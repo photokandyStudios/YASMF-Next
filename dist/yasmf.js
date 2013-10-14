@@ -2150,13 +2150,13 @@ define ( 'yasmf/util/core',["globalize", "cultures/globalize.culture.en-US"], fu
         // store the value
         if (self.localizedText[theNewLocale])
         {
-          self.localizedText[theNewLocale][key] = value;
+          self.localizedText[theNewLocale][key.toUpperCase()] = value;
         } else
         {
           self.localizedText[theNewLocale] =
           {
           };
-          self.localizedText[theNewLocale][key] = value;
+          self.localizedText[theNewLocale][key.toUpperCase()] = value;
         }
       },
       /**
@@ -2939,10 +2939,10 @@ define
 
 /**
  *
- * Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.
+ * Base Object
  * 
- * core.js
- * @module core.js
+ * object.js
+ * @module object.js
  * @author Kerri Shotts
  * @version 0.4
  *
@@ -2983,7 +2983,7 @@ define
 /*global define, console*/
 
 define (
-   'yasmf/util/pk-object',[],function () {
+   'yasmf/util/object',[],function () {
 
 /**
  * PKObject is the base object for all complex objects used by YASMF;
@@ -3024,7 +3024,7 @@ var PKObject = function ()
      * @type Array
      * @default ["PKObject"]
      */
-    self._classHierarchy = ["PKObject"];
+    self._classHierarchy = ["BaseObject"];
 
     /**
      *
@@ -3395,6 +3395,7 @@ var PKObject = function ()
         self._notificationListeners [ theNotification ] = [];
     }
 
+    self._traceNotifications = false;
     /**
      * Notifies all listeners of a particular notification that the notification
      * has been triggered. If the notification hasn't been registered via 
@@ -3404,17 +3405,20 @@ var PKObject = function ()
      * @method notify
      * @param theNotification {String} the notification to trigger
      */
-    self.notify = function ( theNotification )
+    self.notify = function ( theNotification, args )
     {
         if (!self._notificationListeners[theNotification])
         {
             console.log ( theNotification + " has not been registered.");
             return;
         }
-        //console.log ( "Notifying " + self._notificationListeners[theNotification].length + " listeners for " + theNotification );
+        if (self._traceNotifications)
+        {
+          console.log ( "Notifying " + self._notificationListeners[theNotification].length + " listeners for " + theNotification + " ( " + args + " ) " );
+        }
         for (var i=0; i< self._notificationListeners[theNotification].length; i++ )
         {
-            self._notificationListeners[theNotification][i]( self, theNotification );
+            self._notificationListeners[theNotification][i]( self, theNotification, args );
         }        
     }
 
@@ -3566,7 +3570,7 @@ define ('yasmf/util/fileManager',["vendor/q"], function ( Q ) {
  */
 /*global define*/
 
-define ( 'yasmf/ui/core',["yasmf/util/device", "yasmf/util/pk-object"], function ( theDevice, PKObject ) {
+define ( 'yasmf/ui/core',["yasmf/util/device", "yasmf/util/object"], function ( theDevice, BaseObject ) {
    var UI = {};
 
 /**
@@ -4881,7 +4885,7 @@ UI.getRootView = function ()
 
 UI._BackButtonHandler = function ()
 {
-  var self = new PKObject();
+  var self = new BaseObject();
   self.subclass ( "BackButtonHandler" );
   self.registerNotification ( "backButtonPressed" );
   self.handleBackButton = function ()
@@ -4909,7 +4913,7 @@ UI.backButton = new UI._BackButtonHandler();
 
 UI._OrientationHandler = function ()
 {
-  var self = new PKObject();
+  var self = new BaseObject();
   self.subclass ( "OrientationHandler" );
   self.registerNotification ( "orientationChanged" );
   self.handleOrientationChange = function ()
@@ -5002,11 +5006,11 @@ UI.orientationHandler = new UI._OrientationHandler();
  */
 /*global define*/
 
-define ( 'yasmf/ui/view',['yasmf/util/pk-object', 'yasmf/ui/core'], function ( PKObject, UI ) 
+define ( 'yasmf/ui/view',['yasmf/util/object', 'yasmf/ui/core'], function ( BaseObject, UI ) 
 {
 var View = function ()
 {
-  var self = new PKObject();
+  var self = new BaseObject();
   self.subclass ( "UIView" );
 
   // register any notifications
@@ -5174,7 +5178,7 @@ var View = function ()
     self._subViews.push ( theView );
     theView._superView = self;
 
-    // make sure our element knows about it.
+    // make sure our elemenpt knows about it.
     self._element.appendChild ( theView._element );
   };
   /**
@@ -6141,17 +6145,20 @@ var View = function ()
   self.initWithOptions = function ( options )
   {
     self.init();
-    if (options.frame)              { self.frame = options.frame; }
-    if (options.backgroundColor)    { self.backgroundColor = options.backgroundColor; }
-    if (options.backgroundImage)    { self.backgroundImage = options.backgroundImage; }
-    if (options.border)             { self.border = options.border; }
-    if (options.shadows)            { self.shadows = options.shadows; }
-    if (options.visible)            { self.visible = options.visible; }
-    if (options.opacity)            { self.opacity = options.opacity; }
-    if (options.useGPU)             { self.useGPU = options.useGPU; }
-    if (options.useGPUForPositioning) { self.useGPUForPositioning = options.useGPUForPositioning; }
-    if (options.overflow)           { self.overflow = options.overflow; }
-    if (options.interactive)        { self.interactive = options.interactive; }
+    if (typeof options !== "undefined")
+    {
+      if (typeof options.frame !== "undefined" )              { self.frame = options.frame; }
+      if (typeof options.backgroundColor !== "undefined" )    { self.backgroundColor = options.backgroundColor; }
+      if (typeof options.backgroundImage !== "undefined" )    { self.backgroundImage = options.backgroundImage; }
+      if (typeof options.border !== "undefined" )             { self.border = options.border; }
+      if (typeof options.shadows !== "undefined" )            { self.shadows = options.shadows; }
+      if (typeof options.visible !== "undefined" )            { self.visible = options.visible; }
+      if (typeof options.opacity !== "undefined" )            { self.opacity = options.opacity; }
+      if (typeof options.useGPU !== "undefined" )             { self.useGPU = options.useGPU; }
+      if (typeof options.useGPUForPositioning !== "undefined" ) { self.useGPUForPositioning = options.useGPUForPositioning; }
+      if (typeof options.overflow !== "undefined" )           { self.overflow = options.overflow; }
+      if (typeof options.interactive !== "undefined" )        { self.interactive = options.interactive; }
+    };
   };
 
   return self;
@@ -6209,13 +6216,13 @@ var View = function ()
  */
 /*global define*/
 
-define ( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/pk-object','yasmf/util/fileManager','yasmf/ui/core','yasmf/ui/view'],function ( require ) {
+define ( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/ui/core','yasmf/ui/view'],function ( require ) {
   var _y = require('yasmf/util/core');
   _y.datetime = require ('yasmf/util/datetime');
   _y.filename = require ('yasmf/util/filename');
   _y.misc = require ('yasmf/util/misc');
   _y.device = require ('yasmf/util/device');
-  _y.PKObject = require ('yasmf/util/pk-object');
+  _y.BaseObject = require ('yasmf/util/object');
   _y.fileManager = require ('yasmf/util/fileManager');
 
   _y.UI = require ('yasmf/ui/core');
