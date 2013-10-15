@@ -1,23 +1,39 @@
+/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+
 body {
   margin: 0 0;
-  font-family: Helvetica, Arial, Serif;
-  font-size: 15px;
-  line-height: 150%;
-  color: #333;
+  font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+  font-size: 18px;
+  line-height: 1em;
+  color: #FFF;
   background-color: #000;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -moz-tap-highlight-color: rgba(0,0,0,0);
   -ms-tap-highlight-color: rgba(0,0,0,0);
   tap-highlight-color: rgba(0,0,0,0);
   -webkit-user-select: none;
+  -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  outline: none;
   -webkit-outline: none;
+  -moz-outline: none;
+  -ms-outline: none;
+  outline: none;
   text-rendering: optimizeLegibility;
 }
 
+body.ios
+{
+  background-color: #FFF;
+  color: #333;
+}
+
 body.android {
+  font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-Serif;
   text-rendering: auto !important; /* optimizeLegibility is messing up the way words wrap */
+  background-color: #000000;
+  color: #FFFFFF;
 }
 
 
@@ -31,8 +47,9 @@ div {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;
-  height: 100%;
   -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
   box-sizing: border-box;
   position: relative;
 }
@@ -55,6 +72,7 @@ div {
   line-height: 1em;
   font-size: 20px;
   -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
   background-origin: border-box;
@@ -66,65 +84,234 @@ div {
   transform: translate3d(0,0,0);
 }
 
+
+.ui-tint-color
+{
+  color: #40B0FF;
+}
+.android .ui-tint-color
+{
+  color: #33B5E5;
+}
+.ui-background-tint-color
+{
+  background-color: #40B0FF;
+}
+.android .ui-background-tint-color
+{
+  color: #33B5E5;
+}
+.ui-destructive-color
+{
+  color: #FF6060;
+}
+.android .ui-destructive-color
+{
+  color: #CC0000;
+}
+.ui-tint-color, .ui-background-tint-color
+{
+  -webkit-transition: color 1s ease-in;
+  -moz-transition: color 1s ease-in;
+  -ms-transition: color 1s ease-in;
+  transition: color 0.3s ease-in;
+}
+
 .ui-navigation-bar
 {
-  height: 64px;
+  height: 44px;
   z-index:9;
+  background-color: #FFFFFF;
   background-color: rgba(255, 255, 255, 0.75);
-  border-bottom: 1px solid (0,0,0,0.25);
+  background-image: -webkit-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -moz-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -ms-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 200;
+}
+.ios7 .ui-navigation-bar
+{
+  height: 64px;  
+  padding-top: 20px;
+}
+.android .ui-navigation-bar
+{
+  height: 48px;
+  background-color: #000;
+  background-image: none;
+  border-bottom: 2px solid rgba(255,255,255,0.5);
+  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif;
 }
 
-.UILabel
+.ui-navigation-bar .ui-title
+{
+  position: absolute;
+  left: 0;
+  right: 0; 
+  text-align: center;
+  font-weight: bold;
+  height: 44px;
+}
+.android .ui-navigation-bar .ui-title
+{
+  left: 10px;
+  right: 10px;
+  text-align: left;
+  height: 48px;
+}
+
+.ui-navigation-bar .ui-bar-button
+{
+  min-width: 44px;
+}
+
+.ui-navigation-bar .ui-bar-button.ui-align-left
 {
   text-align: left;
-  color: #333;
-  text-shadow: none;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 20px;
-  font-weight: normal;
+}
+.ui-navigation-bar .ui-bar-button.ui-align-right
+{
+  text-align: right;
+}
+.ui-navigation-bar .ui-bar-button.ui-align-center
+{
+  text-align: center;
 }
 
-.UIButton
+.ui-navigation-bar .ui-bar-button-group
 {
-
+  position: absolute;
 }
 
-.UITextInput
+.ui-navigation-bar .ui-bar-button-group.ui-align-right
 {
-
+  right: 0;
+  margin-right: 10px;
+}
+.ui-navigation-bar .ui-bar-button-group.ui-align-left
+{
+  left: 0;
+  margin-left: 10px;
+}
+.ui-navigation-bar .ui-bar-button-group.ui-align-center
+{
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 }
 
-.UITabBar
+.ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button
 {
-
+  text-align: right;
+}
+.ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button
+{
+  text-align: left;
+}
+.ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button
+{
+  text-align: center;
 }
 
-.UINavBar
+.ui-avoid-navigation-bar
 {
-
+  padding-top: 44px !important;
+}
+.ios7 .ui-avoid-navigation-bar
+{
+  padding-top: 64px !important;
+}
+.android .ui-avoid-navigation-bar
+{
+  padding-top: 48px !important;
 }
 
-.UIToolBar
-{
 
+.ui-scroll-container
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;  
 }
 
-.UISegment
+.ui-list
 {
-
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
-.UISegmentBar
+.ui-list-item
 {
+  display: block;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  margin-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 0;
+  min-height: 50px;
+  overflow: auto;
+  position: relative;
+}
+.android .ui-list-item
+{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  margin:left: 0;
+  padding-left: 10px;
+}
 
+.ui-list-item .ui-indicator
+{
+  position: absolute;
+  width: 15px;
+  height: 30px;
+  right: 10px;
+  top: 10px;
+}
+.ui-list-item .ui-arrow-direction-right
+{
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='15' height='30'><line x1='0' y1='0' x2='15' y2='15' stroke-width='1' stroke='black'/><line x1='0' y1='30' x2='15' y2='15' stroke-width='1' stroke='black'/></svg>");
+}
+
+.ui-back-button::before
+{
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: -3px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><line x1='15' y1='0' x2='5' y2='10' stroke-width='2' stroke='black'/><line x1='15' y1='20' x2='5' y2='10' stroke-width='2' stroke='black'/></svg>"); 
+  margin-left: -5px;
+  content: "";
+}
+.android .ui-back-button::before
+{
+  width: 15px;
+  height: 30px;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='15' height='30'><line x1='10' y1='0' x2='0' y2='15' stroke-width='1' stroke='black'/><line x1='10' y1='30' x2='0' y2='15' stroke-width='1' stroke='black'/></svg>");
+}
+.android .ui-back-button
+{
+  color: transparent;
 }
 
 .input, .textarea {
   display: block;
 }
 
-.preventClicks,
-#preventClicks
+#uiPreventClicks
 {
   position: absolute;
   z-index: 999999;
