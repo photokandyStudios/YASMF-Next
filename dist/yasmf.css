@@ -305,6 +305,9 @@ div {
 .android .ui-back-button
 {
   color: transparent;
+  min-width: 15px;
+  width: 15px;
+  height: 48px;
 }
 
 .input, .textarea {
