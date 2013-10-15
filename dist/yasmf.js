@@ -3422,6 +3422,15 @@ var PKObject = function ()
         }        
     }
 
+    self.destroy = function ()
+    {
+       // clear any listeners.
+       self._notificationListeners = {};
+       self._tagListeners = {};
+
+       // ready to be destroyed
+    }
+
     return self;
 
 };
@@ -3573,1400 +3582,364 @@ define ('yasmf/util/fileManager',["vendor/q"], function ( Q ) {
 define ( 'yasmf/ui/core',["yasmf/util/device", "yasmf/util/object"], function ( theDevice, BaseObject ) {
    var UI = {};
 
-/**
-  * Version of the UI Namespace
-  * @property version
-  * @type Object
- **/
-UI.version = "0.4.100";
+  /**
+    * Version of the UI Namespace
+    * @property version
+    * @type Object
+   **/
+  UI.version = "0.4.100";
 
-/**
- *
- * Creates a point. Points are of the form
- * `{ x: x, y: y }`
- *
- * @method makePoint
- * @static
- * @param {Number} x - the x-coordinate of the point
- * @param {Number} y - the y-coordinate of the point
- * @returns {point} a point containing x and y
- *
- */
-UI.makePoint = function ( x, y )
-{
-    return { x: x, y: y };
-};
-/**
- *
- * Creates a copy of a point. You should always copy a point prior
- * to modifying its values, otherwise you risk modifying the
- * original.
- *
- * @method copyPoint
- * @static
- * @param {point} point - the point to copy
- * @returns {point} a new point, ready for modification
- *
- */
-UI.copyPoint = function ( point )
-{
-  return UI.makePoint ( point.x, point.y );
-};
-/**
- *
- * offsets a point by the values in another point. For example,
- * if `pointA` = `{ x:100, y:100 }` and `pointB` = `{ x:-5, y:10 }`, the
- * returned point will be `{ x:95, y:110 }`.
- *
- * @method offsetPoint
- * @static
- * @param {point} pointA - the point to be offset
- * @param {point} pointB - the offset
- * @returns {point} pointA offset by pointB
- *
- */
-UI.offsetPoint = function ( pointA, pointB )
-{
-  return UI.makePoint ( pointA.x + pointB.x, pointA.y + pointB.y );
-};
-
-/**
- *
- * Creates a size of the form `{ w: width, h: height}`
- *
- * @method makeSize
- * @static
- * @param {Number} w - Width portion of a size
- * @param {Number} h - Height portion of a size
- * @returns {size} a size comprised of the specified width and height.
- *
- */
-UI.makeSize = function ( w, h )
-{
-    return { w: w, h: h };
-};
-/**
- *
- * Creates a size from a point.
- *
- * @method makeSizeFromPoint
- * @static
- * @param {point} point - the point to create a size from
- * @returns {size} a size based on the x,y coordinates within the point.
- *
- */
-UI.makeSizeFromPoint = function ( point )
-{
-  return { w: point.x, h: point.y };
-}
-/**
- *
- * Extracts the size from the rect.
- *
- * @method sizeFromRect
- * @static
- * @param {rect} rect - the rectange from which to extract the size
- * @returns {size} a size based on the size of the rect.
- *
- */
-UI.sizeFromRect = function (rect)
-{
-  return { w: rect.size.w, h: rect.size.h };
-}
-/**
- *
- * Copies a size object. You should always copy a size before
- * modifying a size, else you risk modifying the original size.
- *
- * @method copySize
- * @static
- * @param {size} size - the size to copy
- * @returns {size} a duplicate of the size, ready for modification
- *
- */
-UI.copySize = function ( size )
-{
-  return UI.makeSize ( size.w, size.h );
-};
-/**
- *
- * Offsets a size by another size.
- *
- * @method offsetSize
- * @static
- * @param {size} sizeA - the size to offset
- * @param {size} sizeB - the offset
- * @returns {size} sizeA offset by sizeB
- *
- */
-UI.offsetSize = function ( sizeA, sizeB )
-{
-  return UI.makeSize ( sizeA.w + sizeB.w, sizeA.h + sizeB.h );
-};
-
-/**
- *
- * Creates a rect of the form `{ origin: point, size: size }`
- * which expands to 
- * `{ origin: {x: x, y: y}, size: {w: width, h: height} }`
- *
- * @method makeRect
- * @static
- * @param {point} origin - the x,y origin of the rect
- * @param {size} size - the width,height of the rect
- * @returns {rect} a rectangle originating at origin with the specified size
- *
- */
-UI.makeRect = function ( origin, size )
-{
-    return { origin: { x: origin.x, y: origin.y },
-            size: { w: size.w, h: size.h } };
-};
-/**
- *
- * Duplicates a rect, returning a rect suitable for modification. You should
- * always copy a rect prior to modifying the contents, else you risk
- * modifying the original.
- *
- * @method copyRect
- * @static
- * @param {rect} rect - the rect to be copied
- * @returns {rect} a duplicate of the specified rect, suitable for modification
- *
- */
-UI.copyRect = function ( rect )
-{
-  return UI.makeRect ( rect.origin, rect.size );
-};
-
-/**
- *
- * Offsets a rect's origin point by the supplied point.
- *
- * @method offsetRectByPoint
- * @static
- * @param {rect} rectA - the rect to be offset
- * @param {point} pointB - the offset
- * @returns {rect} rectA offset by pointB
- *
- */
-UI.offsetRectByPoint = function ( rectA, pointB )
-{
-  return UI.makeRect ( UI.offsetPoint (rectA.origin, pointB), rectA.size );
-};
-
-/**
- *
- * Offsets a rect's origin by the origin of the second rect,
- * and offsets the rect's size by the size of the second rect.
- *
- * > This implies that the second rect does not need to be "real",
- * > as in, it can have negative sizes and such.
- *
- * @method offsetRectByRect
- * @static
- * @param {rect} rectA - the rect to be offset
- * @param {rect} rectB - the offset
- * @returns {rect} a duplicate of rectA offset by rectB.
- *
- */
-UI.offsetRectByRect = function ( rectA, rectB )
-{
-  return UI.makeRect ( UI.offsetPoint (rectA.origin, rectB.origin), 
-                       UI.offsetSize (rectA.size, rectB.size) );
-};
-
-/**
- *
- * Returns true if the two rects supplied intersect. Note that this
- * will not work if the rectangles are non-canonical.
- *
- * @method doRectsIntersect
- * @static
- * @param {rect} rectA - the first rect
- * @param {rect} rectB - the second rect
- * @returns {boolean} true if the rects intersect
- *
- */
-UI.doRectsIntersect = function ( rectA, rectB )
-{
-  //http://codesam.blogspot.com/2011/02/check-if-two-rectangles-intersect.html
-  var r1tlx = rectA.origin.x;
-  var r2brx = rectB.origin.x + rectB.size.w;
-  var r1brx = rectA.origin.x + rectA.size.w;
-  var r2tlx = rectB.origin.x;
-  var r1tly = rectA.origin.y;
-  var r2bry = rectB.origin.y + rectB.size.h;
-  var r1bry = rectA.origin.y + rectA.size.h;
-  var r2tly = rectB.origin.y;
-  // corrected for Y axis
-  if ( r1tlx >= r2brx || r1brx <= r2tlx || r1tly >= r2bry || r1bry <= r2tly) 
+  /**
+   *
+   * Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
+   * any number of CSS styles. If the color's alpha is zero, the return value is
+   * "transparent". If the color is null, the return value is "inherit".
+   *
+   * @method colorToRGBA
+   * @static
+   * @param {color} theColor - theColor to convert.
+   * @returns {string} a CSS value suitable for color properties
+   */
+  UI.colorToRGBA = function ( theColor )
   {
-    return false;
-  }
-  return true;
-};
-
-
-/**
- *
- * Returns a zero point of {0,0}
- *
- * @method zeroPoint
- * @static
- * @returns {point}
- *
- */
-UI.zeroPoint = function () { return UI.makePoint ( 0, 0 ); };
-
-/**
- *
- * Returns a zero size of {0,0}
- *
- * @method zeroSize
- * @static
- * @returns {size}
- *
- */
-UI.zeroSize = function () { return UI.makeSize ( 0, 0 ); };
-
-/**
- *
- * Returns a zero rect of { {0,0}, {0,0} }
- *
- * @method zerRect
- * @static
- * @returns {rect}
- *
- */
-UI.zeroRect = function () { return UI.makeRect ( UI.zeroPoint(), UI.zeroSize() ); };
-
-/**
- *
- * returns a **point** representing the size of the screen (or browser).
- *
- * @method screenSize
- * @static
- * @returns {point}
- *
- */
-UI.screenSize = function () { return UI.makeSize ( window.innerWidth, window.innerHeight ); };
-
-/**
- *
- * returns a **rect** representing the size of the screen (with a {0,0} origin).
- *
- * @method screenBounds
- * @static
- * @returns {rect}
- *
- */
-UI.screenBounds = function () { return UI.makeRect ( UI.zeroPoint(), UI.screenSize() ); };
-
-/**
- *
- * Creates a font.
- *
- * @method makeFont
- * @static
- * @param {String} theFontFamily - the font family (as you would specify it in CSS)
- * @param {Number} theFontSize - the pixel size of the desired font
- * @param {String} [theFontWeight="normal"] - the weight of the font (as specified by CSS)
- * @returns {font} A font object.
- *
- */
-UI.makeFont = function ( theFontFamily, theFontSize, theFontWeight )
-{
-  return { family: theFontFamily,
-             size: theFontSize,
-           weight: theFontWeight || "normal"
-         };
-}
-/**
- *
- * Copies a font, making it suitable for modification.
- *
- * @method copyFont
- * @static
- * @param {font} theFont - the font to duplicate
- * @returns {font} a duplication of theFont, suitable for modification
- *
- */
-UI.copyFont = function ( theFont )
-{
-  return UI.makeFont ( theFont.family, theFont.size, theFont.weight );
-}
-/**
- *
- * Copies a font, specifying a new size in the process.
- *
- * @method copyFontWithNewSize
- * @static
- * @param {font} theFont - the font to copy
- * @param {Number} theNewSize - the new size, in pixels, of the font
- * @returns {font} a duplication of theFont, but with a new size
- *
- */
-UI.copyFontWithNewSize = function ( theFont, theNewSize )
-{
-  return UI.makeFont ( theFont.family, theNewSize, theFont.weight );
-}
-/**
- *
- * Copies a font, specifying a delta for the new font size.
- *
- * @method copyFontWithNewSizeDelta
- * @static
- * @param {font} theFont - the font to copy
- * @param {Number} theNewSizeDelta - the amount by which to modify the size (in pixels)
- * @returns {font} a duplication of theFont, adjusted by theNewSizeDelta
- *
- */
-UI.copyFontWithNewSizeDelta = function ( theFont, theNewSizeDelta )
-{
-  return UI.makeFont ( theFont.family, theFont.size + theNewSizeDelta, theFont.weight );
-}
-/**
- *
- * Copies a font, specifying a percentage for the new size. A value of 1.00 will keep
- * the size the same; while 1.25 would increase the size and 0.75 would decrease the
- * size.
- *
- * @method copyFontWithPercentSize
- * @static
- * @param {font} theFont - the font to copy
- * @param {Number} theNewSizeDelta - the amount by which to multiply the size
- * @returns {font} a duplicate of theFont, with the size multiplied by theNewSizeDelta
- *
- */
-UI.copyFontWithPercentSize = function ( theFont, theSizePercent )
-{
-  return UI.makeFont ( theFont.family, theFont.size * theSizePercent, theFont.weight );
-}
-/**
- *
- * Applies a font to an element. If theFont is null, the values used
- * are the CSS "inherit" properties.
- * @private
- *
- * @method _applyFontToElement
- * @static
- * @param {DOMElement} theElement - the DOM element the to which the font is applied
- * @param {font} theFont - the font to apply
- *
- */
-UI._applyFontToElement = function ( theElement, theFont )
-{
-  if (theFont)
-  {
-    theElement.style.fontFamily = theFont.family;
-    theElement.style.fontSize = "" + theFont.size + "px";
-    theElement.style.fontWeight = theFont.weight;
-  }
-  else
-  {
-    theElement.style.fontFamily = "inherit";
-    theElement.style.fontSize = "inherit";
-    theElement.style.fontWeight = "inherit";
-  }
-}
-
-/**
- * UI.FONT
- * @namespace UI
- * @class FONT
- */
-UI.FONT = UI.FONT || {};
-
-/**
- *
- * Returns a system font, specific to the platform. Use this when attempting to 
- * match the platform's default font.
- *
- * @method systemFont
- * @static
- * @returns {font}
- */
-UI.FONT.systemFont = function ()
-{
-  var theCurrentPlatform = PKDEVICE.platform();
-  switch (theCurrentPlatform)
-  {
-    case "ios": return UI.makeFont ( "Helvetica, Arial, sans-serif", 20, "normal" );
-    case "android": return UI.makeFont ( "Roboto, Arial, sans-serif", 20, "normal" );
-    case "wince": return UI.makeFont ( "Segoe, Arial, sans-serif", 20, "normal" );
-    default: return UI.makeFont ( "sans-serif", 20, "normal" );
-  }
-}
-/**
- *
- * Returns a bolded system font, specific to the platform.
- *
- * @method boldSystemFont
- * @static
- * @returns {font} a bolded version of {@link UI.FONT.systemFont}
- */
-UI.FONT.boldSystemFont = function ()
-{
-  var theSystemFont = UI.copyFont( UI.FONT.systemFont() );
-  theSystemFont.weight = "bold";
-  return theSystemFont;
-}
-
-/**
- * @class UI
- */
-/**
- *
- * Creates a shadow for use as text or box shadows.
- *
- * @method makeShadow
- * @static
- * @param {boolean} theVisibility - indicates the visibility of the shadow.
- * @param {color} theColor - the color of the shadow.
- * @param {point} theOffset - the shadow offset
- * @param {Number} theBlur - the amount to blur the shadow (can be zero, but not negative)
- * @param {Number} theSpread - the amount of spread to use (box shadows only, can be zero, but not negative)
- * @param {string} [theType] - specify "inset" for inset box shadows, otherwise omit or make null.
- * @returns {shadow}
- *
- */
-UI.makeShadow = function ( theVisibility, theColor, theOffset, theBlur, theSpread, theType )
-{
-  return { visible: theVisibility, color: UI.copyColor(theColor), offset: UI.copyPoint ( theOffset ), 
-           blur: theBlur || 0, spread: theSpread || 0, type: theType || "" };
-}
-/**
- *
- * Copies a shadow and makes it suitable for modification. Always copy a shadow prior to modification,
- * otherwise you risk modifying the original.
- *
- * @method copyShadow
- * @static
- * @param {shadow} theShadow - the shadow to be copied
- * @returns {shadow} the duplicated shadow, suitable for modificaiton
- *
- */
-UI.copyShadow = function ( theShadow )
-{
-  return UI.makeShadow ( theShadow.visible, theShadow.color, theShadow.offset, theShadow.blur, theShadow.spread, theShadow.type );
-}
-/**
- *
- * applies a shadow to an element's text. If the shadow is null or invisible, the "inherit"
- * CSS is applied. If the shadow's color is null, the shadow will be transparent.
- *
- * **Note:** the shadow's spread, if not 0 is ignored, since text shadows don't support spread.
- *
- * @private
- * @method _applyShadowToElementAsTextShadow
- * @static
- * @param {DOMElement} theElement - the DOM element to which to apply the shadow
- * @param {shadow} theShadow - the shadow to apply
- *
- */
-UI._applyShadowToElementAsTextShadow = function ( theElement, theShadow )
-{
-  if (theShadow)
-  {
-    if (theShadow.visible)
+    if (!theColor)
     {
-      theElement.style.textShadow = "" + theShadow.offset.x + "px " +
-                                         theShadow.offset.y + "px " +
-                                         theShadow.blur + "px " +
-                                         UI._colorToRGBA(theShadow.color) + "";
+      return "inherit";
+    }
+    if (theColor.alpha !== 0)
+    {
+      return "rgba(" + theColor.red + "," + theColor.green + "," + theColor.blue + "," + theColor.alpha + ")";
     }
     else
     {
-      theElement.style.textShadow = "inherit";
+      return "transparent";
     }
   }
-  else
+  /**
+   *
+   * Creates a color object of the form `{red:r, green:g, blue:b, alpha:a}`.
+   *
+   * @method makeColor
+   * @static
+   * @param {Number} r - red component (0-255)
+   * @param {Number} g - green component (0-255)
+   * @param {Number} b - blue component (0-255)
+   * @param {Number} a - alpha component (0.0-1.0)
+   * @returns {color}
+   *
+   */
+  UI.makeColor = function ( r, g, b, a )
   {
-    theElement.style.textShadow = "inherit";
-  }    
-}
-/**
- *
- * applies a shadow to an element. If the shadow is null or invisible, the "inherit"
- * CSS is applied. If the shadow's color is null, the shadow will be transparent.
- * @private
- * @method _shadowToBoxShadow
- * @static
- * @param {DOMElement} theElement - the DOM element to which to apply the shadow
- * @param {shadow} theShadow - the shadow to apply
- *
- */
-UI._shadowToBoxShadow = function (  theShadow )
-{
-  if (theShadow)
-  {
-    if (theShadow.visible)
-    {
-      return  "" +  theShadow.type + " " + theShadow.offset.x + "px " +
-                                         theShadow.offset.y + "px " +
-                                         theShadow.blur + "px " +
-                                         theShadow.spread + "px " + 
-                                         UI._colorToRGBA(theShadow.color) + "";
-    }
-    else
-    {
-      return  "inherit";
-    }
+    return { red: r, green: g, blue: b, alpha: a };
   }
-  else
+  /**
+   *
+   * Copies a color and returns it suitable for modification. You should copy
+   * colors prior to modification, otherwise you risk modifying the original.
+   *
+   * @method copyColor
+   * @static
+   * @param {color} theColor - the color to be duplicated
+   * @returns {color} a duplicate color ready to be modified
+   *
+   */
+  UI.copyColor = function (theColor)
   {
-    return  "inherit";
-  }    
-}
-
-/**
- * UI.SHADOW
- * @namespace UI
- * @class SHADOW
- */
-UI.SHADOW = UI.SHADOW || {};
-
-/**
- *
- * Returns a default dark shadow, depending on the platform. Some platforms return an
- * invisible shadow, since they tend not to use text shadows.
- *
- * @method defaultDarkShadow
- * @static
- * @returns {shadow}
- */
-UI.SHADOW.defaultDarkShadow = function ()
-{
-  var theCurrentPlatform = theDevice.platform();
-  switch (theCurrentPlatform)
-  {
-    case "ios": return UI.makeShadow ( true, "rgba(0,0,0,0.25)", UI.makePoint( 0, -1), 0 );
-    default: return UI.makeShadow ( false, "#000", UI.zeroPoint(), 0 );
-  }
-}
-/**
- *
- * Returns a default light shadow, depending on the platform. Some platforms return an
- * invisible shadow, since they tend not to use text shadows.
- *
- * @method lightDarkShadow
- * @static
- * @returns {shadow}
- */
-UI.SHADOW.defaultLightShadow = function ()
-{
-  var theCurrentPlatform = theDevice.platform();
-  switch (theCurrentPlatform)
-  {
-    case "ios": return UI.makeShadow ( true, "rgba(255,255,255,0.75)", UI.makePoint( 0, -1), 0 );
-    default: return UI.makeShadow ( false, "#FFF", UI.zeroPoint(), 0 );
-  }
-}
-
-/**
- * @class UI
- */
-/**
- *
- * Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
- * any number of CSS styles. If the color's alpha is zero, the return value is
- * "transparent". If the color is null, the return value is "inherit".
- *
- * @private
- * @method _colorToRGBA
- * @static
- * @param {color} theColor - theColor to convert.
- * @returns {string} a CSS value suitable for color properties
- */
-UI._colorToRGBA = function ( theColor )
-{
-  if (!theColor)
-  {
-    return "inherit";
-  }
-  if (theColor.alpha !== 0)
-  {
-    return "rgba(" + theColor.red + "," + theColor.green + "," + theColor.blue + "," + theColor.alpha + ")";
-  }
-  else
-  {
-    return "transparent";
-  }
-}
-/**
- *
- * Creates a color object of the form `{red:r, green:g, blue:b, alpha:a}`.
- *
- * @method makeColor
- * @static
- * @param {Number} r - red component (0-255)
- * @param {Number} g - green component (0-255)
- * @param {Number} b - blue component (0-255)
- * @param {Number} a - alpha component (0.0-1.0)
- * @returns {color}
- *
- */
-UI.makeColor = function ( r, g, b, a )
-{
-  return { red: r, green: g, blue: b, alpha: a };
-}
-/**
- *
- * Copies a color and returns it suitable for modification. You should copy
- * colors prior to modification, otherwise you risk modifying the original.
- *
- * @method copyColor
- * @static
- * @param {color} theColor - the color to be duplicated
- * @returns {color} a duplicate color ready to be modified
- *
- */
-UI.copyColor = function (theColor)
-{
-  return UI.makeColor ( theColor.red, theColor.green, theColor.blue, theColor.alpha );
-}
-
-/**
- * UI.COLOR
- * @namespace UI
- * @class COLOR
- */
-UI.COLOR = UI.COLOR || {};
-/** @static 
- * @method blackColor 
- * @returns {color} a black color. 
- */
-UI.COLOR.blackColor     = function () { return UI.makeColor (   0,   0,   0, 1.0 ); }
-/** @static 
- * @method darkGrayColor 
- * @returns {color} a dark gray color. 
- */
-UI.COLOR.darkGrayColor  = function () { return UI.makeColor (  85,  85,  85, 1.0 ); }
-/** @static 
- * @method GrayColor 
- * @returns {color} a gray color. 
- */
-UI.COLOR.GrayColor      = function () { return UI.makeColor ( 127, 127, 127, 1.0 ); }
-/** @static 
- * @method lightGrayColor 
- * @returns {color} a light gray color. 
- */
-UI.COLOR.lightGrayColor = function () { return UI.makeColor ( 170, 170, 170, 1.0 ); }
-/** @static 
- * @method whiteColor 
- * @returns {color} a white color. 
- */
-UI.COLOR.whiteColor     = function () { return UI.makeColor ( 255, 255, 255, 1.0 ); }
-/** @static 
- * @method blueColor 
- * @returns {color} a blue color. 
- */
-UI.COLOR.blueColor      = function () { return UI.makeColor (   0,   0, 255, 1.0 ); }
-/** @static 
- * @method greenColor 
- * @returns {color} a green color. 
- */
-UI.COLOR.greenColor     = function () { return UI.makeColor (   0, 255,   0, 1.0 ); }
-/** @static 
- * @method redColor 
- * @returns {color} a red color. 
- */
-UI.COLOR.redColor       = function () { return UI.makeColor ( 255,   0,   0, 1.0 ); }
-/** @static 
- * @method cyanColor 
- * @returns {color} a cyan color. 
- */
-UI.COLOR.cyanColor      = function () { return UI.makeColor (   0, 255, 255, 1.0 ); }
-/** @static 
- * @method yellowColor 
- * @returns {color} a yellow color. 
- */
-UI.COLOR.yellowColor    = function () { return UI.makeColor ( 255, 255,   0, 1.0 ); }
-/** @static 
- * @method magentaColor 
- * @returns {color} a magenta color. 
- */
-UI.COLOR.magentaColor   = function () { return UI.makeColor ( 255,   0, 255, 1.0 ); }
-/** @static 
- * @method orangeColor 
- * @returns {color} a orange color. 
- */
-UI.COLOR.orangeColor    = function () { return UI.makeColor ( 255, 127,   0, 1.0 ); }
-/** @static 
- * @method purpleColor 
- * @returns {color} a purple color. 
- */
-UI.COLOR.purpleColor    = function () { return UI.makeColor ( 127,   0, 127, 1.0 ); }
-/** @static 
- * @method brownColor 
- * @returns {color} a brown color. 
- */
-UI.COLOR.brownColor     = function () { return UI.makeColor ( 153, 102,  51, 1.0 ); }
-/** @static 
- * @method lightTextColor 
- * @returns {color} a light text color suitable for display on dark backgrounds. 
- */
-UI.COLOR.lightTextColor = function () { return UI.makeColor ( 240, 240, 240, 1.0 ); }
-/** @static 
- * @method darkTextColor 
- * @returns {color} a dark text color suitable for display on light backgrounds. 
- */
-UI.COLOR.darkTextColor  = function () { return UI.makeColor (  15,  15,  15, 1.0 ); }
-/** @static 
- * @method clearColor 
- * @returns {color} a transparent color. 
- */
-UI.COLOR.clearColor     = function () { return UI.makeColor (   0,   0,   0, 0.0 ); }
-
-/**
- * @class UI
- */
-/**
- *
- * Makes an image object. The options object can contain any of the following
- * properties: repeat (default "no-repeat"), position ("top left"), sizing
- * (""), and imageType ("url"). Repeat can be "repeat-x","repeat-y","reepat" or
- * "no-repeat". Position is a CSS position. Sizing can be empty, "contain" or
- * "cover". imageType specifies if the image is a "url" asset or something
- * else (like a "gradient").
- *
- * @method makeImage
- * @static
- * @param {string} thePathToTheImage - the relative or absolute path to the image
- * @param {size} theImageSize - the size of the image as it should appear logically;
- *                              if an image should be displayed with retina quality,
- *                              the physical pixels would be 64x64 whereas the size
- *                              would be {32,32}.
- * @param {Object} options - options for the image. These are all optional, but useful.
- * @returns {image}
- */
-UI.makeImage = function ( thePathToTheImage, theImageSize, options )
-{
-  var theRatio = window.devicePixelRatio;
-  var theNewImageSize = null
-  if (theImageSize)
-  {
-    theNewImageSize = UI.copySize( theImageSize );
-  }
-  var aNewImage = { image: thePathToTheImage, 
-                    imageSize : theNewImageSize,
-                    targetSize: null,
-                    repeat: options.repeat || "no-repeat",
-                    position: options.position || "top left",
-                    sizing: options.sizing || "",
-                    imageType: options.imageType || "url" }; // url, gradient, etc.
-  //UI.recalcImageSize ( aNewImage );
-  return aNewImage;
-}
-/*UI.recalcImageSize = function ( theImage )
-{
-  var theRatio = window.devicePixelRatio || 1;
-  if (theImage.imageSize)
-  {
-    var theTargetSize = UI.makeSize ( theImage.imageSize.w / theRatio,
-                                      theImage.imageSize.h / theRatio );
-    theImage.targetSize = theTargetSize;
-  }
-}*/
-/**
- *
- * Copies an image and returns it suitable for modification. You should always
- * duplicate an image prior to modification or you risk modifying the original.
- *
- * @method copyImage
- * @static
- * @param {image} theImage - the image to be copied
- * @returns {image} a duplicate image, suitable for modification
- */
-UI.copyImage = function ( theImage )
-{
-  return UI.makeImage ( theImage.image, theImage.imageSize,
-                        { repeat: theImage.repeat, position: theImage.position, sizing: theImage.sizing,
-                          imageType: theImage.imageType } );
-}
-/**
- *
- * Applies an image to the background of a DOMElement. If the image type
- * as "url", the image is assumed to be a graphic asset, but if it is
- * some other value, the backgroundImage property is assigned the
- * image property directly (say, as a gradient).
- *
- * If sizing is specified, it is used over any specific size. If a size
- * is specified, but no sizing, it is used (and should be understood as
- * logical pixels). Any one component of a size that is -1 will be
- * converted to "auto".
- * @private
- *
- * @method _applyImageToElemnt
- * @static
- * @param {DOMElement} theElement - the DOM Element to apply the image to
- * @param {image} theImage - the image to appy
- *
- */
-UI._applyImageToElement = function ( theElement, theImage )
-{
-  if (!theImage)
-  {
-    theElement.style.backgroundImage = "";
-    theElement.style.backgroundPosition = "";
-    theElement.style.backgroundSize = "";
-    theElement.style.backgroundRepeat = "";
-    return;
-  }
-  if (theImage.imageType == "url")
-  {
-      theElement.style.backgroundImage = "url(" + theImage.image + ")";
-  }
-  else
-  {
-    theElement.style.backgroundImage = theImage.image;
-  }
-  if (theImage.sizing !== "")
-  {
-    theElement.stle.backgroundSize = theImage.sizing; // cover, contain
-  }
-  else
-  {
-    if (theImage.imageSize)
-    {
-      theElement.style.backgroundSize = "" + 
-       ((theImage.imageSize.w>-1) ? theImage.imageSize.w + "px " : "auto ") + 
-       ((theImage.imageSize.h>-1) ? theImage.imageSize.h + "px" : "auto" );
-    }
-    else
-    {
-      theElement.style.backgroundSize = "";
-    }
-  }
-  theElement.style.backgroundPosition = theImage.position;
-  theElement.style.backgroundRepeat = theImage.repeat;
-}
-/**
- *
- * Creates a linear gradient image that can be used wherever images are used.
- *
- * @method makeLinearGradientImage
- * @static
- * @param {String} gradientOrigin - the CSS origin of the gradient (like top, left, etc.)
- * @param {Array} colorStops - a series of color stops, each one of the form {color: color, position: position} where
- *                             position is optional. The position is a CSS position (like 0%,50%,100%).
- * @returns {image} an image with the specified gradient.
- *
- */
-UI.makeLinearGradientImage = function ( gradientOrigin, colorStops )
-{
-  var gradientString = "-webkit-linear-gradient(" + gradientOrigin + ", ";
-  for (var i=0; i<colorStops.length; i++)
-  {
-    gradientString += UI._colorToRGBA(colorStops[i].color) + " " + (colorStops[i].position || "");
-    if (i<colorStops.length-1)
-    {
-      gradientString += ", "
-    }
-  }
-  gradientString += ")";
-  return UI.makeImage ( gradientString, null, { imageType: "gradient" } );
-}
-/**
- *
- * Creates a simple linear gradient that can be used wherever images are used. Unlike
- * {@link UI.makeLinearGradientImage}, only two color stops and positions are used.
- *
- * @method makeSimpleLinearGradientImage
- * @static
- * @param {String} gradientOrigin - the CSS origin of the gradient (like top, left, etc.)
- * @param {color} color1 - the color for the first stop
- * @param {String} color1Position - the position for the first stop (or null if the default is acceptable)
- * @param {color} color2 - the color for the second stop
- * @param {String} color2Position - the position for the second stop (or null)
- *
- */
-UI.makeSimpleLinearGradientImage = function ( gradientOrigin, color1, color1Position, color2, color2Position )
-{
-  return UI.makeLinearGradientImage ( gradientOrigin, [ {color: color1, position: color1Position},
-                                                        {color: color2, position: color2Position} ] );
-}
-/**
- *
- * Creates a border for a (generic) side.
- *
- * @method makeBorderForSide
- * @static
- * @param {color} theBorderColor - the color for the borde
- * @param {String} [theBorderStyle="inherit"] - a CSS border style
- * @param {Number} [theBorderStrokeWidth="inherit"] - the number of pixels for the border stroke
- *
- * returns {Object} a Border Side
- */
-UI.makeBorderForSide = function ( theBorderColor, theBorderStyle, theBorderStrokeWidth )
-{
-  var theNewColor = null;
-  if (theBorderColor) { theNewColor = UI.copyColor(theBorderColor); }
-
-  return { color: theNewColor, style: theBorderStyle || "inherit", width: theBorderStrokeWidth || "inherit"};
-}
-/**
- *
- * Copies a border for a side; always copy before modification, or you risk
- * modifying the original.
- *
- * @method copyBorderForSide
- * @static
- * @param {Object} theBorderForSide - the border side to copy
- * @returns {Object} a copied Border side
- */
-UI.copyBorderForSide = function ( theBorderForSide )
-{
-  return UI.makeBorderForSide (theBorderForSide.color, theBorderForSide.style, theBorderForSide.width );
-}
-/**
- *
- * Creates a border for applicatiom to DOM Elements.
- *
- * The borders are specified with the top-level color, style, and width parameters (all optional)
- * can be applied to all sides, but a specific property (in the top, left, right, bottom) borders
- * will override any top-level property. Any property not specified will be given a suitable
- * default.
- *
- * The borderRadii object specifies the specific border radii (topLeftBorderRadius, topRightBorderRadius,
- * bottomLeftBorderRadius, bottomRightBorderRadius), but if any are missing, borderRadius will be used
- * instead. If that property is not defined, "inherit" is used.
- *
- * @method makeBorder
- * @static
- * @param {Object} borders - an object that specifies the borders, for all sides, and for each side
- * @param {Object} borderRadii - an object that specifies the border radii
- * @returns {border} a border
- *
- */
-UI.makeBorder = function ( borders, borderRadii )
-{
-  var theBorder = { color: null, style: "inherit", width: 0 };
-  if (borders)
-  {
-    if (borders.color) { theBorder.color = UI.copyColor(borders.color); }
-    if (borders.style) { theBorder.style = borders.style  }
-    if (borders.width) { theBorder.width = borders.width  }
-    if (borders.top) { theBorder.top = UI.copyBorderForSide(borders.top); }
-    if (borders.left) { theBorder.left = UI.copyBorderForSide(borders.left); }
-    if (borders.right) { theBorder.right = UI.copyBorderForSide(borders.right); }
-    if (borders.bottom) { theBorder.bottom = UI.copyBorderForSide(borders.bottom); }
-  }
-  if (borderRadii)
-  {
-    theBorder.topLeftBorderRadius = borderRadii.topLeftBorderRadius || borderRadii.borderRadius || "inherit";
-    theBorder.topRightBorderRadius = borderRadii.topRightBorderRadius || borderRadii.borderRadius || "inherit";
-    theBorder.bottomLeftBorderRadius = borderRadii.bottomLeftBorderRadius || borderRadii.borderRadius || "inherit";
-    theBorder.bottomRightBorderRadius = borderRadii.bottomRightBorderRadius || borderRadii.borderRadius || "inherit";
-  }
-  else
-  {
-    theBorder.topLeftBorderRadius = "inherit";
-    theBorder.topRightBorderRadius = "inherit";
-    theBorder.bottomLeftBorderRadius = "inherit";
-    theBorder.bottomRightBorderRadius = "inherit";
-  }
-  return theBorder;
-}
-/**
- *
- * Copies a border for modification. Always copy borders prior to modifying them, else you
- * risk modifying the original.
- *
- * @method copyBorder
- * @static
- * @param {border} borders - the border to duplicate
- * @returns {border}
- */
-UI.copyBorder = function ( borders )
-{
-  return UI.makeBorder ( borders, { topLeftBorderRadius: borders.topLeftBorderRadius, 
-                                    topRightBorderRadius: borders.topRightBorderRadius,
-                                    bottomLeftBorderRadius: borders.bottomLeftBorderRadius, 
-                                    bottomRightBorderRadius: borders.bottomRightBorderRadius } );
-}
-/**
- *
- * Applies a border to an element.
- * @private
- *
- * @method _applyBorderToElement
- * @static
- * @param {DOMElement} theElement - the DOM element to which to apply the border
- * @param {borde} theBorder - the border to apply
- *
- */
-UI._applyBorderToElement = function ( theElement, theBorder )
-{
-  // over-arching
-  if ( theBorder.color ) { theElement.style.borderColor = UI._colorToRGBA(theBorder.color); }
-                    else { theElement.style.borderColor = "" }
-  if ( theBorder.style !== "inherit" ) { theElement.style.borderStyle = theBorder.style; }
-                                  else { theElement.style.borderStyle = ""; }
-  if ( theBorder.width !== "inherit" ) { theElement.style.borderWidth = "" + theBorder.width + "px"; }
-                                  else { theElement.style.borderWidth = ""; }
-  // and now, the specifics
-  if ( theBorder.left )
-  {
-    if (theBorder.left.color) { theElement.style.borderLeftColor = UI._colorToRGBA(theBorder.left.color); }
-    if ( theBorder.left.style !== "inherit" ) { theElement.style.borderLeftStyle = theBorder.left.style; }
-    if ( theBorder.left.width !== "inherit" ) { theElement.style.borderLeftWidth = "" + theBorder.left.width + "px"; }
+    return UI.makeColor ( theColor.red, theColor.green, theColor.blue, theColor.alpha );
   }
 
-  if ( theBorder.top )
+  /**
+   * UI.COLOR
+   * @namespace UI
+   * @class COLOR
+   */
+  UI.COLOR = UI.COLOR || {};
+  /** @static 
+   * @method blackColor 
+   * @returns {color} a black color. 
+   */
+  UI.COLOR.blackColor     = function () { return UI.makeColor (   0,   0,   0, 1.0 ); }
+  /** @static 
+   * @method darkGrayColor 
+   * @returns {color} a dark gray color. 
+   */
+  UI.COLOR.darkGrayColor  = function () { return UI.makeColor (  85,  85,  85, 1.0 ); }
+  /** @static 
+   * @method GrayColor 
+   * @returns {color} a gray color. 
+   */
+  UI.COLOR.GrayColor      = function () { return UI.makeColor ( 127, 127, 127, 1.0 ); }
+  /** @static 
+   * @method lightGrayColor 
+   * @returns {color} a light gray color. 
+   */
+  UI.COLOR.lightGrayColor = function () { return UI.makeColor ( 170, 170, 170, 1.0 ); }
+  /** @static 
+   * @method whiteColor 
+   * @returns {color} a white color. 
+   */
+  UI.COLOR.whiteColor     = function () { return UI.makeColor ( 255, 255, 255, 1.0 ); }
+  /** @static 
+   * @method blueColor 
+   * @returns {color} a blue color. 
+   */
+  UI.COLOR.blueColor      = function () { return UI.makeColor (   0,   0, 255, 1.0 ); }
+  /** @static 
+   * @method greenColor 
+   * @returns {color} a green color. 
+   */
+  UI.COLOR.greenColor     = function () { return UI.makeColor (   0, 255,   0, 1.0 ); }
+  /** @static 
+   * @method redColor 
+   * @returns {color} a red color. 
+   */
+  UI.COLOR.redColor       = function () { return UI.makeColor ( 255,   0,   0, 1.0 ); }
+  /** @static 
+   * @method cyanColor 
+   * @returns {color} a cyan color. 
+   */
+  UI.COLOR.cyanColor      = function () { return UI.makeColor (   0, 255, 255, 1.0 ); }
+  /** @static 
+   * @method yellowColor 
+   * @returns {color} a yellow color. 
+   */
+  UI.COLOR.yellowColor    = function () { return UI.makeColor ( 255, 255,   0, 1.0 ); }
+  /** @static 
+   * @method magentaColor 
+   * @returns {color} a magenta color. 
+   */
+  UI.COLOR.magentaColor   = function () { return UI.makeColor ( 255,   0, 255, 1.0 ); }
+  /** @static 
+   * @method orangeColor 
+   * @returns {color} a orange color. 
+   */
+  UI.COLOR.orangeColor    = function () { return UI.makeColor ( 255, 127,   0, 1.0 ); }
+  /** @static 
+   * @method purpleColor 
+   * @returns {color} a purple color. 
+   */
+  UI.COLOR.purpleColor    = function () { return UI.makeColor ( 127,   0, 127, 1.0 ); }
+  /** @static 
+   * @method brownColor 
+   * @returns {color} a brown color. 
+   */
+  UI.COLOR.brownColor     = function () { return UI.makeColor ( 153, 102,  51, 1.0 ); }
+  /** @static 
+   * @method lightTextColor 
+   * @returns {color} a light text color suitable for display on dark backgrounds. 
+   */
+  UI.COLOR.lightTextColor = function () { return UI.makeColor ( 240, 240, 240, 1.0 ); }
+  /** @static 
+   * @method darkTextColor 
+   * @returns {color} a dark text color suitable for display on light backgrounds. 
+   */
+  UI.COLOR.darkTextColor  = function () { return UI.makeColor (  15,  15,  15, 1.0 ); }
+  /** @static 
+   * @method clearColor 
+   * @returns {color} a transparent color. 
+   */
+  UI.COLOR.clearColor     = function () { return UI.makeColor (   0,   0,   0, 0.0 ); }
+
+
+  /**
+   * Manages the root element
+   *
+   * @property _rootContainer
+   * @private
+   * @static
+   * @type DOMElement
+   */
+  UI._rootContainer = null;
+  /**
+   * Creates the root element that contains the view hierarchy
+   *
+   * @method _createRootContainer
+   * @static
+   * @private
+   */
+  UI._createRootContainer = function ()
   {
-    if (theBorder.top.color) { theElement.style.borderTopColor = UI._colorToRGBA(theBorder.top.color); }
-    if ( theBorder.top.style !== "inherit" ) { theElement.style.borderTopStyle = theBorder.top.style; }
-    if ( theBorder.top.width !== "inherit" ) { theElement.style.borderTopWidth = "" + theBorder.top.width + "px"; }
+    UI._rootElement = document.createElement ("div");
+    UI._rootElement.className = "ui-container";
+    UI._rootElement.id = "rootContainer";
+    document.body.appendChild (UI._rootElement);
   }
 
-  if ( theBorder.right )
+  /**
+   * Mangage the element used to prevent unwanted clicks
+   *
+   * @property _clickPreventionElement
+   * @private
+   * @static
+   * @type DOMElement
+   */
+  UI._clickPreventionElement = null;
+  /**
+   * Creates the Click Prevention element
+   *
+   * @method _createClickPreventionElement
+   * @private
+   * @static
+   */
+  UI._createClickPreventionElement = function ()
   {
-    if (theBorder.right.color) { theElement.style.borderRightColor = UI._colorToRGBA(theBorder.right.color); }
-    if ( theBorder.right.style !== "inherit" ) { theElement.style.borderRightStyle = theBorder.right.style; }
-    if ( theBorder.right.width !== "inherit" ) { theElement.style.borderRightWidth = "" + theBorder.right.width + "px"; }
+    UI._clickPreventionElement = document.createElement ("div");
+    UI._clickPreventionElement.id = "uiPreventClicks";
+    document.body.appendChild (UI._clickPreventionElement);
   }
 
-  if ( theBorder.bottom )
-  {
-    if (theBorder.bottom.color) { theElement.style.borderBottomColor = UI._colorToRGBA(theBorder.bottom.color); }
-    if ( theBorder.bottom.style !== "inherit" ) { theElement.style.borderBottomStyle = theBorder.bottom.style; }
-    if ( theBorder.bottom.width !== "inherit" ) { theElement.style.borderBottomWidth = "" + theBorder.bottom.width + "px"; }
-  }
-
-  // border radii
-  theElement.style.borderTopLeftRadius = theBorder.topLeftBorderRadius == "inherit" ? "" : theBorder.topLeftBorderRadius + "px";
-  theElement.style.borderTopRightRadius = theBorder.topRightBorderRadius == "inherit" ? "" : theBorder.topRightBorderRadius + "px";
-  theElement.style.borderBottomLeftRadius = theBorder.bottomLeftBorderRadius == "inherit" ? "" : theBorder.bottomLeftBorderRadius + "px";
-  theElement.style.borderBottomRightRadius = theBorder.bottomRightBorderRadius == "inherit" ? "" : theBorder.bottomRightBorderRadius + "px";
-}
-/**
- *
- * Creates an event object from a DOM event.
- *
- * The event returned contains all the touches from the DOM event in an array of {x,y} objects.
- * The event also contains the first touch as x,y properties and the average of all touches
- * as avgX,avgY. If no touches are in the event, these values will be -1.
- *
- * @method makeEvent
- * @static
- * @param {DOMEvent} e - the DOM event
- * @returns {event}
- *
- */
-UI.makeEvent = function ( e )
-{
-  var newEvent = { _originalEvent: e, touches: [], x: -1, y: -1, avgX: -1, avgY: -1 };
-  if (e.touches)
-  {
-    var avgXTotal = 0;
-    var avgYTotal = 0;
-    for (var i=0; i<e.touches.length; i++)
-    {
-      newEvent.touches.push ( { x: e.touches[i].clientX, y: e.touches[i].clientY } );
-      avgXTotal += e.touches[i].clientX;
-      avgYTotal += e.touches[i].clientY;
-      if (i===0)
-      {
-        newEvent.x = e.touches[i].clientX;
-        newEvent.y = e.touches[i].clientY;
-      }
-    }
-    if (e.touches.length>0)
-    {
-      newEvent.avgX = avgXTotal / e.touches.length;
-      newEvent.avgY = avgYTotal / e.touches.length;
-    }
-  }
-  else
-  {
-    if (event.pageX)
-    {
-      newEvent.touches.push ( { x: e.pageX, y: e.pageY } );
-      newEvent.x = e.pageX;
-      newEvent.y = e.pageY;
-      newEvent.avgX = e.pageX;
-      newEvent.avgY = e.pageY;
-    }
-  }
-  return newEvent;
-}
-
-/**
- *
- * Cancels an event that's been created using {@link UI.makeEvent}.
- *
- * @method cancelEvent
- * @static
- * @param {event} e - the event to cancel
- *
- */
-UI.cancelEvent = function ( e )
-{
-  if (e._originalEvent.cancelBubble)
-  {
-    e._originalEvent.cancelBubble();
-  }
-  if (e._originalEvent.stopPropagation)
-  {
-    e._originalEvent.stopPropagation();
-  }
-  if (e._originalEvent.preventDefault)
-  {
-    e._originalEvent.preventDefault();
-  } else
-  {
-    e._originalEvent.returnValue = false;
-  }
-}
-
-/**
- * Translates touch events to mouse events if the platform doesn't support
- * touch events. Leaves other events unaffected.
- *
- * @method _translateEvent
- * @static
- * @private
- * @param theEvent {String} the event name to translate
- */
-UI._translateEvent = function ( theEvent )
-{
-  var theTranslatedEvent = theEvent;
-  if (!theTranslatedEvent) { return theTranslatedEvent; }
-  var nonTouchPlatform = ( theDevice.platform() == "wince" || theDevice.platform() == "unknown" );
-  if (nonTouchPlatform && theTranslatedEvent.toLowerCase().indexOf("touch") > -1 )
-  {
-    theTranslatedEvent = theTranslatedEvent.replace("touch", "mouse");
-    theTranslatedEvent = theTranslatedEvent.replace("start", "down");
-    theTranslatedEvent = theTranslatedEvent.replace("end", "up");
-  }
-  return theTranslatedEvent;  
-}
-
-/**
- * Adds a touch listener to theElement, converting touch events for WP7.
- *
- * @method _addEventListener
- * @static
- * @private
- * @param theElement {DOMElement} the element to attach the event to
- * @param theEvent {String} the event to handle
- * @param theFunction {Function} the function to call when the event is fired
- *
- */
-UI._addEventListener = function(theElement, theEvent, theFunction)
-{
-  var theTranslatedEvent = UI._translateEvent(theEvent.toLowerCase());
-  theElement.addEventListener(theTranslatedEvent, theFunction, false);
-}
-
-/**
- * Removes a touch listener added by addTouchListener
- *
- * @method _removeEventListener
- * @static
- * @private
- * @param theElement {DOMElement} the element to remove an event from
- * @param theEvent {String} the event to remove
- * @param theFunction {Function} the function to remove
- *
- */
-UI._removeEventListener = function(theElement, theEvent, theFunction)
-{
-  var theTranslatedEvent = UI._translateEvent(theEvent.toLowerCase());
-  theElement.removeEventListener(theTranslatedEvent, theFunction);
-}
-
-/**
- * Manages the root element
- *
- * @property _rootElement
- * @private
- * @static
- * @type DOMElement
- */
-UI._rootElement = null;
-/**
- * Creates the root element that contains the view hierarchy
- *
- * @method _createRootElement
- * @static
- * @private
- */
-UI._createRootElement = function ()
-{
-  UI._rootElement = document.createElement ("div");
-  UI._rootElement.className = "container";
-  UI._rootElement.id = "rootContainer";
-  document.body.appendChild (UI._rootElement);
-}
-
-/**
- * Mangage the element used to prevent unwanted clicks
- *
- * @property _clickPreventionElement
- * @private
- * @static
- * @type DOMElement
- */
-UI._clickPreventionElement = null;
-/**
- * Creates the Click Prevention element
- *
- * @method _createClickPreventionElement
- * @private
- * @static
- */
-UI._createClickPreventionElement = function ()
-{
-  UI._clickPreventionElement = document.createElement ("div");
-  UI._clickPreventionElement.id = "preventClicks";
-  document.body.appendChild (UI._clickPreventionElement);
-}
-
-/**
- * Manages the root view (topmost)
- *
- * @property _rootView
- * @private
- * @static
- * @type View
- * @default null
- */
-UI._rootView = null;
-
-/**
- * Assigns a view to be the top view in the hierarchy
- *
- * @method setRootView
- * @static
- * @param theView {View}
- */
-UI.setRootView = function ( theView )
-{
-  if (!UI._rootElement)
-  {
-    UI._createRootElement();
-    UI._createClickPreventionElement();
-  }
-  if (UI._rootView)
-  {
-    UI.removeRootView();
-  }
-  UI._rootView = theView;
-  UI._rootElement.appendChild(theView._element);
-}
-
-/**
- * Removes a view from the root view
- *
- * @method removeRootView
- * @static
- */
-UI.removeRootView = function ()
-{
-  UI._rootElement.removeChild(UI._rootView._element);
+  /**
+   * Manages the root view (topmost)
+   *
+   * @property _rootView
+   * @private
+   * @static
+   * @type View
+   * @default null
+   */
   UI._rootView = null;
-}
 
-/**
- *
- * Returns the root view
- *
- * @method getRootView
- * @static
- * @returns {View}
- */
-UI.getRootView = function ()
-{
-  return UI._rootView;
-}
-
-UI._BackButtonHandler = function ()
-{
-  var self = new BaseObject();
-  self.subclass ( "BackButtonHandler" );
-  self.registerNotification ( "backButtonPressed" );
-  self.handleBackButton = function ()
+  /**
+   * Assigns a view to be the top view in the hierarchy
+   *
+   * @method setRootView
+   * @static
+   * @param theView {View}
+   */
+  UI.setRootView = function ( theView )
   {
-    self.notify ("backButtonPressed");
+    if (!UI._rootContainer)
+    {
+      UI._createRootContainer();
+      UI._createClickPreventionElement();
+    }
+    if (UI._rootView)
+    {
+      UI.removeRootView();
+    }
+    UI._rootView = theView;
+    UI._rootContainer.appendChild(theView.element);
   }
-  document.addEventListener('backbutton', self.handleBackButton, false);
-  return self;
-}
-/**
- *
- * Global Back Button Handler Object
- *
- * Register a listener for the backButtonPressed notification in order
- * to be notified when the back button is pressed.
- *
- * Applies only to a physical back button, not one on the screen.
- *
- * @property backButton
- * @static
- * @final
- * @type _BackButtonHandler
- */
-UI.backButton = new UI._BackButtonHandler();
 
-UI._OrientationHandler = function ()
-{
-  var self = new BaseObject();
-  self.subclass ( "OrientationHandler" );
-  self.registerNotification ( "orientationChanged" );
-  self.handleOrientationChange = function ()
+  /**
+   * Removes a view from the root view
+   *
+   * @method removeRootView
+   * @static
+   */
+  UI.removeRootView = function ()
   {
-    var curDevice;
-    var curOrientation;
-    var curFormFactor;
-    var curScale;
-    var curConvenience;
-
-    curDevice = theDevice.platform();
-    curFormFactor = theDevice.formFactor();
-    curOrientation = theDevice.isPortrait() ? "portrait" : "landscape";
-    curScale = theDevice.isRetina() ? "hiDPI" : "loDPI";
-    curConvenience = "";
-    if (theDevice.iPad()) { curConvenience = "ipad"; }
-    if (theDevice.iPhone()) { curConvenience = "iphone"; }
-    if (theDevice.droidTablet()) { curConvenience = "droid-tablet"; }
-    if (theDevice.droidPhone()) { curConvenience = "droid-phone"; }
-
-    document.body.setAttribute("class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " + curConvenience);
-
-    self.notify ("orientationChanged");
+    UI._rootContainer.removeChild(UI._rootView.element);
+    UI._rootView = null;
   }
-  window.addEventListener('orientationchange', self.handleOrientationChange, false);
-  self.handleOrientationChange();
-  return self;
-}
-/**
- *
- * Global Orientation Handler Object
- *
- * Register a listener for the orientationChanged notification in order
- * to be notified when the orientation changes.
- *
- * @property orientationHandler
- * @static
- * @final
- * @type _OrientationHandler
- */
-UI.orientationHandler = new UI._OrientationHandler();
+
+  /**
+   *
+   * Returns the root view
+   *
+   * @method getRootView
+   * @static
+   * @returns {View}
+   */
+  UI.getRootView = function ()
+  {
+    return UI._rootView;
+  }
+
+  UI._BackButtonHandler = function ()
+  {
+    var self = new BaseObject();
+    self.subclass ( "BackButtonHandler" );
+    self.registerNotification ( "backButtonPressed" );
+    self.handleBackButton = function ()
+    {
+      self.notify ("backButtonPressed");
+    }
+    document.addEventListener('backbutton', self.handleBackButton, false);
+    return self;
+  }
+  /**
+   *
+   * Global Back Button Handler Object
+   *
+   * Register a listener for the backButtonPressed notification in order
+   * to be notified when the back button is pressed.
+   *
+   * Applies only to a physical back button, not one on the screen.
+   *
+   * @property backButton
+   * @static
+   * @final
+   * @type _BackButtonHandler
+   */
+  UI.backButton = new UI._BackButtonHandler();
+
+  UI._OrientationHandler = function ()
+  {
+    var self = new BaseObject();
+    self.subclass ( "OrientationHandler" );
+    self.registerNotification ( "orientationChanged" );
+    self.handleOrientationChange = function ()
+    {
+      var curDevice;
+      var curOrientation;
+      var curFormFactor;
+      var curScale;
+      var curConvenience;
+
+      curDevice = theDevice.platform();
+      if (curDevice == "ios")
+      {
+        if (navigator.userAgent.indexOf("OS 7") > -1 ) { curDevice += " ios7"; }
+        if (navigator.userAgent.indexOf("OS 6") > -1 ) { curDevice += " ios6"; }
+        if (navigator.userAgent.indexOf("OS 5") > -1 ) { curDevice += " ios5"; }
+      }
+      curFormFactor = theDevice.formFactor();
+      curOrientation = theDevice.isPortrait() ? "portrait" : "landscape";
+      curScale = theDevice.isRetina() ? "hiDPI" : "loDPI";
+      curConvenience = "";
+      if (theDevice.iPad()) { curConvenience = "ipad"; }
+      if (theDevice.iPhone()) { curConvenience = "iphone"; }
+      if (theDevice.droidTablet()) { curConvenience = "droid-tablet"; }
+      if (theDevice.droidPhone()) { curConvenience = "droid-phone"; }
+
+      document.body.setAttribute("class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " + curConvenience);
+
+      self.notify ("orientationChanged");
+    }
+    window.addEventListener('orientationchange', self.handleOrientationChange, false);
+    self.handleOrientationChange();
+    return self;
+  }
+  /**
+   *
+   * Global Orientation Handler Object
+   *
+   * Register a listener for the orientationChanged notification in order
+   * to be notified when the orientation changes.
+   *
+   * @property orientationHandler
+   * @static
+   * @final
+   * @type _OrientationHandler
+   */
+  UI.orientationHandler = new UI._OrientationHandler();
+
+  /** 
+   * Create the root container and click prevention div
+   */
+  UI._createRootContainer();
+  UI._createClickPreventionElement();
 
 
-   return UI;
+  return UI;
 });
 
 /**
  *
- * Views provide the basic object that all widgets that are apart of the display hierarchy
- * derive from. They can be anything representable by HTML and contained in a container.
+ * Basic cross-platform mobile Event Handling for YASMF
  * 
- * view.js
- * @module view.js
+ * events.js
  * @author Kerri Shotts
  * @version 0.4
  *
@@ -5006,1167 +3979,357 @@ UI.orientationHandler = new UI._OrientationHandler();
  */
 /*global define*/
 
-define ( 'yasmf/ui/view',['yasmf/util/object', 'yasmf/ui/core'], function ( BaseObject, UI ) 
+define ( 'yasmf/ui/event',["yasmf/util/device"], function ( theDevice )
 {
-var View = function ()
-{
-  var self = new BaseObject();
-  self.subclass ( "UIView" );
 
-  // register any notifications
-  /**
-   * Fired when the bounds of the view has changed. Note that if the frame changes, but the
-   * size of the view does *not* change, this notification is not changed.
-   * @event boundsDidChange
-   */
-  self.registerNotification ( "boundsDidChange" );
-  /**
-   * Fired when the frame of the view has changed. Note that this event will also be fired
-   * when the bounds change, since they inherently affect the frame.Note
-   * that this doesn't get fired when sub-properties are changed, only when the object
-   * itself is assigned.
-   * @event frameDidChange
-   */
-  self.registerNotification ( "frameDidChange" );
-  /**
-   * Fired when the background color has changed. Note
-   * that this doesn't get fired when sub-properties are changed, only when the object
-   * itself is assigned.
-   * @event backgroundColorDidChange
-   */
-  self.registerNotification ( "backgroundColorDidChange" );
-  /**
-   * Fired when the background image has changed. (This includes gradients, etc.). Note
-   * that this doesn't get fired when sub-properties are changed, only when the object
-   * itself is assigned.
-   * @event backgroundImageDidChange
-   */
-  self.registerNotification ( "backgroundImageDidChange" );
-  /**
-   * Fired when the border has changed. Note that this isn't changed when the *size*
-   * of the view changes, only when the border itself is assigned. Furthermore,
-   * it won't be fired when any sub-properties change in the border: to trigger
-   * the event, one *must* copy the border and re-assign it.
-   * @event borderDidChange
-   */
-  self.registerNotification ( "borderDidChange" );
-  /**
-   * Fired when the opacity has changed. 
-   * @event opacityDidChange
-   */
-  self.registerNotification ( "opacityDidChange" );
-  /**
-   * Fired when the shadow has changed. Note
-   * that this doesn't get fired when sub-properties are changed, only when the object
-   * itself is assigned.
-   * @event shadowDidChange
-   */
-  self.registerNotification ( "shadowDidChange" );
-  /**
-   * Fired when the visibility has changed.
-   * @event visibilityDidChange
-   */
-  self.registerNotification ( "visibilityDidChange" );
-  /**
-   * Fired when the view is about to appear.
-   * @event viewWillAppear
-   */
-  self.registerNotification ( "viewWillAppear" );
-  /**
-   * Fired when the view has appeared.
-   * @event viewDidAppear
-   */
-  self.registerNotification ( "viewDidAppear" );
-  /**
-   * Fired when the view will disappear.
-   * @event viewWillDisappear
-   */
-  self.registerNotification ( "viewWillDisappear" );
-  /**
-   * Fired when the view has disappeared
-   * @event viewDidDisappear
-   */
-  self.registerNotification ( "viewDidDisappear" );
-  /**
-   * Fired when the view has finished initializing itself. By the time
-   * this notification is received, it is safe to use various methods
-   * and properties that act on the view's DOM element.
-   * @event viewDidInit
-   */
-  self.registerNotification ( "viewDidInit" );
-  /**
-   * Fired when the view is marked interactive and has been tapped. No
-   * event information is passed.
-   * @event tapped
-   */
-  self.registerNotification ( "tapped" );
-  /**
-   * Fired when the view is marked interactive and a touch event has started. No
-   * event information is passed.
-   * @event touchStarted
-   */
-  self.registerNotification ( "touchStarted" );
-  /**
-   * Fired when the view is marked interactive and a touch has moved. No
-   * event information is passed.
-   * @event touchMoved
-   */
-  self.registerNotification ( "touchMoved" );
-  /**
-   * Fired when the view is marked interactive and a touch event has ended. No
-   * event information is passed.
-   * @event touchEnded
-   */
-  self.registerNotification ( "touchEnded" );
+   /**
+    * Translates touch events to mouse events if the platform doesn't support
+    * touch events. Leaves other events unaffected.
+    *
+    * @method _translateEvent
+    * @static
+    * @private
+    * @param theEvent {String} the event name to translate
+    */
+   var _translateEvent = function ( theEvent )
+   {
+     var theTranslatedEvent = theEvent;
+     if (!theTranslatedEvent) { return theTranslatedEvent; }
+     var platform = theDevice.platform();
+     var nonTouchPlatform = ( platform == "wince" || platform == "unknown" || platform == "mac" || platform =="windows" || platform == "linux" );
+     if (nonTouchPlatform && theTranslatedEvent.toLowerCase().indexOf("touch") > -1 )
+     {
+       theTranslatedEvent = theTranslatedEvent.replace("touch", "mouse");
+       theTranslatedEvent = theTranslatedEvent.replace("start", "down");
+       theTranslatedEvent = theTranslatedEvent.replace("end", "up");
+     }
+     return theTranslatedEvent;  
+   }
 
+   var event = {};
 
-  /*
-   *
-   * All views have direct DOM representations
-   *
-   */
-  /**
-   * Stores a reference to the view's DOM representation. It is not initialized
-   * until the `init` method is finished. Once that is finished, the DOM Element
-   * will be an element with the same tagname as the object's class. For a UI.View,
-   * the tag name will be "UIView". The class will also be "UIView".
-   *
-   * @private
-   * @property _element
-   * @type DOMElement
-   * @default null
-   */
-  self._element = null; 
-  /*
-   *
-   * All views have subviews
-   *
-   */
-  /**
-   *
-   * Represents the list of all views that belong to this view.
-   *
-   * @private
-   * @property _subViews
-   * @type Array
-   * @default empty
-   */
-  self._subViews = [];
-  /**
-   * Represents the superView (parent view).
-   *
-   * @private
-   * @property _superView
-   * @type View
-   * @default null
-   */
-  self._superView = null;
-  /**
-   * Add a view to the list of this view's subviews. Doing so makes the view's
-   * DOM element a child of this view's DOM element, but there is no guarantee
-   * of order. (That is, the representation of the DOM element's children may not
-   * be in the same order as the subViews array.) The view's `superView` is also
-   * set to this view instance.
-   *
-   * > The behavior is undefined if the *same* view is added more than once.
-   *
-   * @method addSubView
-   * @param theView {View} the view to add
-   */
-  self.addSubView = function ( theView )
-  {
-    self._subViews.push ( theView );
-    theView._superView = self;
+   /**
+    *
+    * Creates an event object from a DOM event.
+    *
+    * The event returned contains all the touches from the DOM event in an array of {x,y} objects.
+    * The event also contains the first touch as x,y properties and the average of all touches
+    * as avgX,avgY. If no touches are in the event, these values will be -1.
+    *
+    * @method makeEvent
+    * @static
+    * @param {DOMEvent} e - the DOM event
+    * @returns {event}
+    *
+    */
+   event.convert = function ( that, e )
+   {
+     if (typeof e === "undefined")
+     {
+      e = window.event;
+     }
+     var newEvent = { _originalEvent: e, touches: [], x: -1, y: -1, avgX: -1, avgY: -1, element: e.target || e.srcElement, target: that };
+     if (e.touches)
+     {
+       var avgXTotal = 0;
+       var avgYTotal = 0;
+       for (var i=0; i<e.touches.length; i++)
+       {
+         newEvent.touches.push ( { x: e.touches[i].clientX, y: e.touches[i].clientY } );
+         avgXTotal += e.touches[i].clientX;
+         avgYTotal += e.touches[i].clientY;
+         if (i===0)
+         {
+           newEvent.x = e.touches[i].clientX;
+           newEvent.y = e.touches[i].clientY;
+         }
+       }
+       if (e.touches.length>0)
+       {
+         newEvent.avgX = avgXTotal / e.touches.length;
+         newEvent.avgY = avgYTotal / e.touches.length;
+       }
+     }
+     else
+     {
+       if (event.pageX)
+       {
+         newEvent.touches.push ( { x: e.pageX, y: e.pageY } );
+         newEvent.x = e.pageX;
+         newEvent.y = e.pageY;
+         newEvent.avgX = e.pageX;
+         newEvent.avgY = e.pageY;
+       }
+     }
+     return newEvent;
+   }
 
-    // make sure our elemenpt knows about it.
-    self._element.appendChild ( theView._element );
-  };
-  /**
-   * Removes a subview from the list of this view's subviews. Doing so removes
-   * the view as a child of this view's DOM element, and sets `superView` to 
-   * null.
-   *
-   * > The behavior is undefined if the view hasn't already been added.
-   *
-   * @method removeSubView
-   * @param theView {View} the view to remove
-   */
-  self.removeSubView = function ( theView )
-  {
-    self._subViews.splice ( self._subViews.indexOf(theView), 1 );
-    theView._superView = null;
-
-    // and our element needs to be removed
-    self._element.removeChild ( theView._element );
-  };
-  /**
-   * Removes this view from its superview. Doing so removes this view
-   * from it's prior parent's DOM Elemnt and sets `superView` to null.
-   * 
-   * @method removeFromSuperView
-   */
-  self.removeFromSuperView = function ()
-  {
-    self._superView.removeSubView ( self );
-  };
-  /**
-   * Returns all the subViews in an array.
-   *
-   * @method getSubViews
-   * @returns {Array} all the subviews.
-   */
-  self.getSubViews = function ()
-  {
-    return self._subViews;
-  }
-  /**
-   * Return the super view
-   *
-   * @method getSuperView
-   * @returns {View} the parent view
-   */
-  self.getSuperView = function ()
-  {
-    return self._superView;
-  }
-  /**
-   * The array of subviews. **Read-Only**
-   * @property subViews
-   * @type Array
-   * @default empty
-   */
-  self.__defineGetter__ ( "subViews", self.getSubViews );
-  /**
-   * The parent view. **Read-Only**
-   * @property superView
-   * @type View
-   * @default null
-   */
-  self.__defineGetter__ ( "superView", self.getSuperView );
-
-  /*
-   *
-   * All views have bounds and frames.
-   *
-   */
-  /**
-   * Represents the bounds of the view. Keep in mind that if the view's DOM element
-   * has various other styles that might affect the visible bounds, this may not
-   * accurately reflect the visual representation. 
-   *
-   * @private
-   * @property _bounds
-   * @type rect
-   * @default zeroRect
-   */
-  self._bounds = UI.zeroRect();
-  /**
-   * Represents the frame of the view. Keep in mind that it may not accurately
-   * reflect the DOM element's actual frame (due to various CSS styles that may
-   * be applied).
-   *
-   * @private
-   * @property _frame
-   * @type rect
-   * @default zeroRect
-   */
-  self._frame = UI.zeroRect();
-  /**
-   * Returns the bounds of the view. Keep in mind that it may not accurately
-   * reflect the DOM element's actual bounds (due to various CSS styles that may
-   * be applied).
-   *
-   * @method getBounds
-   * @returns {rect}
-   */
-  self.getBounds = function ()
-  {
-    return self._bounds;
-  }
-  /**
-   * Sets the bounds of the view. 
-   *
-   * Triggers `boundsDidChange` and `frameDidChange`.
-   * @method setBounds
-   * @property newBounds {rect}
-   */
-  self.setBounds = function ( newBounds )
-  {
-    self._bounds = UI.copyRect ( newBounds );
-    if (!self._frame)
-    {
-      self._frame = UI.zeroRect();
-    }
-    if (self._frame.size.w != self._bounds.size.w ||
-        self._frame.size.h != self._bounds.size.h)
-    {
-      self._frame.size = UI.copySize ( newBounds.size );
-      self.notify ("boundsDidChanged");
-      self.notify ("frameDidChange");
-    }
-  }
-  /**
-   * Represents the frame of the view. Keep in mind that it may not accurately
-   * reflect the DOM element's actual frame (due to various CSS styles that may
-   * be applied).
-   *
-   * @method getFrame
-   * @returns {rect}
-   */
-  self.getFrame = function ()
-  {
-    return self._frame;
-  }
-  /**
-   * Set the frame of the view. Adjusts the bounds if necessary.
-   *
-   * Triggers `frameDidChange`, and `boundsDidChange` only if the bounds
-   * needed to be adjusted.
-   * @method setFrame
-   * @param newFrame {rect}
-   */
-  self.setFrame = function( newFrame )
-  {
-    self._frame = UI.copyRect ( newFrame );
-    if (!self._bounds)
-    {
-      self._bounds = UI.zeroRect();
-    }
-    if ( self._bounds.size.w != self._frame.size.w ||
-         self._bounds.size.h != self._frame.size.h )
-    {
-      self._bounds.size = UI.copySize ( newFrame.size );
-      self.notify ("boundsDidChange");      
-    }
-    self.notify ("frameDidChange");
-  }
-  /**
-   * Represents the bounds of the view. Keep in mind that it may not accurately
-   * reflect the DOM element's actual frame (due to various CSS styles that may
-   * be applied). Setting the bounds of the view will adjust the frame.
-   *
-   * Triggers `frameDidChange` and and `boundsDidChange` whenever the bounds are changed, and `boundsDidChange`
-   *
-   * @property bounds
-   * @type rect
-   * @default zeroRect
-   */
-  self.__defineGetter__("bounds", self.getBounds);
-  self.__defineSetter__("bounds", self.setBounds);
-  /**
-   * Represents the frame of the view. Keep in mind that it may not accurately
-   * reflect the DOM element's actual frame (due to various CSS styles that may
-   * be applied). Setting the frame of the view will adjust the bounds if necessary.
-   *
-   * Triggers `frameDidChange` whenever the frame is changed, and `boundsDidChange` only if the bounds actuallly
-   * change.
-   *
-   * @property frame
-   * @type rect
-   * @default zeroRect
-   */
-  self.__defineGetter__("frame", self.getFrame);
-  self.__defineSetter__("frame", self.setFrame);
+   /**
+    *
+    * Cancels an event that's been created using {@link UI.makeEvent}.
+    *
+    * @method cancelEvent
+    * @static
+    * @param {event} e - the event to cancel
+    *
+    */
+   event.cancel = function ( e )
+   {
+     if (e._originalEvent.cancelBubble)
+     {
+       e._originalEvent.cancelBubble();
+     }
+     if (e._originalEvent.stopPropagation)
+     {
+       e._originalEvent.stopPropagation();
+     }
+     if (e._originalEvent.preventDefault)
+     {
+       e._originalEvent.preventDefault();
+     } else
+     {
+       e._originalEvent.returnValue = false;
+     }
+   }
 
 
-  /**
-   * Indicates if the view should use the GPU for compositing.
-   *
-   * @private
-   * @property _useGPU
-   * @type boolean
-   * @default false
-   */
-  self._useGPU = false;
-  /**
-   * Indicates if the view should use the GPU for positioning the view. Requires
-   * that `_useGPU` is `true`.
-   *
-   * @private
-   * @property _useGPUForPositioning
-   * @type boolean
-   * @default false
-   */
-  self._useGPUForPositioning = false;
-  /**
-   * Returns whether or not the view is using the GPU for compositing. If `true`,
-   * the view is using the GPU (if available) for compositing. If `false`, it isn't.
-   *
-   * @method getUseGPU
-   * @returns {boolean}
-   */
-  self.getUseGPU = function ()
-  {
-    return self._useGPU;
-  }
-  /**
-   * Returns whether the view is using the GPU for positioning. If `true`,
-   * the view is using the GPU (if available, and getUseGPU is `true`),
-   * otherwise it is not.
-   *
-   * @method getUseGPUForPositioning
-   * @returns {boolean}
-   */
-  self.getUseGPUForPositioning = function ()
-  {
-    return self._useGPUForPositioning;
-  }
-  /**
-   * Sets whether or not the view should use the GPU (if available) for compositing.
-   * @method setUseGPU
-   * @parameter v {boolean} `true` to use the GPU; `false` to use software compositing.
-   */
-  self.setUseGPU = function ( v )
-  {
-    self._useGPU = v;
-    if (v)
-    {
-      if (!self._useGPUForPositioning)
-      {
-        self._element.style.webkitTransform = "translate3d(0,0,0)";
-      }
-      else
-      {
-        self._element.style.webkitTransform = "translate3d(" + self._frame.origin.x + "px," + self._frame.origin.y + "px,0)";
-//        self._element.style.webkitTransform = "translate(" + self._frame.origin.x + "px," + self._frame.origin.y + "px)";
-      }
-    }
-    else
-    {
-      self._element.style.webkitTransform = "inherit";
-    }
-  }
-  /**
-   * Sets whether or not the view should be positioned using the GPU (if available). Een should
-   * this value be set to `true`, it only takes effect if the view is also compositing via the
-   * GPU.
-   *
-   * @method setUseGPUForPositioning
-   * @param v {boolean} `true` to use the GPU for positioning; `false` to use regular `top`/`left` styling.
-   */
-  self.setUseGPUForPositioning = function ( v )
-  {
-    self._useGPUForPositioning = v;
-    if (v && self._useGPU)
-    {
-      self._element.style.top = "";
-      self._element.style.left = "";
-    }
-    else
-    {
-      if (self._useGPU)
-      {
-        self._element.style.webkitTransform = "translate3d(0,0,0)";
-      }
-      else
-      {
-        self._element.style.webkitTransform = "";
-      }
-    }
-    self.notify ( "frameDidChange" );
-  }
-  /**
-   * Determines whether or not to use the GPU for compositing. If changed, the
-   * DOM element will be updated appropriately.
-   *
-   * @property useGPU
-   * @type boolean
-   * @default false
-   */
-  self.__defineGetter__("useGPU", self.getUseGPU);
-  self.__defineSetter__("useGPU", self.setUseGPU);
-  /**
-   * Determines wether or not to use the GPU for positioning. If changed, the DOM
-   * element is updated appropriately. `useGPU` must be `true` for it to have
-   * any effect.
-   *
-   * @property useGPUForPositioning
-   * @type boolean
-   * @default false
-   */
-  self.__defineGetter__("useGPUForPositioning", self.getUseGPUForPositioning);
-  self.__defineSetter__("useGPUForPositioning", self.setUseGPUForPositioning);
+   /**
+    * Adds a touch listener to theElement, converting touch events for WP7.
+    *
+    * @method addEventListener
+    * @param theElement {DOMElement} the element to attach the event to
+    * @param theEvent {String} the event to handle
+    * @param theFunction {Function} the function to call when the event is fired
+    *
+    */
+   event.addListener = function(theElement, theEvent, theFunction)
+   {
+     var theTranslatedEvent = _translateEvent(theEvent.toLowerCase());
+     theElement.addEventListener(theTranslatedEvent, theFunction, false);
+   }
 
-  /**
-   *
-   * recalculates the element's position based on
-   * the frame. It also calls calcElement() for the
-   * object, if defined. After that, it calls the
-   * _calcElement for every subview, in case they
-   * decide to be re-positioned.
-   *
-   * @private
-   * @method _calcElement
-   * @param o {PKObject} the object being calc'd
-   * @param n {String} the notification
-   */
-  self._calcElement = function ( o, n )
-  {    
-    // allow us the opportunity to override
-    if ( n == "frameDidChange" )
-    {
-      if (self.calcElement)
-      {
-        self.calcElement();
-      }
-    }
+   /**
+    * Removes a touch listener added by addTouchListener
+    *
+    * @method removeEventListener
+    * @param theElement {DOMElement} the element to remove an event from
+    * @param theEvent {String} the event to remove
+    * @param theFunction {Function} the function to remove
+    *
+    */
+   event.removeListener = function(theElement, theEvent, theFunction)
+   {
+     var theTranslatedEvent = _translateEvent(theEvent.toLowerCase());
+     theElement.removeEventListener(theTranslatedEvent, theFunction);
+   }
 
-    // and notify all our sub views if our bounds have changed
-    if ( n == "boundsDidChange" )
-    {
-      for (var i=0; i<self._subViews.length; i++)
-      {
-        if ( self._subViews[i]._calcElement )
-        {
-          self._subViews[i]._calcElement();
-        }
-      }
-    }
-  }
-  /**
-   * Calculates the position and size (and other various properties) of the element.
-   * To a small degree, this would be like the drawRect() in other native frameworks.
-   *
-   * > Override to provide different positioning methods.
-   *
-   * > Called automatically when the frame changes.
-   *
-   * @method calcElement
-   */
-  self.calcElement = function ()
-  {
-    // only change properties that have changed
-    if (self._element.style.position != "absolute") { self._element.style.position = "absolute"; }
-    if (self._useGPUForPositioning && self._useGPU)
-    {
-      self._element.style.webkitTransform = "translate3d(" + self._frame.origin.x + "px," + self._frame.origin.y + "px,0)";  
-//      self._element.style.webkitTransform = "translate(" + self._frame.origin.x + "px," + self._frame.origin.y + "px)";  
-    }
-    else
-    {
-      if (self._frame.origin.y + "px" != self._element.style.top) { self._element.style.top = self._frame.origin.y + "px"; }
-      if (self._frame.origin.x + "px" != self._element.style.left) { self._element.style.left = self._frame.origin.x + "px"; }
-    }
-    if (self._frame.size.w + "px" != self._element.style.width) { self._element.style.width = self._frame.size.w + "px"; }
-    if (self._frame.size.h + "px" != self._element.style.height) { self._element.style.height = self._frame.size.h + "px"; }
-    
-  }
-  // when our frame changes, we must know. Call self._calcElement
-  self.addListenerForNotification ( "frameDidChange" , self._calcElement );
-
-  /*
-   *
-   * Every view has a background color, even if it is transparent.
-   *
-   */
-  /**
-   * The background color of the view. When null, the background color is applied to the DOM
-   * element as `inherit`.
-   *
-   * @private
-   * @property _backgroundColor
-   * @type color
-   * @default null
-   */
-  self._backgroundColor = null;
-  /**
-   * Returns the background color, or null if there is no background color set.
-   *
-   * @method getBackgroundColor
-   * @returns {color}
-   */
-  self.getBackgroundColor = function ()
-  {
-    return self._backgroundColor;
-  };
-  /**
-   * Sets the background color, and fires `backgroundColorDidChange`. If the color
-   * is null, the DOM element will receive `inherit`
-   *
-   * @method setBackgroundColor
-   * @param theColor {color}
-   */
-  self.setBackgroundColor = function ( theColor )
-  {
-    self._backgroundColor = UI.copyColor(theColor);
-    self._element.style.backgroundColor = UI._colorToRGBA (theColor);
-    self.notify ("backgroundColorDidChange");
-  };
-
-  /**
-   * The background color for the view. Changing it will fire `backgroundColorDidChange`.
-   *
-   * @property backgroundColor
-   * @type color
-   * @default null
-   */
-  self.__defineGetter__("backgroundColor", self.getBackgroundColor);
-  self.__defineSetter__("backgroundColor", self.setBackgroundColor);
-
-  /*
-   *
-   * Every view can have a background image
-   *
-   */
-  /**
-   * The background image can be a real image or a gradient. 
-   *
-   * @private
-   * @property _backgroundImage
-   * @type image
-   * @default null
-   */
-  self._backgroundImage = null;
-  /**
-   * returns the background image, if any.
-   *
-   * @method getBackgroundImage
-   * @returns {image}
-   */
-  self.getBackgroundImage = function ()
-  {
-    return self._backgroundImage;
-  }
-  /**
-   * sets the background image. If `theImage` is `null`, the element will
-   * be `inherit` instead. Fires `backgroundImageDidChange`.
-   *
-   * @method setBackgroundImage
-   * @param theImage {image}
-   */
-  self.setBackgroundImage = function ( theImage )
-  {
-    self._backgroundImage = UI.copyImage ( theImage );
-    UI._applyImageToElement ( self._element, self._backgroundImage );
-    self.notify ("backgroundImageDidChange");
-  }
-  /**
-   * The background image of the view, or `null` if none. Changing
-   * will fire `backgroundImageDidChange`.
-   *
-   * @property backgroundImage
-   * @type image
-   * @default null
-   */
-  self.__defineGetter__("backgroundImage", self.getBackgroundImage);
-  self.__defineSetter__("backgroundImage", self.setBackgroundImage);
-
-  /*
-   *
-   * Every view can also have a border
-   *
-   */
-  /**
-   * The border, if any, for the view.
-   *
-   * @private
-   * @property _border
-   * @type border
-   * @default null
-   */
-  self._border = null;
-  /**
-   * Returns the border for the view, `null` if no border.
-   *
-   * @method getBorder
-   * @returns {border}
-   */
-  self.getBorder = function ()
-  {
-    return self._border;
-  }
-  /**
-   * Sets the border of the view. If `null`, the view receives inherited borders. Fires `borderDidChange`.
-   *
-   * @method setBorder
-   * @param theBorder {border}
-   */
-  self.setBorder = function ( theBorder )
-  {
-    self._border = UI.copyBorder (theBorder);
-    UI._applyBorderToElement ( self._element, self._border )
-    {
-      self.notify ("borderDidChange");
-    }
-  }
-  /**
-   * The border for the view. If changed, fires `borderDidChange`.
-   *
-   * @property border
-   * @type border
-   * @default null
-   */
-  self.__defineGetter__("border", self.getBorder);
-  self.__defineSetter__("border", self.setBorder);
-
-  /*
-   *
-   * And every view can also have multiple shadows
-   *
-   */
-  /**
-   * Array of shadows for the view.
-   *
-   * @private
-   * @property _shadows
-   * @type Array
-   * @default empty
-   */
-  self._shadows = [];
-  /**
-   * Returns all the shadows in an array. If there are no shadows, the
-   * array will be empty.
-   *
-   * @method getShadows
-   * @returns {Array} of shadows
-   */
-  self.getShadows = function ()
-  {
-    return self._shadows;
-  }
-  /**
-   * Sets the shadows for the view. `theShadows` must be an Array of shadow
-   * objects. Shadows are applied to the DOM element in the order they appear
-   * in the Array. Calling this method fires `shadowDidChange`.
-   *
-   * @method setShadows
-   * @param theShadows {Array} (of shadows)
-   */
-  self.setShadows = function ( theShadows )
-  {
-    var shadowString = "";
-    self._shadows = [];
-    for (var i=0; i<theShadows.length; i++)
-    {
-      self._shadows.push ( UI.copyShadow ( theShadows[i] ) );
-      shadowString += UI._shadowToBoxShadow ( self._shadows[i] );
-      if (i<theShadows.length-1)
-      {
-        shadowString += ", ";
-      }
-    }
-    self._element.style.boxShadow = shadowString;
-    self.notify ("shadowDidChange");
-  }
-  /**
-   * The shadows for the view. Shadows are applied to the DOM element in the
-   * order they appear in the array. If the property is set, `shadowDidChange`
-   * is fired.
-   *
-   * @property shadows
-   * @type Array
-   * @default empty
-   */
-  self.__defineGetter__("shadows", self.getShadows);
-  self.__defineSetter__("shadows", self.setShadows);
-
-  /*
-   *
-   * Every view can be shown or hidden
-   *
-   */
-  /**
-   * Maintains the visibility state of the object
-   * @private
-   * @property _visible
-   * @type boolean
-   * @default true
-   */
-  self._visible = true;
-  /**
-   * Returns the visibility of the view.
-   *
-   * @method getVisibility
-   * @returns {boolean} `true` if the view is visible.
-   */
-  self.getVisibility = function ()
-  {
-    return self._visible;
-  }
-  /**
-   * Sets the visibility of the view. If the view is appearing, the `viewWillAppear`
-   * notification will be fired, followed by a `viewDidAppear`. If the view is
-   * disappearing, the `viewWillDisappear` will be fired, followed by a `viewDidDisappear`.
-   * No matter what, `visibilityDidChange` will fire.
-   *
-   * > The DOM Element will receive a `display: inherit` while visible, to ensure that styling
-   * > can apply whatever `display` property it wants when the view is visible.
-   *
-   * @method setVisibility
-   * @param visibility {boolean} `true` to show the view; `false` to hide it.
-   */
-  self.setVisibility = function ( visibility )
-  {
-    if (self._visible != visibility)
-    {
-      self.notify ( visibility ? "viewWillAppear" : "viewWillDisappear" );
-      self._visible = visibility;
-      self._element.style.display = ( visibility ? "inherit" : "none" );
-      self.notify ( visibility ? "viewDidAppear" : "viewDidDisappear" );
-      self.notify ( "visibilityDidChange" );
-    }
-  }
-  /**
-   * The state of the object's visibility. If `true`, the object is visible. Changing
-   * the state will cause the obhect to hide or show, depending upon the assignment.
-   * If the view is appearing, the `viewWillAppear`
-   * notification will be fired, followed by a `viewDidAppear`. If the view is
-   * disappearing, the `viewWillDisappear` will be fired, followed by a `viewDidDisappear`.
-   * No matter what, `visibilityDidChange` will fire.
-   *
-   * > The DOM Element will receive a `display: inherit` while visible, to ensure that styling
-   * > can apply whatever `display` property it wants when the view is visible.
-   *
-   * @property visible
-   * @type boolean
-   * @default true
-   */   
-  self.__defineGetter__("visible", self.getVisibility);
-  self.__defineSetter__("visible", self.setVisibility);
-
-  /*
-   *
-   * Every view has opacity
-   *
-   */
-  /**
-   * Opacity of the view; 1.0 = fully opaque; 0.0 = fully transparent.
-   *
-   * @private
-   * @property _opacity
-   * @type Number
-   * @default 1.0
-   */
-  self._opacity = 1.0;
-  /**
-   * returns the opacity of the view.
-   *
-   * @method getOpacity
-   * @returns {Number}
-   */
-  self.getOpacity = function ()
-  {
-    return self._opacity;
-  }
-  /**
-   * Sets the opacity of the view. Fires `opacityDidChange`.
-   *
-   * @method setOpacity
-   * @param opacity {Number} A number between 0.0 and 1.0
-   */
-  self.setOpacity = function ( opacity )
-  {
-    if (self._opacity != opacity)
-    {
-      self._opacity = opacity;
-      self._element.style.opacity = opacity;
-      self.notify ( "opacityDidChange" );
-    }
-  }
-  /**
-   * The opacity of the view from 0.0 (transparent) to 1.0 (fully opaque).
-   * When changed, `opacityDidChange` is fired.
-   *
-   * @property opacity
-   * @type Number
-   * @default 1.0
-   */
-  self.__defineGetter__("opacity", self.getOpacity);
-  self.__defineSetter__("opacity", self.setOpacity);
-
-  /*
-   *
-   * Views can override their scrolling
-   *
-   */
-  /**
-   * By default views inherit their scrolling (which is typically overflow:hidden),
-   * but they can determine their overflow capability (hidden, auto, scroll).
-   *
-   * @private
-   * @property _overflow
-   * @type String
-   * @default "inherit"
-   */
-  self._overflow = "inherit";
-  /**
-   * Returns the overflow property; "inherit" means that the view inherits its scrolling
-   * capability (which is usually overflow:hidden). Valid values are `hidden`, `auto`, `scroll`.
-   *
-   * @method getOverflow
-   * @returns {String}
-   */
-  self.getOverflow = function ()
-  {
-    return self._overflow;
-  }
-  /**
-   * Sets the overflow property; "inherit" means that the view inherits its scrolling
-   * capability (which is usually overflow:hidden). Valid values are `hidden`, `auto`, `scroll`.
-   *
-   * @method setOverflow
-   * @param v {String} `hidden`, `auto`, `scroll`, `inherit`.
-   */
-  self.setOverflow = function ( v )
-  {
-    self._overflow = v;
-    self._element.style.overflow = v;
-  }
-  /**
-   * The CSS overflow property. "inherit" means that the view inherits its scrolling
-   * capability (which is usually overflow:hidden). Valid values are `hidden`, `auto`, `scroll`.
-   *
-   * @property overflow
-   * @type String
-   * @default "inherit"
-   */
-  self.__defineGetter__("overflow", self.getOverflow);
-  self.__defineSetter__("overflow", self.setOverflow);
-
-  /*
-   *
-   * event processing
-   *
-   */
-  /**
-   * Called when the view is interactive and a touchStart event has been fired.
-   * It will add a `touched` event to the DOM Element's class (for the benefit of
-   * any CSS), and then indicates the potential for a tap. `touchStarted` will be
-   * fired and will call `touchStart` with the event if possible.
-   * @private
-   * @method _touchStart
-   * @param e {DOMEvent}
-   */
-  self._touchStart = function ( e )
-  {
-    var event = UI.makeEvent ( e || window.event );
-    self._element.className += " touched ";
-    self._tapPotential = true;
-    self.notify ( "touchStarted" );
-    if (self.touchStart)
-    {
-      return self.touchStart ( event );
-    }
-  }
-  /**
-   * Called, if defined, whenever the view receives the start of a touch and is
-   * interactive.
-   *
-   * @optional
-   * @method touchStart
-   * @param event {event}
-   */
-
-  /**
-   * Called whenever a touch event moves if the view is interactive. It will
-   * remove any `touched` class from the DOM element, and then send `touchMoved`
-   * as a notification. It will clear the tap potential. Finally, if defined,
-   * it will call `touchMove` with the event.
-   *
-   * @private
-   * @method _touchMove
-   * @param event {DOMEvent}
-   */
-  self._touchMove = function ( e )
-  {
-    var event = UI.makeEvent ( e || window.event );
-    self._tapPotential = false;
-    if (self._element.className)
-    {
-      self._element.className = self._element.className.replace(/touched/g,"");
-    }
-    self.notify ( "touchMoved" );
-    if (self.touchMove)
-    {
-      return self.touchMove ( event );
-    }
-  }
-  /**
-   * Called whenever the touch moves on the view, if it is interactive.
-   *
-   * @optional
-   * @method touchMove
-   * @param event {event}
-   */
-
-  /**
-   * Called whenever the touch ends. It removes any `touched` class from the DOM element
-   * and checks the tap potential. If there's been no movement, it will fire `tapped`.
-   * No matter what, `touchEnded` is fired, and then `touchEnd` is called if defined.
-   *
-   * @private
-   * @method _touchEnd
-   * @param e {DOMEvent}
-   *
-   */
-  self._touchEnd = function ( e )
-  {
-    var event = UI.makeEvent ( e || window.event );
-    if (self._element.className)
-    {
-      self._element.className = self._element.className.replace(/touched/g,"");
-    }
-    self.notify ( "touchEnded" );
-    if (self._tapPotential)
-    {
-      self.notify ( "tapped" );
-    }
-    self._tapPotential = false;
-    if (self.touchEnd)
-    {
-      return self.touchEnd ( event );
-    }
-  }
-  /**
-   * Called, if defined, whenever a touch event ends.
-   *
-   * @method touchEnd
-   * @param event {event}
-   */
-
-  /**
-   * Stores the state of the view's interactivity.
-   *
-   * @private
-   * @property _interactive
-   * @type boolean
-   * @default false
-   */
-  self._interactive = false;
-  /**
-   * Stores whether or not touch handlers have been added to the DOM element.
-   * This ensures that they will only ever be added once.
-   *
-   * @private
-   * @property _touchHandlersAdded
-   * @type boolean
-   * @default false
-   */
-  self._touchHandlersAdded = false;
-  /**
-   * Returns the interactive status of the view. If `true`, the view can be interacted with via touch.
-   *
-   * @method getInteractive
-   * @returns {boolean}
-   */
-  self.getInteractive = function ()
-  {
-    return self._interactive;
-  }
-  /**
-   * Sets the interactive status of the view. If `true` is passed, touch handlers are added to the view
-   * and touch events can be processed. If `false` is passed, touch handlers are removed and touch
-   * events are no longer processed.
-   *
-   * @method setInteractive
-   * @param v {boolean}
-   */
-  self.setInteractive = function ( v )
-  {
-    self._interactive = v;
-    if (v)
-    {
-      if (!self._touchHandlersAdded)
-      {
-        UI._addEventListener ( self._element, "touchstart", self._touchStart );
-        UI._addEventListener ( self._element, "touchmove", self._touchMove );
-        UI._addEventListener ( self._element, "touchend", self._touchEnd );      
-      }
-      self._touchHandlersAdded = true;
-    }
-    else
-    {
-      if (self._touchHandlersAdded)
-      {
-        UI._removeEventListener ( self._element, "touchstart", self._touchStart );
-        UI._removeEventListener ( self._element, "touchmove", self._touchMove );
-        UI._removeEventListener ( self._element, "touchend", self._touchEnd );
-        self._touchHandlersAdded = false;        
-      }
-    }
-  }
-  /**
-   * Whether or not the view is interactive. If `true`, it is, and touch events will be
-   * generated.
-   *
-   * @property interactive
-   * @type boolean
-   * @default false
-   */
-  self.__defineGetter__("interactive", self.getInteractive);
-  self.__defineSetter__("interactive", self.setInteractive);
-
-  /**
-   *
-   * Initializes the view by creating the DOM element and setting its class.
-   * Once complete, the view fires `viewDidInit`
-   *
-   * > `noNotify` should only ever be passed from overridden `init`s. The value
-   * > in that case should always be `true` in order to prevent multiple 
-   * > `viewDidInit`.
-   *
-   * @method init
-   * @param {boolean} [noNotify]
-   *
-   */
-  self.overrideSuper ( self.class, "init", self.init );
-  self.init = function ( noNotify )
-  {
-    // super first
-    self.super ( "UIView", "init" );
-
-    // any view initialization
-    self._element = document.createElement ( self.class );
-    self._element.className = self._classHierarchy.join (" ");
-    //self.backgroundColor = UI.COLOR.lightGrayColor();
-
-    // notify of the initialization
-    if (!noNotify) { self.notify ( "viewDidInit" ); }
-  };
-  /**
-   * Initializes the view by calling `init` and then sets the frame.
-   *
-   * @method initWithFrame
-   * @param theFrame {frame}
-   */
-  self.initWithFrame = function ( theFrame )
-  {
-    self.init();
-    self.frame = theFrame;
-  };
-  /**
-   * Initializes the view by calling `init` and then sets all the options in the `options` object.
-   *
-   * @method initWithOptions
-   * @param options {Object} the options. Each property that is supported by the view is also
-   *                         supported in this object. The idea is to simplify initialization code
-   *                         just a little.
-   */
-  self.initWithOptions = function ( options )
-  {
-    self.init();
-    if (typeof options !== "undefined")
-    {
-      if (typeof options.frame !== "undefined" )              { self.frame = options.frame; }
-      if (typeof options.backgroundColor !== "undefined" )    { self.backgroundColor = options.backgroundColor; }
-      if (typeof options.backgroundImage !== "undefined" )    { self.backgroundImage = options.backgroundImage; }
-      if (typeof options.border !== "undefined" )             { self.border = options.border; }
-      if (typeof options.shadows !== "undefined" )            { self.shadows = options.shadows; }
-      if (typeof options.visible !== "undefined" )            { self.visible = options.visible; }
-      if (typeof options.opacity !== "undefined" )            { self.opacity = options.opacity; }
-      if (typeof options.useGPU !== "undefined" )             { self.useGPU = options.useGPU; }
-      if (typeof options.useGPUForPositioning !== "undefined" ) { self.useGPUForPositioning = options.useGPUForPositioning; }
-      if (typeof options.overflow !== "undefined" )           { self.overflow = options.overflow; }
-      if (typeof options.interactive !== "undefined" )        { self.interactive = options.interactive; }
-    };
-  };
-
-  return self;
-
-}
-
-   return View;
+   return event;
 });
+
+/**
+ *
+ * View Containers are simple objects that provide very basic view management with
+ * a thin layer over the corresponding DOM element.
+ * 
+ * viewContainer.js
+ * @author Kerri Shotts
+ * @version 0.4
+ *
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+ * software and associated documentation files (the "Software"), to deal in the Software 
+ * without restriction, including without limitation the rights to use, copy, modify, 
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
+ * permit persons to whom the Software is furnished to do so, subject to the following 
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies 
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT 
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+/*jshint
+         asi:true,
+         bitwise:true,
+         browser:true,
+         camelcase:true,
+         curly:true,
+         eqeqeq:false,
+         forin:true,
+         noarg:true,
+         noempty:true,
+         plusplus:false,
+         smarttabs:true,
+         sub:true,
+         trailing:false,
+         undef:true,
+         white:false,
+         onevar:false 
+ */
+/*global define*/
+
+define ( 'yasmf/ui/viewContainer',["yasmf/util/object"], function ( BaseObject )
+{
+   var _className = "ViewContainer";
+   var ViewContainer = function ()
+   {
+      var self = new _y.BaseObject();
+      self.subclass ( _className );
+
+      self._element = null;
+      self._elementClass = null;
+      self._elementId = null;
+      self._elementTag = "div";
+      self._parentElement = null;
+
+      self.getElement = function ()
+      {
+         if (self._element === null)
+         {
+            self._element = document.createElement ( self._elementTag );
+            if ( self.elementClass !== null) { self._element.className = self.elementClass; };
+            if ( self.elementId !== null) { self._element.id = self.elementId; }
+         }
+         return self._element;
+      }
+      self.setElement = function ( theElement )
+      {
+         self._element = theElement;
+      }
+      self.__defineGetter__ ( "element", self.getElement );
+      self.__defineSetter__ ( "element", self.setElement );
+
+      self.getElementClass = function ()
+      {
+         return self._elementClass;
+      }
+      self.setElementClass = function ( theClassName )
+      {
+         self._elementClass = theClassName;
+         if (self._element !== null )
+         {
+            self._element.className = theClassName;
+         }
+      }
+      self.__defineGetter__ ( "elementClass", self.getElementClass );
+      self.__defineSetter__ ( "elementClass", self.setElementClass );
+
+      self.getElementId = function ()
+      {
+         return self._elementId;
+      }
+      self.setElementId = function ( theElementId )
+      {
+         self._elementId = theElementId;
+         if (self._element !== null )
+         {
+            self._element.id = theElementId;
+         }
+      }
+      self.__defineGetter__ ( "elementId", self.getElementId );
+      self.__defineSetter__ ( "elementId", self.setElementId );
+
+      self.getElementTag = function ()
+      {
+         return self._elementTag;
+      }
+      self.setElementTag = function ( theTagName )
+      {
+         self._elementTag = theTagName;
+      }
+      self.__defineGetter__ ( "elementTag", self.getElementTag );
+      self.__defineSetter__ ( "elementTag", self.setElementTag );
+
+      self.getParentElement = function ()
+      {
+         return self._parentElement;
+      }
+      self.setParentElement = function ( theParentElement )
+      {
+         if (self._parentElement !== null &&
+             self._element !== null)
+         {
+            // remove ourselves from the existing parent element first
+            self._parentElement.removeChild ( self._element );
+            self._parentElement = null;
+         }
+         self._parentElement = theParentElement;
+         if ( self._element !== null)
+         {
+            self._parentElement.appendChild ( self._element );
+         }
+      }
+      self.__defineGetter__ ( "parentElement", self.getParentElement );
+      self.__defineSetter__ ( "parentElement", self.setParentElement );
+
+      self.render = function ()
+      {
+         // right now, this doesn't do anything, but it's here for inheritance purposes
+         return "Error: Abstract Method";
+      }
+      self.renderToElement = function ()
+      {
+         self.element.innerHTML = self.render();
+      }
+
+      self.overrideSuper ( self.class, "init", self.init );
+      self.init = function ( theElementId, theElementTag, theElementClass, theParentElement )
+      {
+         self.super ( _className, "init" ); // super has no parameters
+
+         // set our Id, Tag, and Class
+         if ( typeof theElementId !== "undefined" ) { self.elementId = theElementId; }
+         if ( typeof theElementTag !== "undefined" ) { self.elementTag = theElementTag; }
+         if ( typeof theElementClass !== "undefined" ) { self.elementClass = theElementClass; }
+
+         // render ourselves to the element (via render); this implicitly creates the element
+         // with the above properties.
+         self.renderToElement();
+
+         // add ourselves to our parent.
+         if ( typeof theParentElement !== "undefined" ) { self.parentElement = theParentElement; }
+      }
+
+      self.initWithOptions = function ( options )
+      {
+         var theElementId, theElementTag, theElementClass, theParentElement;
+         if ( typeof options !== "undefined" )
+         {
+            if ( typeof options.id !== "undefined" ) { theElementId = options.id; }
+            if ( typeof options.tag !== "undefined" ) { theElementTag = options.tag; }
+            if ( typeof options.class !== "undefined") { theElementClass = options.class; }
+            if ( typeof options.parent !== "undefined") { theParentElement = options.parent; }
+         }
+         self.init ( theElementId, theElementTag, theElementClass, theParentElement );
+      }
+
+      self.overrideSuper ( self.class, "destroy", self.destroy );
+      self.destroy = function ()
+      {
+         // remove ourselves from the parent view, if attached
+         if (self._parentElement !== null &&
+             self._element !== null)
+         {
+            // remove ourselves from the existing parent element first
+            self._parentElement.removeChild ( self._element );
+            self._parentElement = null;
+         }
+         
+         // and let our super know that it can clean p
+         self.super ( _className, "destroy" );
+
+      }
+      return self;
+   }
+
+   return ViewContainer;
+
+   
+});
+
 /**
  *
  * YASMF-UTIL (Yet Another Simple Mobile Framework Utilities) provides basic utilities
@@ -6216,7 +4379,7 @@ var View = function ()
  */
 /*global define*/
 
-define ( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/ui/core','yasmf/ui/view'],function ( require ) {
+define ( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/ui/core','yasmf/ui/event','yasmf/ui/viewContainer'],function ( require ) {
   var _y = require('yasmf/util/core');
   _y.datetime = require ('yasmf/util/datetime');
   _y.filename = require ('yasmf/util/filename');
@@ -6226,11 +4389,8 @@ define ( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/
   _y.fileManager = require ('yasmf/util/fileManager');
 
   _y.UI = require ('yasmf/ui/core');
-  _y.UI.View = require ('yasmf/ui/view');
-/*
-  _y.UI.Label = require ('yasmf/ui/label');
-  _y.UI.NavBar = require ('yasmf/ui/navbar');
-*/
+  _y.UI.event = require ('yasmf/ui/event');
+  _y.UI.ViewContainer = require ('yasmf/ui/viewContainer');
   return _y;
 });
 
