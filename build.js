@@ -20,9 +20,9 @@
   // target amd loader shim as the main module, path is relative to baseUrl.
   name: "../vendor/almond",
 
-  optimize: "none",
-//  optimize: "uglify2",
-//  preserveLicenseComments: false,
+//  optimize: "none",
+  optimize: "uglify2",
+  preserveLicenseComments: false,
 
   // files to include along with almond.  only lib/skeleton.js is defined, as
   // it pulls in the rest of the dependencies automatically.
