@@ -22,7 +22,7 @@
 
 //  optimize: "none",
   optimize: "uglify2",
-  preserveLicenseComments: false,
+//  preserveLicenseComments: false,
 
   // files to include along with almond.  only lib/skeleton.js is defined, as
   // it pulls in the rest of the dependencies automatically.
