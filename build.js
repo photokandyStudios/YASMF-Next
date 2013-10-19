@@ -10,11 +10,13 @@
   paths: {
     "vendor": "../vendor",
     "globalize": "../vendor/globalize",
-    "cultures": "../vendor/cultures"
+    "cultures": "../vendor/cultures",
+    "Q": "q"
   },
   shim: {
     "cultures/globalize.culture.en-US": ["globalize"],
-    "cultures/globalize.culture.es-US": ["globalize"]
+    "cultures/globalize.culture.es-US": ["globalize"]//,
+//    "Q": { exports: "Q" }
   },
 
   // target amd loader shim as the main module, path is relative to baseUrl.
@@ -27,7 +29,6 @@
   // files to include along with almond.  only lib/skeleton.js is defined, as
   // it pulls in the rest of the dependencies automatically.
   include: ["yasmf"],
-
   // code to wrap around the start / end of the resulting build file
   // the global variable used to expose the API is defined here
   wrap: {
