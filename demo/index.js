@@ -4,12 +4,14 @@ requirejs.config({
     'yasmf': '../lib/yasmf',
     'vendor': '../vendor',
     'globalize': '../vendor/globalize',
-    'cultures': '../vendor/cultures'
+    'cultures': '../vendor/cultures',
+    'Q': '../vendor/q'
   },
   urlArgs: "bust=" + (new Date()).getTime(),
   shim: {
     "cultures/globalize.culture.en-US": ["globalize"],
-    "cultures/globalize.culture.es-US": ["globalize"]
+    "cultures/globalize.culture.es-US": ["globalize"],
+    "Q": { exports: "Q" }
   }
 });
 
