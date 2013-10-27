@@ -109,12 +109,19 @@ div {
 {
   color: #CC0000;
 }
-.ui-tint-color, .ui-background-tint-color
+.ui-tint-color
 {
-  -webkit-transition: color 1s ease-in;
-  -moz-transition: color 1s ease-in;
-  -ms-transition: color 1s ease-in;
+  -webkit-transition: color 0.3s ease-in;
+  -moz-transition: color 0.3s ease-in;
+  -ms-transition: color 0.3s ease-in;
   transition: color 0.3s ease-in;
+}
+.ui-background-tint-color
+{
+  -webkit-transition: background-color 0.3s ease-in;
+  -moz-transition: background-color 0.3s ease-in;
+  -ms-transition: background-color 0.3s ease-in;
+  transition: background-color 0.3s ease-in;  
 }
 
 .ui-navigation-bar
@@ -149,6 +156,34 @@ div {
   font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif;
 }
 
+.ui-tool-bar
+{
+  height: 44px;
+  z-index:9;
+  background-color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.75);
+  background-image: -webkit-linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -moz-linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -ms-linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  border-top: 1px solid rgba(0,0,0,0.25);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}
+.android .ui-tool-bar
+{
+  height: 48px;
+  background-color: #000;
+  background-image: none;
+  border-top: 2px solid rgba(255,255,255,0.5);
+  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif;
+}
+
+
 .ui-navigation-bar .ui-title
 {
   position: absolute;
@@ -166,55 +201,69 @@ div {
   height: 48px;
 }
 
-.ui-navigation-bar .ui-bar-button
+.ui-navigation-bar .ui-bar-button,
+.ui-tool-bar .ui-bar-button
 {
   min-width: 44px;
+  display: inline-block;
+  height: 100%;
 }
 
-.ui-navigation-bar .ui-bar-button.ui-align-left
+.ui-navigation-bar .ui-bar-button.ui-align-left,
+.ui-tool-bar .ui-bar-button.ui-align-left
 {
   text-align: left;
 }
-.ui-navigation-bar .ui-bar-button.ui-align-right
+.ui-navigation-bar .ui-bar-button.ui-align-right,
+.ui-tool-bar .ui-bar-button.ui-align-right
 {
   text-align: right;
 }
-.ui-navigation-bar .ui-bar-button.ui-align-center
+.ui-navigation-bar .ui-bar-button.ui-align-center,
+.ui-tool-bar .ui-bar-button.ui-align-center
 {
   text-align: center;
 }
 
-.ui-navigation-bar .ui-bar-button-group
+.ui-navigation-bar .ui-bar-button-group,
+.ui-tool-bar .ui-bar-button-group
 {
   position: absolute;
+  height: 100%;
 }
 
-.ui-navigation-bar .ui-bar-button-group.ui-align-right
+.ui-navigation-bar .ui-bar-button-group.ui-align-right,
+.ui-tool-bar .ui-bar-button-group.ui-align-right
 {
   right: 0;
   margin-right: 10px;
 }
-.ui-navigation-bar .ui-bar-button-group.ui-align-left
+.ui-navigation-bar .ui-bar-button-group.ui-align-left,
+.ui-tool-bar .ui-bar-button-group.ui-align-left
 {
   left: 0;
   margin-left: 10px;
 }
-.ui-navigation-bar .ui-bar-button-group.ui-align-center
+.ui-navigation-bar .ui-bar-button-group.ui-align-center,
+.ui-tool-bar .ui-bar-button-group.ui-align-center
 {
   left: 0;
   right: 0;
-  margin: 0 auto;
+  text-align: center;
 }
 
-.ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button
+.ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
+.ui-tool-bar .ui-bar-button-group.ui-align-right .ui-bar-button
 {
   text-align: right;
 }
-.ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button
+.ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
+.ui-tool-bar .ui-bar-button-group.ui-align-left .ui-bar-button
 {
   text-align: left;
 }
-.ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button
+.ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
+.ui-tool-bar .ui-bar-button-group.ui-align-center .ui-bar-button
 {
   text-align: center;
 }
@@ -230,6 +279,15 @@ div {
 .android .ui-avoid-navigation-bar
 {
   padding-top: 48px !important;
+}
+
+.ui-avoid-tool-bar
+{
+  padding-bottom: 44px !important;
+}
+.android .ui-avoid-navigation-bar
+{
+  padding-bottom: 48px !important;
 }
 
 
@@ -279,12 +337,41 @@ div {
   right: 0px;
   top: 10px;
   -webkit-mask-size: 30px 30px;
+  -moz-mask-size: 30px 30px;
+  -ms-mask-size: 30px 30px;
+  mask-size: 30px 30px;
 }
 .ui-list-item .ui-arrow-direction-right
 {
   -webkit-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
+  -moz-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
+  -ms-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
+  mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
+}
+.ui-list-item .ui-arrow-direction-left
+{
+  -webkit-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
+  -moz-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
+  -ms-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
+  mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
 }
 
+.ui-bar-button.ui-glyph
+{
+  -webkit-mask-position: center center;
+  -moz-mask-position: center center;
+  -ms-mask-position: center center;
+  mask-position: center center;
+  -webkit-mask-size: 30px 30px;
+  -moz-mask-size: 30px 30px;
+  -ms-mask-size: 30px 30px;
+  mask-size: 30px 30px;
+  -webkit-mask-repeat: no-repeat;
+  -moz-mask-repeat: no-repeat;
+  -ms-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  height: 100%;
+}
 
 .ui-back-button::before
 {
@@ -295,7 +382,13 @@ div {
   display: inline-block;
   vertical-align: middle;
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -webkit-mask-size: 30px 30px;
+  -moz-mask-size: 30px 30px;
+  -ms-mask-size: 30px 30px;
+  mask-size: 30px 30px;
   margin-left: -10px;
   margin-right: -5px;
   content: "";
@@ -305,6 +398,9 @@ div {
   width: 15px;
   height: 30px;
   -webkit-mask-size: 15px 30px;
+  -moz-mask-size: 15px 30px;
+  -ms-mask-size: 15px 30px;
+  mask-size: 15px 30px;
   margin-right: -10px;
   margin-left: -7px;
 }
@@ -315,6 +411,240 @@ div {
   width: 15px;
   height: 48px;
 }
+
+/** glyphs **/
+.ui-glyph-arrow-corners-inward
+{
+  -webkit-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+  -moz-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+  -ms-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+  mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+}
+
+.ui-glyph-arrow-corners-outward
+{
+  -webkit-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
+  -moz-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
+  -ms-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
+  mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
+}
+
+.ui-glyph-bookmark
+{
+  -webkit-mask-image: url("./yasmf-assets/bookmark@2x.png");
+  -moz-mask-image: url("./yasmf-assets/bookmark@2x.png");
+  -ms-mask-image: url("./yasmf-assets/bookmark@2x.png");
+  mask-image: url("./yasmf-assets/bookmark@2x.png");
+}
+
+.ui-glyph-books
+{
+  -webkit-mask-image: url("./yasmf-assets/books@2x.png");
+  -moz-mask-image: url("./yasmf-assets/books@2x.png");
+  -ms-mask-image: url("./yasmf-assets/books@2x.png");
+  mask-image: url("./yasmf-assets/books@2x.png");
+}
+
+.ui-glyph-brightness-less
+{
+  -webkit-mask-image: url("./yasmf-assets/brightness-less@2x.png");
+  -moz-mask-image: url("./yasmf-assets/brightness-less@2x.png");
+  -ms-mask-image: url("./yasmf-assets/brightness-less@2x.png");
+  mask-image: url("./yasmf-assets/brightness-less@2x.png");
+}
+
+.ui-glyph-brightness-more
+{
+  -webkit-mask-image: url("./yasmf-assets/brightness-more@2x.png");
+  -moz-mask-image: url("./yasmf-assets/brightness-more@2x.png");
+  -ms-mask-image: url("./yasmf-assets/brightness-more@2x.png");
+  mask-image: url("./yasmf-assets/brightness-more@2x.png");
+}
+
+.ui-glyph-camera-video
+{
+  -webkit-mask-image: url("./yasmf-assets/camera-video@2x.png");
+  -moz-mask-image: url("./yasmf-assets/camera-video@2x.png");
+  -ms-mask-image: url("./yasmf-assets/camera-video@2x.png");
+  mask-image: url("./yasmf-assets/camera-video@2x.png");
+}
+
+.ui-glyph-camera
+{
+  -webkit-mask-image: url("./yasmf-assets/camera@2x.png");
+  -moz-mask-image: url("./yasmf-assets/camera@2x.png");
+  -ms-mask-image: url("./yasmf-assets/camera@2x.png");
+  mask-image: url("./yasmf-assets/camera@2x.png");
+}
+
+.ui-glyph-checkmark
+{
+  -webkit-mask-image: url("./yasmf-assets/checkmark@2x.png");
+  -moz-mask-image: url("./yasmf-assets/checkmark@2x.png");
+  -ms-mask-image: url("./yasmf-assets/checkmark@2x.png");
+  mask-image: url("./yasmf-assets/checkmark@2x.png");
+}
+
+.ui-glyph-chevron-left-thick
+{
+  -webkit-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+}
+
+.ui-glyph-chevron-left-thin
+{
+  -webkit-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+  mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+}
+
+.ui-glyph-chevron-right-thick
+{
+  -webkit-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
+  mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
+}
+
+.ui-glyph-chevron-right-thin
+{
+  -webkit-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+  mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+}
+
+.ui-glyph-circle-filled
+{
+  -webkit-mask-image: url("./yasmf-assets/circle-filled@2x.png");
+  -moz-mask-image: url("./yasmf-assets/circle-filled@2x.png");
+  -ms-mask-image: url("./yasmf-assets/circle-filled@2x.png");
+  mask-image: url("./yasmf-assets/circle-filled@2x.png");
+}
+
+.ui-glyph-circle-hollow
+{
+  -webkit-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
+  -moz-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
+  -ms-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
+  mask-image: url("./yasmf-assets/circle-hollow@2x.png");
+}
+
+.ui-glyph-pause-filled
+{
+  -webkit-mask-image: url("./yasmf-assets/pause-filled@2x.png");
+  -moz-mask-image: url("./yasmf-assets/pause-filled@2x.png");
+  -ms-mask-image: url("./yasmf-assets/pause-filled@2x.png");
+  mask-image: url("./yasmf-assets/pause-filled@2x.png");
+}
+
+.ui-glyph-pause-hollow
+{
+  -webkit-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
+  -moz-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
+  -ms-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
+  mask-image: url("./yasmf-assets/pause-hollow@2x.png");
+}
+
+.ui-glyph-play-filled
+{
+  -webkit-mask-image: url("./yasmf-assets/play-filled@2x.png");
+  -moz-mask-image: url("./yasmf-assets/play-filled@2x.png");
+  -ms-mask-image: url("./yasmf-assets/play-filled@2x.png");
+  mask-image: url("./yasmf-assets/play-filled@2x.png");
+}
+
+.ui-glyph-play-hollow
+{
+  -webkit-mask-image: url("./yasmf-assets/play-hollow@2x.png");
+  -moz-mask-image: url("./yasmf-assets/play-hollow@2x.png");
+  -ms-mask-image: url("./yasmf-assets/play-hollow@2x.png");
+  mask-image: url("./yasmf-assets/play-hollow@2x.png");
+}
+
+.ui-glyph-clock
+{
+  -webkit-mask-image: url("./yasmf-assets/clock@2x.png");
+  -moz-mask-image: url("./yasmf-assets/clock@2x.png");
+  -ms-mask-image: url("./yasmf-assets/clock@2x.png");
+  mask-image: url("./yasmf-assets/clock@2x.png");
+}
+
+.ui-glyph-delete
+{
+  -webkit-mask-image: url("./yasmf-assets/delete@2x.png");
+  -moz-mask-image: url("./yasmf-assets/delete@2x.png");
+  -ms-mask-image: url("./yasmf-assets/delete@2x.png");
+  mask-image: url("./yasmf-assets/delete@2x.png");
+}
+
+.ui-glyph-gear
+{
+  -webkit-mask-image: url("./yasmf-assets/gear@2x.png");
+  -moz-mask-image: url("./yasmf-assets/gear@2x.png");
+  -ms-mask-image: url("./yasmf-assets/gear@2x.png");
+  mask-image: url("./yasmf-assets/gear@2x.png");
+}
+
+.ui-glyph-list
+{
+  -webkit-mask-image: url("./yasmf-assets/list@2x.png");
+  -moz-mask-image: url("./yasmf-assets/list@2x.png");
+  -ms-mask-image: url("./yasmf-assets/list@2x.png");
+  mask-image: url("./yasmf-assets/list@2x.png");
+}
+
+.ui-glyph-magnifying-glass
+{
+  -webkit-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
+  -moz-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
+  -ms-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
+  mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
+}
+
+.ui-glyph-page-text-new
+{
+  -webkit-mask-image: url("./yasmf-assets/page-text-new@2x.png");
+  -moz-mask-image: url("./yasmf-assets/page-text-new@2x.png");
+  -ms-mask-image: url("./yasmf-assets/page-text-new@2x.png");
+  mask-image: url("./yasmf-assets/page-text-new@2x.png");
+}
+
+.ui-glyph-pencil
+{
+  -webkit-mask-image: url("./yasmf-assets/pencil@2x.png");
+  -moz-mask-image: url("./yasmf-assets/pencil@2x.png");
+  -ms-mask-image: url("./yasmf-assets/pencil@2x.png");
+  mask-image: url("./yasmf-assets/pencil@2x.png");
+}
+
+.ui-glyph-plus
+{
+  -webkit-mask-image: url("./yasmf-assets/plus@2x.png");
+  -moz-mask-image: url("./yasmf-assets/plus@2x.png");
+  -ms-mask-image: url("./yasmf-assets/plus@2x.png");
+  mask-image: url("./yasmf-assets/plus@2x.png");
+}
+
+.ui-glyph-tag
+{
+  -webkit-mask-image: url("./yasmf-assets/tag@2x.png");
+  -moz-mask-image: url("./yasmf-assets/tag@2x.png");
+  -ms-mask-image: url("./yasmf-assets/tag@2x.png");
+  mask-image: url("./yasmf-assets/tag@2x.png");
+}
+
+.ui-glyph-trash
+{
+  -webkit-mask-image: url("./yasmf-assets/trash@2x.png");
+  -moz-mask-image: url("./yasmf-assets/trash@2x.png");
+  -ms-mask-image: url("./yasmf-assets/trash@2x.png");
+  mask-image: url("./yasmf-assets/trash@2x.png");
+}
+
 
 .input, .textarea {
   display: block;
