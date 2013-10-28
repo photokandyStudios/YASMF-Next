@@ -21,6 +21,10 @@ body {
   -ms-outline: none;
   outline: none;
   text-rendering: optimizeLegibility;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 body.ios
@@ -81,7 +85,7 @@ div {
   left: 0;
   right: 0;
   bottom: 0;
-  transform: translate3d(0,0,0);
+  transform: translateZ(0);
 }
 
 
@@ -109,6 +113,15 @@ div {
 {
   color: #CC0000;
 }
+.ui-background-destructive-color
+{
+  background-color: #FF6060;
+}
+.android .ui-background-destructive-color
+{
+  background-color: #CC0000;
+}
+
 .ui-tint-color
 {
   -webkit-transition: color 0.3s ease-in;
@@ -128,6 +141,10 @@ div {
 {
   height: 44px;
   z-index:9;
+  -webkit-transform: translateZ(9px);
+  -moz-transform: translateZ(9px);
+  -ms-transform: translateZ(9px);
+  transform: translateZ(9px);
   background-color: #FFFFFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(top, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
@@ -160,6 +177,10 @@ div {
 {
   height: 44px;
   z-index:9;
+  -webkit-transform: translateZ(9px);
+  -moz-transform: translateZ(9px);
+  -ms-transform: translateZ(9px);
+  transform: translateZ(9px);
   background-color: #FFFFFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
@@ -231,6 +252,11 @@ div {
   position: absolute;
   height: 100%;
 }
+.ios7 .ui-navigation-bar .ui-bar-button-group
+{
+  height: 44px;
+}
+
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-right,
 .ui-tool-bar .ui-bar-button-group.ui-align-right
@@ -314,10 +340,6 @@ div {
   display: block;
   border-bottom: 1px solid rgba(0,0,0,0.25);
   margin-left: 10px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 0;
   min-height: 50px;
   overflow: auto;
   position: relative;
@@ -356,7 +378,60 @@ div {
   mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
 }
 
-.ui-bar-button.ui-glyph
+.ui-list-item .ui-list-item-contents
+{
+  background-color: #FFF;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 0;
+  overflow: auto;
+  z-index: 3;
+/*  -webkit-transform: translateZ(3px);
+  -moz-transform: translateZ(3px);
+  -ms-transform: translateZ(3px);
+  transform: translateZ(3px);*/
+}
+.android .ui-list-item .ui-list-item-contents
+{
+  background-color: #000;
+}
+
+.ui-list-item .ui-list-action-group
+{
+  background-color: #CCC;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+/*  -webkit-transform: translateZ(2px);
+  -moz-transform: translateZ(2px);
+  -ms-transform: translateZ(2px);
+  transform: translateZ(2px); */
+}
+.android .ui-list-item .ui-list-action-group
+{
+  background-color: #333;
+}
+
+.ui-list-item .ui-list-action-group .ui-list-action
+{
+  height: 100%;
+  min-width: 44px;
+  color: #FFF;
+  text-align: center;
+  display: inline-table;
+}
+
+.ui-list-item .ui-list-action-group .ui-list-action div
+{
+  display: table-cell;
+  vertical-align: middle;
+  padding: 10px;
+}
+
+.ui-glyph
 {
   -webkit-mask-position: center center;
   -moz-mask-position: center center;
@@ -645,6 +720,22 @@ div {
   mask-image: url("./yasmf-assets/trash@2x.png");
 }
 
+.ui-glyph-sound-wave
+{
+  -webkit-mask-image: url("./yasmf-assets/sound-wave@2x.png");
+  -moz-mask-image: url("./yasmf-assets/sound-wave@2x.png");
+  -ms-mask-image: url("./yasmf-assets/sound-wave@2x.png");
+  mask-image: url("./yasmf-assets/sound-wave@2x.png");
+}
+
+.ui-glyph-circle-filled-checked
+{
+  -webkit-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
+  -moz-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
+  -ms-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
+  mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
+}
+
 
 .input, .textarea {
   display: block;
@@ -662,6 +753,8 @@ div {
   width: 100%;
   height: 100%;
   display: none;
-  -webkit-transform: translate3d(0,0,0);
-  transform: translate3d(0,0,0);
+  -webkit-transform: translateZ(999999px);
+  -moz-transform: translateZ(999999px);
+  -ms-transform: translateZ(999999px);
+  transform: translateZ(999999px);
 }
