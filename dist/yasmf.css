@@ -86,6 +86,7 @@ div {
   right: 0;
   bottom: 0;
   transform: translateZ(0);
+  z-index: 2;
 }
 
 
