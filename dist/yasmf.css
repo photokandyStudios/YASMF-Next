@@ -737,6 +737,30 @@ div {
   mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
 }
 
+.ui-glyph-photo
+{
+  -webkit-mask-image: url("./yasmf-assets/photo@2x.png");
+  -moz-mask-image: url("./yasmf-assets/photo@2x.png");
+  -ms-mask-image: url("./yasmf-assets/photo@2x.png");
+  mask-image: url("./yasmf-assets/photo@2x.png");
+}
+
+.ui-glyph-photo-add
+{
+  -webkit-mask-image: url("./yasmf-assets/photo-add@2x.png");
+  -moz-mask-image: url("./yasmf-assets/photo-add@2x.png");
+  -ms-mask-image: url("./yasmf-assets/photo-add@2x.png");
+  mask-image: url("./yasmf-assets/photo-add@2x.png");
+}
+
+.ui-glyph-film
+{
+  -webkit-mask-image: url("./yasmf-assets/film@2x.png");
+  -moz-mask-image: url("./yasmf-assets/film@2x.png");
+  -ms-mask-image: url("./yasmf-assets/film@2x.png");
+  mask-image: url("./yasmf-assets/film@2x.png");
+}
+
 
 .input, .textarea {
   display: block;
