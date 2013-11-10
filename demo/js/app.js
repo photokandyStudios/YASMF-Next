@@ -5,16 +5,23 @@ requirejs.config({
     'vendor': '../vendor',
     'globalize': '../vendor/globalize',
     'cultures': '../vendor/cultures',
-    'Q': '../vendor/q'
+    'text': '../vendor/text',
+    'Q': '../vendor/q',
+    'hammer': '../vendor/hammer',
+    'app': './js/app',
+    'html': './html'
   },
   urlArgs: "bust=" + (new Date()).getTime(),
   shim: {
     "cultures/globalize.culture.en-US": ["globalize"],
     "cultures/globalize.culture.es-US": ["globalize"],
-    "Q": { exports: "Q" }
+    "Q": { exports: "Q" },
+    "yasmf": ["Q"]
   }
 });
 
-require(['yasmf', 'cultures/globalize.culture.es-US'], function ( _y, cES) {
+require(['yasmf', 'app/main', 'cultures/globalize.culture.es-US'], function ( _y, APP) {
   window._y = _y;
+  window.APP = APP;
+  APP.start();
 });
