@@ -777,6 +777,38 @@ div {
   mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
 }
 
+.ui-glyph-share
+{
+  -webkit-mask-image: url("./yasmf-assets/share@2x.png");
+  -moz-mask-image: url("./yasmf-assets/share@2x.png");
+  -ms-mask-image: url("./yasmf-assets/share@2x.png");
+  mask-image: url("./yasmf-assets/share@2x.png");
+}
+
+.ui-glyph-download
+{
+  -webkit-mask-image: url("./yasmf-assets/download@2x.png");
+  -moz-mask-image: url("./yasmf-assets/download@2x.png");
+  -ms-mask-image: url("./yasmf-assets/download@2x.png");
+  mask-image: url("./yasmf-assets/download@2x.png");
+}
+
+.ui-glyph-circle-info
+{
+  -webkit-mask-image: url("./yasmf-assets/circle-info@2x.png");
+  -moz-mask-image: url("./yasmf-assets/circle-info@2x.png");
+  -ms-mask-image: url("./yasmf-assets/circle-info@2x.png");
+  mask-image: url("./yasmf-assets/circle-info@2x.png");
+}
+
+.ui-glyph-more
+{
+  -webkit-mask-image: url("./yasmf-assets/more@2x.png");
+  -moz-mask-image: url("./yasmf-assets/more@2x.png");
+  -ms-mask-image: url("./yasmf-assets/more@2x.png");
+  mask-image: url("./yasmf-assets/more@2x.png");
+}
+
 /**
  * Alert
  */
@@ -983,7 +1015,7 @@ div {
   display: block;
 }
 
-#uiPreventClicks
+.ui-prevent-clicks
 {
   position: absolute;
   z-index: 999999;
