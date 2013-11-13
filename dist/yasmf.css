@@ -851,7 +851,7 @@ div {
   min-width: 260px;
   max-width: 420px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 1);
   text-align: center;
   opacity: 0;
   -webkit-transition: -webkit-transform 0.125s ease-in-out, opacity 0.25s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out, right 0.25s ease-in-out, bottom 0.25s ease-in-out, width 0.25s ease-in-out, height 0.25s ease-in-out;
@@ -864,6 +864,10 @@ div {
   transform: scale3d(1,1,1);
   box-shadow: 0px 0px 40px rgba(0,0,0,0.5);
   border-radius: 6px;
+}
+.phone .ui-alert
+{
+  max-width:300px;
 }
 
 .android .ui-alert {
