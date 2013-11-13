@@ -809,6 +809,14 @@ div {
   mask-image: url("./yasmf-assets/more@2x.png");
 }
 
+.ui-glyph-circle-outlined
+{
+  -webkit-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
+  -moz-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
+  -ms-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
+  mask-image: url("./yasmf-assets/circle-outlined@2x.png");
+}
+
 /**
  * Alert
  */
