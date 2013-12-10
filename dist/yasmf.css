@@ -89,6 +89,66 @@ div {
   z-index: 2;
 }
 
+.ui-split-view
+{
+  width: 100%;
+}
+
+.ui-off-canvas-view
+{
+  width: calc(100% + 320px);
+  -webkit-transform: translateX(-320px);
+  -moz-transform: translateX(-320px);
+  -ms-transform: translateX(-320px);
+  transform: translateX(-320px);
+  -webkit-transition: -webkit-transform 0.3s ease-in-out;
+  -moz-transition: -moz-transform 0.3s ease-in-out;
+  -ms-transition: -ms-transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+}
+
+.ui-off-canvas-view.ui-left-side-invisible
+{
+  -webkit-transform: translateX(-320px);
+  -moz-transform: translateX(-320px);
+  -ms-transform: translateX(-320px);
+  transform: translateX(-320px);
+}
+
+.ui-off-canvas-view.ui-left-side-visible
+{
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+}
+
+.ui-container.left-side
+{
+  width: 320px;
+  border-right:1px solid rgba(0,0,0,0.25);
+}
+
+.ui-container.right-side
+{
+  width: calc(100% - 320px);
+  left: 320px;  
+}
+
+.ui-split-view.ui-left-side-invisible .ui-container.left-side
+{
+  display: none;
+}
+.ui-split-view.ui-left-side-invisible .ui-container.right-side
+{
+  width: 100%;
+  left: 0;
+}
+
+.ui-split-view.ui-left-side-visible .ui-container.left-side
+{
+  display: block;
+}
 
 .ui-tint-color
 {
@@ -486,6 +546,11 @@ div {
   min-width: 15px;
   width: 15px;
   height: 48px;
+}
+
+.ui-root-view .ui-back-button
+{
+  display: none;
 }
 
 /** glyphs **/
