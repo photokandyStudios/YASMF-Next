@@ -12,6 +12,10 @@ body {
   -moz-tap-highlight-color: rgba(0,0,0,0);
   -ms-tap-highlight-color: rgba(0,0,0,0);
   tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  -ms-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -85,6 +89,9 @@ div {
   left: 0;
   right: 0;
   bottom: 0;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
   transform: translateZ(0);
   z-index: 2;
 }
@@ -127,6 +134,10 @@ div {
 {
   width: 320px;
   border-right:1px solid rgba(0,0,0,0.25);
+}
+.android .ui-container.left-side
+{
+  border-right:1px solid rgba(255,255,255,0.25);
 }
 
 .ui-container.right-side
@@ -372,7 +383,7 @@ div {
 {
   padding-bottom: 44px !important;
 }
-.android .ui-avoid-navigation-bar
+.android .ui-avoid-tool-bar
 {
   padding-bottom: 48px !important;
 }
