@@ -143,7 +143,7 @@ div {
 .ui-container.right-side
 {
   width: calc(100% - 320px);
-  left: 320px;  
+  left: 320px;
 }
 
 .ui-split-view.ui-left-side-invisible .ui-container.left-side
@@ -206,7 +206,7 @@ div {
   -webkit-transition: background-color 0.3s ease-in;
   -moz-transition: background-color 0.3s ease-in;
   -ms-transition: background-color 0.3s ease-in;
-  transition: background-color 0.3s ease-in;  
+  transition: background-color 0.3s ease-in;
 }
 
 .ui-navigation-bar
@@ -233,8 +233,13 @@ div {
 }
 .ios7 .ui-navigation-bar
 {
-  height: 64px;  
+  height: 64px;
   padding-top: 20px;
+}
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar
+{
+  height: 44px;
+  padding-top: 0;
 }
 .android .ui-navigation-bar
 {
@@ -276,12 +281,69 @@ div {
   font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif;
 }
 
+.ui-tab-bar
+{
+  height: 48px;
+  z-index:9;
+  -webkit-transform: translateZ(9px);
+  -moz-transform: translateZ(9px);
+  -ms-transform: translateZ(9px);
+  transform: translateZ(9px);
+  background-color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.75);
+  background-image: -webkit-linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -moz-linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -ms-linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: linear-gradient(bottom, #ffffff 50%, rgba(255, 255, 255, 0.75) 100%);
+  position: absolute;
+  left: 0;
+  right: 0;
+  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  overflow: hidden;
+}
+.ios7 .ui-tab-bar.ui-tab-top-position
+{
+  padding-top: 20px;
+  height: 68px;
+}
+
+.ui-tab-bar.ui-tab-top-position
+{
+  top: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+.ui-tab-bar.ui-tab-default-position,
+.ui-tab-bar.ui-tab-bottom-position
+{
+  bottom: 0;
+  border-top: 1px solid rgba(0,0,0,0.25);
+}
+.android .ui-tab-bar
+{
+  height: 48px;
+  background-color: #000;
+  background-image: none;
+  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif;
+}
+.android .ui-tab-bar.ui-tab-default-position,
+.android .ui-tab-bar.ui-tab-top-position
+{
+  top: 0;
+  border-bottom: 2px solid rgba(255,255,255,0.5);
+}
+.android .ui-tab-bar.ui-tab-bottom-position
+{
+  bottom: 0;
+  border-top: 2px solid rgba(255,255,255,0.5);
+}
+
 
 .ui-navigation-bar .ui-title
 {
   position: absolute;
   left: 0;
-  right: 0; 
+  right: 0;
   text-align: center;
   font-weight: bold;
   height: 44px;
@@ -295,7 +357,8 @@ div {
 }
 
 .ui-navigation-bar .ui-bar-button,
-.ui-tool-bar .ui-bar-button
+.ui-tool-bar .ui-bar-button,
+.ui-tab-bar .ui-bar-button
 {
   min-width: 44px;
   display: inline-block;
@@ -303,23 +366,27 @@ div {
 }
 
 .ui-navigation-bar .ui-bar-button.ui-align-left,
-.ui-tool-bar .ui-bar-button.ui-align-left
+.ui-tool-bar .ui-bar-button.ui-align-left,
+.ui-tab-bar .ui-bar-button.ui-align-left
 {
   text-align: left;
 }
 .ui-navigation-bar .ui-bar-button.ui-align-right,
-.ui-tool-bar .ui-bar-button.ui-align-right
+.ui-tool-bar .ui-bar-button.ui-align-right,
+.ui-tab-bar .ui-bar-button.ui-align-right
 {
   text-align: right;
 }
 .ui-navigation-bar .ui-bar-button.ui-align-center,
-.ui-tool-bar .ui-bar-button.ui-align-center
+.ui-tool-bar .ui-bar-button.ui-align-center,
+.ui-tab-bar .ui-bar-button.ui-align-center
 {
   text-align: center;
 }
 
 .ui-navigation-bar .ui-bar-button-group,
-.ui-tool-bar .ui-bar-button-group
+.ui-tool-bar .ui-bar-button-group,
+.ui-tab-bar .ui-bar-button-group
 {
   position: absolute;
   height: 100%;
@@ -331,19 +398,22 @@ div {
 
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-right,
-.ui-tool-bar .ui-bar-button-group.ui-align-right
+.ui-tool-bar .ui-bar-button-group.ui-align-right,
+.ui-tab-bar .ui-bar-button-group.ui-align-right
 {
   right: 0;
   margin-right: 10px;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-left,
-.ui-tool-bar .ui-bar-button-group.ui-align-left
+.ui-tool-bar .ui-bar-button-group.ui-align-left,
+.ui-tab-bar .ui-bar-button-group.ui-align-left
 {
   left: 0;
   margin-left: 10px;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-center,
-.ui-tool-bar .ui-bar-button-group.ui-align-center
+.ui-tool-bar .ui-bar-button-group.ui-align-center,
+.ui-tab-bar .ui-bar-button-group.ui-align-center
 {
   left: 0;
   right: 0;
@@ -351,20 +421,28 @@ div {
 }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
-.ui-tool-bar .ui-bar-button-group.ui-align-right .ui-bar-button
+.ui-tool-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
+.ui-tab-bar .ui-bar-button-group.ui-align-right .ui-bar-button
 {
   text-align: right;
+  padding-left: 10px;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
-.ui-tool-bar .ui-bar-button-group.ui-align-left .ui-bar-button
+.ui-tool-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
+.ui-tab-bar .ui-bar-button-group.ui-align-left .ui-bar-button
 {
   text-align: left;
+  padding-right: 10px;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
-.ui-tool-bar .ui-bar-button-group.ui-align-center .ui-bar-button
+.ui-tool-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
+.ui-tab-bar .ui-bar-button-group.ui-align-center .ui-bar-button
 {
   text-align: center;
+  padding-left: 5px;
+  padding-right: 5px;
 }
+
 
 .ui-avoid-navigation-bar
 {
@@ -373,6 +451,10 @@ div {
 .ios7 .ui-avoid-navigation-bar
 {
   padding-top: 64px !important;
+}
+.ios7 .ui-avoid-tool-bar.ui-bar-top-position .ui-avoid-navigation-bar
+{
+  padding-top: 44px !important;
 }
 .android .ui-avoid-navigation-bar
 {
@@ -388,6 +470,35 @@ div {
   padding-bottom: 48px !important;
 }
 
+.ui-avoid-tab-bar.ui-tab-top-position
+{
+  top: 48px; !important;
+  bottom: inherit;
+}
+.ui-avoid-tab-bar.ui-tab-default-position,
+.ui-avoid-tab-bar.ui-tab-bottom-position
+{
+  top: inherit;
+  bottom: 48px !important;
+}
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position
+{
+  top: 68px !important;
+  bottom: inherit;
+}
+
+.android .ui-avoid-tab-bar.ui-tab-default-position,
+.android .ui-avoid-tab-bar.ui-tab-top-position
+{
+  top: 48px; !important;
+  bottom: inherit;
+}
+.android .ui-avoid-tab-bar.ui-tab-bottom-position
+{
+  top: inherit;
+  bottom: 48px !important;
+}
+
 
 .ui-scroll-container
 {
@@ -396,7 +507,7 @@ div {
   left: 0;
   right: 0;
   bottom: 0;
-  overflow: auto;  
+  overflow: auto;
 }
 
 .ui-list
@@ -437,17 +548,17 @@ div {
 }
 .ui-list-item .ui-arrow-direction-right
 {
-  -webkit-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
-  -moz-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
-  -ms-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
-  mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');  
+  -webkit-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');
+  -moz-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');
+  -ms-mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');
+  mask-image:url('./yasmf-assets/chevron-right-thin@2x.png');
 }
 .ui-list-item .ui-arrow-direction-left
 {
-  -webkit-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
-  -moz-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
-  -ms-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
-  mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');  
+  -webkit-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');
+  -moz-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');
+  -ms-mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');
+  mask-image:url('./yasmf-assets/chevron-left-thin@2x.png');
 }
 
 .ui-list-item .ui-list-item-contents
@@ -1031,7 +1142,7 @@ div {
   color: #FFF;
 }
 
-.ui-alert-button-container .ui-alert-button:first-child 
+.ui-alert-button-container .ui-alert-button:first-child
 {
   border-left: 0;
 }
