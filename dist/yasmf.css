@@ -452,7 +452,7 @@ div {
 {
   padding-top: 64px !important;
 }
-.ios7 .ui-avoid-tool-bar.ui-bar-top-position .ui-avoid-navigation-bar
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar
 {
   padding-top: 44px !important;
 }
