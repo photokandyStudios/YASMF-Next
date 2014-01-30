@@ -7,6 +7,8 @@ define ( ["yasmf", "text!html/DemoListView.html!strip",
     var self = new _y.UI.ViewContainer();
     self.subclass ( _className );
 
+    self.title = "Demo";
+
     self._listContainer = null;
     self._alertButton = null;
 
