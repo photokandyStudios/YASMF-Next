@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="en"><head><title>ui/core</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/core"><meta name="groc-project-path" content="lib/yasmf/ui/core.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/core.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module core.js author Kerri Shotts and version 0.4</p>
+
+<p>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the following
+conditions:
+The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.</span></p>
+
+<p>Core of YASMF-UI; defines the version and basic UI  convenience methods.</p>
+
+<p>core.js</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+<span class="cm">         asi:true,</span>
+<span class="cm">         bitwise:true,</span>
+<span class="cm">         browser:true,</span>
+<span class="cm">         camelcase:true,</span>
+<span class="cm">         curly:true,</span>
+<span class="cm">         eqeqeq:false,</span>
+<span class="cm">         forin:true,</span>
+<span class="cm">         noarg:true,</span>
+<span class="cm">         noempty:true,</span>
+<span class="cm">         plusplus:false,</span>
+<span class="cm">         smarttabs:true,</span>
+<span class="cm">         sub:true,</span>
+<span class="cm">         trailing:false,</span>
+<span class="cm">         undef:true,</span>
+<span class="cm">         white:false,</span>
+<span class="cm">         onevar:false</span>
+<span class="cm"> */</span>
+<span class="cm">/*global define*/</span>
+
+<span class="nx">define</span> <span class="p">(</span> <span class="p">[</span><span class="s2">&quot;yasmf/util/device&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/util/object&quot;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theDevice</span><span class="p">,</span> <span class="nx">BaseObject</span> <span class="p">)</span> <span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">UI</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property version of type <em>Object
+ *</em></span></p>
+
+<p>Version of the UI Namespace</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0.4.100&quot;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Styles the element with the given style and value. Adds in the browser
+prefixes to make it easier.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theElement must be a Node.</strong></p></li>
+<li><p><strong>theStyle must be a CssStyle.</strong><br/>(Don't camelCase these, use dashes as in regular styles)</p></li>
+<li><p><strong>theValue must be a value.</strong></p></li>
+</ul>
+
+<p><strong>Returns a void</strong></p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElement</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theElement</span><span class="p">,</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="c1">//noinspection JSUnresolvedVariable</span>
+    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-webkit-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+    <span class="c1">//noinspection JSUnresolvedVariable</span>
+    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-moz-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+    <span class="c1">//noinspection JSUnresolvedVariable</span>
+    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-ms-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+    <span class="c1">//noinspection JSUnresolvedVariable</span>
+    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-o-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+    <span class="c1">//noinspection JSUnresolvedVariable</span>
+    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElements</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theElements</span><span class="p">,</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">theElements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElement</span><span class="p">(</span><span class="nx">theElements</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method colorToRGBA</span></p>
+
+<p>Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
+any number of CSS styles. If the color's alpha is zero, the return value is
+"transparent". If the color is null, the return value is "inherit".</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>theColor must be a color.</strong><br/>(- theColor to convert.)</li>
+</ul>
+
+<p><strong>Returns a string</strong><br/>(a CSS value suitable for color properties)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">colorToRGBA</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theColor</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">theColor</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="s2">&quot;inherit&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//noinspection JSUnresolvedVariable</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">theColor</span><span class="p">.</span><span class="nx">alpha</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">//noinspection JSUnresolvedVariable</span>
+      <span class="k">return</span> <span class="s2">&quot;rgba(&quot;</span> <span class="o">+</span> <span class="nx">theColor</span><span class="p">.</span><span class="nx">red</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nx">theColor</span><span class="p">.</span><span class="nx">green</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nx">theColor</span><span class="p">.</span><span class="nx">blue</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nx">theColor</span><span class="p">.</span><span class="nx">alpha</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="s2">&quot;transparent&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method makeColor typedef {{red: Number, green: Number, blue: Number, alpha: Number}} color</p>
+
+<p>Creates a color object of the form <code>{red:r, green:g, blue:b, alpha:a}</code>.</span></p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>r must be a Number.</strong><br/>(- red component (0-255))</p></li>
+<li><p><strong>g must be a Number.</strong><br/>(- green component (0-255))</p></li>
+<li><p><strong>b must be a Number.</strong><br/>(- blue component (0-255))</p></li>
+<li><p><strong>a must be a Number.</strong><br/>(- alpha component (0.0-1.0))</p></li>
+</ul>
+
+<p><strong>Returns a color</strong></p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">g</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span> <span class="nx">red</span><span class="o">:</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">green</span><span class="o">:</span> <span class="nx">g</span><span class="p">,</span> <span class="nx">blue</span><span class="o">:</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">alpha</span><span class="o">:</span> <span class="nx">a</span> <span class="p">};</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method copyColor</span></p>
+
+<p>Copies a color and returns it suitable for modification. You should copy
+colors prior to modification, otherwise you risk modifying the original.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>theColor must be a color.</strong><br/>(- the color to be duplicated)</li>
+</ul>
+
+<p><strong>Returns a color</strong><br/>(a color ready for changes)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">copyColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theColor</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="c1">//noinspection JSUnresolvedVariable</span>
+    <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="nx">theColor</span><span class="p">.</span><span class="nx">red</span><span class="p">,</span> <span class="nx">theColor</span><span class="p">.</span><span class="nx">green</span><span class="p">,</span> <span class="nx">theColor</span><span class="p">.</span><span class="nx">blue</span><span class="p">,</span> <span class="nx">theColor</span><span class="p">.</span><span class="nx">alpha</span><span class="p">);</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> namespace UI and class COLOR</span></p>
+
+<p>UI.COLOR</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span> <span class="o">=</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span> <span class="o">||</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method blackColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a black color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">blackColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method darkGrayColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a dark gray color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">darkGrayColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">85</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method GrayColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a gray color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">GrayColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">127</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method lightGrayColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a light gray color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">lightGrayColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method whiteColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a white color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">whiteColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method blueColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a blue color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">blueColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method greenColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a green color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">greenColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method redColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a red color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">redColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method cyanColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a cyan color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">cyanColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method yellowColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a yellow color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">yellowColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method magentaColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a magenta color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">magentaColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method orangeColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a orange color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">orangeColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method purpleColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a purple color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">purpleColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">127</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method brownColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a brown color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">brownColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">153</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method lightTextColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a light text color suitable for display on dark backgrounds.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">lightTextColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">240</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method darkTextColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a dark text color suitable for display on light backgrounds.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">darkTextColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method clearColor</span></p>
+
+<p><strong>Returns a color</strong><br/>(a transparent color.)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">COLOR</span><span class="p">.</span><span class="nx">clearColor</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">makeColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span> <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Private static property <em>rootContainer of type _Node</em></span></p>
+
+<p>Manages the root element</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static doc-section-protected"><div class="wrapper"><p><span class='doc-section-header'>Static protected method _createRootContainer</span></p>
+
+<p>Creates the root element that contains the view hierarchy</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">_createRootContainer</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+  <span class="p">{</span>
+    <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">);</span>
+    <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootContainer</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-container&quot;</span><span class="p">;</span>
+    <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootContainer</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;rootContainer&quot;</span><span class="p">;</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">UI</span><span class="p">.</span><span class="nx">_rootContainer</span><span class="p">);</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Private static property <em>rootView of type _ViewContainer</em> and default null</span></p>
+
+<p>Manages the root view (topmost)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method setRootView</span></p>
+
+<p>Assigns a view to be the top view in the hierarchy</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>theView must be a ViewContainer.</strong></li>
+</ul></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">setRootView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theView</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">UI</span><span class="p">.</span><span class="nx">_rootContainer</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="nx">UI</span><span class="p">.</span><span class="nx">_createRootContainer</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="nx">UI</span><span class="p">.</span><span class="nx">removeRootView</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span> <span class="o">=</span> <span class="nx">theView</span><span class="p">;</span>
+    <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootContainer</span><span class="p">;</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method removeRootView</span></p>
+
+<p>Removes a view from the root view</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">removeRootView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method getRootView</span></p>
+
+<p>Returns the root view</p>
+
+<p><strong>Returns a ViewContainer</strong></p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">getRootView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">_rootView</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">UI</span><span class="p">,</span> <span class="s2">&quot;rootView&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">get</span><span class="o">:</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">getRootView</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">setRootView</span><span class="p">}</span> <span class="p">);</span>
+
+  <span class="nx">UI</span><span class="p">.</span><span class="nx">_BackButtonHandler</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+  <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="s2">&quot;BackButtonHandler&quot;</span><span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="s2">&quot;backButtonPressed&quot;</span><span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_lastBackButtonTime</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">handleBackButton</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+    <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">currentTime</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_lastBackButtonTime</span> <span class="o">&lt;</span> <span class="nx">currentTime</span> <span class="o">-</span> <span class="mi">1000</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_lastBackButtonTime</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">();</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">notifyMostRecent</span><span class="p">(</span><span class="s2">&quot;backButtonPressed&quot;</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;backbutton&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">handleBackButton</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static property backButton of type <em>_BackButtonHandler</em></span></p>
+
+<p>Global Back Button Handler Object</p>
+
+<p>Register a listener for the backButtonPressed notification in order
+to be notified when the back button is pressed.</p>
+
+<p>Applies only to a physical back button, not one on the screen.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">backButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">_BackButtonHandler</span><span class="p">();</span>
+
+  <span class="nx">UI</span><span class="p">.</span><span class="nx">_OrientationHandler</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+  <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span><span class="s2">&quot;OrientationHandler&quot;</span><span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="s2">&quot;orientationChanged&quot;</span><span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">handleOrientationChange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+    <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">curDevice</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">curOrientation</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">curFormFactor</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">curScale</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">curConvenience</span><span class="p">;</span>
+
+      <span class="nx">curDevice</span> <span class="o">=</span> <span class="nx">theDevice</span><span class="p">.</span><span class="nx">platform</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">curDevice</span> <span class="o">==</span> <span class="s2">&quot;ios&quot;</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;OS 7&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">curDevice</span> <span class="o">+=</span> <span class="s2">&quot; ios7&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;OS 6&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">curDevice</span> <span class="o">+=</span> <span class="s2">&quot; ios6&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;OS 5&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">curDevice</span> <span class="o">+=</span> <span class="s2">&quot; ios5&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">curFormFactor</span> <span class="o">=</span> <span class="nx">theDevice</span><span class="p">.</span><span class="nx">formFactor</span><span class="p">();</span>
+      <span class="nx">curOrientation</span> <span class="o">=</span> <span class="nx">theDevice</span><span class="p">.</span><span class="nx">isPortrait</span><span class="p">()</span> <span class="o">?</span> <span class="s2">&quot;portrait&quot;</span> <span class="o">:</span> <span class="s2">&quot;landscape&quot;</span><span class="p">;</span>
+      <span class="nx">curScale</span> <span class="o">=</span> <span class="nx">theDevice</span><span class="p">.</span><span class="nx">isRetina</span><span class="p">()</span> <span class="o">?</span> <span class="s2">&quot;hiDPI&quot;</span> <span class="o">:</span> <span class="s2">&quot;loDPI&quot;</span><span class="p">;</span>
+      <span class="nx">curConvenience</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">theDevice</span><span class="p">.</span><span class="nx">iPad</span><span class="p">())</span>
+      <span class="p">{</span>
+        <span class="nx">curConvenience</span> <span class="o">=</span> <span class="s2">&quot;ipad&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">theDevice</span><span class="p">.</span><span class="nx">iPhone</span><span class="p">())</span>
+      <span class="p">{</span>
+        <span class="nx">curConvenience</span> <span class="o">=</span> <span class="s2">&quot;iphone&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">theDevice</span><span class="p">.</span><span class="nx">droidTablet</span><span class="p">())</span>
+      <span class="p">{</span>
+        <span class="nx">curConvenience</span> <span class="o">=</span> <span class="s2">&quot;droid-tablet&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">theDevice</span><span class="p">.</span><span class="nx">droidPhone</span><span class="p">())</span>
+      <span class="p">{</span>
+        <span class="nx">curConvenience</span> <span class="o">=</span> <span class="s2">&quot;droid-phone&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="nx">curDevice</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curFormFactor</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curOrientation</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curScale</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curConvenience</span><span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s2">&quot;orientationChanged&quot;</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;orientationchange&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">handleOrientationChange</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">handleOrientationChange</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static property orientationHandler of type <em>_OrientationHandler</em></span></p>
+
+<p>Global Orientation Handler Object</p>
+
+<p>Register a listener for the orientationChanged notification in order
+to be notified when the orientation changes.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">orientationHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">_OrientationHandler</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Global Notification Object</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">globalNotifications</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Create the root container</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">_createRootContainer</span><span class="p">();</span>
+
+
+  <span class="k">return</span> <span class="nx">UI</span><span class="p">;</span>
+<span class="p">});</span></div></div></div></div></body></html>

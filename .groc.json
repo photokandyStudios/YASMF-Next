@@ -1,0 +1,4 @@
+{
+  "glob": ["lib/yasmf.js", "lib/yasmf/**/*.js", "README.md"]
+}
+

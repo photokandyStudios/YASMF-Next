@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="en"><head><title>ui/splitViewController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/splitViewController"><meta name="groc-project-path" content="lib/yasmf/ui/splitViewController.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/splitViewController.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> author Kerri Shotts and version 0.4</p>
+
+<p>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the following
+conditions:
+The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.</span></p>
+
+<p>Split View Controllers provide basic support for side-by-side views</p>
+
+<p>splitViewController.js</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+<span class="cm">         asi:true,</span>
+<span class="cm">         bitwise:true,</span>
+<span class="cm">         browser:true,</span>
+<span class="cm">         camelcase:true,</span>
+<span class="cm">         curly:true,</span>
+<span class="cm">         eqeqeq:false,</span>
+<span class="cm">         forin:true,</span>
+<span class="cm">         noarg:true,</span>
+<span class="cm">         noempty:true,</span>
+<span class="cm">         plusplus:false,</span>
+<span class="cm">         smarttabs:true,</span>
+<span class="cm">         sub:true,</span>
+<span class="cm">         trailing:false,</span>
+<span class="cm">         undef:true,</span>
+<span class="cm">         white:false,</span>
+<span class="cm">         onevar:false</span>
+<span class="cm"> */</span>
+<span class="cm">/*global define*/</span>
+
+<span class="nx">define</span> <span class="p">(</span> <span class="p">[</span><span class="s2">&quot;yasmf/ui/core&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/ui/viewContainer&quot;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">UI</span><span class="p">,</span> <span class="nx">ViewContainer</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">_className</span> <span class="o">=</span> <span class="s2">&quot;SplitViewController&quot;</span><span class="p">;</span>
+   <span class="kd">var</span> <span class="nx">SplitViewController</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+   <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ViewContainer</span><span class="p">();</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span> <span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span> <span class="p">(</span> <span class="s2">&quot;viewsChanged&quot;</span> <span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_viewType</span> <span class="o">=</span> <span class="s2">&quot;split&quot;</span><span class="p">;</span> <span class="c1">// other valid: off-canvas</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">getViewType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewType</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">setViewType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theViewType</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span> <span class="p">(</span> <span class="s2">&quot;ui-&quot;</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewType</span> <span class="o">+</span> <span class="s2">&quot;-view&quot;</span><span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_viewType</span> <span class="o">=</span> <span class="nx">theViewType</span><span class="p">;</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span> <span class="p">(</span> <span class="s2">&quot;ui-&quot;</span> <span class="o">+</span> <span class="nx">theViewType</span> <span class="o">+</span> <span class="s2">&quot;-view&quot;</span> <span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">=</span> <span class="s2">&quot;invisible&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;viewType&quot;</span><span class="p">,</span>
+                              <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getViewType</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setViewType</span><span class="p">,</span>
+                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_leftViewStatus</span> <span class="o">=</span> <span class="s2">&quot;invisible&quot;</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">getLeftViewStatus</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_leftViewStatus</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">setLeftViewStatus</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">viewStatus</span> <span class="p">)</span>
+      <span class="p">{</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span> <span class="p">(</span> <span class="s2">&quot;ui-left-side-&quot;</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_leftViewStatus</span> <span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_leftViewStatus</span> <span class="o">=</span> <span class="nx">viewStatus</span><span class="p">;</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span> <span class="p">(</span> <span class="s2">&quot;ui-left-side-&quot;</span> <span class="o">+</span> <span class="nx">viewStatus</span> <span class="p">);</span>
+      <span class="p">}</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;leftViewStatus&quot;</span><span class="p">,</span>
+                              <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getLeftViewStatus</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setLeftViewStatus</span><span class="p">,</span>
+                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>Array</em></span></p>
+
+<p>The array of views that this split view controller manages.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span> <span class="o">=</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">];</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">getSubviews</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;subviews&quot;</span><span class="p">,</span>
+                              <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getSubviews</span><span class="p">,</span>
+                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">removeChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="p">);</span>
+         <span class="p">}</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">removeChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="p">);</span>
+         <span class="p">}</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-container left-side&quot;</span><span class="p">;</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-container right-side&quot;</span><span class="p">;</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span><span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+         <span class="p">}</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span><span class="p">();</span>
+      <span class="p">}</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_assignViewToSide</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">whichElement</span><span class="p">,</span> <span class="nx">aView</span> <span class="p">)</span>
+      <span class="p">{</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+         <span class="nx">aView</span><span class="p">.</span><span class="nx">splitViewController</span> <span class="o">=</span> <span class="nx">self</span><span class="p">;</span>
+         <span class="nx">aView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewWillAppear&quot;</span> <span class="p">);</span> <span class="c1">// notify the view</span>
+         <span class="nx">aView</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">whichElement</span><span class="p">;</span> <span class="c1">// and make us the parent</span>
+         <span class="nx">aView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewDidAppear&quot;</span> <span class="p">);</span> <span class="c1">// and notify it that it&#39;s actually there.</span>
+      <span class="p">}</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">getLeftView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+         <span class="p">{</span>
+           <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+         <span class="p">}</span>
+         <span class="k">else</span>
+         <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">setLeftView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">aView</span> <span class="p">)</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">aView</span><span class="p">;</span>
+         <span class="p">}</span>
+         <span class="k">else</span>
+         <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nx">aView</span><span class="p">);</span>
+         <span class="p">}</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_assignViewToSide</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span><span class="p">,</span> <span class="nx">aView</span><span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewsChanged&quot;</span> <span class="p">);</span>
+      <span class="p">}</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;leftView&quot;</span><span class="p">,</span>
+                              <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getLeftView</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setLeftView</span><span class="p">,</span>
+                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">getRightView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+         <span class="p">{</span>
+           <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+         <span class="p">}</span>
+         <span class="k">else</span>
+         <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">setRightView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">aView</span> <span class="p">)</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">aView</span><span class="p">;</span>
+         <span class="p">}</span>
+         <span class="k">else</span>
+         <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nx">aView</span><span class="p">);</span>
+         <span class="p">}</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_assignViewToSide</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span><span class="p">,</span> <span class="nx">aView</span><span class="p">);</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewsChanged&quot;</span> <span class="p">);</span>
+      <span class="p">}</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;rightView&quot;</span><span class="p">,</span>
+                              <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getRightView</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setRightView</span><span class="p">,</span>
+                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;render&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span> <span class="c1">// nothing to render!</span>
+      <span class="p">}</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;renderToElement&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+         <span class="k">return</span><span class="p">;</span> <span class="c1">// nothing to do.</span>
+      <span class="p">}</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theLeftView</span><span class="p">,</span> <span class="nx">theRightView</span><span class="p">,</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">)</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">theLeftView</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span> <span class="s2">&quot;Can&#39;t initialize a navigation controller without a left view.&quot;</span> <span class="p">);</span> <span class="p">}</span>
+         <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">theRightView</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span> <span class="s2">&quot;Can&#39;t initialize a navigation controller without a right view.&quot;</span> <span class="p">);</span> <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>do what a normal view container does</p></div></div><div class="code"><div class="wrapper">         <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">]</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>now add the left and right views</p></div></div><div class="code"><div class="wrapper">         <span class="nx">self</span><span class="p">.</span><span class="nx">leftView</span> <span class="o">=</span> <span class="nx">theLeftView</span><span class="p">;</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">rightView</span> <span class="o">=</span> <span class="nx">theRightView</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;initWithOptions&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">options</span> <span class="p">)</span>
+      <span class="p">{</span>
+         <span class="kd">var</span> <span class="nx">theLeftView</span><span class="p">,</span> <span class="nx">theRightView</span><span class="p">,</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span><span class="p">;</span>
+         <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">theElementId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">theElementTag</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nx">theElementClass</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nx">theParentElement</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">leftView</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nx">theLeftView</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">leftView</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">rightView</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nx">theRightView</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">rightView</span><span class="p">;</span> <span class="p">}</span>
+         <span class="p">}</span>
+         <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">(</span> <span class="nx">theLeftView</span><span class="p">,</span> <span class="nx">theRightView</span><span class="p">,</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">);</span>
+         <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">viewType</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">viewType</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">viewType</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">leftViewStatus</span><span class="p">;</span> <span class="p">}</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+
+
+
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">return</span> <span class="nx">SplitViewController</span><span class="p">;</span>
+<span class="p">});</span></div></div></div></div></body></html>

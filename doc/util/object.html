@@ -1,0 +1,711 @@
+<!DOCTYPE html><html lang="en"><head><title>util/object</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/object"><meta name="groc-project-path" content="lib/yasmf/util/object.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/object.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module object.js author Kerri Shotts and version 0.4</p>
+
+<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the following
+conditions:
+The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
+
+<p></span></p>
+
+<h1 id="base-object">Base Object</h1>
+
+<h2 id="objectjs">object.js</h2></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+<span class="cm"> asi:true,</span>
+<span class="cm"> bitwise:true,</span>
+<span class="cm"> browser:true,</span>
+<span class="cm"> camelcase:true,</span>
+<span class="cm"> curly:true,</span>
+<span class="cm"> eqeqeq:false,</span>
+<span class="cm"> forin:true,</span>
+<span class="cm"> noarg:true,</span>
+<span class="cm"> noempty:true,</span>
+<span class="cm"> plusplus:false,</span>
+<span class="cm"> smarttabs:true,</span>
+<span class="cm"> sub:true,</span>
+<span class="cm"> trailing:false,</span>
+<span class="cm"> undef:true,</span>
+<span class="cm"> white:false,</span>
+<span class="cm"> onevar:false</span>
+<span class="cm"> */</span>
+<span class="cm">/*global define, console*/</span>
+
+<span class="nx">define</span> <span class="p">(</span>
+  <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> class BaseObject</span></p>
+
+<p>BaseObject is the base object for all complex objects used by YASMF;
+simpler objects that are properties-only do not inherit from this
+class.</p>
+
+<p>BaseObject provides simple inheritance, but not by using the typical
+prototypal method. Rather inheritance is formed by object composition
+where all objects are instances of BaseObject with methods overridden
+instead. As such, you can <em>not</em> use any Javascript type checking to
+differentiate PKObjects; you should instead use the <code>class</code>
+property.</p>
+
+<p>BaseObject provides inheritance to more than just a constructor: any
+method can be overridden, but it is critical that the super-chain
+be properly initialized. See the <code>super</code> and <code>overrideSuper</code>
+methods for more information.</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">BaseObject</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+    <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">self</span><span class="o">=</span><span class="k">this</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>classHierarchy of type _Array</em> and default ["BaseObject"]</span></p>
+
+<p>We need a way to provide inheritance. Most methods only provide
+inheritance across the constructor chain, not across any possible
+method. But for our purposes, we need to be able to provide for
+overriding any method (such as drawing, touch responses, etc.),
+and so we implement inheritance in a different way.</p>
+
+<p>First, the _classHierarchy, a private property, provides the
+inheritance tree. All objects inherit from "PKObject".</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BaseObject&quot;</span><span class="p">];</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method subclass</span></p>
+
+<p>Objects are subclassed using this method. The newClass is the
+unique class name of the object (and should match the class'
+actual name.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>newClass must be a String.</strong><br/>(- the new unique class of the object)</li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">newClass</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nx">newClass</span><span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getClass</span></p>
+
+<p>getClass returns the current class of the object. The
+<code>class</code> property can be used as well. Note that there
+is no <code>setter</code> for this property; an object's class
+can <em>not</em> be changed.</p>
+
+<p><strong>Returns a String</strong><br/>(the class of the instance)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">getClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span>
+      <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">[</span><span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property class of type <em>String</em></span></p>
+
+<p>The class of the instance. <strong>Read-only</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getClass</span><span class="p">,</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span> <span class="p">});</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getSuperClassOfClass</span></p>
+
+<p>Returns the super class for the given class. If the
+class is not supplied, the class is assumed to be the
+object's own class.</p>
+
+<p>The property "superClass" uses this to return the
+object's direct superclass, but getSuperClassOfClass
+can be used to determine superclasses higher up
+the hierarchy.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>aClass is optional, must be a String, and has a default value of currentClass.</strong><br/>(the class for which you want the super class. If not specified, the instance's class is used.)</li>
+</ul>
+
+<p><strong>Returns a String</strong><br/>(the super-class of the specified class.)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">aClass</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">theClass</span> <span class="o">=</span> <span class="nx">aClass</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">.</span><span class="nx">indexOf</span> <span class="p">(</span> <span class="nx">theClass</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">&gt;-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+          <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property superClass of type <em>String</em></span></p>
+
+<p>The superclass of the instance.</p></div></div><div class="code"><div class="wrapper">      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;superClass&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span><span class="p">,</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span> <span class="p">});</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>super of type _Object</em></span></p>
+
+<p>_super is an object that stores overridden functions by class and method
+name. This is how we get the ability to arbitrarily override any method
+already present in the superclass.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_super</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method overrideSuper</span></p>
+
+<p>Must be called prior to defining the overridden function as this moves
+the original function into the _super object. The functionName must
+match the name of the method exactly, since there may be a long tree
+of code that depends on it.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theClass must be a String.</strong><br/>(the class for which the function override is desired)</p></li>
+<li><p><strong>theFunctionName must be a String.</strong><br/>(the name of the function to override)</p></li>
+<li><p><strong>theActualFunction must be a Function.</strong><br/>(the actual function (or pointer to function))</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theClass</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">theActualFunction</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">superClass</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span> <span class="p">(</span><span class="nx">theClass</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span><span class="nx">superClass</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span><span class="nx">superClass</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span><span class="nx">superClass</span><span class="p">][</span><span class="nx">theFunctionName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">theActualFunction</span><span class="p">;</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method override</span></p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>theNewFunction must be a Function.</strong><br/>(- The function to override. Must have the name of the overriding function.)</li>
+</ul>
+
+<p>Example:</p>
+
+<pre><code>obj.override ( function initWithOptions ( options )
+    { ... } );
+</code></pre></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">override</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theNewFunction</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">theFunctionName</span> <span class="o">=</span> <span class="nx">theNewFunction</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">theFunctionName</span> <span class="o">!==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">self</span><span class="p">[</span><span class="nx">theFunctionName</span><span class="p">]);</span>
+          <span class="nx">self</span><span class="p">[</span><span class="nx">theFunctionName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">theNewFunction</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method super</span></p>
+
+<p>Calls a super function with any number of arguments.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theClass must be a String.</strong><br/>(the current class instance)</p></li>
+<li><p><strong>theFunctionName must be a String.</strong><br/>(the name of the function to execute)</p></li>
+<li><p><strong>args is optional and must be an Array.</strong><br/>(Any number of parameters to pass to the super method)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theClass</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">superClass</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span> <span class="p">(</span><span class="nx">theClass</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span><span class="nx">superClass</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span><span class="nx">superClass</span><span class="p">][</span><span class="nx">theFunctionName</span><span class="p">])</span>
+          <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span><span class="nx">superClass</span><span class="p">][</span><span class="nx">theFunctionName</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+          <span class="p">}</span>
+          <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>
+
+<p>initializes the object</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>since we're at the top of the hierarchy, we don't do anything.</p></div></div><div class="code"><div class="wrapper">      <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Objects have some properties that we want all objects to have...</p></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>tag of type _Object</em></span></p>
+
+<p>Stores the values of all the tags associated with the instance.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_tags</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>tagListeners of type _Object</em></span></p>
+
+<p>Stores the <em>listeners</em> for all the tags associated with the instance.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method setTagForKey</span></p>
+
+<p>Sets the value for a specific tag associated with the instance. If the
+tag does not exist, it is created.</p>
+
+<p>Any listeners attached to the tag via <code>addTagListenerForKey</code> will be
+notified of the change. Listeners are passed three parameters:
+<code>self</code> (the originating instance),
+<code>theKey</code> (the tag being changed),
+and <code>theValue</code> (the value of the tag); the tag is <em>already</em> changed</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theKey must be a *.</strong><br/>(the name of the tag; "__default" is special and refers to the default tag visible via the <code>tag</code> property.)</p></li>
+<li><p><strong>theValue must be a *.</strong><br/>(the value to assign to the tag.)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">setTagForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_tags</span><span class="p">[</span><span class="nx">theKey</span><span class="p">]</span> <span class="o">=</span> <span class="nx">theValue</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">notifyListener</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theListener</span><span class="p">,</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span>
+          <span class="p">{</span>
+            <span class="nx">theListener</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+          <span class="p">};</span>
+        <span class="p">};</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">setTimeout</span> <span class="p">(</span>  <span class="nx">notifyListener</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">][</span><span class="nx">i</span><span class="p">],</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">),</span> <span class="mi">0</span> <span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getTagForKey</span></p>
+
+<p>Returns the value for a given key. If the key does not exist, the
+result is undefined.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>theKey must be a *.</strong><br/>(the tag; "__default" is special and refers to the default tag visible via the <code>tag</code> property.)</li>
+</ul>
+
+<p><strong>Returns a *</strong><br/>(the value of the key)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">getTagForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tags</span><span class="p">[</span><span class="nx">theKey</span><span class="p">];</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method addListenerForKey</span></p>
+
+<p>Add a listener to a specific tag. The listener will receive three
+parameters whenever the tag changes (though they are optional). The tag
+itself doesn't need to exist in order to assign a listener to it.</p>
+
+<p>The first parameter is the object for which the tag has been changed.
+The second parameter is the tag being changed, and the third parameter
+is the value of the tag. <strong>Note:</strong> the value has already changed by
+the time the listener is called.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theKey must be a *.</strong><br/>(The tag for which to add a listener; <code>__default</code> is special and refers the default tag visible via the <code>tag</code> property.)</p></li>
+<li><p><strong>theListener must be a Function.</strong><br/>(the function (or reference) to call when the value changes.)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">addTagListenerForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">].</span><span class="nx">push</span> <span class="p">(</span><span class="nx">theListener</span><span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method removeTagListenerForKey</span></p>
+
+<p>Removes a listener from being notified when a tag changes.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theKey must be a *.</strong><br/>(the tag from which to remove the listener; <code>__default</code> is special and refers to the default tag visible via the <code>tag</code> property.)</p></li>
+<li><p><strong>theListener must be a Function.</strong><br/>(the function (or reference) to remove.)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">removeTagListenerForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">].</span><span class="nx">splice</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span><span class="nx">theKey</span><span class="p">].</span><span class="nx">indexOf</span> <span class="p">(</span> <span class="nx">theListener</span> <span class="p">),</span> <span class="mi">1</span> <span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method setTag</span></p>
+
+<p>Sets the value for the simple tag (<code>__default</code>). Any listeners attached
+to <code>__default</code> will be notified.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>theValue must be a *.</strong><br/>(the value for the tag)</li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">setTag</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theValue</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">setTagForKey</span> <span class="p">(</span> <span class="s2">&quot;__default&quot;</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getTag</span></p>
+
+<p>Returns the value for the given tag (<code>__default</code>). If the tag has never been
+set, the result is undefined.</p>
+
+<p><strong>Returns a *</strong><br/>(the value of the tag.)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">getTag</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getTagForKey</span> <span class="p">(</span> <span class="s2">&quot;__default&quot;</span> <span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property tag of type <em>*</em></span></p>
+
+<p>The default tag for the instance. Changing the tag itself (not any sub-properties of an object)
+will notify any listeners attached to <code>__default</code>.</p></div></div><div class="code"><div class="wrapper">      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">,</span>
+                              <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getTag</span><span class="p">,</span>
+                                <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setTag</span><span class="p">,</span>
+                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>All objects subject notifications for events</p></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>notificationListeners of type _Object</em></span></p>
+
+<p>Supports notification listeners.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method addListenerForNotification</span></p>
+
+<p>Adds a listener for a notification. If a notification has not been
+registered (via <code>registerNotification</code>), an error is logged on the console
+and the function returns without attaching the listener. This means if
+you aren't watching the console, the function fails nearly silently.</p>
+
+<blockquote>
+  <p>By default, no notifications are registered.</p>
+</blockquote>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theNotification must be a String.</strong><br/>(the name of the notification)</p></li>
+<li><p><strong>theListener must be a Function.</strong><br/>(the function (or reference) to be called when the notification is triggered.)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">addListenerForNotification</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span><span class="p">);</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">push</span> <span class="p">(</span><span class="nx">theListener</span><span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method removeListenerForNotification</span></p>
+
+<p>Removes a listener from a notification. If a notification has not been
+registered (via <code>registerNotification</code>), an error is logged on the console
+and the function returns without attaching the listener. This means if
+you aren't watching the console, the function fails nearly silently.</p>
+
+<blockquote>
+  <p>By default, no notifications are registered.</p>
+</blockquote>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theNotification must be a String.</strong><br/>(the notification)</p></li>
+<li><p><strong>theListener must be a Function.</strong><br/>(The function or reference to remove)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">removeListenerForNotification</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theNotification</span><span class="p">,</span> <span class="nx">theListener</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span><span class="p">);</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">].</span><span class="nx">splice</span>
+          <span class="p">(</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">theListener</span><span class="p">),</span> <span class="mi">1</span>
+          <span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method registerNotification</span></p>
+
+<p>Registers a notification so that listeners can then be attached. Notifications
+should be registered as soon as possible, otherwise listeners may attempt to
+attach to a notification that isn't registered.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>theNotification must be a String.</strong><br/>(the name of the notification.)</li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theNotification</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span> <span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="p">};</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notify</span></p>
+
+<p>Notifies all listeners of a particular notification that the notification
+has been triggered. If the notification hasn't been registered via
+<code>registerNotification</code>, an error is logged to the console, but the function
+itself returns silently, so be sure to watch the console for errors.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theNotification must be a String.</strong><br/>(the notification to trigger)</p></li>
+<li><p><strong>args is optional and must be a *.</strong><br/>(Arguments to pass to the listener; usually an array)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span><span class="p">);</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Notifying &quot;</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">].</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot; listeners for &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; ( &quot;</span> <span class="o">+</span> <span class="nx">args</span> <span class="o">+</span> <span class="s2">&quot; ) &quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">notifyListener</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theListener</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span>
+          <span class="p">{</span>
+            <span class="nx">theListener</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+          <span class="p">};</span>
+        <span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">notifyListener</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">][</span><span class="nx">i</span><span class="p">],</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notifyMostRecent</span></p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theNotification must be a String.</strong><br/>(the specific notification to trigger)</p></li>
+<li><p><strong>args is optional and must be a *.</strong><br/>(Arguments to pass to the listener; usually an array)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">notifyMostRecent</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">])</span>
+        <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span><span class="p">);</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Notifying &quot;</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">].</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot; listeners for &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; ( &quot;</span> <span class="o">+</span> <span class="nx">args</span> <span class="o">+</span> <span class="s2">&quot; ) &quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">].</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span><span class="nx">theNotification</span><span class="p">][</span><span class="nx">i</span><span class="p">](</span><span class="nx">self</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span><span class="p">);},</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method defineProperty</span></p>
+
+<p>Defines a property on the object. Essentially shorthand for <code>Object.defineProperty</code>. An
+internal <code>_propertyName</code> variable is declared which getters and setters can access.</p>
+
+<p>The property can be read-write, read-only, or write-only depending on the values in
+<code>propertyOptions.read</code> and <code>propertyOptions.write</code>. The default is read-write.</p>
+
+<p>Getters and setters can be provided in one of two ways: they can be automatically
+discovered by following a specific naming pattern (<code>getPropertyName</code>) if
+<code>propertyOptions.selfDiscover</code> is <code>true</code> (the default). They can also be explicitly
+defined by setting <code>propertyOptions.get</code> and <code>propertyOptions.set</code>.</p>
+
+<p>A property does not necessarily need a getter or setter in order to be readable or
+writable. A basic pattern of setting or returning the private variable is implemented
+for any property without specific getters and setters but who have indicate that the
+property is readable or writable.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>propertyName must be a String.</strong><br/>(the name of the property; use camelCase)</p></li>
+<li><p><strong>propertyOptions must be an Object.</strong><br/>(the various options as described above.)</p></li>
+</ul>
+
+<p>Example:</p>
+
+<pre><code>self.defineProperty ( "someProperty" );        // someProperty, read-write
+self.defineProperty ( "anotherProperty", { default: 2 } );
+self.setWidth = function ( newWidth, oldWidth )
+{
+    self._width = newWidth;
+    self.element.style.width = newWidth + "px";
+}
+self.defineProperty ( "width" );   // automatically discovers setWidth as the setter.
+</code></pre></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">propertyName</span><span class="p">,</span> <span class="nx">propertyOptions</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">fnName</span> <span class="o">=</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set the default options and copy the specified options</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>       <span class="k">default</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
+          <span class="nx">read</span><span class="o">:</span>                        <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">write</span><span class="o">:</span>                       <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">get</span><span class="o">:</span>                         <span class="kc">null</span><span class="p">,</span>
+          <span class="nx">set</span><span class="o">:</span>                         <span class="kc">null</span><span class="p">,</span>
+          <span class="nx">selfDiscover</span><span class="o">:</span>                <span class="kc">true</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">property</span> <span class="k">in</span> <span class="nx">propertyOptions</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">propertyOptions</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">property</span><span class="p">))</span>
+          <span class="p">{</span>
+            <span class="nx">options</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nx">propertyOptions</span><span class="p">[</span><span class="nx">property</span><span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if get/set are not specified, we'll attempt to self-discover them</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the private variable</p></div></div><div class="code"><div class="wrapper">        <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="k">default</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">read</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">write</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">return</span><span class="p">;</span> <span class="c1">// not read/write, so nothing more.</span>
+        <span class="p">}</span>
+
+        <span class="kd">var</span> <span class="nx">defPropOptions</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">read</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">get</span><span class="p">;</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+          <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if there is a getter, use it</p></div></div><div class="code"><div class="wrapper">            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+            <span class="p">{</span>
+              <span class="k">return</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">](</span><span class="nx">self</span><span class="p">[</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">]);</span>
+            <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>otherwise return the private variable</p></div></div><div class="code"><div class="wrapper">            <span class="k">else</span>
+            <span class="p">{</span>
+              <span class="k">return</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">];</span>
+            <span class="p">}</span>
+          <span class="p">};</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">];</span>
+          <span class="p">}</span>
+          <span class="nx">defPropOptions</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">write</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">set</span><span class="p">;</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">oldV</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+            <span class="p">{</span>
+              <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">](</span><span class="nx">v</span><span class="p">,</span> <span class="nx">oldV</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+              <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="p">}</span>
+          <span class="p">};</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">];</span>
+          <span class="p">}</span>
+          <span class="nx">defPropOptions</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span>
+                              <span class="nx">defPropOptions</span><span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method defineObservableProperty</span></p>
+
+<p>Defines a custom property, which also implements a form of KVO.</p>
+
+<p>Any options not specified are defaulted in. The default is for a property
+to be observable (which fires the default propertyNameChanged notice),
+read/write with no custom get/set/validate routines, and no default.</p>
+
+<p>Observable Properties can have getters, setters, and validators. They can be
+automatically discovered, assuming they follow the pattern <code>getObservablePropertyName</code>,
+<code>setObservablePropertyName</code>, and <code>validateObservablePropertyName</code>. They can also be
+specified explicitly by setting <code>propertyOptions.get</code>, <code>set</code>, and <code>validate</code>.</p>
+
+<p>Properties can be read-write, read-only, or write-only. This is controlled by
+<code>propertyOptions.read</code> and <code>write</code>. The default is read-write.</p>
+
+<p>Properties can have a default value provided as well, specified by setting
+<code>propertyOptions.default</code>.</p>
+
+<p>Finally, a notification of the form <code>propertyNameChanged</code> is fired if
+the value changes. If the value does <em>not</em> change, the notification is not fired.
+The name of the notification is controlled by setting <code>propertyOptions.notification</code>.
+If you need a notification to fire when a property is simply set (regardless of the
+change in value), set <code>propertyOptions.notifyAlways</code> to <code>true</code>.</p>
+
+<p>KVO getters, setters, and validators follow very different patterns than normal
+property getters and setters.</p>
+
+<pre><code>self.getObservableWidth = function ( returnValue ) { return returnValue; };
+self.setObservableWidth = function ( newValue, oldValue ) { return newValue; };
+self.validateObservableWidth = function ( testValue ) { return testValue!==10; };
+self.defineObservableProperty ( "width" );
+</code></pre>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>propertyName must be a String.</strong><br/>(The specific property to define)</p></li>
+<li><p><strong>propertyOptions must be an Object.</strong><br/>(the options for this property.)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">propertyName</span><span class="p">,</span> <span class="nx">propertyOptions</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">fnName</span> <span class="o">=</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set the default options and copy the specified options</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span><span class="nx">observable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">notification</span><span class="o">:</span> <span class="nx">propertyName</span> <span class="o">+</span> <span class="s2">&quot;Changed&quot;</span><span class="p">,</span>
+          <span class="k">default</span><span class="o">:</span>                 <span class="kc">undefined</span><span class="p">,</span>
+          <span class="nx">read</span><span class="o">:</span>                    <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">write</span><span class="o">:</span>                   <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">get</span><span class="o">:</span>                     <span class="kc">null</span><span class="p">,</span>
+          <span class="nx">validate</span><span class="o">:</span>                <span class="kc">null</span><span class="p">,</span>
+          <span class="nx">set</span><span class="o">:</span>                     <span class="kc">null</span><span class="p">,</span>
+          <span class="nx">selfDiscover</span><span class="o">:</span>            <span class="kc">true</span><span class="p">,</span>
+          <span class="nx">notifyAlways</span><span class="o">:</span>            <span class="kc">false</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">property</span> <span class="k">in</span> <span class="nx">propertyOptions</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">propertyOptions</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">property</span><span class="p">))</span>
+          <span class="p">{</span>
+            <span class="nx">options</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nx">propertyOptions</span><span class="p">[</span><span class="nx">property</span><span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if get/set are not specified, we'll attempt to self-discover them</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;getObservable&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;getObservable&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;setObservable&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;setObservable&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">validate</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;validateObservable&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="s2">&quot;validateObservable&quot;</span> <span class="o">+</span> <span class="nx">fnName</span> <span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if the property is observable, register its notification</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">observable</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">notification</span><span class="p">);</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the private variable; __ here to avoid self-defined _</p></div></div><div class="code"><div class="wrapper">        <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="k">default</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">read</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">write</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">return</span><span class="p">;</span> <span class="c1">// not read/write, so nothing more.</span>
+        <span class="p">}</span>
+
+        <span class="kd">var</span> <span class="nx">defPropOptions</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">read</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">get</span><span class="p">;</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+          <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if there is a getter, use it</p></div></div><div class="code"><div class="wrapper">            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+            <span class="p">{</span>
+              <span class="k">return</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">](</span><span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">]);</span>
+            <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>otherwise return the private variable</p></div></div><div class="code"><div class="wrapper">            <span class="k">else</span>
+            <span class="p">{</span>
+              <span class="k">return</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">];</span>
+            <span class="p">}</span>
+          <span class="p">};</span>
+          <span class="nx">defPropOptions</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">write</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___validate&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">validate</span><span class="p">;</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">set</span><span class="p">;</span>
+          <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">oldV</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">];</span>
+            <span class="kd">var</span> <span class="nx">valid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___validate&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+            <span class="p">{</span>
+              <span class="nx">valid</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___validate&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">](</span><span class="nx">v</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">valid</span><span class="p">)</span>
+            <span class="p">{</span>
+              <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
+              <span class="p">{</span>
+                <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;___set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">](</span><span class="nx">v</span><span class="p">,</span> <span class="nx">oldV</span><span class="p">);</span>
+              <span class="p">}</span>
+              <span class="k">else</span>
+              <span class="p">{</span>
+                <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__&quot;</span> <span class="o">+</span> <span class="nx">propertyName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+              <span class="p">}</span>
+
+              <span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="o">!==</span> <span class="nx">oldV</span> <span class="o">||</span> <span class="nx">options</span><span class="p">.</span><span class="nx">notifyAlways</span><span class="p">)</span>
+              <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">observable</span><span class="p">)</span>
+                <span class="p">{</span>
+                  <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">notification</span><span class="p">,</span>
+                              <span class="p">{</span><span class="s2">&quot;new&quot;</span><span class="o">:</span> <span class="nx">v</span><span class="p">,</span> <span class="s2">&quot;old&quot;</span><span class="o">:</span> <span class="nx">oldV</span><span class="p">});</span>
+                <span class="p">}</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+          <span class="p">};</span>
+          <span class="nx">defPropOptions</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="s2">&quot;__set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span>
+                              <span class="nx">defPropOptions</span><span class="p">);</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method destroy</span></p>
+
+<p>Readies an object to be destroyed. The base object only clears the notifications and
+the attached listeners.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>clear any listeners.</p></div></div><div class="code"><div class="wrapper">        <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span> <span class="o">=</span> <span class="p">{};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>ready to be destroyed</p></div></div><div class="code"><div class="wrapper">      <span class="p">};</span>
+
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nx">BaseObject</span><span class="p">;</span>
+
+  <span class="p">});</span></div></div></div></div></body></html>
