@@ -1,4 +1,4 @@
-/*
+/*!
  * YASMF-Next Styling
  *
  * yasmf.css
@@ -21,7 +21,11 @@
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+/*
+ *
+ * Eric Meyer's Reset CSS v2.0 - http://cssreset.com
+ *
+ */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
   border: 0;
   font-size: 100%;
@@ -49,9 +53,17 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
+/*
+ * Comment here; webstorm likes to indent incorrectly immediately after the reset
+ */
+/*****************************************************************************
+ *
+ * Basic styles
+ *
+ *****************************************************************************/
 body {
   margin: 0 0;
-  font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+  font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
   font-size: 18px;
   line-height: 1em;
   color: #333;
@@ -59,23 +71,32 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -moz-tap-highlight-color: rgba(0, 0, 0, 0);
   -ms-tap-highlight-color: rgba(0, 0, 0, 0);
+  -o-tap-highlight-color: rgba(0, 0, 0, 0);
   tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   -ms-tap-highlight-color: transparent;
+  -o-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  -o-user-select: none;
   user-select: none;
   -webkit-outline: none;
   -moz-outline: none;
   -ms-outline: none;
+  -o-outline: none;
   outline: none;
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  -ms-text-rendering: optimizeLegibility;
+  -o-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
   backface-visibility: hidden; }
 
 body.ios {
@@ -83,7 +104,11 @@ body.ios {
   color: #333; }
 
 body.android {
-  font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-Serif;
+  font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-serif;
+  -webkit-text-rendering: auto !important;
+  -moz-text-rendering: auto !important;
+  -ms-text-rendering: auto !important;
+  -o-text-rendering: auto !important;
   text-rendering: auto !important;
   /* optimizeLegibility is messing up the way words wrap */
   background-color: #000000;
@@ -94,6 +119,16 @@ body.wince {
   background-color: #000;
   font-family: "Segoe WP" !important; }
 
+.hidden {
+  display: none; }
+
+/*****************************************************************************
+ *
+ * Container: the base mechanism used to contain various YASMF widgets.
+ *
+ *****************************************************************************/
+/* We want all DIVs to be relatively
+   positioned. We also want to use the border-box box-sizing method */
 div {
   background-position: center center;
   background-repeat: no-repeat;
@@ -101,12 +136,11 @@ div {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
   box-sizing: border-box;
   position: relative; }
 
-.hidden {
-  display: none; }
-
+/* Containers themselves are absolutely positioned */
 .ui-container {
   display: block;
   position: absolute;
@@ -116,10 +150,6 @@ div {
   border: none;
   line-height: 1em;
   font-size: 20px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
   background-origin: border-box;
   -webkit-overflow-scrolling: touch;
   top: 0;
@@ -129,9 +159,15 @@ div {
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
   -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
   transform: translateZ(0);
   z-index: 2; }
 
+/*****************************************************************************
+ *
+ * Split View Containers
+ *
+ *****************************************************************************/
 .ui-split-view {
   width: 100%; }
 
@@ -140,22 +176,26 @@ div {
   -webkit-transform: translateX(-320px);
   -moz-transform: translateX(-320px);
   -ms-transform: translateX(-320px);
+  -o-transform: translateX(-320px);
   transform: translateX(-320px);
   -webkit-transition: -webkit-transform 0.3s ease-in-out;
   -moz-transition: -moz-transform 0.3s ease-in-out;
   -ms-transition: -ms-transform 0.3s ease-in-out;
+  -o-transition: -o-transform 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out; }
 
 .ui-off-canvas-view.ui-left-side-invisible {
   -webkit-transform: translateX(-320px);
   -moz-transform: translateX(-320px);
   -ms-transform: translateX(-320px);
+  -o-transform: translateX(-320px);
   transform: translateX(-320px); }
 
 .ui-off-canvas-view.ui-left-side-visible {
   -webkit-transform: translateX(0);
   -moz-transform: translateX(0);
   -ms-transform: translateX(0);
+  -o-transform: translateX(0);
   transform: translateX(0); }
 
 .ui-container.left-side {
@@ -179,67 +219,88 @@ div {
 .ui-split-view.ui-left-side-visible .ui-container.left-side {
   display: block; }
 
+/*****************************************************************************
+ *
+ * Tint Colors (used for interactive buttons and icons)
+ *
+ *****************************************************************************/
 .ui-tint-color {
-  color: #40B0FF; }
+  color: #40b0ff; }
 
 .android .ui-tint-color {
-  color: #33B5E5; }
+  color: #33b5e5; }
 
 .ui-background-tint-color {
-  background-color: #40B0FF; }
+  background-color: #40b0ff; }
 
 .android .ui-background-tint-color {
-  color: #33B5E5; }
+  color: #33b5e5; }
 
 .ui-destructive-color {
-  color: #FF6060; }
+  color: #ff6060; }
 
 .android .ui-destructive-color {
-  color: #CC0000; }
+  color: #cc0000; }
 
 .ui-background-destructive-color {
-  background-color: #FF6060; }
+  background-color: #ff6060; }
 
 .android .ui-background-destructive-color {
-  background-color: #CC0000; }
+  background-color: #cc0000; }
 
+/* Tint colors can have affordances so that when an interactive element is touched, the
+   color changes using a transition. */
 .ui-tint-color {
   -webkit-transition: color 0.3s ease-in;
   -moz-transition: color 0.3s ease-in;
   -ms-transition: color 0.3s ease-in;
+  -o-transition: color 0.3s ease-in;
   transition: color 0.3s ease-in; }
 
 .ui-background-tint-color {
   -webkit-transition: background-color 0.3s ease-in;
   -moz-transition: background-color 0.3s ease-in;
   -ms-transition: background-color 0.3s ease-in;
+  -o-transition: background-color 0.3s ease-in;
   transition: background-color 0.3s ease-in; }
 
+/*****************************************************************************
+ *
+ * Navigation Bar Widget
+ *
+ *****************************************************************************/
 .ui-navigation-bar {
   height: 44px;
   z-index: 9;
   -webkit-transform: translateZ(9px);
   -moz-transform: translateZ(9px);
   -ms-transform: translateZ(9px);
+  -o-transform: translateZ(9px);
   transform: translateZ(9px);
   background-color: #FFFFFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(top, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -moz-linear-gradient(top, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -ms-linear-gradient(top, white 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -o-linear-gradient(top, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: linear-gradient(top, white 50%, rgba(255, 255, 255, 0.75) 100%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
   font-weight: 300; }
 
+/* iOS 7's navbar needs to account for the status bar. Apparently the status bar
+   can be different sizes, and yet based on testing with a double-height status
+   bar, this seems to work. */
 .ios7 .ui-navigation-bar {
   height: 64px;
   padding-top: 20px; }
 
+/* However, if we're a navigation bar trying to avoid a tab bar positioned at
+   the top, we need to adjust things so we don't introduce an extra 20px */
 .ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar {
   height: 44px;
   padding-top: 0; }
@@ -249,27 +310,53 @@ div {
   background-color: #000;
   background-image: none;
   border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif; }
+  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, Sans-serif; }
 
+/* Position the title of a navigation bar in the center of the navigation bar
+   This doesn't really account for the positions of any elements on the bar
+   however, and should be modified.
+   TODO: account for bar button groups and back button */
+.ui-navigation-bar .ui-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: bold;
+  height: 44px; }
+
+/* Android left-aligns the title */
+.android .ui-navigation-bar .ui-title {
+  left: 10px;
+  right: 10px;
+  text-align: left;
+  height: 48px; }
+
+/*****************************************************************************
+ *
+ * Tool Bar Widget
+ *
+ *****************************************************************************/
 .ui-tool-bar {
   height: 44px;
   z-index: 9;
   -webkit-transform: translateZ(9px);
   -moz-transform: translateZ(9px);
   -ms-transform: translateZ(9px);
+  -o-transform: translateZ(9px);
   transform: translateZ(9px);
   background-color: #FFFFFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -moz-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -ms-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -o-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   border-top: 1px solid rgba(0, 0, 0, 0.25);
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
   font-weight: 300; }
 
 .android .ui-tool-bar {
@@ -277,28 +364,37 @@ div {
   background-color: #000;
   background-image: none;
   border-top: 2px solid rgba(255, 255, 255, 0.5);
-  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif; }
+  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, Sans-serif; }
 
+/*****************************************************************************
+ *
+ * Tab Bar Widget
+ *
+ *****************************************************************************/
 .ui-tab-bar {
   height: 48px;
   z-index: 9;
   -webkit-transform: translateZ(9px);
   -moz-transform: translateZ(9px);
   -ms-transform: translateZ(9px);
+  -o-transform: translateZ(9px);
   transform: translateZ(9px);
   background-color: #FFFFFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -moz-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -ms-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
+  background-image: -o-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   position: absolute;
   left: 0;
   right: 0;
-  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
   font-weight: 300;
   overflow: hidden; }
 
+/* If a tab bar is positioned at the top of the screen on iOS 7, account for the
+   space occupied by the status bar. */
 .ios7 .ui-tab-bar.ui-tab-top-position {
   padding-top: 20px;
   height: 68px; }
@@ -316,7 +412,7 @@ div {
   height: 48px;
   background-color: #000;
   background-image: none;
-  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, sans-serif; }
+  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, Sans-serif; }
 
 .android .ui-tab-bar.ui-tab-default-position,
 .android .ui-tab-bar.ui-tab-top-position {
@@ -327,20 +423,12 @@ div {
   bottom: 0;
   border-top: 2px solid rgba(255, 255, 255, 0.5); }
 
-.ui-navigation-bar .ui-title {
-  position: absolute;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-weight: bold;
-  height: 44px; }
-
-.android .ui-navigation-bar .ui-title {
-  left: 10px;
-  right: 10px;
-  text-align: left;
-  height: 48px; }
-
+/*****************************************************************************
+ *
+ * Bar Buttons can exist on Navigation, Tool, and Tab Bars
+ *
+ *****************************************************************************/
+/* Ensure a minimum click area */
 .ui-navigation-bar .ui-bar-button,
 .ui-tool-bar .ui-bar-button,
 .ui-tab-bar .ui-bar-button {
@@ -348,6 +436,7 @@ div {
   display: inline-block;
   height: 100%; }
 
+/* Ensure that we can left, right, and center align the contents of a bar button */
 .ui-navigation-bar .ui-bar-button.ui-align-left,
 .ui-tool-bar .ui-bar-button.ui-align-left,
 .ui-tab-bar .ui-bar-button.ui-align-left {
@@ -363,6 +452,12 @@ div {
 .ui-tab-bar .ui-bar-button.ui-align-center {
   text-align: center; }
 
+/*****************************************************************************
+ *
+ * Bar Button Groups: Groups bar buttons so that operations can be applied as
+ * a group
+ *
+ *****************************************************************************/
 .ui-navigation-bar .ui-bar-button-group,
 .ui-tool-bar .ui-bar-button-group,
 .ui-tab-bar .ui-bar-button-group {
@@ -372,6 +467,8 @@ div {
 .ios7 .ui-navigation-bar .ui-bar-button-group {
   height: 44px; }
 
+/* Bar button groups can be aligned to the left, center, or right of their
+   container. */
 .ui-navigation-bar .ui-bar-button-group.ui-align-right,
 .ui-tool-bar .ui-bar-button-group.ui-align-right,
 .ui-tab-bar .ui-bar-button-group.ui-align-right {
@@ -391,6 +488,7 @@ div {
   right: 0;
   text-align: center; }
 
+/* Any bar button within a group inherits the group's alignment */
 .ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-right .ui-bar-button {
@@ -410,6 +508,12 @@ div {
   padding-left: 5px;
   padding-right: 5px; }
 
+/*****************************************************************************
+ *
+ * Avoidance Classes
+ *
+ *****************************************************************************/
+/* Avoid the navigation bar */
 .ui-avoid-navigation-bar {
   padding-top: 44px !important; }
 
@@ -422,12 +526,14 @@ div {
 .android .ui-avoid-navigation-bar {
   padding-top: 48px !important; }
 
+/* Avoid the tool bar */
 .ui-avoid-tool-bar {
   padding-bottom: 44px !important; }
 
 .android .ui-avoid-tool-bar {
   padding-bottom: 48px !important; }
 
+/* Avoid the tab bar based on its position */
 .ui-avoid-tab-bar.ui-tab-top-position {
   top: 48px !important;
   bottom: inherit; }
@@ -450,6 +556,13 @@ div {
   top: inherit;
   bottom: 48px !important; }
 
+/*****************************************************************************
+ *
+ * Scroll Container
+ *
+ *****************************************************************************/
+/* Scroll containers are positioned absolutely, anchored to their parent's
+   corners, but allow the content inside to scroll. */
 .ui-scroll-container {
   position: absolute;
   top: 0;
@@ -458,12 +571,23 @@ div {
   bottom: 0;
   overflow: auto; }
 
+/*****************************************************************************
+ *
+ * List
+ *
+ *****************************************************************************/
+/* Lists are UL, OL, etc., styled appropriately */
 .ui-list {
   width: 100%;
   list-style-type: none;
   margin: 0;
   padding: 0; }
 
+/*****************************************************************************
+ *
+ * List Item
+ *
+ *****************************************************************************/
 .ui-list-item {
   display: block;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -477,6 +601,8 @@ div {
   margin-left: 0;
   padding-left: 10px; }
 
+/* List Items can have indicators attached, which will appear
+   on the right of the list item. */
 .ui-list-item .ui-indicator {
   position: absolute;
   width: 30px;
@@ -486,20 +612,24 @@ div {
   -webkit-mask-size: 30px 30px;
   -moz-mask-size: 30px 30px;
   -ms-mask-size: 30px 30px;
+  -o-mask-size: 30px 30px;
   mask-size: 30px 30px; }
 
 .ui-list-item .ui-arrow-direction-right {
   -webkit-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   mask-image: url("./yasmf-assets/chevron-right-thin@2x.png"); }
 
 .ui-list-item .ui-arrow-direction-left {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   mask-image: url("./yasmf-assets/chevron-left-thin@2x.png"); }
 
+/* Inside a list, a list-item-contents contains the actual contents of the list item */
 .ui-list-item .ui-list-item-contents {
   background-color: #FFF;
   padding-right: 10px;
@@ -516,6 +646,7 @@ div {
 .android .ui-list-item .ui-list-item-contents {
   background-color: #000; }
 
+/* A list action group can be used to group actions together as in a swipe-to-delete mechanism */
 .ui-list-item .ui-list-action-group {
   background-color: #CCC;
   position: absolute;
@@ -543,21 +674,34 @@ div {
   vertical-align: middle;
   padding: 10px; }
 
+/*****************************************************************************
+ *
+ * Glyphs -- these are icons that can be referenced by Class name
+ *
+ *****************************************************************************/
 .ui-glyph {
   -webkit-mask-position: center center;
   -moz-mask-position: center center;
   -ms-mask-position: center center;
+  -o-mask-position: center center;
   mask-position: center center;
   -webkit-mask-size: 30px 30px;
   -moz-mask-size: 30px 30px;
   -ms-mask-size: 30px 30px;
+  -o-mask-size: 30px 30px;
   mask-size: 30px 30px;
   -webkit-mask-repeat: no-repeat;
   -moz-mask-repeat: no-repeat;
   -ms-mask-repeat: no-repeat;
+  -o-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   height: 100%; }
 
+/*****************************************************************************
+ *
+ * Back buttons are bit funny; not exactly a glyph and not exactly a button
+ *
+ *****************************************************************************/
 .ui-back-button::before {
   width: 30px;
   height: 30px;
@@ -568,10 +712,12 @@ div {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -webkit-mask-size: 30px 30px;
   -moz-mask-size: 30px 30px;
   -ms-mask-size: 30px 30px;
+  -o-mask-size: 30px 30px;
   mask-size: 30px 30px;
   margin-left: -10px;
   margin-right: -5px;
@@ -583,6 +729,7 @@ div {
   -webkit-mask-size: 15px 30px;
   -moz-mask-size: 15px 30px;
   -ms-mask-size: 15px 30px;
+  -o-mask-size: 15px 30px;
   mask-size: 15px 30px;
   margin-right: -10px;
   margin-left: -7px; }
@@ -593,265 +740,314 @@ div {
   width: 15px;
   height: 48px; }
 
+/* If we're on the root view, don't show a back button */
 .ui-root-view .ui-back-button {
   display: none; }
 
-/** glyphs **/
-.ui-glyph-arrow-corners-inward {
-  -webkit-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
-  -moz-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
-  -ms-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
-  mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png"); }
+/*****************************************************************************
+ *
+ * Icon Glyphs
+ *
+ *****************************************************************************/
+.ui-glyph-arror-corners-inward {
+  -webkit-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
+  -moz-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
+  -ms-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
+  -o-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
+  mask-image: url("./yasmf-assets/arror-corners-inward@2x.png"); }
 
 .ui-glyph-arrow-corners-outward {
   -webkit-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
   -moz-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
   -ms-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
+  -o-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
   mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png"); }
 
 .ui-glyph-bookmark {
   -webkit-mask-image: url("./yasmf-assets/bookmark@2x.png");
   -moz-mask-image: url("./yasmf-assets/bookmark@2x.png");
   -ms-mask-image: url("./yasmf-assets/bookmark@2x.png");
+  -o-mask-image: url("./yasmf-assets/bookmark@2x.png");
   mask-image: url("./yasmf-assets/bookmark@2x.png"); }
 
 .ui-glyph-books {
   -webkit-mask-image: url("./yasmf-assets/books@2x.png");
   -moz-mask-image: url("./yasmf-assets/books@2x.png");
   -ms-mask-image: url("./yasmf-assets/books@2x.png");
+  -o-mask-image: url("./yasmf-assets/books@2x.png");
   mask-image: url("./yasmf-assets/books@2x.png"); }
 
 .ui-glyph-brightness-less {
   -webkit-mask-image: url("./yasmf-assets/brightness-less@2x.png");
   -moz-mask-image: url("./yasmf-assets/brightness-less@2x.png");
   -ms-mask-image: url("./yasmf-assets/brightness-less@2x.png");
+  -o-mask-image: url("./yasmf-assets/brightness-less@2x.png");
   mask-image: url("./yasmf-assets/brightness-less@2x.png"); }
 
 .ui-glyph-brightness-more {
   -webkit-mask-image: url("./yasmf-assets/brightness-more@2x.png");
   -moz-mask-image: url("./yasmf-assets/brightness-more@2x.png");
   -ms-mask-image: url("./yasmf-assets/brightness-more@2x.png");
+  -o-mask-image: url("./yasmf-assets/brightness-more@2x.png");
   mask-image: url("./yasmf-assets/brightness-more@2x.png"); }
 
 .ui-glyph-camera-video {
   -webkit-mask-image: url("./yasmf-assets/camera-video@2x.png");
   -moz-mask-image: url("./yasmf-assets/camera-video@2x.png");
   -ms-mask-image: url("./yasmf-assets/camera-video@2x.png");
+  -o-mask-image: url("./yasmf-assets/camera-video@2x.png");
   mask-image: url("./yasmf-assets/camera-video@2x.png"); }
 
 .ui-glyph-camera {
   -webkit-mask-image: url("./yasmf-assets/camera@2x.png");
   -moz-mask-image: url("./yasmf-assets/camera@2x.png");
   -ms-mask-image: url("./yasmf-assets/camera@2x.png");
+  -o-mask-image: url("./yasmf-assets/camera@2x.png");
   mask-image: url("./yasmf-assets/camera@2x.png"); }
 
 .ui-glyph-checkmark {
   -webkit-mask-image: url("./yasmf-assets/checkmark@2x.png");
   -moz-mask-image: url("./yasmf-assets/checkmark@2x.png");
   -ms-mask-image: url("./yasmf-assets/checkmark@2x.png");
+  -o-mask-image: url("./yasmf-assets/checkmark@2x.png");
   mask-image: url("./yasmf-assets/checkmark@2x.png"); }
 
 .ui-glyph-chevron-left-thick {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   mask-image: url("./yasmf-assets/chevron-left-thick@2x.png"); }
 
 .ui-glyph-chevron-left-thin {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   mask-image: url("./yasmf-assets/chevron-left-thin@2x.png"); }
 
 .ui-glyph-chevron-right-thick {
   -webkit-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
   mask-image: url("./yasmf-assets/chevron-right-thick@2x.png"); }
 
 .ui-glyph-chevron-right-thin {
   -webkit-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   mask-image: url("./yasmf-assets/chevron-right-thin@2x.png"); }
 
 .ui-glyph-circle-filled {
   -webkit-mask-image: url("./yasmf-assets/circle-filled@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-filled@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-filled@2x.png");
+  -o-mask-image: url("./yasmf-assets/circle-filled@2x.png");
   mask-image: url("./yasmf-assets/circle-filled@2x.png"); }
 
 .ui-glyph-circle-hollow {
   -webkit-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
+  -o-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
   mask-image: url("./yasmf-assets/circle-hollow@2x.png"); }
 
 .ui-glyph-pause-filled {
   -webkit-mask-image: url("./yasmf-assets/pause-filled@2x.png");
   -moz-mask-image: url("./yasmf-assets/pause-filled@2x.png");
   -ms-mask-image: url("./yasmf-assets/pause-filled@2x.png");
+  -o-mask-image: url("./yasmf-assets/pause-filled@2x.png");
   mask-image: url("./yasmf-assets/pause-filled@2x.png"); }
 
 .ui-glyph-pause-hollow {
   -webkit-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
   -moz-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
   -ms-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
+  -o-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
   mask-image: url("./yasmf-assets/pause-hollow@2x.png"); }
 
 .ui-glyph-play-filled {
   -webkit-mask-image: url("./yasmf-assets/play-filled@2x.png");
   -moz-mask-image: url("./yasmf-assets/play-filled@2x.png");
   -ms-mask-image: url("./yasmf-assets/play-filled@2x.png");
+  -o-mask-image: url("./yasmf-assets/play-filled@2x.png");
   mask-image: url("./yasmf-assets/play-filled@2x.png"); }
 
 .ui-glyph-play-hollow {
   -webkit-mask-image: url("./yasmf-assets/play-hollow@2x.png");
   -moz-mask-image: url("./yasmf-assets/play-hollow@2x.png");
   -ms-mask-image: url("./yasmf-assets/play-hollow@2x.png");
+  -o-mask-image: url("./yasmf-assets/play-hollow@2x.png");
   mask-image: url("./yasmf-assets/play-hollow@2x.png"); }
 
 .ui-glyph-clock {
   -webkit-mask-image: url("./yasmf-assets/clock@2x.png");
   -moz-mask-image: url("./yasmf-assets/clock@2x.png");
   -ms-mask-image: url("./yasmf-assets/clock@2x.png");
+  -o-mask-image: url("./yasmf-assets/clock@2x.png");
   mask-image: url("./yasmf-assets/clock@2x.png"); }
 
 .ui-glyph-delete {
   -webkit-mask-image: url("./yasmf-assets/delete@2x.png");
   -moz-mask-image: url("./yasmf-assets/delete@2x.png");
   -ms-mask-image: url("./yasmf-assets/delete@2x.png");
+  -o-mask-image: url("./yasmf-assets/delete@2x.png");
   mask-image: url("./yasmf-assets/delete@2x.png"); }
 
 .ui-glyph-gear {
   -webkit-mask-image: url("./yasmf-assets/gear@2x.png");
   -moz-mask-image: url("./yasmf-assets/gear@2x.png");
   -ms-mask-image: url("./yasmf-assets/gear@2x.png");
+  -o-mask-image: url("./yasmf-assets/gear@2x.png");
   mask-image: url("./yasmf-assets/gear@2x.png"); }
 
 .ui-glyph-list {
   -webkit-mask-image: url("./yasmf-assets/list@2x.png");
   -moz-mask-image: url("./yasmf-assets/list@2x.png");
   -ms-mask-image: url("./yasmf-assets/list@2x.png");
+  -o-mask-image: url("./yasmf-assets/list@2x.png");
   mask-image: url("./yasmf-assets/list@2x.png"); }
 
 .ui-glyph-magnifying-glass {
   -webkit-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
   -moz-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
   -ms-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
+  -o-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
   mask-image: url("./yasmf-assets/magnifying-glass@2x.png"); }
 
 .ui-glyph-page-text-new {
   -webkit-mask-image: url("./yasmf-assets/page-text-new@2x.png");
   -moz-mask-image: url("./yasmf-assets/page-text-new@2x.png");
   -ms-mask-image: url("./yasmf-assets/page-text-new@2x.png");
+  -o-mask-image: url("./yasmf-assets/page-text-new@2x.png");
   mask-image: url("./yasmf-assets/page-text-new@2x.png"); }
 
 .ui-glyph-pencil {
   -webkit-mask-image: url("./yasmf-assets/pencil@2x.png");
   -moz-mask-image: url("./yasmf-assets/pencil@2x.png");
   -ms-mask-image: url("./yasmf-assets/pencil@2x.png");
+  -o-mask-image: url("./yasmf-assets/pencil@2x.png");
   mask-image: url("./yasmf-assets/pencil@2x.png"); }
 
 .ui-glyph-plus {
   -webkit-mask-image: url("./yasmf-assets/plus@2x.png");
   -moz-mask-image: url("./yasmf-assets/plus@2x.png");
   -ms-mask-image: url("./yasmf-assets/plus@2x.png");
+  -o-mask-image: url("./yasmf-assets/plus@2x.png");
   mask-image: url("./yasmf-assets/plus@2x.png"); }
 
 .ui-glyph-tag {
   -webkit-mask-image: url("./yasmf-assets/tag@2x.png");
   -moz-mask-image: url("./yasmf-assets/tag@2x.png");
   -ms-mask-image: url("./yasmf-assets/tag@2x.png");
+  -o-mask-image: url("./yasmf-assets/tag@2x.png");
   mask-image: url("./yasmf-assets/tag@2x.png"); }
 
 .ui-glyph-trash {
   -webkit-mask-image: url("./yasmf-assets/trash@2x.png");
   -moz-mask-image: url("./yasmf-assets/trash@2x.png");
   -ms-mask-image: url("./yasmf-assets/trash@2x.png");
+  -o-mask-image: url("./yasmf-assets/trash@2x.png");
   mask-image: url("./yasmf-assets/trash@2x.png"); }
 
 .ui-glyph-sound-wave {
   -webkit-mask-image: url("./yasmf-assets/sound-wave@2x.png");
   -moz-mask-image: url("./yasmf-assets/sound-wave@2x.png");
   -ms-mask-image: url("./yasmf-assets/sound-wave@2x.png");
+  -o-mask-image: url("./yasmf-assets/sound-wave@2x.png");
   mask-image: url("./yasmf-assets/sound-wave@2x.png"); }
 
 .ui-glyph-circle-filled-checked {
   -webkit-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
+  -o-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
   mask-image: url("./yasmf-assets/circle-filled-checked@2x.png"); }
 
 .ui-glyph-photo {
   -webkit-mask-image: url("./yasmf-assets/photo@2x.png");
   -moz-mask-image: url("./yasmf-assets/photo@2x.png");
   -ms-mask-image: url("./yasmf-assets/photo@2x.png");
+  -o-mask-image: url("./yasmf-assets/photo@2x.png");
   mask-image: url("./yasmf-assets/photo@2x.png"); }
 
 .ui-glyph-photo-add {
   -webkit-mask-image: url("./yasmf-assets/photo-add@2x.png");
   -moz-mask-image: url("./yasmf-assets/photo-add@2x.png");
   -ms-mask-image: url("./yasmf-assets/photo-add@2x.png");
+  -o-mask-image: url("./yasmf-assets/photo-add@2x.png");
   mask-image: url("./yasmf-assets/photo-add@2x.png"); }
 
 .ui-glyph-film {
   -webkit-mask-image: url("./yasmf-assets/film@2x.png");
   -moz-mask-image: url("./yasmf-assets/film@2x.png");
   -ms-mask-image: url("./yasmf-assets/film@2x.png");
+  -o-mask-image: url("./yasmf-assets/film@2x.png");
   mask-image: url("./yasmf-assets/film@2x.png"); }
 
 .ui-glyph-chat-bubble {
   -webkit-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
   -moz-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
   -ms-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
+  -o-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
   mask-image: url("./yasmf-assets/chat-bubble@2x.png"); }
 
 .ui-glyph-chat-bubble-dots {
   -webkit-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
   -moz-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
   -ms-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
+  -o-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
   mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png"); }
 
 .ui-glyph-share {
   -webkit-mask-image: url("./yasmf-assets/share@2x.png");
   -moz-mask-image: url("./yasmf-assets/share@2x.png");
   -ms-mask-image: url("./yasmf-assets/share@2x.png");
+  -o-mask-image: url("./yasmf-assets/share@2x.png");
   mask-image: url("./yasmf-assets/share@2x.png"); }
 
 .ui-glyph-download {
   -webkit-mask-image: url("./yasmf-assets/download@2x.png");
   -moz-mask-image: url("./yasmf-assets/download@2x.png");
   -ms-mask-image: url("./yasmf-assets/download@2x.png");
+  -o-mask-image: url("./yasmf-assets/download@2x.png");
   mask-image: url("./yasmf-assets/download@2x.png"); }
 
 .ui-glyph-circle-info {
   -webkit-mask-image: url("./yasmf-assets/circle-info@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-info@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-info@2x.png");
+  -o-mask-image: url("./yasmf-assets/circle-info@2x.png");
   mask-image: url("./yasmf-assets/circle-info@2x.png"); }
 
 .ui-glyph-more {
   -webkit-mask-image: url("./yasmf-assets/more@2x.png");
   -moz-mask-image: url("./yasmf-assets/more@2x.png");
   -ms-mask-image: url("./yasmf-assets/more@2x.png");
+  -o-mask-image: url("./yasmf-assets/more@2x.png");
   mask-image: url("./yasmf-assets/more@2x.png"); }
 
 .ui-glyph-circle-outlined {
   -webkit-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
+  -o-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
   mask-image: url("./yasmf-assets/circle-outlined@2x.png"); }
 
 .ui-glyph-gps-locate {
   -webkit-mask-image: url("./yasmf-assets/gps-locate@2x.png");
   -moz-mask-image: url("./yasmf-assets/gps-locate@2x.png");
   -ms-mask-image: url("./yasmf-assets/gps-locate@2x.png");
+  -o-mask-image: url("./yasmf-assets/gps-locate@2x.png");
   mask-image: url("./yasmf-assets/gps-locate@2x.png"); }
 
-/**
- * Alert
- */
+/*****************************************************************************
+ *
+ * Alert Styles
+ *
+ *****************************************************************************/
 .ui-alert-container {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.25);
@@ -863,6 +1059,7 @@ div {
   -webkit-transition: opacity 0.25s ease-in-out;
   -moz-transition: opacity 0.25s ease-in-out;
   -ms-transition: opacity 0.25s ease-in-out;
+  -o-transition: opacity 0.25s ease-in-out;
   transition: opacity 0.25s ease-in-out;
   z-index: 9999999;
   display: table;
@@ -1027,18 +1224,25 @@ div {
 .input, .textarea {
   display: block; }
 
+/*****************************************************************************
+ *
+ * Put up when YASMF doesn't want taps to be handled, such as during view
+ * transitions.
+ *
+ *****************************************************************************/
 .ui-prevent-clicks {
   position: absolute;
   z-index: 999999;
   background-color: transparent;
   top: 0;
-  bottom: 0;
-  right: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
   display: none;
   -webkit-transform: translateZ(999999px);
   -moz-transform: translateZ(999999px);
   -ms-transform: translateZ(999999px);
+  -o-transform: translateZ(999999px);
   transform: translateZ(999999px); }
