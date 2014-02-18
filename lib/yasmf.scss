@@ -344,6 +344,7 @@ div {
 /*****************************************************************************
  *
  * Tint Colors (used for interactive buttons and icons)
+ *  - Built in affordance: colors transition over .3s to half opacity.
  *
  *****************************************************************************/
 
@@ -353,18 +354,36 @@ $android-tint-color: #33B5E5;
 .ui-tint-color
 {
   color: $tint-color;
+  @include transition(color 0.3s ease-in);
+}
+.ui-tint-color:active
+{
+  color: rgba($tint-color, 0.5);
 }
 .android .ui-tint-color
 {
   color: $android-tint-color;
 }
+.android .ui-tint-color:active
+{
+  color: rgba($android-tint-color, 0.5);
+}
 .ui-background-tint-color
 {
   background-color: $tint-color;
+  @include transition(background-color 0.3s ease-in);
+}
+.ui-background-tint-color:active
+{
+  background-color: rgba($tint-color, 0.5);
 }
 .android .ui-background-tint-color
 {
-  color: $android-tint-color;
+  background-color: $android-tint-color;
+}
+.android .ui-background-tint-color:active
+{
+  background-color: rgba($android-tint-color,0.5);
 }
 
 $destructive-color: #FF6060;
@@ -385,17 +404,6 @@ $android-destructive-color: #CC0000;
 .android .ui-background-destructive-color
 {
   background-color: $android-destructive-color;
-}
-
-/* Tint colors can have affordances so that when an interactive element is touched, the
-   color changes using a transition. */
-.ui-tint-color
-{
-  @include transition(color 0.3s ease-in);
-}
-.ui-background-tint-color
-{
-  @include transition(background-color 0.3s ease-in);
 }
 
 /*****************************************************************************
@@ -851,6 +859,29 @@ $android-destructive-color: #CC0000;
   padding: 10px;
 }
 
+/* light enough so that we don't have to override a lot in custom css unless we want to */
+$selection-color: rgba(48, 97, 154, 1);
+$android-selection-color: rgba(36, 36, 36, 1);
+
+/* List affordances */
+.ui-list-item:active, .ui-list-item-contents:active
+{
+  background-color: $selection-color;
+  color: white;
+}
+.android .ui-list-item:active, .android .ui-list-item-contents:active
+{
+  background-color: $android-selection-color;
+  color: white;
+}
+.ui-list-item:active .ui-glyph, .ui-list-item-contents:active .ui-glyph,
+.ui-list-item:active .ui-indicator, .ui-list-item-contents:active .ui-indicator
+{
+  background-color: white;
+}
+
+
+
 /*****************************************************************************
  *
  * Glyphs -- these are icons that can be referenced by Class name
@@ -1122,6 +1153,16 @@ $glyphs: arror-corners-inward, arrow-corners-outward, bookmark, books,
   box-shadow: none;
   -webkit-box-shadow: none;
   border-radius: 0px;
+}
+
+/* affordances for ui-alert */
+.ui-alert-button-container .ui-alert-button:active
+{
+  background-color: rgba(0,0,0,0.0625);
+}
+.android .ui-alert-button-container .ui-alert-button:active
+{
+  background-color: rgba(255, 255, 255,0.0625);
 }
 
 
