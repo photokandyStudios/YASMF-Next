@@ -22,7 +22,7 @@
   // target amd loader shim as the main module, path is relative to baseUrl.
   name: "../vendor/almond",
 
-//  optimize: "none",
+// optimize: "none",
   optimize: "uglify2",
 //  preserveLicenseComments: false,
 
