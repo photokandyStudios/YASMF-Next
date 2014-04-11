@@ -5685,8 +5685,15 @@ define ( 'yasmf/ui/core',["yasmf/util/device", "yasmf/util/object"], function ( 
   /**
    * Create the root container
    */
-  UI._createRootContainer();
-
+  if (typeof document.body !== "undefined" && document.body !== null)
+  {
+    UI._createRootContainer();
+  }
+  else
+  {
+    // we're being loaded in HEAD without defer; try a timeout
+    setTimeout ( UI._createRootContainer, 0);
+  }
 
   return UI;
 });
