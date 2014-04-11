@@ -5658,7 +5658,6 @@ define ( 'yasmf/ui/core',["yasmf/util/device", "yasmf/util/object"], function ( 
     }
     else
     {
-      // we're being loaded in HEAD without defer; try a timeout
       setTimeout ( self.handleOrientationChange, 0);
     }
     return self;
@@ -5691,7 +5690,6 @@ define ( 'yasmf/ui/core',["yasmf/util/device", "yasmf/util/object"], function ( 
   }
   else
   {
-    // we're being loaded in HEAD without defer; try a timeout
     setTimeout ( UI._createRootContainer, 0);
   }
 
