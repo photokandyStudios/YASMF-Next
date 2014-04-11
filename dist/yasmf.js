@@ -5644,12 +5644,23 @@ define ( 'yasmf/ui/core',["yasmf/util/device", "yasmf/util/object"], function ( 
         curConvenience = "droid-phone";
       }
 
-      document.body.setAttribute("class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " + curConvenience);
+      if (typeof document.body !== "undefined")
+      {
+        document.body.setAttribute("class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " + curConvenience);
+      }
 
       self.notify("orientationChanged");
     };
     window.addEventListener('orientationchange', self.handleOrientationChange, false);
-    self.handleOrientationChange();
+    if (typeof document.body !== "undefined")
+    {
+      self.handleOrientationChange();
+    }
+    else
+    {
+      // we're being loaded in HEAD without defer; try a timeout
+      setTimeout ( self.handleOrientationChange, 0);
+    }
     return self;
   };
   /**
