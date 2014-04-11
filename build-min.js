@@ -22,8 +22,8 @@
   // target amd loader shim as the main module, path is relative to baseUrl.
   name: "../vendor/almond",
 
-  optimize: "none",
-//  optimize: "uglify2",
+// optimize: "none",
+  optimize: "uglify2",
 //  preserveLicenseComments: false,
 
   // files to include along with almond.  only lib/skeleton.js is defined, as
@@ -53,5 +53,5 @@
   },
 
   // build file destination, relative to the build file itself
-  out: "./dist/yasmf.js"
+  out: "./dist/yasmf.min.js"
 })

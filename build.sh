@@ -14,6 +14,7 @@ cp -r ./lib/yasmf-assets ./dist
 # Build RequireJS
 echo "RequireJS Build..."
 node ./vendor/requirejs/node_modules/requirejs/bin/r.js -o ./build.js
+node ./vendor/requirejs/node_modules/requirejs/bin/r.js -o ./build-min.js
 #
 # compile SASS (requires sass from sass-lang.com)
 echo "SASS Build..."
