@@ -3520,6 +3520,7 @@ define (
       self.init = function ()
       {
         // since we're at the top of the hierarchy, we don't do anything.
+        return self;
       };
 
       /*
@@ -4124,6 +4125,33 @@ define (
                               defPropOptions);
       };
 
+      self._autoInit = function ( )
+      {
+        if (arguments.length > 0)
+        {
+          if (arguments.length == 1)
+          {
+            // chances are this is an initWithOptions, but make sure the incoming parameter is an object
+            if (typeof arguments[0] === "object") {
+              if (typeof self.initWithOptions !== "undefined" )
+              {
+                return self.initWithOptions.apply(self, arguments);
+              }
+              else
+              {
+                self.init.apply (self, arguments);
+              }
+            }
+            else {
+              return self.init.apply (self,arguments);
+            }
+          }
+          else {
+            return self.init.apply (self,arguments);
+          }
+        }
+      };
+
       /**
        *
        * Readies an object to be destroyed. The base object only clears the notifications and
@@ -4138,7 +4166,7 @@ define (
 
         // ready to be destroyed
       };
-
+      self._autoInit.apply (self, arguments);
       return self;
 
     };
@@ -6086,6 +6114,8 @@ define ( 'yasmf/ui/viewContainer',["yasmf/util/object"], function ( BaseObject )
 
          // add ourselves to our parent.
          if ( typeof theParentElement !== "undefined" ) { self.parentElement = theParentElement; }
+
+        return self;
       }
 
       self.initWithOptions = function ( options )
@@ -6103,6 +6133,8 @@ define ( 'yasmf/ui/viewContainer',["yasmf/util/object"], function ( BaseObject )
          {
             if ( typeof options.title !== "undefined" ) { self.title = options.title; }
          }
+
+        return self;
       }
 
       self.overrideSuper ( self.class, "destroy", self.destroy );
@@ -6121,6 +6153,7 @@ define ( 'yasmf/ui/viewContainer',["yasmf/util/object"], function ( BaseObject )
          self.super ( _className, "destroy" );
 
       }
+      self._autoInit.apply (self, arguments);
       return self;
    }
 
@@ -6478,6 +6511,8 @@ define ( 'yasmf/ui/navigationController',["yasmf/ui/core", "yasmf/ui/viewContain
 
          // now add the root view
          self.rootView = theRootView;
+
+         return self;
       }
 
       self.overrideSuper ( self.class, "initWithOptions", self.initWithOptions );
@@ -6492,9 +6527,10 @@ define ( 'yasmf/ui/navigationController',["yasmf/ui/core", "yasmf/ui/viewContain
             if ( typeof options.parent !== "undefined") { theParentElement = options.parent; }
             if ( typeof options.rootView !== "undefined") { theRootView = options.rootView; }
          }
-         self.init ( theRootView, theElementId, theElementTag, theElementClass, theParentElement );
+         return self.init ( theRootView, theElementId, theElementTag, theElementClass, theParentElement );
       }
 
+     self._autoInit.apply (self, arguments);
       return self;
    }
    return NavigationController;
@@ -6715,6 +6751,8 @@ define ( 'yasmf/ui/splitViewController',["yasmf/ui/core", "yasmf/ui/viewContaine
          // now add the left and right views
          self.leftView = theLeftView;
          self.rightView = theRightView;
+
+        return self;
       }
 
       self.overrideSuper ( self.class, "initWithOptions", self.initWithOptions );
@@ -6736,10 +6774,11 @@ define ( 'yasmf/ui/splitViewController',["yasmf/ui/core", "yasmf/ui/viewContaine
             if ( typeof options.viewType !== "undefined" ) { self.viewType = options.viewType; }
             if ( typeof options.leftViewStatus !== "undefined" ) { self.leftViewStatus = options.leftViewStatus; }
          }
+
+        return self;
       }
 
-
-
+     self._autoInit.apply (self, arguments);
       return self;
    }
    return SplitViewController;
@@ -6975,7 +7014,7 @@ define ( 'yasmf/ui/tabViewController',["yasmf/ui/core", "yasmf/ui/viewContainer"
             {
               // do what a normal view container does
               self.super ( _className, "init", [ theElementId, theElementTag, theElementClass, theParentElement ] );
-
+              return self;
             }
 
             self.overrideSuper ( self.class, "initWithOptions", self.initWithOptions );
@@ -6995,8 +7034,10 @@ define ( 'yasmf/ui/tabViewController',["yasmf/ui/core", "yasmf/ui/viewContainer"
                 if ( typeof options.barPosition !== "undefined" ) { self.barPosition = options.barPosition; }
                 if ( typeof options.barAlignment !== "undefined" ) { self.barAlignment = options.barAlignment; }
               }
+              return self;
             }
 
+            self._autoInit.apply (self, arguments);
             return self;
           }
 
