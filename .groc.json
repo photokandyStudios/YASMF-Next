@@ -1,5 +1,4 @@
 {
-  "glob": ["lib/yasmf.js", "lib/yasmf/**/*.js", "lib/yasmf.scss", "README.md"],
-  "github": true
+  "glob": ["lib/yasmf.js", "lib/yasmf/**/*.js", "lib/yasmf.scss", "README.md"]
 }
 
