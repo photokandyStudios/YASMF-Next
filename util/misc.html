@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><title>util/misc</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/misc"><meta name="groc-project-path" content="lib/yasmf/util/misc.js"><meta name="groc-github-url" content="https://github.com/photokandyStudios/YASMF-Next"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/photokandyStudios/YASMF-Next/blob/master/lib/yasmf/util/misc.js">lib/yasmf/util/misc.js</a></div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module misc.js author Kerri Shotts and version 0.4</p>
+
+<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the following
+conditions:
+The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
+
+<p></span></p>
+
+<p>Provides miscellaneous functions that had no other category.</p>
+
+<p>misc.js</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+<span class="cm">         asi:true,</span>
+<span class="cm">         bitwise:true,</span>
+<span class="cm">         browser:true,</span>
+<span class="cm">         camelcase:true,</span>
+<span class="cm">         curly:true,</span>
+<span class="cm">         eqeqeq:false,</span>
+<span class="cm">         forin:true,</span>
+<span class="cm">         noarg:true,</span>
+<span class="cm">         noempty:true,</span>
+<span class="cm">         plusplus:false,</span>
+<span class="cm">         smarttabs:true,</span>
+<span class="cm">         sub:true,</span>
+<span class="cm">         trailing:false,</span>
+<span class="cm">         undef:true,</span>
+<span class="cm">         white:false,</span>
+<span class="cm">         onevar:false</span>
+<span class="cm"> */</span>
+<span class="cm">/*global define*/</span>
+<span class="nx">define</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method makeFauxUUID</span></p>
+
+<p>Returns a pseudo-UUID. Not guaranteed to be unique (far from it, probably), but
+close enough for most purposes. You should handle collisions gracefully on your
+own, of course. see http://stackoverflow.com/a/8809472</p>
+
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">makeFauxUUID</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="s1">&#39;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&#39;</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span> <span class="sr">/[xy]/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">c</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="p">(</span> <span class="nx">d</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">16</span> <span class="p">)</span> <span class="o">%</span> <span class="mi">16</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="nx">d</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span> <span class="nx">d</span> <span class="o">/</span> <span class="mi">16</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="nx">c</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span> <span class="o">?</span> <span class="nx">r</span> <span class="o">:</span> <span class="p">(</span> <span class="nx">r</span> <span class="o">&amp;</span> <span class="mh">0x7</span> <span class="o">|</span> <span class="mh">0x8</span> <span class="p">)</span> <span class="p">).</span><span class="nx">toString</span><span class="p">(</span> <span class="mi">16</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nx">uuid</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>

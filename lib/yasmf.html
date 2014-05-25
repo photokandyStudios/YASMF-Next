@@ -1,0 +1,1284 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/yasmf</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="lib/yasmf"><meta name="groc-project-path" content="lib/yasmf.scss"><meta name="groc-github-url" content="https://github.com/photokandyStudios/YASMF-Next"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/photokandyStudios/YASMF-Next/blob/master/lib/yasmf.scss">lib/yasmf.scss</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">/*!</span>
+<span class="cm"> * YASMF-Next Styling</span>
+<span class="cm"> *</span>
+<span class="cm"> * yasmf.css</span>
+<span class="cm"> * @author Kerri Shotts</span>
+<span class="cm"> * @version 0.4</span>
+<span class="cm"> *</span>
+<span class="cm"> * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC</span>
+<span class="cm"> * Permission is hereby granted, free of charge, to any person obtaining a copy of this</span>
+<span class="cm"> * software and associated documentation files (the &quot;Software&quot;), to deal in the Software</span>
+<span class="cm"> * without restriction, including without limitation the rights to use, copy, modify,</span>
+<span class="cm"> * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to</span>
+<span class="cm"> * permit persons to whom the Software is furnished to do so, subject to the following</span>
+<span class="cm"> * conditions:</span>
+<span class="cm"> * The above copyright notice and this permission notice shall be included in all copies</span>
+<span class="cm"> * or substantial portions of the Software.</span>
+<span class="cm"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,</span>
+<span class="cm"> * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR</span>
+<span class="cm"> * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE</span>
+<span class="cm"> * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT</span>
+<span class="cm"> * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="cm"> * OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="cm"> */</span>
+
+
+<span class="cm">/*</span>
+<span class="cm"> *</span>
+<span class="cm"> * Eric Meyer&#39;s Reset CSS v2.0 - http://cssreset.com</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+<span class="nt">html</span><span class="o">,</span><span class="nt">body</span><span class="o">,</span><span class="nt">div</span><span class="o">,</span><span class="nt">span</span><span class="o">,</span><span class="nt">applet</span><span class="o">,</span><span class="nt">object</span><span class="o">,</span><span class="nt">iframe</span><span class="o">,</span><span class="nt">h1</span><span class="o">,</span><span class="nt">h2</span><span class="o">,</span><span class="nt">h3</span><span class="o">,</span><span class="nt">h4</span><span class="o">,</span><span class="nt">h5</span><span class="o">,</span><span class="nt">h6</span><span class="o">,</span><span class="nt">p</span><span class="o">,</span><span class="nt">blockquote</span><span class="o">,</span><span class="nt">pre</span><span class="o">,</span><span class="nt">a</span><span class="o">,</span><span class="nt">abbr</span><span class="o">,</span><span class="nt">acronym</span><span class="o">,</span><span class="nt">address</span><span class="o">,</span><span class="nt">big</span><span class="o">,</span><span class="nt">cite</span><span class="o">,</span><span class="nt">code</span><span class="o">,</span><span class="nt">del</span><span class="o">,</span><span class="nt">dfn</span><span class="o">,</span><span class="nt">em</span><span class="o">,</span><span class="nt">img</span><span class="o">,</span><span class="nt">ins</span><span class="o">,</span><span class="nt">kbd</span><span class="o">,</span><span class="nt">q</span><span class="o">,</span><span class="nt">s</span><span class="o">,</span><span class="nt">samp</span><span class="o">,</span><span class="nt">small</span><span class="o">,</span><span class="nt">strike</span><span class="o">,</span><span class="nt">strong</span><span class="o">,</span><span class="nt">sub</span><span class="o">,</span><span class="nt">sup</span><span class="o">,</span><span class="nt">tt</span><span class="o">,</span><span class="nt">var</span><span class="o">,</span><span class="nt">b</span><span class="o">,</span><span class="nt">u</span><span class="o">,</span><span class="nt">i</span><span class="o">,</span><span class="nt">center</span><span class="o">,</span><span class="nt">dl</span><span class="o">,</span><span class="nt">dt</span><span class="o">,</span><span class="nt">dd</span><span class="o">,</span><span class="nt">ol</span><span class="o">,</span><span class="nt">ul</span><span class="o">,</span><span class="nt">li</span><span class="o">,</span><span class="nt">fieldset</span><span class="o">,</span><span class="nt">form</span><span class="o">,</span><span class="nt">label</span><span class="o">,</span><span class="nt">legend</span><span class="o">,</span><span class="nt">table</span><span class="o">,</span><span class="nt">caption</span><span class="o">,</span><span class="nt">tbody</span><span class="o">,</span><span class="nt">tfoot</span><span class="o">,</span><span class="nt">thead</span><span class="o">,</span><span class="nt">tr</span><span class="o">,</span><span class="nt">th</span><span class="o">,</span><span class="nt">td</span><span class="o">,</span><span class="nt">article</span><span class="o">,</span><span class="nt">aside</span><span class="o">,</span><span class="nt">canvas</span><span class="o">,</span><span class="nt">details</span><span class="o">,</span><span class="nt">embed</span><span class="o">,</span><span class="nt">figure</span><span class="o">,</span><span class="nt">figcaption</span><span class="o">,</span><span class="nt">footer</span><span class="o">,</span><span class="nt">header</span><span class="o">,</span><span class="nt">hgroup</span><span class="o">,</span><span class="nt">menu</span><span class="o">,</span><span class="nt">nav</span><span class="o">,</span><span class="nt">output</span><span class="o">,</span><span class="nt">ruby</span><span class="o">,</span><span class="nt">section</span><span class="o">,</span><span class="nt">summary</span><span class="o">,</span><span class="nt">time</span><span class="o">,</span><span class="nt">mark</span><span class="o">,</span><span class="nt">audio</span><span class="o">,</span><span class="nt">video</span><span class="p">{</span><span class="na">border</span><span class="o">:</span><span class="mi">0</span><span class="p">;</span><span class="na">font-size</span><span class="o">:</span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span><span class="nt">font</span><span class="nd">:inherit</span><span class="o">;</span><span class="nt">vertical-align</span><span class="nd">:baseline</span><span class="o">;</span><span class="nt">margin</span><span class="nd">:0</span><span class="o">;</span><span class="nt">padding</span><span class="nd">:0</span><span class="p">}</span><span class="nt">article</span><span class="o">,</span><span class="nt">aside</span><span class="o">,</span><span class="nt">details</span><span class="o">,</span><span class="nt">figcaption</span><span class="o">,</span><span class="nt">figure</span><span class="o">,</span><span class="nt">footer</span><span class="o">,</span><span class="nt">header</span><span class="o">,</span><span class="nt">hgroup</span><span class="o">,</span><span class="nt">menu</span><span class="o">,</span><span class="nt">nav</span><span class="o">,</span><span class="nt">section</span><span class="p">{</span><span class="nt">display</span><span class="nd">:block</span><span class="p">}</span><span class="nt">body</span><span class="p">{</span><span class="na">line-height</span><span class="o">:</span><span class="mi">1</span><span class="p">}</span><span class="nt">ol</span><span class="o">,</span><span class="nt">ul</span><span class="p">{</span><span class="nt">list-style</span><span class="nd">:none</span><span class="p">}</span><span class="nt">blockquote</span><span class="o">,</span><span class="nt">q</span><span class="p">{</span><span class="nt">quotes</span><span class="nd">:none</span><span class="p">}</span><span class="nt">blockquote</span><span class="nd">:before</span><span class="o">,</span><span class="nt">blockquote</span><span class="nd">:after</span><span class="o">,</span><span class="nt">q</span><span class="nd">:before</span><span class="o">,</span><span class="nt">q</span><span class="nd">:after</span><span class="p">{</span><span class="nt">content</span><span class="nd">:none</span><span class="p">}</span><span class="nt">table</span><span class="p">{</span><span class="nt">border-collapse</span><span class="nd">:collapse</span><span class="o">;</span><span class="nt">border-spacing</span><span class="nd">:0</span><span class="p">}</span>
+<span class="cm">/*</span>
+<span class="cm"> * Comment here; webstorm likes to indent incorrectly immediately after the reset</span>
+<span class="cm"> */</span>
+
+<span class="c1">//****************************************************************************</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Mixins ( vendor prefix )</p></div></div><div class="code"><div class="wrapper"><span class="c1">//****************************************************************************</span>
+
+<span class="k">@mixin</span><span class="nf"> tap-highlight-color</span> <span class="p">(</span> <span class="nv">$color</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-tap-highlight-color</span><span class="o">:</span> <span class="nv">$color</span><span class="p">;</span>
+   <span class="na">-moz-tap-highlight-color</span><span class="o">:</span> <span class="nv">$color</span><span class="p">;</span>
+    <span class="na">-ms-tap-highlight-color</span><span class="o">:</span> <span class="nv">$color</span><span class="p">;</span>
+     <span class="na">-o-tap-highlight-color</span><span class="o">:</span> <span class="nv">$color</span><span class="p">;</span>
+        <span class="na">tap-highlight-color</span><span class="o">:</span> <span class="nv">$color</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> user-select</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-user-select</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-user-select</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-user-select</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-user-select</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">user-select</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> outline</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-outline</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-outline</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-outline</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-outline</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">outline</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> text-rendering</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-text-rendering</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-text-rendering</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-text-rendering</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-text-rendering</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">text-rendering</span><span class="o">:</span> <span class="nv">$value</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> backface-visibility</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-backface-visibility</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-backface-visibility</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-backface-visibility</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-backface-visibility</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">backface-visibility</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> box-sizing</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-box-sizing</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-box-sizing</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-box-sizing</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-box-sizing</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">box-sizing</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> transform</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-transform</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-transform</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-transform</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-transform</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">transform</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> transition</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-transition</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-transition</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-transition</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-transition</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">transition</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> transitionWPR</span> <span class="p">(</span> <span class="nv">$value</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-transition</span><span class="o">:</span> <span class="o">-</span><span class="n">webkit-</span><span class="si">#{</span><span class="nv">$value</span><span class="si">}</span><span class="p">;</span>
+     <span class="na">-moz-transition</span><span class="o">:</span> <span class="o">-</span><span class="n">moz-</span><span class="si">#{</span><span class="nv">$value</span><span class="si">}</span><span class="p">;</span>
+      <span class="na">-ms-transition</span><span class="o">:</span> <span class="o">-</span><span class="n">ms-</span><span class="si">#{</span><span class="nv">$value</span><span class="si">}</span><span class="p">;</span>
+       <span class="na">-o-transition</span><span class="o">:</span> <span class="o">-</span><span class="n">o-</span><span class="si">#{</span><span class="nv">$value</span><span class="si">}</span><span class="p">;</span>
+          <span class="na">transition</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> linear-gradient</span> <span class="p">(</span> <span class="nv">$args</span><span class="o">...</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="nf">-webkit-linear-gradient</span><span class="p">(</span><span class="nv">$args</span><span class="p">);</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="nf">-moz-linear-gradient</span><span class="p">(</span><span class="nv">$args</span><span class="p">);</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="nf">-ms-linear-gradient</span><span class="p">(</span><span class="nv">$args</span><span class="p">);</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="nf">-o-linear-gradient</span><span class="p">(</span><span class="nv">$args</span><span class="p">);</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="nf">linear-gradient</span><span class="p">(</span><span class="nv">$args</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> mask-size</span> <span class="p">(</span> <span class="nv">$value</span><span class="o">...</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-mask-size</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-mask-size</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-mask-size</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-mask-size</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">mask-size</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> mask-image</span> <span class="p">(</span> <span class="nv">$value</span><span class="o">...</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-mask-image</span><span class="o">:</span><span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-mask-image</span><span class="o">:</span><span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-mask-image</span><span class="o">:</span><span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-mask-image</span><span class="o">:</span><span class="nv">$value</span><span class="p">;</span>
+          <span class="na">mask-image</span><span class="o">:</span><span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> mask-position</span> <span class="p">(</span> <span class="nv">$value</span><span class="o">...</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-mask-position</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-mask-position</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-mask-position</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-mask-position</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">mask-position</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> mask-repeat</span> <span class="p">(</span> <span class="nv">$value</span><span class="o">...</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-mask-repeat</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+     <span class="na">-moz-mask-repeat</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+      <span class="na">-ms-mask-repeat</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+       <span class="na">-o-mask-repeat</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+          <span class="na">mask-repeat</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> flex-box</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="o">-</span><span class="n">webkit-box</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="o">-</span><span class="n">moz-box</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="o">-</span><span class="n">ms-flexbox</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="o">-</span><span class="n">webkit-flex</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="n">flex</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> order</span> <span class="p">(</span> <span class="nv">$value</span><span class="o">...</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-box-ordinal-group</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">-moz-box-ordinal-group</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">-ms-flex-order</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">-webkit-order</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">order</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">@mixin</span><span class="nf"> flex</span> <span class="p">(</span> <span class="nv">$value</span><span class="o">...</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">-webkit-box-flex</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">-moz-box-flex</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">-webkit-flex</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">-ms-flex</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="na">flex</span><span class="o">:</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">@mixin</span><span class="nf"> justify-content-space-between</span> <span class="p">()</span>
+<span class="p">{</span>
+  <span class="na">-webkit-box-pack</span><span class="o">:</span> <span class="no">justify</span><span class="p">;</span>
+  <span class="na">-moz-box-pack</span><span class="o">:</span> <span class="no">justify</span><span class="p">;</span>
+  <span class="na">-ms-box-pack</span><span class="o">:</span> <span class="no">justify</span><span class="p">;</span>
+  <span class="na">-o-box-pack</span><span class="o">:</span> <span class="no">justify</span><span class="p">;</span>
+  <span class="na">justify-content</span><span class="o">:</span> <span class="n">space-between</span><span class="p">;</span>
+
+
+<span class="p">}</span>
+<span class="c1">//****************************************************************************</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>mixins (convenience)</p></div></div><div class="code"><div class="wrapper"><span class="c1">//****************************************************************************</span>
+
+<span class="k">@mixin</span><span class="nf"> rectTLBR</span> <span class="p">(</span> <span class="nv">$top</span><span class="o">,</span> <span class="nv">$left</span><span class="o">,</span> <span class="nv">$bottom</span><span class="o">,</span> <span class="nv">$right</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="nv">$top</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="nv">$left</span><span class="p">;</span>
+  <span class="na">right</span><span class="o">:</span> <span class="nv">$right</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="nv">$bottom</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> rectTLWH</span> <span class="p">(</span> <span class="nv">$top</span><span class="o">,</span> <span class="nv">$left</span><span class="o">,</span> <span class="nv">$width</span><span class="o">,</span> <span class="nv">$height</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="nv">$top</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="nv">$left</span><span class="p">;</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nv">$width</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="nv">$height</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> size</span> <span class="p">(</span> <span class="nv">$width</span><span class="o">,</span> <span class="nv">$height</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nv">$width</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="nv">$height</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span><span class="nf"> origin</span> <span class="p">(</span> <span class="nv">$top</span><span class="o">,</span> <span class="nv">$left</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="nv">$top</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="nv">$left</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Basic styles</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nv">$font-stack</span><span class="o">:</span> <span class="o">-</span><span class="n">apple-system-font</span><span class="o">,</span> <span class="s2">&quot;Helvetica Neue&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">Sans-serif</span><span class="p">;</span>
+<span class="nv">$android-font-stack</span><span class="o">:</span> <span class="s2">&quot;Roboto&quot;</span><span class="o">,</span> <span class="s2">&quot;DroidSans&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">Sans-serif</span><span class="p">;</span>
+<span class="nv">$WP8-font-stack</span><span class="o">:</span> <span class="s2">&quot;Segoe WP&quot;</span> <span class="nv">!important</span><span class="p">;</span>
+
+<span class="nt">body</span> <span class="p">{</span>
+  <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">font-family</span><span class="o">:</span> <span class="nv">$font-stack</span><span class="p">;</span>
+  <span class="na">font-size</span><span class="o">:</span> <span class="mi">18</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">line-height</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#333</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#E8E8E8</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> tap-highlight-color</span><span class="p">(</span><span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="p">));</span>
+  <span class="k">@include</span><span class="nd"> tap-highlight-color</span><span class="p">(</span><span class="no">transparent</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> user-select</span><span class="p">(</span><span class="no">none</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> outline</span><span class="p">(</span><span class="no">none</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> text-rendering</span><span class="p">(</span><span class="n">optimizeLegibility</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> backface-visibility</span><span class="p">(</span><span class="no">hidden</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nt">body</span><span class="nc">.ios</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#333</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">body</span><span class="nc">.android</span> <span class="p">{</span>
+  <span class="na">font-family</span><span class="o">:</span> <span class="nv">$android-font-stack</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> text-rendering</span><span class="p">(</span><span class="no">auto</span> <span class="nv">!important</span><span class="p">);</span> <span class="cm">/* optimizeLegibility is messing up the way words wrap */</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#000000</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#FFFFFF</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="nt">body</span><span class="nc">.wince</span> <span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#000</span><span class="p">;</span>
+  <span class="na">font-family</span><span class="o">:</span> <span class="nv">$WP8-font-stack</span><span class="p">;</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>TODO: Do we actually use this anywhere?</p></div></div><div class="code"><div class="wrapper"><span class="nc">.hidden</span> <span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Container: the base mechanism used to contain various YASMF widgets.</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="cm">/* We want all DIVs to be relatively</span>
+<span class="cm">   positioned. We also want to use the border-box box-sizing method */</span>
+<span class="nt">div</span> <span class="p">{</span>
+  <span class="na">background-position</span><span class="o">:</span> <span class="no">center</span> <span class="no">center</span><span class="p">;</span>
+  <span class="na">background-repeat</span><span class="o">:</span> <span class="no">no-repeat</span><span class="p">;</span>
+  <span class="na">background-size</span><span class="o">:</span> <span class="n">contain</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> box-sizing</span> <span class="p">(</span><span class="no">border</span><span class="o">-</span><span class="n">box</span><span class="p">);</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> outline</span> <span class="p">(</span><span class="no">none</span><span class="p">);</span> <span class="c1">// you&#39;d think putting this on the BODY style</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>would carry to here, but on Android, it doesn't.</p></div></div><div class="code"><div class="wrapper"><span class="p">}</span>
+
+<span class="cm">/* Containers themselves are absolutely positioned */</span>
+<span class="nc">.ui-container</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="p">;</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">overflow</span><span class="o">:</span> <span class="no">hidden</span><span class="p">;</span>
+  <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">border</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="na">line-height</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">font-size</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">background-origin</span><span class="o">:</span> <span class="no">border</span><span class="o">-</span><span class="n">box</span><span class="p">;</span>
+  <span class="na">-webkit-overflow-scrolling</span><span class="o">:</span> <span class="n">touch</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> rectTLBR</span> <span class="p">(</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> transform</span> <span class="p">(</span><span class="nf">translateZ</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+  <span class="na">z-index</span><span class="o">:</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Split View Containers</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+<span class="nc">.ui-split-view</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/* Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android &lt;4.4</span>
+<span class="cm">   will fail spectacularly */</span>
+<span class="nc">.ui-off-canvas-view</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">-webkit-calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">+</span> <span class="mi">320</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">+</span> <span class="mi">320</span><span class="kt">px</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateX</span><span class="p">(</span><span class="mi">-320</span><span class="kt">px</span><span class="p">));</span>
+  <span class="k">@include</span><span class="nd"> transitionWPR</span><span class="p">(</span><span class="n">transform</span> <span class="mi">0</span><span class="mf">.3</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nc">.phone</span> <span class="nc">.ui-off-canvas-view</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">-webkit-calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">+</span> <span class="mi">280</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">+</span> <span class="mi">280</span><span class="kt">px</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateX</span><span class="p">(</span><span class="mi">-280</span><span class="kt">px</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-split-overlay-view</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-off-canvas-view.ui-left-side-invisible</span><span class="o">,</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateX</span><span class="p">(</span><span class="mi">-320</span><span class="kt">px</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="nc">.phone</span> <span class="nc">.ui-off-canvas-view.ui-left-side-invisible</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateX</span><span class="p">(</span><span class="mi">-280</span><span class="kt">px</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-off-canvas-view.ui-left-side-visible</span><span class="o">,</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateX</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-container.left-side</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">320</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">border-right</span><span class="o">:</span><span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+  <span class="na">z-index</span><span class="o">:</span><span class="mi">3</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateZ</span><span class="p">(</span><span class="mi">3</span><span class="kt">px</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="nc">.phone</span> <span class="nc">.ui-off-canvas-view</span> <span class="nc">.ui-container.left-side</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">280</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-container.left-side</span>
+<span class="p">{</span>
+  <span class="na">border-right</span><span class="o">:</span><span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-container.right-side</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">-webkit-calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">-</span> <span class="mi">320</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">-</span> <span class="mi">320</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">320</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.phone</span> <span class="nc">.ui-off-canvas-view</span> <span class="nc">.ui-container.right-side</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">-webkit-calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">-</span> <span class="mi">280</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">width</span><span class="o">:</span> <span class="nf">calc</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span> <span class="o">-</span> <span class="mi">280</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">280</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-split-view.ui-left-side-invisible</span> <span class="nc">.ui-container.left-side</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-split-view.ui-left-side-invisible</span> <span class="nc">.ui-container.right-side</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-split-view.ui-left-side-visible</span> <span class="nc">.ui-container.left-side</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-split-overlay-view.ui-left-side-invisible</span> <span class="nc">.ui-container.left-side</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateX</span><span class="p">(</span><span class="mi">-320</span><span class="kt">px</span><span class="p">));</span>
+  <span class="k">@include</span><span class="nd"> transitionWPR</span><span class="p">(</span><span class="n">transform</span> <span class="mi">0</span><span class="mf">.3</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ui-split-overlay-view.ui-left-side-visible</span> <span class="nc">.ui-container.left-side</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateX</span><span class="p">(</span><span class="mi">0</span><span class="kt">px</span><span class="p">));</span>
+  <span class="k">@include</span><span class="nd"> transitionWPR</span><span class="p">(</span><span class="n">transform</span> <span class="mi">0</span><span class="mf">.3</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-split-overlay-view</span> <span class="nc">.ui-container.right-side</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Tint Colors (used for interactive buttons and icons)</span>
+<span class="cm"> *  - Built in affordance: colors transition over .3s to half opacity.</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nv">$tint-color</span><span class="o">:</span> <span class="mh">#40B0FF</span><span class="p">;</span>
+<span class="nv">$android-tint-color</span><span class="o">:</span> <span class="mh">#33B5E5</span><span class="p">;</span>
+
+<span class="nc">.ui-tint-color</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nv">$tint-color</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transition</span><span class="p">(</span><span class="no">color</span> <span class="mi">0</span><span class="mf">.3</span><span class="kt">s</span> <span class="n">ease-in</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ui-tint-color</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="nv">$tint-color</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-tint-color</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nv">$android-tint-color</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-tint-color</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="nv">$android-tint-color</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ui-background-tint-color</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nv">$tint-color</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transition</span><span class="p">(</span><span class="no">background-color</span> <span class="mi">0</span><span class="mf">.3</span><span class="kt">s</span> <span class="n">ease-in</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ui-background-tint-color</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="nv">$tint-color</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-background-tint-color</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nv">$android-tint-color</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-background-tint-color</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="nv">$android-tint-color</span><span class="o">,</span><span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nv">$destructive-color</span><span class="o">:</span> <span class="mh">#FF6060</span><span class="p">;</span>
+<span class="nv">$android-destructive-color</span><span class="o">:</span> <span class="mh">#CC0000</span><span class="p">;</span>
+
+<span class="nc">.ui-destructive-color</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nv">$destructive-color</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-destructive-color</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nv">$android-destructive-color</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-background-destructive-color</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nv">$destructive-color</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-background-destructive-color</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nv">$android-destructive-color</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Navigation Bar Widget</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nc">.ui-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">z-index</span><span class="o">:</span><span class="mi">9</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateZ</span><span class="p">(</span><span class="mi">9</span><span class="kt">px</span><span class="p">));</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#FFFFFF</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.75</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> linear-gradient</span><span class="p">(</span><span class="no">top</span><span class="o">,</span> <span class="mh">#ffffff</span> <span class="mi">50</span><span class="kt">%</span><span class="o">,</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.75</span><span class="p">)</span> <span class="mi">100</span><span class="kt">%</span><span class="p">);</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">font</span><span class="o">:</span> <span class="mi">18</span><span class="kt">px</span><span class="o">/</span><span class="mi">44</span><span class="kt">px</span> <span class="nv">$font-stack</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="mi">300</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> flex-box</span><span class="p">();</span>
+  <span class="k">@include</span><span class="nd"> justify-content-space-between</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="cm">/* iOS 7&#39;s navbar needs to account for the status bar. Apparently the status bar</span>
+<span class="cm">   can be different sizes, and yet based on testing with a double-height status</span>
+<span class="cm">   bar, this seems to work. */</span>
+<span class="nc">.ios7</span> <span class="nc">.ui-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">64</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/* However, if we&#39;re a navigation bar trying to avoid a tab bar positioned at</span>
+<span class="cm">   the top, we need to adjust things so we don&#39;t introduce an extra 20px */</span>
+<span class="nc">.ios7</span> <span class="nc">.ui-avoid-tab-bar.ui-tab-top-position</span> <span class="nc">.ui-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#000</span><span class="p">;</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+  <span class="na">font</span><span class="o">:</span> <span class="mi">18</span><span class="kt">px</span><span class="o">/</span><span class="mi">48</span><span class="kt">px</span> <span class="nv">$android-font-stack</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Position the title of a navigation bar in the center of the navigation bar</span>
+<span class="cm">   This doesn&#39;t really account for the positions of any elements on the bar</span>
+<span class="cm">   however, and should be modified.</span>
+<span class="cm">   TODO: account for bar button groups and back button */</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-title</span>
+<span class="p">{</span>
+  <span class="c1">//position: absolute;</span>
+  <span class="c1">//left: 0;</span>
+  <span class="c1">//right: 0;</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">bold</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> flex</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> order</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// 2==center (would be 1, but android &lt;4.4)</span>
+  <span class="na">position</span><span class="o">:</span> <span class="n">initial</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/* Android left-aligns the title */</span>
+<span class="nc">.android</span> <span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-title</span>
+<span class="p">{</span>
+  <span class="c1">//left: 10px;</span>
+  <span class="c1">//right: 10px;</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">left</span><span class="p">;</span>
+  <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-right</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Tool Bar Widget</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+<span class="nc">.ui-tool-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">z-index</span><span class="o">:</span><span class="mi">9</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateZ</span><span class="p">(</span><span class="mi">9</span><span class="kt">px</span><span class="p">));</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#FFFFFF</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.75</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> linear-gradient</span><span class="p">(</span><span class="no">bottom</span><span class="o">,</span> <span class="mh">#ffffff</span> <span class="mi">50</span><span class="kt">%</span><span class="o">,</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.75</span><span class="p">)</span> <span class="mi">100</span><span class="kt">%</span><span class="p">);</span>
+  <span class="na">border-top</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">font</span><span class="o">:</span> <span class="mi">18</span><span class="kt">px</span><span class="o">/</span><span class="mi">44</span><span class="kt">px</span> <span class="nv">$font-stack</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="mi">300</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> flex-box</span><span class="p">();</span>
+  <span class="k">@include</span><span class="nd"> justify-content-space-between</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-tool-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#000</span><span class="p">;</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="na">border-top</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+  <span class="na">font</span><span class="o">:</span> <span class="mi">18</span><span class="kt">px</span><span class="o">/</span><span class="mi">48</span><span class="kt">px</span> <span class="nv">$android-font-stack</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Tab Bar Widget</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+<span class="nc">.ui-tab-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">z-index</span><span class="o">:</span><span class="mi">9</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateZ</span><span class="p">(</span><span class="mi">9</span><span class="kt">px</span><span class="p">));</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#FFFFFF</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.75</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> linear-gradient</span><span class="p">(</span><span class="no">bottom</span><span class="o">,</span> <span class="mh">#ffffff</span> <span class="mi">50</span><span class="kt">%</span><span class="o">,</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.75</span><span class="p">)</span> <span class="mi">100</span><span class="kt">%</span><span class="p">);</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">font</span><span class="o">:</span> <span class="mi">18</span><span class="kt">px</span><span class="o">/</span><span class="mi">44</span><span class="kt">px</span> <span class="nv">$font-stack</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="mi">300</span><span class="p">;</span>
+  <span class="na">overflow</span><span class="o">:</span> <span class="no">hidden</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/* If a tab bar is positioned at the top of the screen on iOS 7, account for the</span>
+<span class="cm">   space occupied by the status bar. */</span>
+<span class="nc">.ios7</span> <span class="nc">.ui-tab-bar.ui-tab-top-position</span>
+<span class="p">{</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">68</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-tab-bar.ui-tab-top-position</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ui-tab-bar.ui-tab-default-position</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar.ui-tab-bottom-position</span>
+<span class="p">{</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">border-top</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-tab-bar</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#000</span><span class="p">;</span>
+  <span class="na">background-image</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="na">font</span><span class="o">:</span> <span class="mi">18</span><span class="kt">px</span><span class="o">/</span><span class="mi">48</span><span class="kt">px</span> <span class="nv">$android-font-stack</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-tab-bar.ui-tab-default-position</span><span class="o">,</span>
+<span class="nc">.android</span> <span class="nc">.ui-tab-bar.ui-tab-top-position</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-tab-bar.ui-tab-bottom-position</span>
+<span class="p">{</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">border-top</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Bar Buttons can exist on Navigation, Tool, and Tab Bars</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="cm">/* Ensure a minimum click area */</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button</span>
+<span class="p">{</span>
+  <span class="na">min-width</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">inline</span><span class="o">-</span><span class="no">block</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Ensure that we can left, right, and center align the contents of a bar button */</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button.ui-align-left</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button.ui-align-left</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button.ui-align-left</span>
+<span class="p">{</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">left</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button.ui-align-right</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button.ui-align-right</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button.ui-align-right</span>
+<span class="p">{</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">right</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button.ui-align-center</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button.ui-align-center</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button.ui-align-center</span>
+<span class="p">{</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Bar Button Groups: Groups bar buttons so that operations can be applied as</span>
+<span class="cm"> * a group</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button-group</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button-group</span>
+<span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>position: absolute;</p></div></div><div class="code"><div class="wrapper">  <span class="na">position</span><span class="o">:</span> <span class="n">initial</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> flex</span><span class="p">(</span><span class="no">none</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ios7</span> <span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Bar button groups can be aligned to the left, center, or right of their</span>
+<span class="cm">   container. */</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group.ui-align-right</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button-group.ui-align-right</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button-group.ui-align-right</span>
+<span class="p">{</span>
+  <span class="c1">//right: 0;</span>
+  <span class="k">@include</span><span class="nd"> order</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="c1">//3==right-side; would be 2, but android&lt;4.4</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">right</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group.ui-align-left</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button-group.ui-align-left</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button-group.ui-align-left</span>
+<span class="p">{</span>
+  <span class="c1">//left: 0</span>
+  <span class="k">@include</span><span class="nd"> order</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//1==left-side; would be 0, but android&lt;4.4</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">left</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group.ui-align-center</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button-group.ui-align-center</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button-group.ui-align-center</span>
+<span class="p">{</span>
+  <span class="c1">//left: 0;</span>
+  <span class="c1">//right: 0;</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> order</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">//2==center; would be 1, but android&lt;4.4</span>
+  <span class="k">@include</span><span class="nd"> flex</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* Any bar button within a group inherits the group&#39;s alignment */</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group.ui-align-right</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button-group.ui-align-right</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button-group.ui-align-right</span> <span class="nc">.ui-bar-button</span>
+<span class="p">{</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">right</span><span class="p">;</span>
+  <span class="na">padding-right</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group.ui-align-left</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button-group.ui-align-left</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button-group.ui-align-left</span> <span class="nc">.ui-bar-button</span>
+<span class="p">{</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">left</span><span class="p">;</span>
+  <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-navigation-bar</span> <span class="nc">.ui-bar-button-group.ui-align-center</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tool-bar</span> <span class="nc">.ui-bar-button-group.ui-align-center</span> <span class="nc">.ui-bar-button</span><span class="o">,</span>
+<span class="nc">.ui-tab-bar</span> <span class="nc">.ui-bar-button-group.ui-align-center</span> <span class="nc">.ui-bar-button</span>
+<span class="p">{</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="p">;</span>
+  <span class="na">padding-left</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-right</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Avoidance Classes</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="cm">/* Avoid the navigation bar */</span>
+<span class="nc">.ui-avoid-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ios7</span> <span class="nc">.ui-avoid-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">64</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ios7</span> <span class="nc">.ui-avoid-tab-bar.ui-tab-top-position</span> <span class="nc">.ui-avoid-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-avoid-navigation-bar</span>
+<span class="p">{</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Avoid the tool bar */</span>
+<span class="nc">.ui-avoid-tool-bar</span>
+<span class="p">{</span>
+  <span class="na">padding-bottom</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-avoid-tool-bar</span>
+<span class="p">{</span>
+  <span class="na">padding-bottom</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Avoid the tab bar based on its position */</span>
+<span class="nc">.ui-avoid-tab-bar.ui-tab-top-position</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="no">inherit</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-avoid-tab-bar.ui-tab-default-position</span><span class="o">,</span>
+<span class="nc">.ui-avoid-tab-bar.ui-tab-bottom-position</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="no">inherit</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ios7</span> <span class="nc">.ui-avoid-tab-bar.ui-tab-top-position</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">68</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="no">inherit</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.android</span> <span class="nc">.ui-avoid-tab-bar.ui-tab-default-position</span><span class="o">,</span>
+<span class="nc">.android</span> <span class="nc">.ui-avoid-tab-bar.ui-tab-top-position</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="no">inherit</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-avoid-tab-bar.ui-tab-bottom-position</span>
+<span class="p">{</span>
+  <span class="na">top</span><span class="o">:</span> <span class="no">inherit</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Scroll Container</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="cm">/* Scroll containers are positioned absolutely, anchored to their parent&#39;s</span>
+<span class="cm">   corners, but allow the content inside to scroll. */</span>
+<span class="nc">.ui-scroll-container</span>
+<span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">overflow</span><span class="o">:</span> <span class="no">auto</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * List</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="cm">/* Lists are UL, OL, etc., styled appropriately */</span>
+<span class="nc">.ui-list</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="na">list-style-type</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * List Item</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nc">.ui-list-item</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="p">;</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+  <span class="na">margin-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">min-height</span><span class="o">:</span> <span class="mi">50</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">overflow</span><span class="o">:</span> <span class="no">auto</span><span class="p">;</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-list-item</span>
+<span class="p">{</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+  <span class="na">margin-left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">padding-left</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* List Items can have indicators attached, which will appear</span>
+<span class="cm">   on the right of the list item. */</span>
+<span class="nc">.ui-list-item</span> <span class="nc">.ui-indicator</span>
+<span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> size</span><span class="p">(</span><span class="mi">30</span><span class="kt">px</span><span class="o">,</span> <span class="mi">30</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> mask-size</span><span class="p">(</span><span class="mi">30</span><span class="kt">px</span> <span class="mi">30</span><span class="kt">px</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ui-list-item</span> <span class="nc">.ui-arrow-direction-right</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> mask-image</span><span class="p">(</span><span class="sx">url(&#39;./yasmf-assets/chevron-right-thin@2x.png&#39;)</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.ui-list-item</span> <span class="nc">.ui-arrow-direction-left</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> mask-image</span><span class="p">(</span><span class="sx">url(&#39;./yasmf-assets/chevron-left-thin@2x.png&#39;)</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* Inside a list, a list-item-contents contains the actual contents of the list item */</span>
+<span class="nc">.ui-list-item</span> <span class="nc">.ui-list-item-contents</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+  <span class="na">padding-right</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-bottom</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">overflow</span><span class="o">:</span> <span class="no">auto</span><span class="p">;</span>
+  <span class="na">z-index</span><span class="o">:</span> <span class="mi">3</span><span class="p">;</span>
+<span class="cm">/*  -webkit-transform: translateZ(3px);</span>
+<span class="cm">  -moz-transform: translateZ(3px);</span>
+<span class="cm">  -ms-transform: translateZ(3px);</span>
+<span class="cm">  transform: translateZ(3px);*/</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-list-item</span> <span class="nc">.ui-list-item-contents</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#000</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* A list action group can be used to group actions together as in a swipe-to-delete mechanism */</span>
+<span class="nc">.ui-list-item</span> <span class="nc">.ui-list-action-group</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#CCC</span><span class="p">;</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">z-index</span><span class="o">:</span> <span class="mi">2</span><span class="p">;</span>
+<span class="cm">/*  -webkit-transform: translateZ(2px);</span>
+<span class="cm">  -moz-transform: translateZ(2px);</span>
+<span class="cm">  -ms-transform: translateZ(2px);</span>
+<span class="cm">  transform: translateZ(2px); */</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-list-item</span> <span class="nc">.ui-list-action-group</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#333</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-list-item</span> <span class="nc">.ui-list-action-group</span> <span class="nc">.ui-list-action</span>
+<span class="p">{</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="na">min-width</span><span class="o">:</span> <span class="mi">44</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">inline-table</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-list-item</span> <span class="nc">.ui-list-action-group</span> <span class="nc">.ui-list-action</span> <span class="nt">div</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">table-cell</span><span class="p">;</span>
+  <span class="na">vertical-align</span><span class="o">:</span> <span class="no">middle</span><span class="p">;</span>
+  <span class="na">padding</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* light enough so that we don&#39;t have to override a lot in custom css unless we want to */</span>
+<span class="nv">$selection-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">48</span><span class="o">,</span> <span class="mi">97</span><span class="o">,</span> <span class="mi">154</span><span class="o">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="nv">$android-selection-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">36</span><span class="o">,</span> <span class="mi">36</span><span class="o">,</span> <span class="mi">36</span><span class="o">,</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="cm">/* List affordances */</span>
+<span class="nc">.ui-list-item</span><span class="nd">:active</span><span class="o">,</span> <span class="nc">.ui-list-item-contents</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nv">$selection-color</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-list-item</span><span class="nd">:active</span><span class="o">,</span> <span class="nc">.android</span> <span class="nc">.ui-list-item-contents</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nv">$android-selection-color</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-list-item</span><span class="nd">:active</span> <span class="nc">.ui-glyph</span><span class="o">,</span> <span class="nc">.ui-list-item-contents</span><span class="nd">:active</span> <span class="nc">.ui-glyph</span><span class="o">,</span>
+<span class="nc">.ui-list-item</span><span class="nd">:active</span> <span class="nc">.ui-indicator</span><span class="o">,</span> <span class="nc">.ui-list-item-contents</span><span class="nd">:active</span> <span class="nc">.ui-indicator</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Glyphs -- these are icons that can be referenced by Class name</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+<span class="nc">.ui-glyph</span>
+<span class="p">{</span>
+  <span class="k">@include</span><span class="nd"> mask-position</span><span class="p">(</span><span class="no">center</span> <span class="no">center</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> mask-size</span><span class="p">(</span><span class="mi">30</span><span class="kt">px</span> <span class="mi">30</span><span class="kt">px</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> mask-repeat</span><span class="p">(</span><span class="no">no-repeat</span><span class="p">);</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> box-sizing</span><span class="p">(</span><span class="no">border</span><span class="o">-</span><span class="n">box</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Back buttons are bit funny; not exactly a glyph and not exactly a button</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+<span class="na">.ui-back-button</span><span class="o">::</span><span class="n">before</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">30</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">30</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+  <span class="na">top</span><span class="o">:</span> <span class="mi">-3</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">inline</span><span class="o">-</span><span class="no">block</span><span class="p">;</span>
+  <span class="na">vertical-align</span><span class="o">:</span> <span class="no">middle</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> mask-image</span><span class="p">(</span><span class="sx">url(&quot;./yasmf-assets/chevron-left-thick@2x.png&quot;)</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> mask-size</span><span class="p">(</span><span class="mi">30</span><span class="kt">px</span> <span class="mi">30</span><span class="kt">px</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> mask-repeat</span><span class="p">(</span><span class="no">no-repeat</span><span class="p">);</span>
+  <span class="na">margin-left</span><span class="o">:</span> <span class="mi">-10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">-5</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">content</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="na">.android</span><span class="err"> </span><span class="na">.ui-back-button</span><span class="o">::</span><span class="n">before</span>
+<span class="p">{</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> mask-size</span><span class="p">(</span><span class="mi">15</span><span class="kt">px</span> <span class="mi">30</span><span class="kt">px</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> mask-position</span><span class="p">(</span><span class="no">left</span> <span class="mi">5</span><span class="kt">px</span><span class="p">);</span>
+  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">-10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">margin-left</span><span class="o">:</span> <span class="mi">-7</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-back-button</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="no">transparent</span><span class="p">;</span>
+  <span class="na">font-size</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">min-width</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">48</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* If we&#39;re on the root view, don&#39;t show a back button */</span>
+<span class="nc">.ui-root-view</span> <span class="nc">.ui-back-button</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Icon Glyphs</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nv">$glyphs</span><span class="o">:</span> <span class="n">arrow-corners-inward</span><span class="o">,</span> <span class="n">arrow-corners-outward</span><span class="o">,</span> <span class="n">bookmark</span><span class="o">,</span> <span class="n">books</span><span class="o">,</span>
+         <span class="n">brightness-less</span><span class="o">,</span> <span class="n">brightness-more</span><span class="o">,</span> <span class="n">camera-video</span><span class="o">,</span> <span class="n">camera</span><span class="o">,</span> <span class="n">checkmark</span><span class="o">,</span>
+         <span class="n">chevron-left-thick</span><span class="o">,</span> <span class="n">chevron-left-thin</span><span class="o">,</span> <span class="n">chevron-right-thick</span><span class="o">,</span> <span class="n">chevron-right-thin</span><span class="o">,</span>
+         <span class="no">circle</span><span class="o">-</span><span class="n">filled</span><span class="o">,</span> <span class="no">circle</span><span class="o">-</span><span class="n">hollow</span><span class="o">,</span> <span class="no">pause</span><span class="o">-</span><span class="n">filled</span><span class="o">,</span> <span class="no">pause</span><span class="o">-</span><span class="n">hollow</span><span class="o">,</span>
+         <span class="n">play-filled</span><span class="o">,</span> <span class="n">play-hollow</span><span class="o">,</span> <span class="n">clock</span><span class="o">,</span> <span class="n">delete</span><span class="o">,</span> <span class="n">gear</span><span class="o">,</span> <span class="n">list</span><span class="o">,</span> <span class="n">magnifying-glass</span><span class="o">,</span>
+         <span class="no">page</span><span class="o">-</span><span class="no">text</span><span class="o">-</span><span class="n">new</span><span class="o">,</span> <span class="n">pencil</span><span class="o">,</span> <span class="n">plus</span><span class="o">,</span> <span class="n">tag</span><span class="o">,</span> <span class="n">trash</span><span class="o">,</span> <span class="n">sound-wave</span><span class="o">,</span> <span class="no">circle</span><span class="o">-</span><span class="n">filled-checked</span><span class="o">,</span>
+         <span class="n">photo</span><span class="o">,</span> <span class="n">photo-add</span><span class="o">,</span> <span class="n">film</span><span class="o">,</span> <span class="n">chat-bubble</span><span class="o">,</span> <span class="n">chat-bubble-dots</span><span class="o">,</span> <span class="n">share</span><span class="o">,</span> <span class="n">download</span><span class="o">,</span>
+         <span class="no">circle</span><span class="o">-</span><span class="n">info</span><span class="o">,</span> <span class="n">more</span><span class="o">,</span> <span class="no">circle</span><span class="o">-</span><span class="n">outlined</span><span class="o">,</span> <span class="n">gps-locate</span><span class="o">,</span> <span class="no">square</span><span class="o">-</span><span class="n">filled</span><span class="o">,</span> <span class="no">square</span><span class="o">-</span><span class="n">hollow</span><span class="o">,</span>
+         <span class="n">menu</span><span class="p">;</span>
+
+<span class="k">@each</span> <span class="err">$</span><span class="nt">glyph</span> <span class="nt">in</span> <span class="err">$</span><span class="nt">glyphs</span>
+<span class="p">{</span>
+  <span class="nc">.ui-glyph-</span><span class="si">#{</span><span class="nv">$glyph</span><span class="si">}</span>
+  <span class="p">{</span>
+    <span class="k">@include</span><span class="nd"> mask-image</span><span class="p">(</span><span class="sx">url(&quot;./yasmf-assets/</span><span class="si">#{</span><span class="nv">$glyph</span><span class="si">}</span><span class="sx">@2x.png&quot;)</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Alert Styles</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nc">.ui-alert-container</span> <span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> rectTLBR</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="na">opacity</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transition</span><span class="p">(</span><span class="no">opacity</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">);</span>
+  <span class="na">z-index</span><span class="o">:</span> <span class="mi">9999999</span><span class="p">;</span>
+
+  <span class="na">display</span><span class="o">:</span> <span class="n">table</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> size</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">100</span><span class="kt">%</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert-vertical-align</span>
+<span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">table-cell</span><span class="p">;</span>
+  <span class="na">vertical-align</span><span class="o">:</span> <span class="no">middle</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert</span> <span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+  <span class="na">min-width</span><span class="o">:</span> <span class="mi">260</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">max-width</span><span class="o">:</span> <span class="mi">420</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span> <span class="no">auto</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="p">;</span>
+  <span class="na">opacity</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">-webkit-transition</span><span class="o">:</span> <span class="o">-</span><span class="n">webkit-transform</span> <span class="mi">0</span><span class="mf">.125</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">opacity</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">top</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">left</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">right</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">bottom</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">width</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">height</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">;</span>
+  <span class="na">-moz-transition</span><span class="o">:</span> <span class="o">-</span><span class="n">moz-transform</span> <span class="mi">0</span><span class="mf">.125</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">opacity</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">top</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">left</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">right</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">bottom</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">width</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">height</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">;</span>
+  <span class="na">-ms-transition</span><span class="o">:</span> <span class="o">-</span><span class="n">ms-transform</span> <span class="mi">0</span><span class="mf">.125</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">opacity</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">top</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">left</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">right</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">bottom</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">width</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">height</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">;</span>
+  <span class="na">transition</span><span class="o">:</span> <span class="n">transform</span> <span class="mi">0</span><span class="mf">.125</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">opacity</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">top</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">left</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">right</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">bottom</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">width</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="o">,</span> <span class="no">height</span> <span class="mi">0</span><span class="mf">.25</span><span class="kt">s</span> <span class="n">ease-in-out</span><span class="p">;</span>
+  <span class="na">-webkit-transform</span><span class="o">:</span> <span class="nf">scale3d</span><span class="p">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="p">);</span>
+  <span class="na">-moz-transform</span><span class="o">:</span> <span class="nf">scale3d</span><span class="p">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="p">);</span>
+  <span class="na">-ms-transform</span><span class="o">:</span> <span class="nf">scale3d</span><span class="p">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="p">);</span>
+  <span class="na">transform</span><span class="o">:</span> <span class="nf">scale3d</span><span class="p">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="p">);</span>
+  <span class="na">box-shadow</span><span class="o">:</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">40</span><span class="kt">px</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.5</span><span class="p">);</span>
+  <span class="na">border-radius</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.phone</span> <span class="nc">.ui-alert</span>
+<span class="p">{</span>
+  <span class="na">max-width</span><span class="o">:</span><span class="mi">300</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.android</span> <span class="nc">.ui-alert</span> <span class="p">{</span>
+  <span class="na">border-radius</span><span class="o">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#242424</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert-title</span> <span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+  <span class="na">font-size</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">line-height</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="no">auto</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">bold</span><span class="p">;</span>
+  <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">padding-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="mf">.5</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">padding-top</span><span class="o">:</span> <span class="mi">0</span><span class="mf">.5</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#000</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.android</span> <span class="nc">.ui-alert-title</span>
+<span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#33B5E5</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">normal</span><span class="p">;</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">left</span><span class="p">;</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="no">solid</span> <span class="mh">#33B5E5</span><span class="p">;</span>
+  <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="mf">.5</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">padding-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert-text</span> <span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+  <span class="na">line-height</span><span class="o">:</span> <span class="mi">1</span><span class="mf">.25</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="no">auto</span><span class="p">;</span>
+  <span class="na">font-size</span><span class="o">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">normal</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#333</span><span class="p">;</span>
+  <span class="na">padding-left</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">padding-right</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">padding-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.android</span> <span class="nc">.ui-alert-text</span>
+<span class="p">{</span>
+  <span class="na">text-align</span><span class="o">:</span> <span class="no">left</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#E8E8E8</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="nc">.ui-alert-button-container</span> <span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+  <span class="na">line-height</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="no">auto</span><span class="p">;</span>
+  <span class="na">font-size</span><span class="o">:</span> <span class="mi">16</span><span class="kt">pt</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">normal</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#333</span><span class="p">;</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="na">border-collapse</span><span class="o">:</span> <span class="no">collapse</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="n">table</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button</span> <span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="p">;</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">table-cell</span><span class="p">;</span>
+  <span class="na">background-clip</span><span class="o">:</span> <span class="no">padding</span><span class="o">-</span><span class="n">box</span><span class="p">;</span>
+  <span class="na">padding-left</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">padding-right</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.125</span><span class="p">);</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">normal</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#40B0FF</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.android</span> <span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button</span> <span class="p">{</span>
+  <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.125</span><span class="p">);</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button</span><span class="nd">:first-child</span>
+<span class="p">{</span>
+  <span class="na">border-left</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button</span><span class="nd">:last-child</span>
+<span class="p">{</span>
+  <span class="na">border-right</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button.destructive</span> <span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#FF6060</span> <span class="nv">!important</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button.destructive</span> <span class="p">{</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#FFF</span> <span class="nv">!important</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#992424</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button.bold</span> <span class="p">{</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">bold</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button.wide</span> <span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="p">;</span>
+  <span class="na">border</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">border-top</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.125</span><span class="p">);</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.125</span><span class="p">);</span>
+  <span class="na">line-height</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button.wide</span><span class="nd">:last-child</span> <span class="p">{</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.android</span> <span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button.wide</span> <span class="p">{</span>
+  <span class="na">border</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">border-top</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.125</span><span class="p">);</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.125</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button.wide</span><span class="nd">:last-child</span> <span class="p">{</span>
+  <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="nc">.ui-prompt-input</span> <span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">static</span><span class="p">;</span>
+  <span class="na">line-height</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">height</span><span class="o">:</span> <span class="mi">1</span><span class="mf">.5</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">font-size</span><span class="o">:</span> <span class="mi">12</span><span class="kt">pt</span><span class="p">;</span>
+  <span class="na">font-weight</span><span class="o">:</span> <span class="no">normal</span><span class="p">;</span>
+  <span class="na">width</span><span class="o">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
+  <span class="na">padding</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="na">margin-top</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+  <span class="na">bottom</span><span class="o">:</span> <span class="mi">60</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">color</span><span class="o">:</span> <span class="mh">#333</span><span class="p">;</span>
+  <span class="na">border-radius</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+  <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.75</span><span class="p">);</span>
+  <span class="na">-webkit-box-shadow</span><span class="o">:</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="mi">6</span><span class="kt">px</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">)</span> <span class="no">inset</span><span class="p">;</span>
+  <span class="na">box-shadow</span><span class="o">:</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="mi">6</span><span class="kt">px</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.25</span><span class="p">)</span> <span class="no">inset</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+  <span class="na">-webkit-appearance</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.android</span> <span class="nc">.ui-prompt-input</span> <span class="p">{</span>
+  <span class="na">box-shadow</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="na">-webkit-box-shadow</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="na">border-radius</span><span class="o">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* affordances for ui-alert */</span>
+<span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="mf">.0625</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.android</span> <span class="nc">.ui-alert-button-container</span> <span class="nc">.ui-alert-button</span><span class="nd">:active</span>
+<span class="p">{</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span><span class="mi">0</span><span class="mf">.0625</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="cm">/**</span>
+<span class="cm"> * End Alert</span>
+<span class="cm"> */</span>
+
+<span class="nc">.input</span><span class="o">,</span> <span class="nc">.textarea</span> <span class="p">{</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> outline</span><span class="p">(</span><span class="no">none</span><span class="p">);</span> <span class="c1">// you&#39;d think having this on the body element would be sufficient,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>but not for android.</p></div></div><div class="code"><div class="wrapper"><span class="p">}</span>
+
+<span class="cm">/*****************************************************************************</span>
+<span class="cm"> *</span>
+<span class="cm"> * Put up when YASMF doesn&#39;t want taps to be handled, such as during view</span>
+<span class="cm"> * transitions.</span>
+<span class="cm"> *</span>
+<span class="cm"> *****************************************************************************/</span>
+
+<span class="nc">.ui-prevent-clicks</span>
+<span class="p">{</span>
+  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="p">;</span>
+  <span class="na">z-index</span><span class="o">:</span> <span class="mi">999999</span><span class="p">;</span>
+  <span class="na">background-color</span><span class="o">:</span> <span class="no">transparent</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> rectTLBR</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">@include</span><span class="nd"> size</span><span class="p">(</span><span class="mi">100</span><span class="kt">%</span><span class="o">,</span> <span class="mi">100</span><span class="kt">%</span><span class="p">);</span>
+  <span class="na">display</span><span class="o">:</span> <span class="no">none</span><span class="p">;</span>
+  <span class="k">@include</span><span class="nd"> transform</span><span class="p">(</span><span class="nf">translateZ</span><span class="p">(</span><span class="mi">999999</span><span class="kt">px</span><span class="p">));</span>
+<span class="p">}</span></div></div></div></div></body></html>
