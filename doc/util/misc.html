@@ -40,24 +40,21 @@ OTHER DEALINGS IN THE SOFTWARE.
 <span class="cm">         onevar:false</span>
 <span class="cm"> */</span>
 <span class="cm">/*global define*/</span>
-<span class="nx">define</span> <span class="p">(</span>
-   <span class="kd">function</span> <span class="p">()</span>
-   <span class="p">{</span>
-      <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method makeFauxUUID</span></p>
+<span class="nx">define</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method makeFauxUUID</span></p>
 
 <p>Returns a pseudo-UUID. Not guaranteed to be unique (far from it, probably), but
 close enough for most purposes. You should handle collisions gracefully on your
 own, of course. see http://stackoverflow.com/a/8809472</p>
 
-<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">         <span class="nx">makeFauxUUID</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span>
-         <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
-          <span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="s1">&#39;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&#39;</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[xy]/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
-              <span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="p">(</span><span class="nx">d</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="mi">16</span><span class="p">)</span><span class="o">%</span><span class="mi">16</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
-              <span class="nx">d</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">d</span><span class="o">/</span><span class="mi">16</span><span class="p">);</span>
-              <span class="k">return</span> <span class="p">(</span><span class="nx">c</span><span class="o">==</span><span class="s1">&#39;x&#39;</span> <span class="o">?</span> <span class="nx">r</span> <span class="o">:</span> <span class="p">(</span><span class="nx">r</span><span class="o">&amp;</span><span class="mh">0x7</span><span class="o">|</span><span class="mh">0x8</span><span class="p">)).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
-          <span class="p">});</span>
-          <span class="k">return</span> <span class="nx">uuid</span><span class="p">;</span>
-         <span class="p">}</span>
-      <span class="p">};</span>
-   <span class="p">});</span></div></div></div></div></body></html>
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">makeFauxUUID</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">uuid</span> <span class="o">=</span> <span class="s1">&#39;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&#39;</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span> <span class="sr">/[xy]/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">c</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="p">(</span> <span class="nx">d</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">16</span> <span class="p">)</span> <span class="o">%</span> <span class="mi">16</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="nx">d</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span> <span class="nx">d</span> <span class="o">/</span> <span class="mi">16</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="nx">c</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span> <span class="o">?</span> <span class="nx">r</span> <span class="o">:</span> <span class="p">(</span> <span class="nx">r</span> <span class="o">&amp;</span> <span class="mh">0x7</span> <span class="o">|</span> <span class="mh">0x8</span> <span class="p">)</span> <span class="p">).</span><span class="nx">toString</span><span class="p">(</span> <span class="mi">16</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nx">uuid</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>

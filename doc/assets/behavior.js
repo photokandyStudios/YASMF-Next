@@ -80,6 +80,25 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           },
           "depth": 2,
           "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".scss"],
+              "pygmentsLexer": "scss",
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "SCSS"
+            },
+            "sourcePath": "/Users/kerrishotts/Documents/Mobile/YASMF/YASMF-Next/lib/yasmf.scss",
+            "projectPath": "lib/yasmf.scss",
+            "targetPath": "lib/yasmf",
+            "pageTitle": "lib/yasmf",
+            "title": "yasmf"
+          },
+          "depth": 2,
+          "outline": []
         }
       ]
     }, {

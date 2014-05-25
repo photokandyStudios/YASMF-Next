@@ -37,220 +37,208 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
 <span class="cm">           onevar:false</span>
 <span class="cm">   */</span>
 <span class="cm">/*global define*/</span>
+<span class="nx">define</span><span class="p">(</span> <span class="p">[</span> <span class="s2">&quot;yasmf/ui/core&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/ui/viewContainer&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/ui/event&quot;</span> <span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">UI</span><span class="p">,</span>
+  <span class="nx">ViewContainer</span><span class="p">,</span> <span class="nx">Event</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">_className</span> <span class="o">=</span> <span class="s2">&quot;TabViewController&quot;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">TabViewController</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ViewContainer</span><span class="p">();</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewsChanged&quot;</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span> <span class="o">=</span> <span class="p">[];</span> <span class="c1">// each tab on the tab bar</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// contains our bar button group</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// contains all our tabs</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// contains all our subviews</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-tab-bar ui-tab-default-position&quot;</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-bar-button-group ui-align-center&quot;</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElementIfNecessary</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">===</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElement</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span>
+        <span class="s2">&quot;ui-container ui-avoid-tab-bar ui-tab-default-position&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainerIfNecessary</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">===</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainer</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElementIfNecessary</span><span class="p">();</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainerIfNecessary</span><span class="p">();</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">aView</span><span class="p">,</span> <span class="nx">idx</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-bar-button ui-tint-color&quot;</span><span class="p">;</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">aView</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span> <span class="s2">&quot;data-tag&quot;</span><span class="p">,</span> <span class="nx">idx</span> <span class="p">)</span>
+      <span class="nx">Event</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="s2">&quot;touchstart&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">selectedTab</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span> <span class="s2">&quot;data-tag&quot;</span> <span class="p">),</span> <span class="mi">10</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nx">e</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">setObservableBarPosition</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">newPosition</span><span class="p">,</span> <span class="nx">oldPosition</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">oldPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">newPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">oldPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">newPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nx">newPosition</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span><span class="p">(</span> <span class="s2">&quot;barPosition&quot;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="k">default</span><span class="o">:</span> <span class="s2">&quot;default&quot;</span>
+    <span class="p">}</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">setObservableBarAlignment</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">newAlignment</span><span class="p">,</span> <span class="nx">oldAlignment</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span> <span class="s2">&quot;ui-align-&quot;</span> <span class="o">+</span> <span class="nx">oldAlignment</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="s2">&quot;ui-align-&quot;</span> <span class="o">+</span> <span class="nx">newAlignment</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nx">newAlignment</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span><span class="p">(</span> <span class="s2">&quot;barAlignment&quot;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="k">default</span><span class="o">:</span> <span class="s2">&quot;center&quot;</span>
+    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>Array</em></span></p>
 
-<span class="nx">define</span> <span class="p">(</span> <span class="p">[</span><span class="s2">&quot;yasmf/ui/core&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/ui/viewContainer&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;yasmf/ui/event&quot;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">UI</span><span class="p">,</span> <span class="nx">ViewContainer</span><span class="p">,</span> <span class="nx">Event</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">_className</span> <span class="o">=</span> <span class="s2">&quot;TabViewController&quot;</span><span class="p">;</span>
-          <span class="kd">var</span> <span class="nx">TabViewController</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-          <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ViewContainer</span><span class="p">();</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span> <span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span> <span class="p">(</span> <span class="s2">&quot;viewsChanged&quot;</span> <span class="p">);</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span> <span class="o">=</span> <span class="p">[];</span> <span class="c1">// each tab on the tab bar</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// contains our bar button group</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// contains all our tabs</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// contains all our subviews</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElement</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-tab-bar ui-tab-default-position&quot;</span><span class="p">;</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-bar-button-group ui-align-center&quot;</span><span class="p">;</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">appendChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span> <span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElementIfNecessary</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span>
-              <span class="p">{</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElement</span><span class="p">();</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainer</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-container ui-avoid-tab-bar ui-tab-default-position&quot;</span> <span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainerIfNecessary</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span>
-              <span class="p">{</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainer</span><span class="p">();</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabBarElementIfNecessary</span><span class="p">();</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createViewContainerIfNecessary</span><span class="p">();</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
-              <span class="p">{</span>
-                <span class="k">return</span><span class="p">;</span>
-              <span class="p">}</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span><span class="p">();</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabElement</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">aView</span><span class="p">,</span> <span class="nx">idx</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span> <span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-              <span class="nx">e</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-bar-button ui-tint-color&quot;</span><span class="p">;</span>
-              <span class="nx">e</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">aView</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
-              <span class="nx">e</span><span class="p">.</span><span class="nx">setAttribute</span> <span class="p">(</span><span class="s2">&quot;data-tag&quot;</span><span class="p">,</span> <span class="nx">idx</span><span class="p">)</span>
-              <span class="nx">Event</span><span class="p">.</span><span class="nx">addListener</span> <span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="s2">&quot;touchstart&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span>
-                                                   <span class="p">{</span>
-                                                     <span class="nx">self</span><span class="p">.</span><span class="nx">selectedTab</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;data-tag&quot;</span><span class="p">),</span><span class="mi">10</span><span class="p">);</span>
-                                                   <span class="p">});</span>
-              <span class="k">return</span> <span class="nx">e</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">setObservableBarPosition</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">newPosition</span><span class="p">,</span> <span class="nx">oldPosition</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span> <span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">oldPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_tabBarElement</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span> <span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">newPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span> <span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">oldPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span> <span class="p">(</span> <span class="s2">&quot;ui-tab-&quot;</span> <span class="o">+</span> <span class="nx">newPosition</span> <span class="o">+</span> <span class="s2">&quot;-position&quot;</span> <span class="p">);</span>
-              <span class="k">return</span> <span class="nx">newPosition</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span> <span class="p">(</span><span class="s2">&quot;barPosition&quot;</span><span class="p">,</span> <span class="p">{</span><span class="k">default</span><span class="o">:</span> <span class="s2">&quot;default&quot;</span><span class="p">}</span> <span class="p">);</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">setObservableBarAlignment</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">newAlignment</span><span class="p">,</span> <span class="nx">oldAlignment</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span> <span class="p">(</span> <span class="s2">&quot;ui-align-&quot;</span> <span class="o">+</span> <span class="nx">oldAlignment</span><span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span> <span class="p">(</span> <span class="s2">&quot;ui-align-&quot;</span> <span class="o">+</span> <span class="nx">newAlignment</span><span class="p">);</span>
-              <span class="k">return</span> <span class="nx">newAlignment</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span> <span class="p">(</span><span class="s2">&quot;barAlignment&quot;</span><span class="p">,</span> <span class="p">{</span><span class="k">default</span><span class="o">:</span> <span class="s2">&quot;center&quot;</span><span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>Array</em></span></p>
-
-<p>The array of views that this tab view controller manages.</p></div></div><div class="code"><div class="wrapper">            <span class="c1">//self._subviews = [];</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="s2">&quot;subviews&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">write</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="k">default</span><span class="o">:</span> <span class="p">[]}</span> <span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">addSubview</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">view</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
-
-              <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabElement</span> <span class="p">(</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">length</span> <span class="p">);</span>
-
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">appendChild</span> <span class="p">(</span> <span class="nx">e</span> <span class="p">);</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span> <span class="nx">e</span> <span class="p">);</span>
-
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span> <span class="nx">view</span> <span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">removeSubview</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">view</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
-              <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">indexOf</span> <span class="p">(</span><span class="nx">view</span><span class="p">);</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
-              <span class="p">{</span>
-                <span class="kd">var</span> <span class="nx">hidingView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-                <span class="kd">var</span> <span class="nx">hidingViewParent</span> <span class="o">=</span> <span class="nx">hidingView</span><span class="p">.</span><span class="nx">parentElement</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">hidingViewParent</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span> <span class="nx">hidingView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewWillDisappear&quot;</span> <span class="p">);</span> <span class="p">}</span>
-                <span class="nx">hidingView</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">hidingViewParent</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span> <span class="nx">hidingView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewDidDisappear&quot;</span> <span class="p">);</span> <span class="p">}</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">splice</span> <span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-                <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">removeChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">);</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">splice</span> <span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-                <span class="kd">var</span> <span class="nx">curSelectedTab</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">selectedTab</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">curSelectedTab</span> <span class="o">&gt;</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="nx">curSelectedTab</span><span class="o">--</span><span class="p">;</span> <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">curSelectedTab</span> <span class="o">&gt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
-                <span class="p">{</span>
-                  <span class="nx">curSelectedTab</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">selectedTab</span> <span class="o">=</span> <span class="nx">curSelectedTab</span><span class="p">;</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">setObservableSelectedTab</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">newIndex</span><span class="p">,</span> <span class="nx">oldIndex</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="kd">var</span> <span class="nx">oldView</span><span class="p">,</span> <span class="nx">newView</span><span class="p">;</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nx">oldIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-              <span class="p">{</span>
-                <span class="nx">oldView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="nx">oldIndex</span><span class="p">];</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="nx">newView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="nx">newIndex</span><span class="p">];</span> <span class="p">}</span>
-                <span class="nx">oldView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewWillDisappear&quot;</span> <span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewWillAppear&quot;</span> <span class="p">);</span> <span class="p">}</span>
-                <span class="nx">oldView</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="nx">newIndex</span><span class="p">].</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">;</span> <span class="p">}</span>
-                <span class="nx">oldView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewDidDisappear&quot;</span> <span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewDidAppear&quot;</span> <span class="p">);</span> <span class="p">}</span>
-              <span class="p">}</span>
-              <span class="k">else</span>
-              <span class="p">{</span>
-                <span class="nx">newView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="nx">newIndex</span><span class="p">];</span>
-                <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewWillAppear&quot;</span> <span class="p">);</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span><span class="nx">newIndex</span><span class="p">].</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">;</span>
-                <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;viewDidAppear&quot;</span> <span class="p">);</span>
-              <span class="p">}</span>
-              <span class="k">return</span> <span class="nx">newIndex</span><span class="p">;</span>
-            <span class="p">};</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span> <span class="p">(</span> <span class="s2">&quot;selectedTab&quot;</span><span class="p">,</span> <span class="p">{</span><span class="k">default</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-                                                            <span class="nx">notifyAlways</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span> <span class="p">);</span>
-
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;render&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span> <span class="c1">// nothing to render!</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;renderToElement&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
-            <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
-              <span class="k">return</span><span class="p">;</span> <span class="c1">// nothing to do.</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">)</span>
-            <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>do what a normal view container does</p></div></div><div class="code"><div class="wrapper">              <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">]</span> <span class="p">);</span>
-              <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;initWithOptions&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">options</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="kd">var</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span><span class="p">;</span>
-              <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span>
-              <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">theElementId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span> <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">theElementTag</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span><span class="p">;</span> <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nx">theElementClass</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span> <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nx">theParentElement</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span><span class="p">;</span> <span class="p">}</span>
-              <span class="p">}</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">);</span>
-              <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span>
-              <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barPosition</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">barPosition</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barPosition</span><span class="p">;</span> <span class="p">}</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barAlignment</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">barAlignment</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barAlignment</span><span class="p">;</span> <span class="p">}</span>
-              <span class="p">}</span>
-              <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span> <span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
-            <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-          <span class="p">}</span>
-
-          <span class="nx">TabViewController</span><span class="p">.</span><span class="nx">BAR_POSITION</span> <span class="o">=</span> <span class="p">{</span><span class="k">default</span><span class="o">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-                                            <span class="nx">top</span><span class="o">:</span> <span class="s2">&quot;top&quot;</span><span class="p">,</span>
-                                            <span class="nx">bottom</span><span class="o">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">};</span>
-          <span class="nx">TabViewController</span><span class="p">.</span><span class="nx">BAR_ALIGNMENT</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">center</span><span class="o">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span>
-                                              <span class="nx">left</span><span class="o">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
-                                              <span class="nx">right</span><span class="o">:</span> <span class="s2">&quot;right&quot;</span><span class="p">}</span>
-          <span class="k">return</span> <span class="nx">TabViewController</span><span class="p">;</span>
-        <span class="p">});</span></div></div></div></div></body></html>
+<p>The array of views that this tab view controller manages.</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//self._subviews = [];</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;subviews&quot;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">write</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="k">default</span><span class="o">:</span> <span class="p">[]</span>
+    <span class="p">}</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">addSubview</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">view</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_createTabElement</span><span class="p">(</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">length</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">e</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">e</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">view</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">removeSubview</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">view</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">view</span> <span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">i</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">hidingView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span> <span class="nx">i</span> <span class="p">];</span>
+        <span class="kd">var</span> <span class="nx">hidingViewParent</span> <span class="o">=</span> <span class="nx">hidingView</span><span class="p">.</span><span class="nx">parentElement</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">hidingViewParent</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">hidingView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewWillDisappear&quot;</span> <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">hidingView</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">hidingViewParent</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">hidingView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewDidDisappear&quot;</span> <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_barButtonGroup</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">[</span> <span class="nx">i</span> <span class="p">]</span> <span class="p">);</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">curSelectedTab</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">selectedTab</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">curSelectedTab</span> <span class="o">&gt;</span> <span class="nx">i</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">curSelectedTab</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">curSelectedTab</span> <span class="o">&gt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">length</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">curSelectedTab</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tabElements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">selectedTab</span> <span class="o">=</span> <span class="nx">curSelectedTab</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">setObservableSelectedTab</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">newIndex</span><span class="p">,</span> <span class="nx">oldIndex</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">oldView</span><span class="p">,</span> <span class="nx">newView</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">oldIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">oldView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span> <span class="nx">oldIndex</span> <span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">newView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span> <span class="nx">newIndex</span> <span class="p">];</span>
+        <span class="p">}</span>
+        <span class="nx">oldView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewWillDisappear&quot;</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewWillAppear&quot;</span> <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">oldView</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span> <span class="nx">newIndex</span> <span class="p">].</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">oldView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewDidDisappear&quot;</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">newIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewDidAppear&quot;</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">newView</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span> <span class="nx">newIndex</span> <span class="p">];</span>
+        <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewWillAppear&quot;</span> <span class="p">);</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span><span class="p">[</span> <span class="nx">newIndex</span> <span class="p">].</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewContainer</span><span class="p">;</span>
+        <span class="nx">newView</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;viewDidAppear&quot;</span> <span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">newIndex</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span><span class="p">(</span> <span class="s2">&quot;selectedTab&quot;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="k">default</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+      <span class="nx">notifyAlways</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">}</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;render&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span> <span class="c1">// nothing to render!</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;renderToElement&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElementsIfNecessary</span><span class="p">();</span>
+      <span class="k">return</span><span class="p">;</span> <span class="c1">// nothing to do.</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span>
+      <span class="nx">theParentElement</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>do what a normal view container does</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span>
+        <span class="nx">theParentElement</span>
+      <span class="p">]</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;initWithOptions&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="p">);</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">theElementId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">theElementTag</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">theElementClass</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">theParentElement</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barPosition</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">barPosition</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barPosition</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barAlignment</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">barAlignment</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">barAlignment</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">TabViewController</span><span class="p">.</span><span class="nx">BAR_POSITION</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="k">default</span><span class="o">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="nx">top</span><span class="o">:</span> <span class="s2">&quot;top&quot;</span><span class="p">,</span>
+    <span class="nx">bottom</span><span class="o">:</span> <span class="s2">&quot;bottom&quot;</span>
+  <span class="p">};</span>
+  <span class="nx">TabViewController</span><span class="p">.</span><span class="nx">BAR_ALIGNMENT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">center</span><span class="o">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span>
+    <span class="nx">left</span><span class="o">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+    <span class="nx">right</span><span class="o">:</span> <span class="s2">&quot;right&quot;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">TabViewController</span><span class="p">;</span>
+<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>

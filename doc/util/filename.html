@@ -41,22 +41,19 @@ path separator is changed from "/" to "\", it should parse Windows paths as well
 <span class="cm">         onevar:false</span>
 <span class="cm"> */</span>
 <span class="cm">/*global define*/</span>
-<span class="nx">define</span><span class="p">(</span>
-  <span class="kd">function</span> <span class="p">()</span>
-  <span class="p">{</span>
+<span class="nx">define</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">PKFILE</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>String</em></span></p>
 
-    <span class="kd">var</span> <span class="nx">PKFILE</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>String</em></span></p>
+<p>Version</p></div></div><div class="code"><div class="wrapper">    <span class="nx">version</span><span class="o">:</span> <span class="s2">&quot;00.04.100&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property invalidCharacters default ["/","\",":","|","&lt;",">","*","?",";","%"] and of type <em>Array</em></span></p>
 
-<p>Version</p></div></div><div class="code"><div class="wrapper">      <span class="nx">version</span><span class="o">:</span> <span class="s2">&quot;00.04.100&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property invalidCharacters default ["/","\",":","|","&lt;",">","*","?",";","%"] and of type <em>Array</em></span></p>
-
-<p>Specifies the characters that are not allowed in file names.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">invalidCharacters</span><span class="o">:</span> <span class="s2">&quot;/,\\,:,|,&lt;,&gt;,*,?,;,%&quot;</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">),</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property extensionSeparator default . and of type <em>String</em></span></p>
+<p>Specifies the characters that are not allowed in file names.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">invalidCharacters</span><span class="o">:</span> <span class="s2">&quot;/,\\,:,|,&lt;,&gt;,*,?,;,%&quot;</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span> <span class="s2">&quot;,&quot;</span> <span class="p">),</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property extensionSeparator default . and of type <em>String</em></span></p>
 
 <p>Indicates the character that separates a name from its extension,
-as in "filename.ext".</p></div></div><div class="code"><div class="wrapper">      <span class="nx">extensionSeparator</span><span class="o">:</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property pathSeparator default / and of type <em>String</em></span></p>
+as in "filename.ext".</p></div></div><div class="code"><div class="wrapper">    <span class="nx">extensionSeparator</span><span class="o">:</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property pathSeparator default / and of type <em>String</em></span></p>
 
-<p>Indicates the character that separates path components.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">pathSeparator</span><span class="o">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property replacementCharacter default - and of type <em>String</em></span></p>
+<p>Indicates the character that separates path components.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">pathSeparator</span><span class="o">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property replacementCharacter default - and of type <em>String</em></span></p>
 
-<p>Indicates the character used when replacing invalid characters</p></div></div><div class="code"><div class="wrapper">      <span class="nx">replacementCharacter</span><span class="o">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method makeValid</span></p>
+<p>Indicates the character used when replacing invalid characters</p></div></div><div class="code"><div class="wrapper">    <span class="nx">replacementCharacter</span><span class="o">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method makeValid</span></p>
 
 <p>Converts a potential invalid filename to a valid filename by replacing
 invalid characters (as specified in "invalidCharacters") with "replacementCharacter".</p>
@@ -67,20 +64,18 @@ invalid characters (as specified in "invalidCharacters") with "replacementCharac
 <li><strong>theFileName must be a String.</strong></li>
 </ul>
 
-<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">makeValid</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theFileName</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">self</span><span class="o">=</span><span class="nx">PKFILE</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">theNewFileName</span> <span class="o">=</span> <span class="nx">theFileName</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">invalidCharacters</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-          <span class="k">while</span> <span class="p">(</span><span class="nx">theNewFileName</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">invalidCharacters</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">d</span><span class="o">++</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">)</span>
-          <span class="p">{</span>
-            <span class="nx">theNewFileName</span> <span class="o">=</span> <span class="nx">theNewFileName</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">invalidCharacters</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">self</span><span class="p">.</span><span class="nx">replacementCharacter</span><span class="p">);</span>
-          <span class="p">}</span>
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">makeValid</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theFileName</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">PKFILE</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">theNewFileName</span> <span class="o">=</span> <span class="nx">theFileName</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">invalidCharacters</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span> <span class="nx">theNewFileName</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">invalidCharacters</span><span class="p">[</span> <span class="nx">i</span> <span class="p">]</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="nx">d</span><span class="o">++</span> <span class="p">)</span> <span class="o">&lt;</span>
+          <span class="mi">50</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">theNewFileName</span> <span class="o">=</span> <span class="nx">theNewFileName</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">invalidCharacters</span><span class="p">[</span> <span class="nx">i</span> <span class="p">],</span> <span class="nx">self</span><span class="p">.</span><span class="nx">replacementCharacter</span> <span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">theNewFileName</span><span class="p">;</span>
-      <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getFilePart</span></p>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">theNewFileName</span><span class="p">;</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getFilePart</span></p>
 
 <p>Returns the name+extension portion of a full path.</p>
 
@@ -90,16 +85,15 @@ invalid characters (as specified in "invalidCharacters") with "replacementCharac
 <li><strong>theFileName must be a String.</strong></li>
 </ul>
 
-<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">getFilePart</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theFileName</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">self</span><span class="o">=</span><span class="nx">PKFILE</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">theSlashPosition</span> <span class="o">=</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">pathSeparator</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">theSlashPosition</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">theFileName</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">theSlashPosition</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">theSlashPosition</span><span class="p">);</span>
-      <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getPathPart</span></p>
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">getFilePart</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theFileName</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">PKFILE</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">theSlashPosition</span> <span class="o">=</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">pathSeparator</span> <span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">theSlashPosition</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">theFileName</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">theSlashPosition</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span>
+        <span class="nx">theSlashPosition</span> <span class="p">);</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getPathPart</span></p>
 
 <p>Returns the path portion of a full path.</p>
 
@@ -109,16 +103,14 @@ invalid characters (as specified in "invalidCharacters") with "replacementCharac
 <li><strong>theFileName must be a String.</strong></li>
 </ul>
 
-<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">getPathPart</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theFileName</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">self</span><span class="o">=</span><span class="nx">PKFILE</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">theSlashPosition</span> <span class="o">=</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">pathSeparator</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">theSlashPosition</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">theSlashPosition</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-      <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getFileNamePart</span></p>
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">getPathPart</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theFileName</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">PKFILE</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">theSlashPosition</span> <span class="o">=</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">pathSeparator</span> <span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">theSlashPosition</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">theFileName</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">theSlashPosition</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getFileNamePart</span></p>
 
 <p>Returns the filename, minus the extension.</p>
 
@@ -128,17 +120,15 @@ invalid characters (as specified in "invalidCharacters") with "replacementCharac
 <li><strong>theFileName must be a String.</strong></li>
 </ul>
 
-<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">getFileNamePart</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theFileName</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">self</span><span class="o">=</span><span class="nx">PKFILE</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">theFileNameNoPath</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getFilePart</span><span class="p">(</span><span class="nx">theFileName</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">theDotPosition</span> <span class="o">=</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">extensionSeparator</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">theDotPosition</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">theFileNameNoPath</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">theDotPosition</span><span class="p">);</span>
-      <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getFileExtensionPart</span></p>
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">getFileNamePart</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theFileName</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">PKFILE</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">theFileNameNoPath</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getFilePart</span><span class="p">(</span> <span class="nx">theFileName</span> <span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">theDotPosition</span> <span class="o">=</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">extensionSeparator</span> <span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">theDotPosition</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">theFileNameNoPath</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">theDotPosition</span> <span class="p">);</span>
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getFileExtensionPart</span></p>
 
 <p>Returns the extension of a filename</p>
 
@@ -148,19 +138,16 @@ invalid characters (as specified in "invalidCharacters") with "replacementCharac
 <li><strong>theFileName must be a String.</strong></li>
 </ul>
 
-<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">getFileExtensionPart</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theFileName</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">self</span><span class="o">=</span><span class="nx">PKFILE</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">theFileNameNoPath</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getFilePart</span><span class="p">(</span><span class="nx">theFileName</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">theDotPosition</span> <span class="o">=</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">extensionSeparator</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">theDotPosition</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">theDotPosition</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">theDotPosition</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">getFileExtensionPart</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theFileName</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">PKFILE</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">theFileNameNoPath</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getFilePart</span><span class="p">(</span> <span class="nx">theFileName</span> <span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">theDotPosition</span> <span class="o">=</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">extensionSeparator</span> <span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">theDotPosition</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
       <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">return</span> <span class="nx">PKFILE</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">);</span></div></div></div></div></body></html>
+      <span class="k">return</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">theDotPosition</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">theFileNameNoPath</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span>
+        <span class="nx">theDotPosition</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">PKFILE</span><span class="p">;</span>
+<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>
