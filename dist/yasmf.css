@@ -21,46 +21,145 @@
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
+
 /*
  *
  * Eric Meyer's Reset CSS v2.0 - http://cssreset.com
  *
  */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   border: 0;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
   margin: 0;
-  padding: 0; }
-
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-  display: block; }
-
+  padding: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
 body {
-  line-height: 1; }
-
-ol, ul {
-  list-style: none; }
-
-blockquote, q {
-  quotes: none; }
-
-blockquote:before, blockquote:after, q:before, q:after {
-  content: none; }
-
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: none;
+}
 table {
   border-collapse: collapse;
-  border-spacing: 0; }
-
+  border-spacing: 0;
+}
 /*
  * Comment here; webstorm likes to indent incorrectly immediately after the reset
  */
+
 /*****************************************************************************
  *
  * Basic styles
  *
  *****************************************************************************/
+
 body {
   margin: 0 0;
   font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
@@ -97,12 +196,12 @@ body {
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
   -o-backface-visibility: hidden;
-  backface-visibility: hidden; }
-
+  backface-visibility: hidden;
+}
 body.ios {
   background-color: #FFF;
-  color: #333; }
-
+  color: #333;
+}
 body.android {
   font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-serif;
   -webkit-text-rendering: auto !important;
@@ -112,23 +211,25 @@ body.android {
   text-rendering: auto !important;
   /* optimizeLegibility is messing up the way words wrap */
   background-color: #000000;
-  color: #FFFFFF; }
-
+  color: #FFFFFF;
+}
 body.wince {
   color: #FFF;
   background-color: #000;
-  font-family: "Segoe WP" !important; }
-
+  font-family: "Segoe WP" !important;
+}
 .hidden {
-  display: none; }
-
+  display: none;
+}
 /*****************************************************************************
  *
  * Container: the base mechanism used to contain various YASMF widgets.
  *
  *****************************************************************************/
+
 /* We want all DIVs to be relatively
    positioned. We also want to use the border-box box-sizing method */
+
 div {
   background-position: center center;
   background-repeat: no-repeat;
@@ -143,9 +244,10 @@ div {
   -moz-outline: none;
   -ms-outline: none;
   -o-outline: none;
-  outline: none; }
-
+  outline: none;
+}
 /* Containers themselves are absolutely positioned */
+
 .ui-container {
   display: block;
   position: absolute;
@@ -166,18 +268,20 @@ div {
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
-  z-index: 2; }
-
+  z-index: 2;
+}
 /*****************************************************************************
  *
  * Split View Containers
  *
  *****************************************************************************/
-.ui-split-view {
-  width: 100%; }
 
+.ui-split-view {
+  width: 100%;
+}
 /* Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android <4.4
    will fail spectacularly */
+
 .ui-off-canvas-view {
   width: -webkit-calc(100% + 320px);
   width: calc(100% + 320px);
@@ -190,8 +294,8 @@ div {
   -moz-transition: -moz-transform 0.3s ease-in-out;
   -ms-transition: -ms-transform 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out; }
-
+  transition: transform 0.3s ease-in-out;
+}
 .phone .ui-off-canvas-view {
   width: -webkit-calc(100% + 280px);
   width: calc(100% + 280px);
@@ -199,32 +303,32 @@ div {
   -moz-transform: translateX(-280px);
   -ms-transform: translateX(-280px);
   -o-transform: translateX(-280px);
-  transform: translateX(-280px); }
-
+  transform: translateX(-280px);
+}
 .ui-split-overlay-view {
-  width: 100%; }
-
+  width: 100%;
+}
 .ui-off-canvas-view.ui-left-side-invisible {
   -webkit-transform: translateX(-320px);
   -moz-transform: translateX(-320px);
   -ms-transform: translateX(-320px);
   -o-transform: translateX(-320px);
-  transform: translateX(-320px); }
-
+  transform: translateX(-320px);
+}
 .phone .ui-off-canvas-view.ui-left-side-invisible {
   -webkit-transform: translateX(-280px);
   -moz-transform: translateX(-280px);
   -ms-transform: translateX(-280px);
   -o-transform: translateX(-280px);
-  transform: translateX(-280px); }
-
+  transform: translateX(-280px);
+}
 .ui-off-canvas-view.ui-left-side-visible {
   -webkit-transform: translateX(0);
   -moz-transform: translateX(0);
   -ms-transform: translateX(0);
   -o-transform: translateX(0);
-  transform: translateX(0); }
-
+  transform: translateX(0);
+}
 .ui-container.left-side {
   width: 320px;
   border-right: 1px solid rgba(0, 0, 0, 0.25);
@@ -233,34 +337,34 @@ div {
   -moz-transform: translateZ(3px);
   -ms-transform: translateZ(3px);
   -o-transform: translateZ(3px);
-  transform: translateZ(3px); }
-
+  transform: translateZ(3px);
+}
 .phone .ui-off-canvas-view .ui-container.left-side {
-  width: 280px; }
-
+  width: 280px;
+}
 .android .ui-container.left-side {
-  border-right: 1px solid rgba(255, 255, 255, 0.25); }
-
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
 .ui-container.right-side {
   width: -webkit-calc(100% - 320px);
   width: calc(100% - 320px);
-  left: 320px; }
-
+  left: 320px;
+}
 .phone .ui-off-canvas-view .ui-container.right-side {
   width: -webkit-calc(100% - 280px);
   width: calc(100% - 280px);
-  left: 280px; }
-
+  left: 280px;
+}
 .ui-split-view.ui-left-side-invisible .ui-container.left-side {
-  display: none; }
-
+  display: none;
+}
 .ui-split-view.ui-left-side-invisible .ui-container.right-side {
   width: 100%;
-  left: 0; }
-
+  left: 0;
+}
 .ui-split-view.ui-left-side-visible .ui-container.left-side {
-  display: block; }
-
+  display: block;
+}
 .ui-split-overlay-view.ui-left-side-invisible .ui-container.left-side {
   -webkit-transform: translateX(-320px);
   -moz-transform: translateX(-320px);
@@ -271,8 +375,8 @@ div {
   -moz-transition: -moz-transform 0.3s ease-in-out;
   -ms-transition: -ms-transform 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out; }
-
+  transition: transform 0.3s ease-in-out;
+}
 .ui-split-overlay-view.ui-left-side-visible .ui-container.left-side {
   -webkit-transform: translateX(0px);
   -moz-transform: translateX(0px);
@@ -283,69 +387,71 @@ div {
   -moz-transition: -moz-transform 0.3s ease-in-out;
   -ms-transition: -ms-transform 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out; }
-
+  transition: transform 0.3s ease-in-out;
+}
 .ui-split-overlay-view .ui-container.right-side {
   width: 100%;
-  left: 0; }
-
+  left: 0;
+}
 /*****************************************************************************
  *
  * Tint Colors (used for interactive buttons and icons)
  *  - Built in affordance: colors transition over .3s to half opacity.
  *
  *****************************************************************************/
+
 .ui-tint-color {
   color: #40b0ff;
   -webkit-transition: color 0.3s ease-in;
   -moz-transition: color 0.3s ease-in;
   -ms-transition: color 0.3s ease-in;
   -o-transition: color 0.3s ease-in;
-  transition: color 0.3s ease-in; }
-
+  transition: color 0.3s ease-in;
+}
 .ui-tint-color:active {
-  color: rgba(64, 176, 255, 0.5); }
-
+  color: rgba(64, 176, 255, 0.5);
+}
 .android .ui-tint-color {
-  color: #33b5e5; }
-
+  color: #33b5e5;
+}
 .android .ui-tint-color:active {
-  color: rgba(51, 181, 229, 0.5); }
-
+  color: rgba(51, 181, 229, 0.5);
+}
 .ui-background-tint-color {
   background-color: #40b0ff;
   -webkit-transition: background-color 0.3s ease-in;
   -moz-transition: background-color 0.3s ease-in;
   -ms-transition: background-color 0.3s ease-in;
   -o-transition: background-color 0.3s ease-in;
-  transition: background-color 0.3s ease-in; }
-
+  transition: background-color 0.3s ease-in;
+}
 .ui-background-tint-color:active {
-  background-color: rgba(64, 176, 255, 0.5); }
-
+  background-color: rgba(64, 176, 255, 0.5);
+}
 .android .ui-background-tint-color {
-  background-color: #33b5e5; }
-
+  background-color: #33b5e5;
+}
 .android .ui-background-tint-color:active {
-  background-color: rgba(51, 181, 229, 0.5); }
-
+  background-color: rgba(51, 181, 229, 0.5);
+}
 .ui-destructive-color {
-  color: #ff6060; }
-
+  color: #ff6060;
+}
 .android .ui-destructive-color {
-  color: #cc0000; }
-
+  color: #cc0000;
+}
 .ui-background-destructive-color {
-  background-color: #ff6060; }
-
+  background-color: #ff6060;
+}
 .android .ui-background-destructive-color {
-  background-color: #cc0000; }
-
+  background-color: #cc0000;
+}
 /*****************************************************************************
  *
  * Navigation Bar Widget
  *
  *****************************************************************************/
+
 .ui-navigation-bar {
   height: 44px;
   z-index: 9;
@@ -377,32 +483,35 @@ div {
   -moz-box-pack: justify;
   -ms-box-pack: justify;
   -o-box-pack: justify;
-  justify-content: space-between; }
-
+  justify-content: space-between;
+}
 /* iOS 7's navbar needs to account for the status bar. Apparently the status bar
    can be different sizes, and yet based on testing with a double-height status
    bar, this seems to work. */
+
 .ios7 .ui-navigation-bar {
   height: 64px;
-  padding-top: 20px; }
-
+  padding-top: 20px;
+}
 /* However, if we're a navigation bar trying to avoid a tab bar positioned at
    the top, we need to adjust things so we don't introduce an extra 20px */
+
 .ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar {
   height: 44px;
-  padding-top: 0; }
-
+  padding-top: 0;
+}
 .android .ui-navigation-bar {
   height: 48px;
   background-color: #000;
   background-image: none;
   border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, Sans-serif; }
-
+  font: 18px/48px"Roboto", "DroidSans", Helvetica, Arial, Sans-serif;
+}
 /* Position the title of a navigation bar in the center of the navigation bar
    This doesn't really account for the positions of any elements on the bar
    however, and should be modified.
    TODO: account for bar button groups and back button */
+
 .ui-navigation-bar .ui-title {
   text-align: center;
   font-weight: bold;
@@ -417,20 +526,22 @@ div {
   -ms-flex-order: 2;
   -webkit-order: 2;
   order: 2;
-  position: initial; }
-
+  position: initial;
+}
 /* Android left-aligns the title */
+
 .android .ui-navigation-bar .ui-title {
   text-align: left;
   padding-left: 10px;
   padding-right: 10px;
-  height: 48px; }
-
+  height: 48px;
+}
 /*****************************************************************************
  *
  * Tool Bar Widget
  *
  *****************************************************************************/
+
 .ui-tool-bar {
   height: 44px;
   z-index: 9;
@@ -462,20 +573,21 @@ div {
   -moz-box-pack: justify;
   -ms-box-pack: justify;
   -o-box-pack: justify;
-  justify-content: space-between; }
-
+  justify-content: space-between;
+}
 .android .ui-tool-bar {
   height: 48px;
   background-color: #000;
   background-image: none;
   border-top: 2px solid rgba(255, 255, 255, 0.5);
-  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, Sans-serif; }
-
+  font: 18px/48px"Roboto", "DroidSans", Helvetica, Arial, Sans-serif;
+}
 /*****************************************************************************
  *
  * Tab Bar Widget
  *
  *****************************************************************************/
+
 .ui-tab-bar {
   height: 48px;
   z-index: 9;
@@ -496,73 +608,78 @@ div {
   right: 0;
   font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
   font-weight: 300;
-  overflow: hidden; }
-
+  overflow: hidden;
+}
 /* If a tab bar is positioned at the top of the screen on iOS 7, account for the
    space occupied by the status bar. */
+
 .ios7 .ui-tab-bar.ui-tab-top-position {
   padding-top: 20px;
-  height: 68px; }
-
+  height: 68px;
+}
 .ui-tab-bar.ui-tab-top-position {
   top: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
-
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
 .ui-tab-bar.ui-tab-default-position,
 .ui-tab-bar.ui-tab-bottom-position {
   bottom: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.25); }
-
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
 .android .ui-tab-bar {
   height: 48px;
   background-color: #000;
   background-image: none;
-  font: 18px/48px "Roboto", "DroidSans", Helvetica, Arial, Sans-serif; }
-
+  font: 18px/48px"Roboto", "DroidSans", Helvetica, Arial, Sans-serif;
+}
 .android .ui-tab-bar.ui-tab-default-position,
 .android .ui-tab-bar.ui-tab-top-position {
   top: 0;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5); }
-
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
 .android .ui-tab-bar.ui-tab-bottom-position {
   bottom: 0;
-  border-top: 2px solid rgba(255, 255, 255, 0.5); }
-
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+}
 /*****************************************************************************
  *
  * Bar Buttons can exist on Navigation, Tool, and Tab Bars
  *
  *****************************************************************************/
+
 /* Ensure a minimum click area */
+
 .ui-navigation-bar .ui-bar-button,
 .ui-tool-bar .ui-bar-button,
 .ui-tab-bar .ui-bar-button {
   min-width: 44px;
   display: inline-block;
-  height: 100%; }
-
+  height: 100%;
+}
 /* Ensure that we can left, right, and center align the contents of a bar button */
+
 .ui-navigation-bar .ui-bar-button.ui-align-left,
 .ui-tool-bar .ui-bar-button.ui-align-left,
 .ui-tab-bar .ui-bar-button.ui-align-left {
-  text-align: left; }
-
+  text-align: left;
+}
 .ui-navigation-bar .ui-bar-button.ui-align-right,
 .ui-tool-bar .ui-bar-button.ui-align-right,
 .ui-tab-bar .ui-bar-button.ui-align-right {
-  text-align: right; }
-
+  text-align: right;
+}
 .ui-navigation-bar .ui-bar-button.ui-align-center,
 .ui-tool-bar .ui-bar-button.ui-align-center,
 .ui-tab-bar .ui-bar-button.ui-align-center {
-  text-align: center; }
-
+  text-align: center;
+}
 /*****************************************************************************
  *
  * Bar Button Groups: Groups bar buttons so that operations can be applied as
  * a group
  *
  *****************************************************************************/
+
 .ui-navigation-bar .ui-bar-button-group,
 .ui-tool-bar .ui-bar-button-group,
 .ui-tab-bar .ui-bar-button-group {
@@ -572,13 +689,14 @@ div {
   -moz-box-flex: none;
   -webkit-flex: none;
   -ms-flex: none;
-  flex: none; }
-
+  flex: none;
+}
 .ios7 .ui-navigation-bar .ui-bar-button-group {
-  height: 44px; }
-
+  height: 44px;
+}
 /* Bar button groups can be aligned to the left, center, or right of their
    container. */
+
 .ui-navigation-bar .ui-bar-button-group.ui-align-right,
 .ui-tool-bar .ui-bar-button-group.ui-align-right,
 .ui-tab-bar .ui-bar-button-group.ui-align-right {
@@ -587,8 +705,8 @@ div {
   -ms-flex-order: 3;
   -webkit-order: 3;
   order: 3;
-  text-align: right; }
-
+  text-align: right;
+}
 .ui-navigation-bar .ui-bar-button-group.ui-align-left,
 .ui-tool-bar .ui-bar-button-group.ui-align-left,
 .ui-tab-bar .ui-bar-button-group.ui-align-left {
@@ -597,8 +715,8 @@ div {
   -ms-flex-order: 1;
   -webkit-order: 1;
   order: 1;
-  text-align: left; }
-
+  text-align: left;
+}
 .ui-navigation-bar .ui-bar-button-group.ui-align-center,
 .ui-tool-bar .ui-bar-button-group.ui-align-center,
 .ui-tab-bar .ui-bar-button-group.ui-align-center {
@@ -612,123 +730,134 @@ div {
   -moz-box-flex: 1;
   -webkit-flex: 1;
   -ms-flex: 1;
-  flex: 1; }
-
+  flex: 1;
+}
 /* Any bar button within a group inherits the group's alignment */
+
 .ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-right .ui-bar-button {
   text-align: right;
-  padding-right: 10px; }
-
+  padding-right: 10px;
+}
 .ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-left .ui-bar-button {
   text-align: left;
-  padding-left: 10px; }
-
+  padding-left: 10px;
+}
 .ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-center .ui-bar-button {
   text-align: center;
   padding-left: 5px;
-  padding-right: 5px; }
-
+  padding-right: 5px;
+}
 /*****************************************************************************
  *
  * Avoidance Classes
  *
  *****************************************************************************/
+
 /* Avoid the navigation bar */
+
 .ui-avoid-navigation-bar {
-  padding-top: 44px !important; }
-
+  padding-top: 44px !important;
+}
 .ios7 .ui-avoid-navigation-bar {
-  padding-top: 64px !important; }
-
+  padding-top: 64px !important;
+}
 .ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar {
-  padding-top: 44px !important; }
-
+  padding-top: 44px !important;
+}
 .android .ui-avoid-navigation-bar {
-  padding-top: 48px !important; }
-
+  padding-top: 48px !important;
+}
 /* Avoid the tool bar */
+
 .ui-avoid-tool-bar {
-  padding-bottom: 44px !important; }
-
+  padding-bottom: 44px !important;
+}
 .android .ui-avoid-tool-bar {
-  padding-bottom: 48px !important; }
-
+  padding-bottom: 48px !important;
+}
 /* Avoid the tab bar based on its position */
+
 .ui-avoid-tab-bar.ui-tab-top-position {
   top: 48px !important;
-  bottom: inherit; }
-
+  bottom: inherit;
+}
 .ui-avoid-tab-bar.ui-tab-default-position,
 .ui-avoid-tab-bar.ui-tab-bottom-position {
   top: inherit;
-  bottom: 48px !important; }
-
+  bottom: 48px !important;
+}
 .ios7 .ui-avoid-tab-bar.ui-tab-top-position {
   top: 68px !important;
-  bottom: inherit; }
-
+  bottom: inherit;
+}
 .android .ui-avoid-tab-bar.ui-tab-default-position,
 .android .ui-avoid-tab-bar.ui-tab-top-position {
   top: 48px !important;
-  bottom: inherit; }
-
+  bottom: inherit;
+}
 .android .ui-avoid-tab-bar.ui-tab-bottom-position {
   top: inherit;
-  bottom: 48px !important; }
-
+  bottom: 48px !important;
+}
 /*****************************************************************************
  *
  * Scroll Container
  *
  *****************************************************************************/
+
 /* Scroll containers are positioned absolutely, anchored to their parent's
    corners, but allow the content inside to scroll. */
+
 .ui-scroll-container {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  overflow: auto; }
-
+  overflow: auto;
+}
 /*****************************************************************************
  *
  * List
  *
  *****************************************************************************/
+
 /* Lists are UL, OL, etc., styled appropriately */
+
 .ui-list {
   width: 100%;
   list-style-type: none;
   margin: 0;
-  padding: 0; }
-
+  padding: 0;
+}
 /*****************************************************************************
  *
  * List Item
  *
  *****************************************************************************/
+
 .ui-list-item {
   display: block;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   margin-left: 10px;
   min-height: 50px;
   overflow: auto;
-  position: relative; }
-
+  position: relative;
+}
 .android .ui-list-item {
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   margin-left: 0;
-  padding-left: 10px; }
-
+  padding-left: 10px;
+}
 /* List Items can have indicators attached, which will appear
    on the right of the list item. */
+
 .ui-list-item .ui-indicator {
   position: absolute;
   width: 30px;
@@ -739,23 +868,24 @@ div {
   -moz-mask-size: 30px 30px;
   -ms-mask-size: 30px 30px;
   -o-mask-size: 30px 30px;
-  mask-size: 30px 30px; }
-
+  mask-size: 30px 30px;
+}
 .ui-list-item .ui-arrow-direction-right {
   -webkit-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -o-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
-  mask-image: url("./yasmf-assets/chevron-right-thin@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+}
 .ui-list-item .ui-arrow-direction-left {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -o-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
-  mask-image: url("./yasmf-assets/chevron-left-thin@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+}
 /* Inside a list, a list-item-contents contains the actual contents of the list item */
+
 .ui-list-item .ui-list-item-contents {
   background-color: #FFF;
   padding-right: 10px;
@@ -767,12 +897,13 @@ div {
   /*  -webkit-transform: translateZ(3px);
     -moz-transform: translateZ(3px);
     -ms-transform: translateZ(3px);
-    transform: translateZ(3px);*/ }
-
+    transform: translateZ(3px);*/
+}
 .android .ui-list-item .ui-list-item-contents {
-  background-color: #000; }
-
+  background-color: #000;
+}
 /* A list action group can be used to group actions together as in a swipe-to-delete mechanism */
+
 .ui-list-item .ui-list-action-group {
   background-color: #CCC;
   position: absolute;
@@ -783,42 +914,49 @@ div {
   /*  -webkit-transform: translateZ(2px);
     -moz-transform: translateZ(2px);
     -ms-transform: translateZ(2px);
-    transform: translateZ(2px); */ }
-
+    transform: translateZ(2px); */
+}
 .android .ui-list-item .ui-list-action-group {
-  background-color: #333; }
-
+  background-color: #333;
+}
 .ui-list-item .ui-list-action-group .ui-list-action {
   height: 100%;
   min-width: 44px;
   color: #FFF;
   text-align: center;
-  display: inline-table; }
-
+  display: inline-table;
+}
 .ui-list-item .ui-list-action-group .ui-list-action div {
   display: table-cell;
   vertical-align: middle;
-  padding: 10px; }
-
+  padding: 10px;
+}
 /* light enough so that we don't have to override a lot in custom css unless we want to */
+
 /* List affordances */
-.ui-list-item:active, .ui-list-item-contents:active {
+
+.ui-list-item:active,
+.ui-list-item-contents:active {
   background-color: #30619a;
-  color: white; }
-
-.android .ui-list-item:active, .android .ui-list-item-contents:active {
+  color: white;
+}
+.android .ui-list-item:active,
+.android .ui-list-item-contents:active {
   background-color: #242424;
-  color: white; }
-
-.ui-list-item:active .ui-glyph, .ui-list-item-contents:active .ui-glyph,
-.ui-list-item:active .ui-indicator, .ui-list-item-contents:active .ui-indicator {
-  background-color: white; }
-
+  color: white;
+}
+.ui-list-item:active .ui-glyph,
+.ui-list-item-contents:active .ui-glyph,
+.ui-list-item:active .ui-indicator,
+.ui-list-item-contents:active .ui-indicator {
+  background-color: white;
+}
 /*****************************************************************************
  *
  * Glyphs -- these are icons that can be referenced by Class name
  *
  *****************************************************************************/
+
 .ui-glyph {
   -webkit-mask-position: center center;
   -moz-mask-position: center center;
@@ -840,13 +978,14 @@ div {
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
-  box-sizing: border-box; }
-
+  box-sizing: border-box;
+}
 /*****************************************************************************
  *
  * Back buttons are bit funny; not exactly a glyph and not exactly a button
  *
  *****************************************************************************/
+
 .ui-back-button::before {
   width: 30px;
   height: 30px;
@@ -871,8 +1010,8 @@ div {
   mask-repeat: no-repeat;
   margin-left: -10px;
   margin-right: -5px;
-  content: ""; }
-
+  content: "";
+}
 .android .ui-back-button::before {
   width: 15px;
   height: 48px;
@@ -887,344 +1026,347 @@ div {
   -o-mask-position: left 5px;
   mask-position: left 5px;
   margin-right: -10px;
-  margin-left: -7px; }
-
+  margin-left: -7px;
+}
 .android .ui-back-button {
   color: transparent;
   font-size: 0;
   min-width: 15px;
   width: 15px;
-  height: 48px; }
-
+  height: 48px;
+}
 /* If we're on the root view, don't show a back button */
-.ui-root-view .ui-back-button {
-  display: none; }
 
+.ui-root-view .ui-back-button {
+  display: none;
+}
 /*****************************************************************************
  *
  * Icon Glyphs
  *
  *****************************************************************************/
+
 .ui-glyph-arrow-corners-inward {
   -webkit-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
   -moz-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
   -ms-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
   -o-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
-  mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png"); }
-
+  mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+}
 .ui-glyph-arrow-corners-outward {
   -webkit-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
   -moz-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
   -ms-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
   -o-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
-  mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png"); }
-
+  mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");
+}
 .ui-glyph-bookmark {
   -webkit-mask-image: url("./yasmf-assets/bookmark@2x.png");
   -moz-mask-image: url("./yasmf-assets/bookmark@2x.png");
   -ms-mask-image: url("./yasmf-assets/bookmark@2x.png");
   -o-mask-image: url("./yasmf-assets/bookmark@2x.png");
-  mask-image: url("./yasmf-assets/bookmark@2x.png"); }
-
+  mask-image: url("./yasmf-assets/bookmark@2x.png");
+}
 .ui-glyph-books {
   -webkit-mask-image: url("./yasmf-assets/books@2x.png");
   -moz-mask-image: url("./yasmf-assets/books@2x.png");
   -ms-mask-image: url("./yasmf-assets/books@2x.png");
   -o-mask-image: url("./yasmf-assets/books@2x.png");
-  mask-image: url("./yasmf-assets/books@2x.png"); }
-
+  mask-image: url("./yasmf-assets/books@2x.png");
+}
 .ui-glyph-brightness-less {
   -webkit-mask-image: url("./yasmf-assets/brightness-less@2x.png");
   -moz-mask-image: url("./yasmf-assets/brightness-less@2x.png");
   -ms-mask-image: url("./yasmf-assets/brightness-less@2x.png");
   -o-mask-image: url("./yasmf-assets/brightness-less@2x.png");
-  mask-image: url("./yasmf-assets/brightness-less@2x.png"); }
-
+  mask-image: url("./yasmf-assets/brightness-less@2x.png");
+}
 .ui-glyph-brightness-more {
   -webkit-mask-image: url("./yasmf-assets/brightness-more@2x.png");
   -moz-mask-image: url("./yasmf-assets/brightness-more@2x.png");
   -ms-mask-image: url("./yasmf-assets/brightness-more@2x.png");
   -o-mask-image: url("./yasmf-assets/brightness-more@2x.png");
-  mask-image: url("./yasmf-assets/brightness-more@2x.png"); }
-
+  mask-image: url("./yasmf-assets/brightness-more@2x.png");
+}
 .ui-glyph-camera-video {
   -webkit-mask-image: url("./yasmf-assets/camera-video@2x.png");
   -moz-mask-image: url("./yasmf-assets/camera-video@2x.png");
   -ms-mask-image: url("./yasmf-assets/camera-video@2x.png");
   -o-mask-image: url("./yasmf-assets/camera-video@2x.png");
-  mask-image: url("./yasmf-assets/camera-video@2x.png"); }
-
+  mask-image: url("./yasmf-assets/camera-video@2x.png");
+}
 .ui-glyph-camera {
   -webkit-mask-image: url("./yasmf-assets/camera@2x.png");
   -moz-mask-image: url("./yasmf-assets/camera@2x.png");
   -ms-mask-image: url("./yasmf-assets/camera@2x.png");
   -o-mask-image: url("./yasmf-assets/camera@2x.png");
-  mask-image: url("./yasmf-assets/camera@2x.png"); }
-
+  mask-image: url("./yasmf-assets/camera@2x.png");
+}
 .ui-glyph-checkmark {
   -webkit-mask-image: url("./yasmf-assets/checkmark@2x.png");
   -moz-mask-image: url("./yasmf-assets/checkmark@2x.png");
   -ms-mask-image: url("./yasmf-assets/checkmark@2x.png");
   -o-mask-image: url("./yasmf-assets/checkmark@2x.png");
-  mask-image: url("./yasmf-assets/checkmark@2x.png"); }
-
+  mask-image: url("./yasmf-assets/checkmark@2x.png");
+}
 .ui-glyph-chevron-left-thick {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
   -o-mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
-  mask-image: url("./yasmf-assets/chevron-left-thick@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chevron-left-thick@2x.png");
+}
 .ui-glyph-chevron-left-thin {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -o-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
-  mask-image: url("./yasmf-assets/chevron-left-thin@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
+}
 .ui-glyph-chevron-right-thick {
   -webkit-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
   -o-mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
-  mask-image: url("./yasmf-assets/chevron-right-thick@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chevron-right-thick@2x.png");
+}
 .ui-glyph-chevron-right-thin {
   -webkit-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -o-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
-  mask-image: url("./yasmf-assets/chevron-right-thin@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
+}
 .ui-glyph-circle-filled {
   -webkit-mask-image: url("./yasmf-assets/circle-filled@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-filled@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-filled@2x.png");
   -o-mask-image: url("./yasmf-assets/circle-filled@2x.png");
-  mask-image: url("./yasmf-assets/circle-filled@2x.png"); }
-
+  mask-image: url("./yasmf-assets/circle-filled@2x.png");
+}
 .ui-glyph-circle-hollow {
   -webkit-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
   -o-mask-image: url("./yasmf-assets/circle-hollow@2x.png");
-  mask-image: url("./yasmf-assets/circle-hollow@2x.png"); }
-
+  mask-image: url("./yasmf-assets/circle-hollow@2x.png");
+}
 .ui-glyph-pause-filled {
   -webkit-mask-image: url("./yasmf-assets/pause-filled@2x.png");
   -moz-mask-image: url("./yasmf-assets/pause-filled@2x.png");
   -ms-mask-image: url("./yasmf-assets/pause-filled@2x.png");
   -o-mask-image: url("./yasmf-assets/pause-filled@2x.png");
-  mask-image: url("./yasmf-assets/pause-filled@2x.png"); }
-
+  mask-image: url("./yasmf-assets/pause-filled@2x.png");
+}
 .ui-glyph-pause-hollow {
   -webkit-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
   -moz-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
   -ms-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
   -o-mask-image: url("./yasmf-assets/pause-hollow@2x.png");
-  mask-image: url("./yasmf-assets/pause-hollow@2x.png"); }
-
+  mask-image: url("./yasmf-assets/pause-hollow@2x.png");
+}
 .ui-glyph-play-filled {
   -webkit-mask-image: url("./yasmf-assets/play-filled@2x.png");
   -moz-mask-image: url("./yasmf-assets/play-filled@2x.png");
   -ms-mask-image: url("./yasmf-assets/play-filled@2x.png");
   -o-mask-image: url("./yasmf-assets/play-filled@2x.png");
-  mask-image: url("./yasmf-assets/play-filled@2x.png"); }
-
+  mask-image: url("./yasmf-assets/play-filled@2x.png");
+}
 .ui-glyph-play-hollow {
   -webkit-mask-image: url("./yasmf-assets/play-hollow@2x.png");
   -moz-mask-image: url("./yasmf-assets/play-hollow@2x.png");
   -ms-mask-image: url("./yasmf-assets/play-hollow@2x.png");
   -o-mask-image: url("./yasmf-assets/play-hollow@2x.png");
-  mask-image: url("./yasmf-assets/play-hollow@2x.png"); }
-
+  mask-image: url("./yasmf-assets/play-hollow@2x.png");
+}
 .ui-glyph-clock {
   -webkit-mask-image: url("./yasmf-assets/clock@2x.png");
   -moz-mask-image: url("./yasmf-assets/clock@2x.png");
   -ms-mask-image: url("./yasmf-assets/clock@2x.png");
   -o-mask-image: url("./yasmf-assets/clock@2x.png");
-  mask-image: url("./yasmf-assets/clock@2x.png"); }
-
+  mask-image: url("./yasmf-assets/clock@2x.png");
+}
 .ui-glyph-delete {
   -webkit-mask-image: url("./yasmf-assets/delete@2x.png");
   -moz-mask-image: url("./yasmf-assets/delete@2x.png");
   -ms-mask-image: url("./yasmf-assets/delete@2x.png");
   -o-mask-image: url("./yasmf-assets/delete@2x.png");
-  mask-image: url("./yasmf-assets/delete@2x.png"); }
-
+  mask-image: url("./yasmf-assets/delete@2x.png");
+}
 .ui-glyph-gear {
   -webkit-mask-image: url("./yasmf-assets/gear@2x.png");
   -moz-mask-image: url("./yasmf-assets/gear@2x.png");
   -ms-mask-image: url("./yasmf-assets/gear@2x.png");
   -o-mask-image: url("./yasmf-assets/gear@2x.png");
-  mask-image: url("./yasmf-assets/gear@2x.png"); }
-
+  mask-image: url("./yasmf-assets/gear@2x.png");
+}
 .ui-glyph-list {
   -webkit-mask-image: url("./yasmf-assets/list@2x.png");
   -moz-mask-image: url("./yasmf-assets/list@2x.png");
   -ms-mask-image: url("./yasmf-assets/list@2x.png");
   -o-mask-image: url("./yasmf-assets/list@2x.png");
-  mask-image: url("./yasmf-assets/list@2x.png"); }
-
+  mask-image: url("./yasmf-assets/list@2x.png");
+}
 .ui-glyph-magnifying-glass {
   -webkit-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
   -moz-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
   -ms-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
   -o-mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
-  mask-image: url("./yasmf-assets/magnifying-glass@2x.png"); }
-
+  mask-image: url("./yasmf-assets/magnifying-glass@2x.png");
+}
 .ui-glyph-page-text-new {
   -webkit-mask-image: url("./yasmf-assets/page-text-new@2x.png");
   -moz-mask-image: url("./yasmf-assets/page-text-new@2x.png");
   -ms-mask-image: url("./yasmf-assets/page-text-new@2x.png");
   -o-mask-image: url("./yasmf-assets/page-text-new@2x.png");
-  mask-image: url("./yasmf-assets/page-text-new@2x.png"); }
-
+  mask-image: url("./yasmf-assets/page-text-new@2x.png");
+}
 .ui-glyph-pencil {
   -webkit-mask-image: url("./yasmf-assets/pencil@2x.png");
   -moz-mask-image: url("./yasmf-assets/pencil@2x.png");
   -ms-mask-image: url("./yasmf-assets/pencil@2x.png");
   -o-mask-image: url("./yasmf-assets/pencil@2x.png");
-  mask-image: url("./yasmf-assets/pencil@2x.png"); }
-
+  mask-image: url("./yasmf-assets/pencil@2x.png");
+}
 .ui-glyph-plus {
   -webkit-mask-image: url("./yasmf-assets/plus@2x.png");
   -moz-mask-image: url("./yasmf-assets/plus@2x.png");
   -ms-mask-image: url("./yasmf-assets/plus@2x.png");
   -o-mask-image: url("./yasmf-assets/plus@2x.png");
-  mask-image: url("./yasmf-assets/plus@2x.png"); }
-
+  mask-image: url("./yasmf-assets/plus@2x.png");
+}
 .ui-glyph-tag {
   -webkit-mask-image: url("./yasmf-assets/tag@2x.png");
   -moz-mask-image: url("./yasmf-assets/tag@2x.png");
   -ms-mask-image: url("./yasmf-assets/tag@2x.png");
   -o-mask-image: url("./yasmf-assets/tag@2x.png");
-  mask-image: url("./yasmf-assets/tag@2x.png"); }
-
+  mask-image: url("./yasmf-assets/tag@2x.png");
+}
 .ui-glyph-trash {
   -webkit-mask-image: url("./yasmf-assets/trash@2x.png");
   -moz-mask-image: url("./yasmf-assets/trash@2x.png");
   -ms-mask-image: url("./yasmf-assets/trash@2x.png");
   -o-mask-image: url("./yasmf-assets/trash@2x.png");
-  mask-image: url("./yasmf-assets/trash@2x.png"); }
-
+  mask-image: url("./yasmf-assets/trash@2x.png");
+}
 .ui-glyph-sound-wave {
   -webkit-mask-image: url("./yasmf-assets/sound-wave@2x.png");
   -moz-mask-image: url("./yasmf-assets/sound-wave@2x.png");
   -ms-mask-image: url("./yasmf-assets/sound-wave@2x.png");
   -o-mask-image: url("./yasmf-assets/sound-wave@2x.png");
-  mask-image: url("./yasmf-assets/sound-wave@2x.png"); }
-
+  mask-image: url("./yasmf-assets/sound-wave@2x.png");
+}
 .ui-glyph-circle-filled-checked {
   -webkit-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
   -o-mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
-  mask-image: url("./yasmf-assets/circle-filled-checked@2x.png"); }
-
+  mask-image: url("./yasmf-assets/circle-filled-checked@2x.png");
+}
 .ui-glyph-photo {
   -webkit-mask-image: url("./yasmf-assets/photo@2x.png");
   -moz-mask-image: url("./yasmf-assets/photo@2x.png");
   -ms-mask-image: url("./yasmf-assets/photo@2x.png");
   -o-mask-image: url("./yasmf-assets/photo@2x.png");
-  mask-image: url("./yasmf-assets/photo@2x.png"); }
-
+  mask-image: url("./yasmf-assets/photo@2x.png");
+}
 .ui-glyph-photo-add {
   -webkit-mask-image: url("./yasmf-assets/photo-add@2x.png");
   -moz-mask-image: url("./yasmf-assets/photo-add@2x.png");
   -ms-mask-image: url("./yasmf-assets/photo-add@2x.png");
   -o-mask-image: url("./yasmf-assets/photo-add@2x.png");
-  mask-image: url("./yasmf-assets/photo-add@2x.png"); }
-
+  mask-image: url("./yasmf-assets/photo-add@2x.png");
+}
 .ui-glyph-film {
   -webkit-mask-image: url("./yasmf-assets/film@2x.png");
   -moz-mask-image: url("./yasmf-assets/film@2x.png");
   -ms-mask-image: url("./yasmf-assets/film@2x.png");
   -o-mask-image: url("./yasmf-assets/film@2x.png");
-  mask-image: url("./yasmf-assets/film@2x.png"); }
-
+  mask-image: url("./yasmf-assets/film@2x.png");
+}
 .ui-glyph-chat-bubble {
   -webkit-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
   -moz-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
   -ms-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
   -o-mask-image: url("./yasmf-assets/chat-bubble@2x.png");
-  mask-image: url("./yasmf-assets/chat-bubble@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chat-bubble@2x.png");
+}
 .ui-glyph-chat-bubble-dots {
   -webkit-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
   -moz-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
   -ms-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
   -o-mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
-  mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png"); }
-
+  mask-image: url("./yasmf-assets/chat-bubble-dots@2x.png");
+}
 .ui-glyph-share {
   -webkit-mask-image: url("./yasmf-assets/share@2x.png");
   -moz-mask-image: url("./yasmf-assets/share@2x.png");
   -ms-mask-image: url("./yasmf-assets/share@2x.png");
   -o-mask-image: url("./yasmf-assets/share@2x.png");
-  mask-image: url("./yasmf-assets/share@2x.png"); }
-
+  mask-image: url("./yasmf-assets/share@2x.png");
+}
 .ui-glyph-download {
   -webkit-mask-image: url("./yasmf-assets/download@2x.png");
   -moz-mask-image: url("./yasmf-assets/download@2x.png");
   -ms-mask-image: url("./yasmf-assets/download@2x.png");
   -o-mask-image: url("./yasmf-assets/download@2x.png");
-  mask-image: url("./yasmf-assets/download@2x.png"); }
-
+  mask-image: url("./yasmf-assets/download@2x.png");
+}
 .ui-glyph-circle-info {
   -webkit-mask-image: url("./yasmf-assets/circle-info@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-info@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-info@2x.png");
   -o-mask-image: url("./yasmf-assets/circle-info@2x.png");
-  mask-image: url("./yasmf-assets/circle-info@2x.png"); }
-
+  mask-image: url("./yasmf-assets/circle-info@2x.png");
+}
 .ui-glyph-more {
   -webkit-mask-image: url("./yasmf-assets/more@2x.png");
   -moz-mask-image: url("./yasmf-assets/more@2x.png");
   -ms-mask-image: url("./yasmf-assets/more@2x.png");
   -o-mask-image: url("./yasmf-assets/more@2x.png");
-  mask-image: url("./yasmf-assets/more@2x.png"); }
-
+  mask-image: url("./yasmf-assets/more@2x.png");
+}
 .ui-glyph-circle-outlined {
   -webkit-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
   -moz-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
   -ms-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
   -o-mask-image: url("./yasmf-assets/circle-outlined@2x.png");
-  mask-image: url("./yasmf-assets/circle-outlined@2x.png"); }
-
+  mask-image: url("./yasmf-assets/circle-outlined@2x.png");
+}
 .ui-glyph-gps-locate {
   -webkit-mask-image: url("./yasmf-assets/gps-locate@2x.png");
   -moz-mask-image: url("./yasmf-assets/gps-locate@2x.png");
   -ms-mask-image: url("./yasmf-assets/gps-locate@2x.png");
   -o-mask-image: url("./yasmf-assets/gps-locate@2x.png");
-  mask-image: url("./yasmf-assets/gps-locate@2x.png"); }
-
+  mask-image: url("./yasmf-assets/gps-locate@2x.png");
+}
 .ui-glyph-square-filled {
   -webkit-mask-image: url("./yasmf-assets/square-filled@2x.png");
   -moz-mask-image: url("./yasmf-assets/square-filled@2x.png");
   -ms-mask-image: url("./yasmf-assets/square-filled@2x.png");
   -o-mask-image: url("./yasmf-assets/square-filled@2x.png");
-  mask-image: url("./yasmf-assets/square-filled@2x.png"); }
-
+  mask-image: url("./yasmf-assets/square-filled@2x.png");
+}
 .ui-glyph-square-hollow {
   -webkit-mask-image: url("./yasmf-assets/square-hollow@2x.png");
   -moz-mask-image: url("./yasmf-assets/square-hollow@2x.png");
   -ms-mask-image: url("./yasmf-assets/square-hollow@2x.png");
   -o-mask-image: url("./yasmf-assets/square-hollow@2x.png");
-  mask-image: url("./yasmf-assets/square-hollow@2x.png"); }
-
+  mask-image: url("./yasmf-assets/square-hollow@2x.png");
+}
 .ui-glyph-menu {
   -webkit-mask-image: url("./yasmf-assets/menu@2x.png");
   -moz-mask-image: url("./yasmf-assets/menu@2x.png");
   -ms-mask-image: url("./yasmf-assets/menu@2x.png");
   -o-mask-image: url("./yasmf-assets/menu@2x.png");
-  mask-image: url("./yasmf-assets/menu@2x.png"); }
-
+  mask-image: url("./yasmf-assets/menu@2x.png");
+}
 /*****************************************************************************
  *
  * Alert Styles
  *
  *****************************************************************************/
+
 .ui-alert-container {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.25);
@@ -1241,12 +1383,12 @@ div {
   z-index: 9999999;
   display: table;
   width: 100%;
-  height: 100%; }
-
+  height: 100%;
+}
 .ui-alert-vertical-align {
   display: table-cell;
-  vertical-align: middle; }
-
+  vertical-align: middle;
+}
 .ui-alert {
   position: relative;
   min-width: 260px;
@@ -1264,15 +1406,15 @@ div {
   -ms-transform: scale3d(1, 1, 1);
   transform: scale3d(1, 1, 1);
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.5);
-  border-radius: 6px; }
-
+  border-radius: 6px;
+}
 .phone .ui-alert {
-  max-width: 300px; }
-
+  max-width: 300px;
+}
 .android .ui-alert {
   border-radius: 0px;
-  background-color: #242424; }
-
+  background-color: #242424;
+}
 .ui-alert-title {
   position: relative;
   font-size: 20px;
@@ -1282,16 +1424,16 @@ div {
   padding: 1em;
   padding-bottom: 0.5em;
   padding-top: 0.5em;
-  color: #000; }
-
+  color: #000;
+}
 .android .ui-alert-title {
   color: #33B5E5;
   font-weight: normal;
   text-align: left;
   border-bottom: 2px solid #33B5E5;
   margin-bottom: 0.5em;
-  padding-bottom: 0; }
-
+  padding-bottom: 0;
+}
 .ui-alert-text {
   position: relative;
   line-height: 1.25em;
@@ -1301,12 +1443,12 @@ div {
   color: #333;
   padding-left: 1em;
   padding-right: 1em;
-  padding-bottom: 1em; }
-
+  padding-bottom: 1em;
+}
 .android .ui-alert-text {
   text-align: left;
-  color: #E8E8E8; }
-
+  color: #E8E8E8;
+}
 .ui-alert-button-container {
   position: relative;
   line-height: 2em;
@@ -1316,8 +1458,8 @@ div {
   color: #333;
   width: 100%;
   border-collapse: collapse;
-  display: table; }
-
+  display: table;
+}
 .ui-alert-button-container .ui-alert-button {
   position: relative;
   display: table-cell;
@@ -1328,29 +1470,29 @@ div {
   border-bottom: 0;
   width: 50%;
   font-weight: normal;
-  color: #40B0FF; }
-
+  color: #40B0FF;
+}
 .android .ui-alert-button-container .ui-alert-button {
   border: 1px solid rgba(255, 255, 255, 0.125);
   border-bottom: 0;
-  color: #FFF; }
-
+  color: #FFF;
+}
 .ui-alert-button-container .ui-alert-button:first-child {
-  border-left: 0; }
-
+  border-left: 0;
+}
 .ui-alert-button-container .ui-alert-button:last-child {
-  border-right: 0; }
-
+  border-right: 0;
+}
 .ui-alert-button-container .ui-alert-button.destructive {
-  color: #FF6060 !important; }
-
+  color: #FF6060 !important;
+}
 .android .ui-alert-button-container .ui-alert-button.destructive {
   color: #FFF !important;
-  background-color: #992424; }
-
+  background-color: #992424;
+}
 .ui-alert-button-container .ui-alert-button.bold {
-  font-weight: bold; }
-
+  font-weight: bold;
+}
 .ui-alert-button-container .ui-alert-button.wide {
   display: block;
   border: 0;
@@ -1358,19 +1500,19 @@ div {
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
   line-height: 2em;
   height: 2em;
-  width: 100%; }
-
+  width: 100%;
+}
 .ui-alert-button-container .ui-alert-button.wide:last-child {
-  border-bottom: 0; }
-
+  border-bottom: 0;
+}
 .android .ui-alert-button-container .ui-alert-button.wide {
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.125);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.125); }
-
+  border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+}
 .android .ui-alert-button-container .ui-alert-button.wide:last-child {
-  border-bottom: 0; }
-
+  border-bottom: 0;
+}
 .ui-prompt-input {
   position: static;
   line-height: 1em;
@@ -1388,37 +1530,41 @@ div {
   -webkit-box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25) inset;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25) inset;
   background-color: #FFF;
-  -webkit-appearance: none; }
-
+  -webkit-appearance: none;
+}
 .android .ui-prompt-input {
   box-shadow: none;
   -webkit-box-shadow: none;
-  border-radius: 0px; }
-
+  border-radius: 0px;
+}
 /* affordances for ui-alert */
+
 .ui-alert-button-container .ui-alert-button:active {
-  background-color: rgba(0, 0, 0, 0.0625); }
-
+  background-color: rgba(0, 0, 0, 0.0625);
+}
 .android .ui-alert-button-container .ui-alert-button:active {
-  background-color: rgba(255, 255, 255, 0.0625); }
-
+  background-color: rgba(255, 255, 255, 0.0625);
+}
 /**
  * End Alert
  */
-.input, .textarea {
+
+.input,
+.textarea {
   display: block;
   -webkit-outline: none;
   -moz-outline: none;
   -ms-outline: none;
   -o-outline: none;
-  outline: none; }
-
+  outline: none;
+}
 /*****************************************************************************
  *
  * Put up when YASMF doesn't want taps to be handled, such as during view
  * transitions.
  *
  *****************************************************************************/
+
 .ui-prevent-clicks {
   position: absolute;
   z-index: 999999;
@@ -1434,4 +1580,5 @@ div {
   -moz-transform: translateZ(999999px);
   -ms-transform: translateZ(999999px);
   -o-transform: translateZ(999999px);
-  transform: translateZ(999999px); }
+  transform: translateZ(999999px);
+}

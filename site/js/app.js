@@ -1,4 +1,4 @@
-requirejs.config({
+requirejs.config( {
   baseUrl: '.',
   paths: {
     'yasmf': '../lib/yasmf',
@@ -11,17 +11,18 @@ requirejs.config({
     'app': './js/app',
     'html': './html'
   },
-  urlArgs: "bust=" + (new Date()).getTime(),
+  urlArgs: "bust=" + ( new Date() ).getTime(),
   shim: {
-    "cultures/globalize.culture.en-US": ["globalize"],
-    "cultures/globalize.culture.es-US": ["globalize"],
-    "Q": { exports: "Q" },
-    "yasmf": ["Q"]
+    "cultures/globalize.culture.en-US": [ "globalize" ],
+    "cultures/globalize.culture.es-US": [ "globalize" ],
+    "Q": {
+      exports: "Q"
+    },
+    "yasmf": [ "Q" ]
   }
-});
-
-require(['yasmf', 'app/main', 'cultures/globalize.culture.es-US'], function ( _y, APP) {
+} );
+require( [ 'yasmf', 'app/main', 'cultures/globalize.culture.es-US' ], function( _y, APP ) {
   window._y = _y;
   window.APP = APP;
   APP.start();
-});
+} );
