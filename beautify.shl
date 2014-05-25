@@ -1,0 +1,18 @@
+#!/bin/sh
+# lib
+find ./lib -name "*.js" -exec js-beautify --config ./jsbeautify.json -r {} \;
+find ./css -name "*.scss" -exec js-beautify --config ./jsbeautify.json --css -r {} \;
+
+# site
+find ./site/js -name "*.js" -exec js-beautify --config ./jsbeautify.json -r {} \;
+find ./site/html -name "*.html" -exec js-beautify --config ./jsbeautify.json --html -r {} \;
+find ./site/css -name "*.css" -exec js-beautify --config ./jsbeautify.json --css -r {} \;
+
+# demo
+find ./demo/js -name "*.js" -exec js-beautify --config ./jsbeautify.json -r {} \;
+find ./demo/html -name "*.html" -exec js-beautify --config ./jsbeautify.json --html -r {} \;
+find ./demo/css -name "*.css" -exec js-beautify --config ./jsbeautify.json --css -r {} \;
+
+# distribution
+find ./dist -name "yasmf.js" -exec js-beautify --config ./jsbeautify.json -r {} \;
+find ./css -name "*.css" -exec js-beautify --config ./jsbeautify.json --css -r {} \;
