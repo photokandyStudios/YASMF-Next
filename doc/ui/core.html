@@ -55,16 +55,17 @@ prefixes to make it easier.</p>
 
 <p><strong>Returns a void</strong></p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElement</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theElement</span><span class="p">,</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">)</span>
   <span class="p">{</span>
-    <span class="c1">//noinspection JSUnresolvedVariable</span>
-    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-webkit-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
-    <span class="c1">//noinspection JSUnresolvedVariable</span>
-    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-moz-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
-    <span class="c1">//noinspection JSUnresolvedVariable</span>
-    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-ms-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
-    <span class="c1">//noinspection JSUnresolvedVariable</span>
-    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s2">&quot;-o-&quot;</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
-    <span class="c1">//noinspection JSUnresolvedVariable</span>
-    <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-webkit-&quot;</span><span class="p">,</span><span class="s2">&quot;-moz-&quot;</span><span class="p">,</span><span class="s2">&quot;-ms-&quot;</span><span class="p">,</span><span class="s2">&quot;-o-&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">prefixes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">thePrefix</span> <span class="o">=</span> <span class="nx">prefixes</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">theNewStyle</span> <span class="o">=</span> <span class="nx">thePrefix</span> <span class="o">+</span> <span class="nx">theStyle</span><span class="p">;</span>
+      <span class="c1">//noinspection JSUnresolvedVariable</span>
+      <span class="kd">var</span> <span class="nx">theNewValue</span> <span class="o">=</span> <span class="nx">theValue</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%PREFIX%&quot;</span><span class="p">,</span><span class="nx">thePrefix</span><span class="p">);</span>
+
+      <span class="c1">//noinspection JSUnresolvedVariable</span>
+      <span class="nx">theElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span> <span class="p">(</span><span class="nx">theNewStyle</span><span class="p">,</span> <span class="nx">theNewValue</span><span class="p">);</span>
+    <span class="p">}</span>
   <span class="p">};</span>
 
   <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElements</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">theElements</span><span class="p">,</span> <span class="nx">theStyle</span><span class="p">,</span> <span class="nx">theValue</span><span class="p">)</span>
@@ -297,20 +298,36 @@ to be notified when the back button is pressed.</p>
         <span class="nx">curConvenience</span> <span class="o">=</span> <span class="s2">&quot;droid-phone&quot;</span><span class="p">;</span>
       <span class="p">}</span>
 
-      <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="nx">curDevice</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curFormFactor</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curOrientation</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curScale</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curConvenience</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="nx">curDevice</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curFormFactor</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curOrientation</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curScale</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">curConvenience</span><span class="p">);</span>
+      <span class="p">}</span>
 
       <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span><span class="s2">&quot;orientationChanged&quot;</span><span class="p">);</span>
     <span class="p">};</span>
     <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;orientationchange&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">handleOrientationChange</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">handleOrientationChange</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">handleOrientationChange</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="nx">setTimeout</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">handleOrientationChange</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
     <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
   <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static property orientationHandler of type <em>_OrientationHandler</em></span></p>
 
 <p>Global Orientation Handler Object</p>
 
 <p>Register a listener for the orientationChanged notification in order
-to be notified when the orientation changes.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">orientationHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">_OrientationHandler</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Global Notification Object</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">globalNotifications</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Create the root container</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">_createRootContainer</span><span class="p">();</span>
-
+to be notified when the orientation changes.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">orientationHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">_OrientationHandler</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Global Notification Object</p></div></div><div class="code"><div class="wrapper">  <span class="nx">UI</span><span class="p">.</span><span class="nx">globalNotifications</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Create the root container</p></div></div><div class="code"><div class="wrapper">  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="nx">UI</span><span class="p">.</span><span class="nx">_createRootContainer</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="nx">setTimeout</span> <span class="p">(</span> <span class="nx">UI</span><span class="p">.</span><span class="nx">_createRootContainer</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="p">}</span>
 
   <span class="k">return</span> <span class="nx">UI</span><span class="p">;</span>
 <span class="p">});</span></div></div></div></div></body></html>

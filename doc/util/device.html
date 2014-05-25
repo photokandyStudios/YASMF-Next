@@ -122,12 +122,24 @@ instead.</p>
         <span class="k">if</span> <span class="p">((</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">==</span> <span class="s2">&quot;iPhone&quot;</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">==</span> <span class="s2">&quot;iPhone Simulator&quot;</span><span class="p">))</span>
         <span class="p">{</span>
           <span class="k">return</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>the following is hacky, and not guaranteed to work all the time,
-especially as phones get bigger screens with higher DPI.</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">screen</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">screen</span><span class="p">.</span><span class="nx">height</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
+
+        <span class="kd">var</span> <span class="nx">ua</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;android&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>android reports if it is a phone or tablet based on user agent</p></div></div><div class="code"><div class="wrapper">          <span class="cm">/*if (ua.indexOf(&quot;mobile safari&quot;) &gt; -1)</span>
+<span class="cm">          {</span>
+<span class="cm">            return &quot;phone&quot;;</span>
+<span class="cm">          }*/</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;mobile safari&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;safari&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
+          <span class="p">}</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>the following is hacky, and not guaranteed to work all the time,
+especially as phones get bigger screens with higher DPI.</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">((</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">screen</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">screen</span><span class="p">.</span><span class="nx">height</span><span class="p">)</span><span class="o">/</span><span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">900</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">return</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
       <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Determines if the device is a tablet (or tablet-sized, more accurately)</p>
 
 <p><strong>Returns a Boolean</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">isTablet</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span>

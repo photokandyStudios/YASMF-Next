@@ -34,18 +34,17 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
 <span class="cm">         trailing:false,</span>
 <span class="cm">         undef:true,</span>
 <span class="cm">         white:false,</span>
-<span class="cm">         onevar:false</span>
+<span class="cm">         onevar:false,</span>
+<span class="cm">         loopfunc:true</span>
 <span class="cm"> */</span>
 <span class="cm">/*global define, Q, LocalFileSystem, console*/</span>
 
-<span class="nx">define</span> <span class="p">([</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/util/object&quot;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">Q</span><span class="p">,</span> <span class="nx">BaseObject</span> <span class="p">)</span> <span class="p">{</span>
-
-  <span class="kd">var</span> <span class="nx">DEBUG</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Requests a quota from the file system</p>
+<span class="nx">define</span> <span class="p">([</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/util/object&quot;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">Q</span><span class="p">,</span> <span class="nx">BaseObject</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> typedef {{}} Promise</span></p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">DEBUG</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Requests a quota from the file system</p>
 
 <p>Parameters:</p>
 
 <ul>
-<li><p><strong>fileSystemType must be a Constant.</strong><br/>(PERSISTENT or TEMPORARY)</p></li>
+<li><p><strong>fileSystemType must be a *.</strong><br/>(PERSISTENT or TEMPORARY)</p></li>
 <li><p><strong>requestedDataSize must be a Number.</strong><br/>(The quota we're asking for)</p></li>
 </ul>
 
@@ -92,7 +91,7 @@ instead, let's assume we get permission</p></div></div><div class="code"><div cl
 <p>Parameters:</p>
 
 <ul>
-<li><p><strong>fileSystemType must be a Constant.</strong><br/>(TEMPORARY or PERSISTENT)</p></li>
+<li><p><strong>fileSystemType must be a *.</strong><br/>(TEMPORARY or PERSISTENT)</p></li>
 <li><p><strong>requestedDataSize must be a Number.</strong><br/>(The quota)</p></li>
 </ul>
 
@@ -120,25 +119,49 @@ instead, let's assume we get permission</p></div></div><div class="code"><div cl
 <p>Parameters:</p>
 
 <ul>
-<li><strong>theURI must be a String.</strong><br/>(the path, should start with file://, but if it doesn't we'll add it.)</li>
-</ul></div></div><div class="code"><div class="wrapper">  <span class="kd">function</span> <span class="nx">_resolveLocalFileSystemURI</span> <span class="p">(</span> <span class="nx">theURI</span> <span class="p">)</span>
+<li><strong>theURL must be a String.</strong><br/>(the path, should start with file://, but if it doesn't we'll add it.)</li>
+</ul></div></div><div class="code"><div class="wrapper">  <span class="kd">function</span> <span class="nx">_resolveLocalFileSystemURL</span> <span class="p">(</span> <span class="nx">theURL</span> <span class="p">)</span>
   <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">DEBUG</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span> <span class="p">[</span> <span class="s2">&quot;_resolveLocalFileSystemURI: &quot;</span><span class="p">,</span> <span class="nx">theURI</span> <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">DEBUG</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span> <span class="p">[</span> <span class="s2">&quot;_resolveLocalFileSystemURL: &quot;</span><span class="p">,</span> <span class="nx">theURL</span> <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))}</span>
     <span class="k">try</span>
     <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">theURI</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">).</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+      <span class="kd">var</span> <span class="nx">parts</span> <span class="o">=</span> <span class="nx">theURL</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">protocol</span><span class="p">,</span> <span class="nx">path</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span>
       <span class="p">{</span>
-        <span class="nx">theURI</span> <span class="o">=</span> <span class="s2">&quot;file://&quot;</span> <span class="o">+</span> <span class="nx">theURI</span><span class="p">;</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span> <span class="s2">&quot;The URI is not well-formed; missing protocol: &quot;</span> <span class="o">+</span> <span class="nx">theURL</span> <span class="p">);</span>
       <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">theURI</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
       <span class="p">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span> <span class="s2">&quot;The URI is not well-formed.&quot;</span> <span class="p">);</span>
+        <span class="nx">protocol</span> <span class="o">=</span> <span class="s2">&quot;file&quot;</span><span class="p">;</span>
+        <span class="nx">path</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="p">}</span>
+      <span class="k">else</span>
+      <span class="p">{</span>
+        <span class="nx">protocol</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="nx">path</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
       <span class="p">}</span>
 
-      <span class="nx">theURI</span> <span class="o">=</span> <span class="nx">theURI</span><span class="p">.</span><span class="nx">replace</span> <span class="p">(</span><span class="s2">&quot;file:///private&quot;</span><span class="p">,</span> <span class="s2">&quot;file://&quot;</span><span class="p">);</span>   <span class="c1">// iOS doesn&#39;t like file URIs that start with private</span>
+      <span class="kd">var</span> <span class="nx">pathComponents</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">newPathComponents</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="nx">pathComponents</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">part</span> <span class="p">)</span>
+                              <span class="p">{</span>
+                                <span class="nx">part</span> <span class="o">=</span> <span class="nx">part</span><span class="p">.</span><span class="nx">trim</span><span class="p">();</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="nx">part</span> <span class="o">!==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                                <span class="p">{</span> <span class="c1">// remove /private if it is the first item in the new array, for iOS sake</span>
+                                  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">((</span><span class="nx">part</span> <span class="o">===</span> <span class="s2">&quot;private&quot;</span> <span class="o">||</span>
+                                         <span class="nx">part</span> <span class="o">===</span> <span class="s2">&quot;localhost&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> 
+                                        <span class="nx">newPathComponents</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+                                    <span class="nx">newPathComponents</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span> <span class="nx">part</span> <span class="p">);</span>
+                                  <span class="p">}</span>
+                                <span class="p">}</span>
+                              <span class="p">});</span>
+      <span class="kd">var</span> <span class="nx">theNewURI</span> <span class="o">=</span> <span class="nx">newPathComponents</span><span class="p">.</span><span class="nx">join</span> <span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">);</span>
+      <span class="nx">theNewURI</span> <span class="o">=</span> <span class="nx">protocol</span> <span class="o">+</span> <span class="s2">&quot;:///&quot;</span> <span class="o">+</span> <span class="nx">theNewURI</span><span class="p">;</span>
 
-      <span class="nb">window</span><span class="p">.</span><span class="nx">resolveLocalFileSystemURI</span> <span class="p">(</span> <span class="nx">theURI</span><span class="p">,</span>
+
+      <span class="nb">window</span><span class="p">.</span><span class="nx">resolveLocalFileSystemURL</span> <span class="p">(</span> <span class="nx">theNewURI</span><span class="p">,</span>
         <span class="kd">function</span> <span class="p">(</span><span class="nx">theEntry</span><span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span> <span class="p">(</span><span class="nx">theEntry</span><span class="p">);</span> <span class="p">},</span>
         <span class="kd">function</span> <span class="p">(</span><span class="nx">anError</span><span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span>
       <span class="p">);</span>
@@ -150,8 +173,9 @@ instead, let's assume we get permission</p></div></div><div class="code"><div cl
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
 
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Returns a directory entry based on the path from the parent using
-the specified options ( or {} )</p>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> typedef {{}} DirectoryEntry
+Returns a directory entry based on the path from the parent using
+the specified options ( or {} )</span></p>
 
 <p>Parameters:</p>
 
@@ -212,7 +236,8 @@ the specified options ( or {} )</p>
       <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Returns a file object based on the file entry.</p>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> typedef {{}} FileEntry
+Returns a file object based on the file entry.</span></p>
 
 <p>Parameters:</p>
 
@@ -256,11 +281,11 @@ to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").</p>
       <span class="nx">fileReader</span><span class="p">.</span><span class="nx">onloadend</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">e</span> <span class="p">)</span>
       <span class="p">{</span>
         <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span> <span class="p">(</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span> <span class="p">);</span>
-      <span class="p">}</span>
+      <span class="p">};</span>
       <span class="nx">fileReader</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span>
       <span class="p">{</span>
         <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span>
-      <span class="p">}</span>
+      <span class="p">};</span>
       <span class="nx">fileReader</span><span class="p">[</span><span class="s2">&quot;readAs&quot;</span> <span class="o">+</span> <span class="nx">readAsKind</span><span class="p">](</span> <span class="nx">fileObject</span> <span class="p">);</span>
     <span class="p">}</span>
     <span class="k">catch</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span>
@@ -292,13 +317,14 @@ to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").</p>
       <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Write the contents to the fileWriter</p>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> typedef {{}} FileWriter
+Write the contents to the fileWriter</span></p>
 
 <p>Parameters:</p>
 
 <ul>
 <li><p><strong>fileWriter must be a FileWriter.</strong><br/>(Obtained from _createFileWriter)</p></li>
-<li><p><strong>contents must be a Variable.</strong><br/>(The contents to write)</p></li>
+<li><p><strong>contents must be a *.</strong><br/>(The contents to write)</p></li>
 </ul>
 
 <p><strong>Returns a Promise</strong><br/>(the Promise)</p></div></div><div class="code"><div class="wrapper">  <span class="kd">function</span> <span class="nx">_writeFileContents</span> <span class="p">(</span> <span class="nx">fileWriter</span><span class="p">,</span> <span class="nx">contents</span> <span class="p">)</span>
@@ -312,13 +338,13 @@ to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").</p>
         <span class="nx">fileWriter</span><span class="p">.</span><span class="nx">onwrite</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">e</span> <span class="p">)</span>
         <span class="p">{</span>
           <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span> <span class="p">(</span> <span class="nx">e</span> <span class="p">);</span>
-        <span class="p">}</span>
+        <span class="p">};</span>
         <span class="nx">fileWriter</span><span class="p">.</span><span class="nx">write</span> <span class="p">(</span> <span class="nx">contents</span> <span class="p">);</span>
-      <span class="p">}</span>
+      <span class="p">};</span>
       <span class="nx">fileWriter</span><span class="p">.</span><span class="nx">onError</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span>
       <span class="p">{</span>
         <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span>
-      <span class="p">}</span>
+      <span class="p">};</span>
       <span class="nx">fileWriter</span><span class="p">.</span><span class="nx">truncate</span> <span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> <span class="c1">// clear out the contents, first</span>
     <span class="p">}</span>
     <span class="k">catch</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span>
@@ -550,26 +576,26 @@ recursively.</p>
     <span class="nx">self</span><span class="p">.</span><span class="nx">getGlobalDebug</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">DEBUG</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">setGlobalDebug</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">debug</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="nx">DEBUG</span> <span class="o">=</span> <span class="nx">debug</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;globalDebug&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getGlobalDebug</span><span class="p">,</span>
                                                    <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setGlobalDebug</span><span class="p">,</span>
-                                                   <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span><span class="p">})</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>the fileSystemType can either be self.PERSISTENT or self.TEMPORARY, and is only
+                                                   <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>the fileSystemType can either be self.PERSISTENT or self.TEMPORARY, and is only
 set during an INIT operation. It cannot be set at any other time.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_fileSystemType</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// can only be changed during INIT</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">getFileSystemType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_fileSystemType</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;fileSystemType&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getFileSystemType</span><span class="p">,</span>
                                                       <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>The requested quota -- stored for future reference, since we ask for it
-specificall during an INIT operation. It cannot be changed.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_requestedQuota</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// can only be changed during INIT</span>
+specifically during an INIT operation. It cannot be changed.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_requestedQuota</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// can only be changed during INIT</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">getRequestedQuota</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_requestedQuota</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;requestedQuota&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getRequestedQuota</span><span class="p">,</span>
                                                       <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>Number</em></span></p>
 
@@ -578,28 +604,28 @@ only obtained during an INIT.</p></div></div><div class="code"><div class="wrapp
     <span class="nx">self</span><span class="p">.</span><span class="nx">getActualQuota</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_actualQuota</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;actualQuota&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getActualQuota</span><span class="p">,</span>
-                                                   <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>FileSystem</em></span></p>
-
-<p>The current filesystem -- either the temporary or persistent one; it can't be changed</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_fileSystem</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+                                                   <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> typedef {{}} FileSystem
+The current filesystem -- either the temporary or persistent one; it can't be changed and of type <em>FileSystem</em></span></p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_fileSystem</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">getFileSystem</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_fileSystem</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;fileSystem&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getFileSystem</span><span class="p">,</span>
                                                   <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>[type]</em></span></p>
 
-<p>Current Working Directory Entry</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<p>Current Working Directory Entry</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_root</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">getCurrentWorkingDirectory</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span><span class="p">;</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">setCurrentWorkingDirectory</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theCWD</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span> <span class="o">=</span> <span class="nx">theCWD</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">hasBaseObject</span><span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span> <span class="p">(</span> <span class="s2">&quot;changedCurrentWorkingDirectory&quot;</span> <span class="p">);</span> <span class="p">}</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
     <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;cwd&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getCurrentWorkingDirectory</span><span class="p">,</span>
                                            <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setCurrentWorkingDirectory</span><span class="p">,</span>
                                            <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
@@ -611,20 +637,20 @@ only obtained during an INIT.</p></div></div><div class="code"><div class="wrapp
 <p>Current Working Directory stack</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_cwds</span> <span class="o">=</span> <span class="p">[];</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Push the current working directory on to the stack</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">pushCurrentWorkingDirectory</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_cwds</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span> <span class="p">);</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pop the topmost directory on the stack and change to it</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">popCurrentWorkingDirectory</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Pop the topmost directory on the stack and change to it</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">popCurrentWorkingDirectory</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
     <span class="p">{</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">setCurrentWorkingDirectory</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwds</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span> <span class="p">);</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
 
-    <span class="nx">self</span><span class="p">.</span><span class="nx">resolveLocalFileSystemURI</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theURI</span> <span class="p">)</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">resolveLocalFileSystemURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theURI</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
-      <span class="nx">_resolveLocalFileSystemURI</span> <span class="p">(</span> <span class="nx">theURI</span> <span class="p">)</span>
+      <span class="nx">_resolveLocalFileSystemURL</span> <span class="p">(</span> <span class="nx">theURI</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">then</span> <span class="p">(</span> <span class="kd">function</span> <span class="nx">gotEntry</span> <span class="p">(</span> <span class="nx">theEntry</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span> <span class="p">(</span><span class="nx">theEntry</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns the file entry for the given path (useful for
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns the file entry for the given path (useful for
 getting the full path of a file)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getFileEntry</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
@@ -633,12 +659,12 @@ getting the full path of a file)</p></div></div><div class="code"><div class="wr
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns the file object for a given file (useful for getting
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns the file object for a given file (useful for getting
 the size of a file)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getFile</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getFileEntry</span> <span class="p">(</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
                  <span class="p">.</span><span class="nx">then</span> <span class="p">(</span> <span class="nx">_getFileObject</span> <span class="p">);</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns the directory entry for a given path</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getDirectoryEntry</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theDirectoryPath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns the directory entry for a given path</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getDirectoryEntry</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theDirectoryPath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
       <span class="nx">_getDirectoryEntry</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span><span class="p">,</span> <span class="nx">theDirectoryPath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
@@ -646,7 +672,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>returns the URL for a given file</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getFileURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>returns the URL for a given file</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getFileURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
       <span class="nx">_getFileEntry</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span><span class="p">,</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
@@ -654,7 +680,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns a URL for the given directory</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getDirectoryURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">thePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns a URL for the given directory</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getDirectoryURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">thePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
       <span class="nx">_getDirectoryEntry</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span><span class="p">,</span> <span class="nx">thePath</span> <span class="o">||</span> <span class="s2">&quot;.&quot;</span> <span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
@@ -662,7 +688,36 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Change to an arbitrary directory</p>
+    <span class="p">};</span>
+
+    <span class="nx">self</span><span class="p">.</span><span class="nx">getNativeURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theEntry</span> <span class="p">)</span>
+    <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">thePath</span> <span class="o">=</span> <span class="nx">theEntry</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">theEntry</span> <span class="o">!==</span> <span class="s2">&quot;string&quot;</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="nx">thePath</span> <span class="o">=</span> <span class="nx">theEntry</span><span class="p">.</span><span class="nx">fullPath</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="kd">var</span> <span class="nx">isAbsolute</span> <span class="o">=</span> <span class="p">(</span><span class="nx">thePath</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">===</span><span class="s2">&quot;/&quot;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">theRootPath</span> <span class="o">=</span> <span class="nx">isAbsolute</span> <span class="o">?</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_root</span><span class="p">.</span><span class="nx">nativeURL</span> <span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">cwd</span><span class="p">.</span><span class="nx">nativeURL</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">theRootPath</span> <span class="o">+</span> <span class="p">(</span><span class="nx">isAbsolute</span> <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="o">:</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="nx">thePath</span><span class="p">;</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>returns the native file path for a given file</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getNativeFileURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
+    <span class="p">{</span>
+
+      <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+      <span class="nx">_getFileEntry</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span><span class="p">,</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
+        <span class="p">.</span><span class="nx">then</span> <span class="p">(</span> <span class="kd">function</span> <span class="nx">gotFileEntry</span> <span class="p">(</span> <span class="nx">theFileEntry</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span> <span class="p">(</span> <span class="nx">theFileEntry</span><span class="p">.</span><span class="nx">nativeURL</span> <span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
+        <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
+        <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
+      <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Returns a URL for the given directory</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getNativeDirectoryURL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">thePath</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
+    <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+      <span class="nx">_getDirectoryEntry</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span><span class="p">,</span> <span class="nx">thePath</span> <span class="o">||</span> <span class="s2">&quot;.&quot;</span> <span class="p">,</span> <span class="nx">options</span> <span class="p">)</span>
+        <span class="p">.</span><span class="nx">then</span> <span class="p">(</span> <span class="kd">function</span> <span class="nx">gotDirectoryEntry</span> <span class="p">(</span> <span class="nx">theDirectoryEntry</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span> <span class="p">(</span> <span class="nx">theDirectoryEntry</span><span class="p">.</span><span class="nx">nativeURL</span> <span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
+        <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
+        <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
+      <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Change to an arbitrary directory</p>
 
 <p>Parameters:</p>
 
@@ -679,7 +734,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Read an arbitrary file's contents.</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Read an arbitrary file's contents.</p>
 
 <p>Parameters:</p>
 
@@ -699,7 +754,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Read an arbitrary directory's entries.</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Read an arbitrary directory's entries.</p>
 
 <p>Parameters:</p>
 
@@ -717,14 +772,14 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Write data to an arbitrary file</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Write data to an arbitrary file</p>
 
 <p>Parameters:</p>
 
 <ul>
 <li><p><strong>theFilePath must be a String.</strong><br/>(The file name to write to, relative to cwd)</p></li>
 <li><p><strong>options must be an Object.</strong><br/>(The options to use when opening the file)</p></li>
-<li><p><strong>theData must be a Variable.</strong><br/>(The data to write)</p></li>
+<li><p><strong>theData must be a *.</strong><br/>(The data to write)</p></li>
 </ul>
 
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">writeFileContents</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theFilePath</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">theData</span> <span class="p">)</span>
@@ -737,7 +792,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Creates an arbitrary directory</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Creates an arbitrary directory</p>
 
 <p>Parameters:</p>
 
@@ -753,7 +808,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Copies a file to a new directory, with an optional new name</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Copies a file to a new directory, with an optional new name</p>
 
 <p>Parameters:</p>
 
@@ -775,7 +830,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Copies a directory to a new directory, with an optional new name</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Copies a directory to a new directory, with an optional new name</p>
 
 <p>Parameters:</p>
 
@@ -797,7 +852,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Moves a file to a new directory, with an optional new name</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Moves a file to a new directory, with an optional new name</p>
 
 <p>Parameters:</p>
 
@@ -819,7 +874,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Moves a directory to a new directory, with an optional new name</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Moves a directory to a new directory, with an optional new name</p>
 
 <p>Parameters:</p>
 
@@ -841,7 +896,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Renames a file to a new name, in the cwd</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Renames a file to a new name, in the cwd</p>
 
 <p>Parameters:</p>
 
@@ -853,7 +908,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">renameFile</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">sourceFilePath</span><span class="p">,</span> <span class="nx">withNewName</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">moveFile</span> <span class="p">(</span> <span class="nx">sourceFilePath</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="nx">withNewName</span> <span class="p">);</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Renames a directory to a new name, in the cwd</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Renames a directory to a new name, in the cwd</p>
 
 <p>Parameters:</p>
 
@@ -865,7 +920,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">renameDirectory</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">sourceDirectoryPath</span><span class="p">,</span> <span class="nx">withNewName</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">moveDirectory</span> <span class="p">(</span> <span class="nx">sourceDirectoryPath</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="nx">withNewName</span> <span class="p">);</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Deletes a file</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Deletes a file</p>
 
 <p>Parameters:</p>
 
@@ -882,7 +937,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Removes a directory, possibly recursively</p>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Removes a directory, possibly recursively</p>
 
 <p>Parameters:</p>
 
@@ -900,7 +955,7 @@ the size of a file)</p></div></div><div class="code"><div class="wrapper">    <s
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span><span class="nx">anError</span><span class="p">);</span> <span class="p">}</span> <span class="p">)</span>
       <span class="p">.</span><span class="nx">done</span> <span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Asks the browser for the requested quota, and then requests the file system
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Asks the browser for the requested quota, and then requests the file system
 and sets the cwd to the root directory.</p>
 
 <p><strong>Returns a Promise</strong><br/>(The promise)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_initializeFileSystem</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
@@ -912,13 +967,20 @@ and sets the cwd to the root directory.</p>
                 <span class="k">return</span> <span class="nx">_requestFileSystem</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fileSystemType</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">actualQuota</span><span class="p">);</span> <span class="p">})</span>
       <span class="p">.</span><span class="nx">then</span> <span class="p">(</span> <span class="kd">function</span> <span class="nx">gotFS</span> <span class="p">(</span> <span class="nx">theFS</span> <span class="p">)</span> <span class="p">{</span>
                 <span class="nx">self</span><span class="p">.</span><span class="nx">_fileSystem</span> <span class="o">=</span> <span class="nx">theFS</span><span class="p">;</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span> <span class="o">=</span> <span class="nx">theFS</span><span class="p">.</span><span class="nx">root</span><span class="p">;</span> <span class="p">})</span>
+                <span class="c1">//self._cwd = theFS.root;</span>
+                <span class="k">return</span> <span class="nx">_getDirectoryEntry</span> <span class="p">(</span> <span class="nx">theFS</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">{}</span> <span class="p">);</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">then</span> <span class="p">(</span> <span class="kd">function</span> <span class="nx">gotRootDirectory</span> <span class="p">(</span> <span class="nx">theRootDirectory</span><span class="p">)</span>
+                    <span class="p">{</span>
+                      <span class="nx">self</span><span class="p">.</span><span class="nx">_root</span> <span class="o">=</span> <span class="nx">theRootDirectory</span><span class="p">;</span>
+                      <span class="nx">self</span><span class="p">.</span><span class="nx">_cwd</span> <span class="o">=</span> <span class="nx">theRootDirectory</span><span class="p">;</span>
+                    <span class="p">})</span>
       <span class="p">.</span><span class="nx">then</span> <span class="p">(</span> <span class="kd">function</span> <span class="nx">allDone</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span> <span class="nx">self</span> <span class="p">);</span> <span class="p">})</span>
       <span class="p">.</span><span class="k">catch</span> <span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">)</span> <span class="p">{</span>
                 <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span> <span class="p">(</span> <span class="nx">anError</span> <span class="p">);</span> <span class="p">})</span>
       <span class="p">.</span><span class="nx">done</span><span class="p">();</span>
       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
 and requested quota size. Both must be specified.</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">);</span> <span class="p">}</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">fileSystemType</span><span class="p">,</span> <span class="nx">requestedQuota</span> <span class="p">)</span>
     <span class="p">{</span>
@@ -929,7 +991,7 @@ and requested quota size. Both must be specified.</p></div></div><div class="cod
       <span class="nx">self</span><span class="p">.</span><span class="nx">_fileSystemType</span> <span class="o">=</span> <span class="nx">fileSystemType</span><span class="p">;</span>
 
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_initializeFileSystem</span><span class="p">();</span> <span class="c1">// this returns a promise, so we can .then after.</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
 and requested quota size. Both must be specified.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">options</span> <span class="p">)</span>
     <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span><span class="s2">&quot;No options specified. Need type and quota.&quot;</span><span class="p">);</span> <span class="p">}</span>
@@ -937,10 +999,14 @@ and requested quota size. Both must be specified.</p></div></div><div class="cod
       <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestedQuota</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span><span class="s2">&quot;No quota requested. If you don&#39;t know, specify ZERO.&quot;</span><span class="p">);</span> <span class="p">}</span>
 
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">fileSystemType</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestedQuota</span> <span class="p">);</span>
-    <span class="p">}</span>
+    <span class="p">};</span>
 
     <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
   <span class="p">};</span>
 
+  <span class="nx">FileManager</span><span class="p">.</span><span class="nx">meta</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;00.04.450&#39;</span><span class="p">,</span>
+                       <span class="kr">class</span><span class="o">:</span> <span class="nx">_className</span><span class="p">,</span>
+                       <span class="nx">autoInitializable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                       <span class="nx">categorizable</span><span class="o">:</span> <span class="kc">false</span> <span class="p">};</span>
   <span class="k">return</span> <span class="nx">FileManager</span><span class="p">;</span>
 <span class="p">});</span></div></div></div></div></body></html>

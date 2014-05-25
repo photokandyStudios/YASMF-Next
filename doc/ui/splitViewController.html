@@ -48,7 +48,7 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
 
       <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span> <span class="p">(</span> <span class="s2">&quot;viewsChanged&quot;</span> <span class="p">);</span>
 
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_viewType</span> <span class="o">=</span> <span class="s2">&quot;split&quot;</span><span class="p">;</span> <span class="c1">// other valid: off-canvas</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_viewType</span> <span class="o">=</span> <span class="s2">&quot;split&quot;</span><span class="p">;</span> <span class="c1">// other valid: off-canvas, split-overlay</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">getViewType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
       <span class="p">{</span>
          <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_viewType</span><span class="p">;</span>
@@ -64,7 +64,7 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
                               <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getViewType</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setViewType</span><span class="p">,</span>
                                 <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span>
 
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_leftViewStatus</span> <span class="o">=</span> <span class="s2">&quot;invisible&quot;</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_leftViewStatus</span> <span class="o">=</span> <span class="s2">&quot;invisible&quot;</span><span class="p">;</span> <span class="c1">// options: visible, invisible</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">getLeftViewStatus</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
       <span class="p">{</span>
          <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_leftViewStatus</span><span class="p">;</span>
@@ -77,7 +77,19 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
       <span class="p">}</span>
       <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;leftViewStatus&quot;</span><span class="p">,</span>
                               <span class="p">{</span> <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getLeftViewStatus</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setLeftViewStatus</span><span class="p">,</span>
-                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>Array</em></span></p>
+                                <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">);</span>
+
+      <span class="nx">self</span><span class="p">.</span><span class="nx">toggleLeftView</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">===</span> <span class="s2">&quot;visible&quot;</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">=</span> <span class="s2">&quot;invisible&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>Array</em></span></p>
 
 <p>The array of views that this split view controller manages.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_subviews</span> <span class="o">=</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">];</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">getSubviews</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span>
@@ -200,6 +212,8 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">theLeftView</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span> <span class="s2">&quot;Can&#39;t initialize a navigation controller without a left view.&quot;</span> <span class="p">);</span> <span class="p">}</span>
          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">theRightView</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="p">(</span> <span class="s2">&quot;Can&#39;t initialize a navigation controller without a right view.&quot;</span> <span class="p">);</span> <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>do what a normal view container does</p></div></div><div class="code"><div class="wrapper">         <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">]</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>now add the left and right views</p></div></div><div class="code"><div class="wrapper">         <span class="nx">self</span><span class="p">.</span><span class="nx">leftView</span> <span class="o">=</span> <span class="nx">theLeftView</span><span class="p">;</span>
          <span class="nx">self</span><span class="p">.</span><span class="nx">rightView</span> <span class="o">=</span> <span class="nx">theRightView</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
       <span class="p">}</span>
 
       <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;initWithOptions&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="p">);</span>
@@ -221,10 +235,27 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
             <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">viewType</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">viewType</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">viewType</span><span class="p">;</span> <span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">leftViewStatus</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">leftViewStatus</span><span class="p">;</span> <span class="p">}</span>
          <span class="p">}</span>
-      <span class="p">}</span>
 
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+      <span class="p">};</span>
 
+     <span class="nx">self</span><span class="p">.</span><span class="nx">override</span> <span class="p">(</span> <span class="kd">function</span> <span class="nx">destroy</span><span class="p">()</span>
+                     <span class="p">{</span>
+                       <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+                       <span class="p">{</span>
+                         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">removeChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="p">);</span>
+                       <span class="p">}</span>
+                       <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span>
+                       <span class="p">{</span>
+                         <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">removeChild</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="p">);</span>
+                       <span class="p">}</span>
+                       <span class="nx">self</span><span class="p">.</span><span class="nx">_leftElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+                       <span class="nx">self</span><span class="p">.</span><span class="nx">_rightElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
+                       <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span> <span class="p">);</span>
+                     <span class="p">});</span>
+
+     <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span> <span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
    <span class="p">}</span>
    <span class="k">return</span> <span class="nx">SplitViewController</span><span class="p">;</span>

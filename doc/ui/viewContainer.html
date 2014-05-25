@@ -173,6 +173,8 @@ a thin layer over the corresponding DOM element.</p>
          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementTag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementTag</span> <span class="o">=</span> <span class="nx">theElementTag</span><span class="p">;</span> <span class="p">}</span>
          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementClass</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementClass</span> <span class="o">=</span> <span class="nx">theElementClass</span><span class="p">;</span> <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>render ourselves to the element (via render); this implicitly creates the element
 with the above properties.</p></div></div><div class="code"><div class="wrapper">         <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add ourselves to our parent.</p></div></div><div class="code"><div class="wrapper">         <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theParentElement</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">theParentElement</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
       <span class="p">}</span>
 
       <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">options</span> <span class="p">)</span>
@@ -190,6 +192,8 @@ with the above properties.</p></div></div><div class="code"><div class="wrapper"
          <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span> <span class="nx">self</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span> <span class="p">}</span>
          <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
       <span class="p">}</span>
 
       <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="p">);</span>
@@ -201,6 +205,7 @@ with the above properties.</p></div></div><div class="code"><div class="wrapper"
          <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and let our super know that it can clean p</p></div></div><div class="code"><div class="wrapper">         <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span> <span class="p">);</span>
 
       <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span> <span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
    <span class="p">}</span>
 
