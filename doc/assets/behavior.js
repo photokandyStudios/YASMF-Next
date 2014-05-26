@@ -21,13 +21,61 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "YASMF v0.4 - Yet Another Simple Mobile Framework",
-            "slug": "yasmf-v04-yet-another-simple-mobile-framework",
+            "title": "YASMF-Next v0.4 - Yet Another Simple Mobile Framework",
+            "slug": "yasmf-next-v04-yet-another-simple-mobile-framework",
             "isFileHeader": true
           },
           "depth": 1,
           "children": [
             {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Why?",
+                "slug": "why"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Platform Support",
+                "slug": "platform-support"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Documentation",
+                "slug": "documentation"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Features",
+                "slug": "features"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Plans",
+                "slug": "plans"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "History",
+                "slug": "history"
+              },
+              "depth": 2
+            }, {
               "type": "heading",
               "data": {
                 "level": 2,
@@ -38,11 +86,59 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             }
           ]
         },
-        "title": "YASMF v0.4 - Yet Another Simple Mobile Framework"
+        "title": "YASMF-Next v0.4 - Yet Another Simple Mobile Framework"
       },
       "depth": 1,
       "outline": [
         {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Why?",
+            "slug": "why"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Platform Support",
+            "slug": "platform-support"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Documentation",
+            "slug": "documentation"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Features",
+            "slug": "features"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "Plans",
+            "slug": "plans"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "History",
+            "slug": "history"
+          },
+          "depth": 2
+        }, {
           "type": "heading",
           "data": {
             "level": 2,
