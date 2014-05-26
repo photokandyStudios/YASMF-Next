@@ -219,7 +219,6 @@ A typical view looks something like this:
 	      Hammer( self._deleteButton ).on( "tap", self.delete );
 	      self._shareButton = self.element.querySelector( ".share-button" );
 	      Hammer( self._shareButton ).on( "tap", self.share );
-	      _y.UI.backButton.addListenerForNotification( "backButtonPressed", self.goBack );
 	    });
 
 	    self.override( function init( theParentElement ) {
@@ -228,8 +227,10 @@ A typical view looks something like this:
 	        self.class + " ui-container", theParentElement
 	      ] );
 	      // do other initialization
+	      self.addListenerForNotification( "viewWasPushed", self.captureBackButton );
 	      self.addListenerForNotification( "viewWasPopped", self.releaseBackButton );
 	      self.addListenerForNotification( "viewWasPopped", self.destroy );
+	      return self;
 	    });
 	    
 	    self.override( function initWithOptions ( options ) {
@@ -239,8 +240,11 @@ A typical view looks something like this:
 	          theParentElement = options.parent;
 	        }
 	      }
-	      self.init( theParentElement );
+	      return self.init( theParentElement );
 	    });
+	    
+	    self.captureBackButton = function() {
+	    	_y.UI.backButton.addListenerForNotification( "backButtonPressed"), self.goBack );	    };
 	    
 	    self.releaseBackButton = function() {
 	      _y.UI.backButton.removeListenerForNotification( "backButtonPressed", self.goBack );
@@ -248,6 +252,9 @@ A typical view looks something like this:
 
 	    self.override( function destroy() {
 	      self.releaseBackButton();
+	      
+	      self.removeListenerForNotification ( "viewWasPushed", self.captureBackButton );
+	      
 	      // Stop listening for our disappearance
 	      self.removeListenerForNotification( "viewWasPopped", self.releaseBackButton );
 	      self.removeListenerForNotification( "viewWasPopped", self.destroy );
@@ -257,6 +264,7 @@ A typical view looks something like this:
 	      self._shareButton = null;
 	      self.super( _className, "destroy" );
 	    };
+	    self._autoInit.apply( self, arguments );
 	    return self;
 	  });
 	  return AView;
