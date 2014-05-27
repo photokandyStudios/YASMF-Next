@@ -176,8 +176,213 @@ self.defineProperty ( "backingVariable", { read: true, write: false } );
 
 ## Notification Listeners
 
+Notifications are a powerful tool: they can be used to notify listeners about important changes in an object's state.
+
+Before a notification may be used, it must be registered:
+
+```
+self.registerNotification ( "aNotification" );
+```
+
+A listener can be added by calling a specific object's `addListenerForNotification`:
+
+```
+self.addListenerForNotification ( "viewWasPopped", self.destroy );
+APP.navigationController.addListenerForNotification ( "viewPushed", self.doSomethingInteresting );
+```
+
+A listener can be removed by calling `removeListenerForNotification`:
+
+```
+self.removeListenerForNotification ( "viewWasPopped", self.destroy );
+```
+
+Typically, listeners for an object's own notifications are added in `init` and are cleaned up in `destroy`. Listeners for other object's notifications are added/removed in many different ways (though often in response to `viewWasPushed` and `viewWasPopped`).
+
+Notification listeners are, by default, wrapped in `setTimeout (..., 0)` calls. This means one must not assume the listeners are called in any particular order, nor are they called immediately upon the notification being fired. Should a notification need this treatment, however, one can register a notification as `synchronous`:
+
+```
+self.registerNotification ( "aSynchronousNotification", false);
+```
+
+To generate a notification, call `notify`:
+
+```
+self.notify ( "aNotification" );
+```
+
+To generate a notification that calls only the last listener, call `notifyMostRecent`:
+
+```
+self.notifyMostRecent ( "aNotification" );
+```
+
+Notification listeners always receive the the object making the notification and the notification itself as parameters:
+
+```
+self.someListener = function ( sender, notification ) { ... };
+```
+
+Parameters can be sent via notifications as well, and the listeners will receive them:
+
+```
+self.notify ( "aNotification", [1, 2, 3] );
+self.aNotificationListener = function ( sender, notification, args ) {
+  // args = [1, 2, 3]
+}
+```
+
 ## Tags
+
+Tags are are, in essence, properties-lite. Any number of tags can be used, and they can all notify listeners of changes.
+
+To set a value for a tag:
+
+```
+self.setTagForKey ( "wordType", 0); // assign 0 to wordType key
+```
+
+To retrieve the value:
+
+```
+var x = self.getTagForKey ( "wordType" );
+```
+
+To attach a listener that gets notified when the value of the tag is changed:
+
+```
+self.addTagListenerForKey ( "wordType", self.wordTypeChanged );
+```
+
+And one can remove a listener using `removeTagListenerForKey`:
+
+```
+self.removeTagListenerForKey ( "wordType", self.wordTypeChanged );
+```
+
+The listener is passed the object generating the notice, the key of the tag, and the value of the tag:
+
+```
+self.wordTypeChanged = function ( sender, key, value ) { ... }
+```
 
 ## Observable Properties
 
+Observable properties are akin to regular properties, but with a mix of notifications added for good measure. They are called *observable* in that they automatically send notifications when their value is changed, and automatically register those notifications so that other objects can listen for those changes. They also support additional features that standard properties don't automatically support.
+
+An observable property is defined similar to a regular property:
+
+```
+self.defineObservableProperty ( "userName" );
+```
+
+The above creates a new property called `userName`, registers a `userNameChanged` notification, and will send a `userNameChanged` notice whenever the value changes.
+
+In order to control this behavior, you can pass additional options:
+
+```
+self.defineObservableProperty ( "userName", options );
+```
+
+The options are as follows:
+
+`observable`
+: Automatically registers a notification if `true`; `true` by default. If `false`, changes to the value will not fire a notification.
+
+`notification`
+: The name of the notification to register and send when the value changes. By default it is the property name followed by `Changed`.
+
+`default`
+: The default value; defaults to `undefined`
+
+`read`/`write`
+: Indicates if the value can be read (`get`) or `set`. Defaults to `true` for both, thus read/write.
+
+`get`
+: Specifies the `get` method. Default is `null`.
+
+`set`
+: Specifies the `set` method. Default is `null`.
+
+`validate`
+: Specifies the method that validates incoming changes. Default is `null`.
+
+`selfDiscover`
+: If `true`, the `get`, `set`, and `validate` methods are self-discovered assuming the follow the naming convention of `getObservable<PropertyName>`, `setObservable<PropertyName>`, and `validateObservable<PropertyName>`. Default is `true`.
+
+`notifyAlways`
+: If `true`, a notification is sent whenever the `set`ter is called, even if the value doesn't change. Default is `false`.
+
+If no `get` or `set` method is provided or discovered, standard methods are provided. If `validate` is not provided or discovered, no validation is performed.
+
+The `validation` method determines if the incoming data is valid -- no more. It should not attempt to assign the data to the property or do anything else with the property:
+
+```
+self.validateObservableUserName = function ( value ) {
+  return (value !== "Sparky"); // We don't like Sparky, so it can't be assigned.
+}
+```
+
+> **Note:** If a validation fails, it does so silently.
+
+The `get` method is written a little different than most `get`ters -- it is passed the value of the property:
+
+```
+self.getObservableUserName = function ( value ) {
+  return value;
+}
+```
+
+The `set` method is also written differently:
+
+```
+self.setObservableUserName = function ( value, oldValue ) {
+  return value; // returning the value will cause the property to be set to this value.
+}
+```
+
+Finally, any notifications that are sent when the value is changed also pass along the new and old values:
+
+```
+self.anObservablePropertyListener = function ( sender, notification, args ) {
+  // args: { new: value, old: oldValue }
+}
+
 ## Methods
+
+Methods can be defined as usual:
+
+```
+self.aMethod = function ( [args] ) { ... };
+```
+
+However, should you need to override a method provided in a parent class, you should call `overrideSuper` or `override`. Which you call is up to you.
+
+```
+self.overrideSuper ( self.class, "init", self.init);
+self.init = function ( args ) {
+  self.super(_className, "init", [args]); // arguments should work instead of [args] if all arguments should be passed
+  // carry on
+}
+
+OR
+
+self.override ( function init ( args ) {
+  self.super(_className, "init", [args]); // arguments should work instead of [args] if all arguments should be passed
+  // carry on
+});
+```
+
+In both the above examples, we call `super` in order to call the overridden method. If your method needs to add to the behavior of the object, you should call `super` -- but if the method should completely replace the behavior of the object, there is no need.
+
+> **Note:** `super` only works for methods that have been overridden with `overrideSuper` or `override`.
+
+The first parameter to `super` must always be the class name -- but should *never* be `self.class` -- this will break the `super` chain in children descendants. The second parameter must be the name of the overridden function. The final optional parameter is an array of arguments to pass to the overridden method, and is typically an array. Alternatively, the function's `arguments` list can be passed along instead.
+
+## Property Overrides
+
+It is possible to override property `get`ters and `set`ters, but it is important to recognize that overriding the `get` or `set` method will not update the property.
+
+If calling `Object.defineProperty`, the desired `get` and/or `set` method needs to be overridden, and then `Object.defineProperty` called again with the same `get` and `set` methods. This only works if the property is set to be configurable.
+
+If using `BaseObject.defineProperty` or `defineObservableProperty`, you should override the `get` or `set` method (or `validate` method) and then redefine the property again. These properties are always configurable by child classes.
