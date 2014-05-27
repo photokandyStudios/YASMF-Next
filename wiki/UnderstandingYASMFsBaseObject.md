@@ -347,6 +347,7 @@ Finally, any notifications that are sent when the value is changed also pass alo
 self.anObservablePropertyListener = function ( sender, notification, args ) {
   // args: { new: value, old: oldValue }
 }
+```
 
 ## Methods
 
