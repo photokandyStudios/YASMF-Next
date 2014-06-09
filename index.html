@@ -1,12 +1,102 @@
-<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><meta name="groc-github-url" content="https://github.com/photokandyStudios/YASMF-Next"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/photokandyStudios/YASMF-Next/blob/master/README.md">README.md</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="yasmf-v04-yet-another-simple-mobile-framework">YASMF v0.4 - Yet Another Simple Mobile Framework</h1>
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><meta name="groc-github-url" content="https://github.com/photokandyStudios/YASMF-Next"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/photokandyStudios/YASMF-Next/blob/master/README.md">README.md</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="yasmf-next-v04-yet-another-simple-mobile-framework">YASMF-Next v0.4 - Yet Another Simple Mobile Framework</h1>
 
-<p>YASMF, or Yet Another Simple Mobile Framework, provides a simple, lightweight framework for mobile applications, especially those based on webkit browsers.</p>
+<p>YASMF-Next, or Yet Another Simple Mobile Framework (Next Generation), provides a simple, lightweight framework for mobile applications, especially those based on webkit browsers.</p>
+
+<h2 id="why">Why?</h2>
+
+<p>Many of the frameworks that support mobile development are large and bulky, and several tend to have poor performance on actual mobile devices. The goal of YASMF-Next is to be simple and limited in scope while also being performant on mobile devices.</p>
+
+<p>YASMF-Next (v0.4) is based loosely on <a href="https://github.com/kerrishotts/iSite-Mobile">iSiteMobile</a> and the previous version (0.2 and 0.3) of <a href="https://github.com/photokandyStudios/YASMF">YASMF</a> and also integrates some ideas from the native iOS SDK, especially with regards to view hierarchy and management. YASMF-Next provides a simple localization library, promise-wrapped file management, and simple view management, and base styles to simplify creating HTML-based widgets that look and feel reasonably native.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> YASMF is at version 0.4 and is under heavy development. This means that the underlying API is subject to change at any time.</p>
+  
+  <p>YASMF v0.2 has been used in production-level applications, and so is useable in your own application development. v0.4 is more than a little fresh, so take care. There may just be dragons about.</p>
+</blockquote>
+
+<h2 id="platform-support">Platform Support</h2>
+
+<ul>
+<li><strong>Android:</strong> Android 4.x and higher. Works on phone and tablets. </li>
+<li><strong>iOS:</strong> iOS 6.x and higher. Works on iPhone, iPod, and iPad.</li>
+<li><strong>Webkit:</strong> Chrome, Safari, etc.</li>
+</ul>
+
+<blockquote>
+  <p><strong>Note:</strong> Requires Cordova / PhoneGap 3.0 or higher, if the FileManager is used.</p>
+</blockquote>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>Documentation can be found in several locations:</p>
+
+<ul>
+<li><a href="https://github.com/photokandyStudios/YASMF-Next/wiki">Use of YASMF-Next</a></li>
+<li><a href="http://photokandystudios.github.io/YASMF-Next/index.html">YASMF Documentation</a></li>
+<li>Local YASMF Documentation is under <code>./doc</code> and <code>./wiki</code></li>
+</ul>
+
+<h2 id="features">Features</h2>
+
+<ul>
+<li>AMD support</li>
+<li>Relatively small code base (easy to grok)</li>
+<li>Performant on mobile devices</li>
+<li>Uses CSS transforms and animations where possible</li>
+<li>Classical Object Inheritance</li>
+<li>KVO-like Observable Properties</li>
+<li>Notifications and Listeners</li>
+<li>Useful utility modules:
+<ul><li>Date/Time handling</li>
+<li>File name handling</li>
+<li>HTML5 File API wrapped with Promises (using Q)</li>
+<li>Device sniffing / handling</li>
+<li>Localization (formatting by jQuery/Globalize)</li>
+<li>DOM convenience methods</li></ul></li>
+<li>User Interface:
+<ul><li>Simple View Containers</li>
+<li>Navigation Controllers (push/pop)</li>
+<li>Split View Controllers (normal split, off-canvas view, split-overlay)</li>
+<li>Navigation bars</li>
+<li>Tool Bars</li>
+<li>Tinted Glyphs</li>
+<li>Bar Buttons</li>
+<li>Scroll containers </li></ul></li>
+</ul>
+
+<h2 id="plans">Plans</h2>
+
+<ul>
+<li>0.5
+<ul><li>Routers</li>
+<li>MVC base objects</li>
+<li>Object categories</li>
+<li>Automatic Notification Handler Hookup</li>
+<li>Additional widgets</li></ul></li>
+<li>Future
+<ul><li>Table view w/ infinite scrolling and cell re-use</li>
+<li>Data binding</li>
+<li>Enhanced templating</li></ul></li>
+</ul>
+
+<h2 id="history">History</h2>
+
+<ul>
+<li>0.4 (May 2014)
+<ul><li>First release of YASMF-Next</li></ul></li>
+<li>0.3 (Nov 2013)
+<ul><li>Refactor attempt of YASMF (aborted in order to start over from scratch)</li></ul></li>
+<li>0.2 (Aug 2012)
+<ul><li>Initial release of YASMF</li></ul></li>
+<li>0.1 (May 2011)
+<ul><li>iSiteMobile release</li></ul></li>
+</ul>
 
 <h2 id="license">License</h2>
 
 <p>YASMF-Util is MIT licensed.</p>
 
-<p>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC</p>
+<p>Copyright (c) 2013, 2014 Kerri Shotts, photoKandy Studios LLC</p>
 
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 
