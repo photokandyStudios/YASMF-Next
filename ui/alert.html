@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><title>ui/alert</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/alert"><meta name="groc-project-path" content="lib/yasmf/ui/alert.js"><meta name="groc-github-url" content="https://github.com/photokandyStudios/YASMF-Next"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/photokandyStudios/YASMF-Next/blob/master/lib/yasmf/ui/alert.js">lib/yasmf/ui/alert.js</a></div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module alert.js author Kerri Shotts and version 0.4</p>
 
-<p>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
@@ -14,11 +14,12 @@ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PA
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.</span></p>
+OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
 
-<p>Provides native-like alert methods, including prompts and messages.</p>
+<p></span></p>
 
-<p>alert.js</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+<p>Provides native-like alert methods, including prompts and messages.</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
 <span class="cm">         asi:true,</span>
 <span class="cm">         bitwise:true,</span>
 <span class="cm">         browser:true,</span>
@@ -43,55 +44,47 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
   <span class="kd">var</span> <span class="nx">_className</span> <span class="o">=</span> <span class="s2">&quot;Alert&quot;</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">Alert</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>dismissed just indicates that the alert was dismissed (either by the user
-or by code). buttonTapped passes along which button was tapped.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;buttonTapped&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;dismissed&quot;</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>String</em></span></p>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="notifications">Notifications</h1>
 
-<p>The title to show in the alert.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;Alert&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">getTitle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_title</span><span class="p">;</span>
-      <span class="p">}</span>
+<ul>
+<li><code>buttonTapped</code> indicates which button was tapped when the view is dismissing</li>
+<li><code>dismissed</code> indicates that the alert was dismissed (by user or code)</li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;buttonTapped&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;dismissed&quot;</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property title of type <em>String</em></span></p>
+
+<p>The title to show in the alert.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// the corresponding DOM element</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">setTitle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theTitle</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">theTitle</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">theTitle</span><span class="p">;</span>
         <span class="p">}</span>
       <span class="p">}</span>
-      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getTitle</span><span class="p">,</span>
-        <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">,</span>
-        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>String</em></span></p>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;ALERT&quot;</span> <span class="p">)</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property text of type <em>String</em></span></p>
 
 <p>The body of the alert. Leave blank if you don't need to show
-anything more than the title.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">getText</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_text</span><span class="p">;</span>
-      <span class="p">}</span>
+anything more than the title.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">setText</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theText</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_text</span> <span class="o">=</span> <span class="nx">theText</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">theText</span><span class="p">;</span>
         <span class="p">}</span>
       <span class="p">}</span>
-      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getText</span><span class="p">,</span>
-        <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setText</span><span class="p">,</span>
-        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>Array</em></span></p>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property buttons of type <em>Array</em></span></p>
 
 <p>The alert's buttons are specified in this property. The layout
-is expected to be: [ { title: title [, type: type] [, tag: tag] } [, {} ...] ]</p>
+is expected to be: <code>[ { title: title [, type: type] [, tag: tag] } [, {} ...] ]</code></p>
 
 <p>Each button's type can be "normal", "bold", "destructive". The tag may be
 null; if it is, it is assigned the button index. If a tag is specifed (common
 for cancel buttons), that is the return value.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span> <span class="o">=</span> <span class="p">[];</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">getButtons</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">;</span>
-      <span class="p">}</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">setButtons</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theButtons</span> <span class="p">)</span> <span class="p">{</span>
         <span class="kd">function</span> <span class="nx">dismissWithIndex</span><span class="p">(</span> <span class="nx">idx</span> <span class="p">)</span> <span class="p">{</span>
           <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -119,32 +112,28 @@ wide buttons are for 1 button or 4+ buttons.</p></div></div><div class="code"><d
           <span class="p">}</span>
         <span class="p">}</span>
       <span class="p">}</span>
-      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;buttons&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getButtons</span><span class="p">,</span>
-        <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setButtons</span><span class="p">,</span>
-        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-      <span class="p">}</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// root element contains the container</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;buttons&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="p">[]</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>other DOM elements we need to construct the alert</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// root element contains the container</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// points to the alert itself</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// points to the DIV used to vertically align us</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// stores a promise</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>boolean</em></span></p>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// stores a promise</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property usePromise of type <em>boolean</em></span></p>
 
-<p>If true, show() returns a promise.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_usePromise</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">getUsePromise</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_usePromise</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;usePromise&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUsePromise</span><span class="p">,</span>
-        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-      <span class="p">}</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_visible</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">getVisible</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_visible</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;visible&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getVisible</span><span class="p">,</span>
-        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Creates the DOM elements for an Alert. Assumes the styles are
+<p>If true, show() returns a promise.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;usePromise&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="kc">false</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property visible of type <em>Boolean</em></span></p>
+
+<p>Indicates if the alert is veisible.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;visible&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="kc">false</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createElements</span></p>
+
+<p>Creates the DOM elements for an Alert. Assumes the styles are
 already in the style sheet.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert-container&quot;</span><span class="p">;</span>
@@ -163,13 +152,19 @@ already in the style sheet.</p></div></div><div class="code"><div class="wrapper
         <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="p">);</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span> <span class="p">);</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span> <span class="p">);</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">backButtonPressed</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method backButtonPressed</span></p>
+
+<p>Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">backButtonPressed</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.</p>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method hide</span></p>
+
+<p>Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.</p>
 
 <p><strong>Returns a [type]</strong><br/>([description])</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">hide</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Shows an alert.</p>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method show</span></p>
+
+<p>Shows an alert.</p>
 
 <p><strong>Returns a Promise</strong><br/>(a promise if usePromise = true)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">show</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">visible</span> <span class="p">)</span> <span class="p">{</span>
@@ -195,8 +190,15 @@ already in the style sheet.</p></div></div><div class="code"><div class="wrapper
           <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
           <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
         <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">idx</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method dismiss</span></p>
+
+<p>Dismisses the alert with the sepcified button index</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>idx must be a Number.</strong></li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">idx</span> <span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">visible</span> <span class="p">)</span> <span class="p">{</span>
           <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>drop the listener for the back button</p></div></div><div class="code"><div class="wrapper">        <span class="nx">UI</span><span class="p">.</span><span class="nx">backButton</span><span class="p">.</span><span class="nx">removeListenerForNotification</span><span class="p">(</span> <span class="s2">&quot;backButtonPressed&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">backButtonPressed</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove from the body</p></div></div><div class="code"><div class="wrapper">        <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -219,12 +221,19 @@ already in the style sheet.</p></div></div><div class="code"><div class="wrapper
             <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span> <span class="nx">tag</span> <span class="p">)</span> <span class="p">);</span>
           <span class="p">}</span>
         <span class="p">}</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Initializes the Alert and calls _createElements.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>
+
+<p>Initializes the Alert and calls _createElements.</p>
+
+<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">override</span><span class="p">(</span> <span class="kd">function</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span> <span class="p">);</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span><span class="p">();</span>
-      <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Initializes the Alert. Options includes title, text, buttons, and promise.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;initWithOptions&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">initWithOptions</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method overrideSuper</span></p>
+
+<p>Initializes the Alert. Options includes title, text, buttons, and promise.</p>
+
+<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">override</span><span class="p">(</span> <span class="kd">function</span> <span class="nx">initWithOptions</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
         <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
@@ -240,7 +249,10 @@ already in the style sheet.</p></div></div><div class="code"><div class="wrapper
             <span class="nx">self</span><span class="p">.</span><span class="nx">_usePromise</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
           <span class="p">}</span>
         <span class="p">}</span>
-      <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Clean up after ourselves.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method destroy</span></p>
+
+<p>Clean up after ourselves.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="p">);</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">destroy</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">visible</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">self</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
@@ -254,9 +266,11 @@ already in the style sheet.</p></div></div><div class="code"><div class="wrapper
         <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span> <span class="p">);</span>
-      <span class="p">};</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>handle auto-init</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">);</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Creates a button suitable for an Alert</p>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method button</span></p>
+
+<p>Creates a button suitable for an Alert</p>
 
 <p>Parameters:</p>
 
@@ -284,7 +298,9 @@ already in the style sheet.</p></div></div><div class="code"><div class="wrapper
       <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">button</span><span class="p">;</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Creates an OK-style Alert. It only has an OK button.</p>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method OK</span></p>
+
+<p>Creates an OK-style Alert. It only has an OK button.</p>
 
 <p>Parameters:</p>
 
@@ -312,7 +328,9 @@ already in the style sheet.</p></div></div><div class="code"><div class="wrapper
     <span class="p">}</span>
     <span class="nx">anOK</span><span class="p">.</span><span class="nx">initWithOptions</span><span class="p">(</span> <span class="nx">anOKOptions</span> <span class="p">);</span>
     <span class="k">return</span> <span class="nx">anOK</span><span class="p">;</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Creates an OK/Cancel-style Alert. It only has an OK and CANCEL button.</p>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method Confirm</span></p>
+
+<p>Creates an OK/Cancel-style Alert. It only has an OK and CANCEL button.</p>
 
 <p>Parameters:</p>
 
