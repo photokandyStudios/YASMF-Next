@@ -1,6 +1,5 @@
 (function(global, define) {
   var globalDefine = global.define;
-
 /**
  * almond 0.2.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
@@ -2012,11 +2011,11 @@ define("cultures/globalize.culture.en-US", function(){});
      *
      * Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.
      *
-     * core.js
      * @module core.js
      * @author Kerri Shotts
      * @version 0.4
      *
+     * ```
      * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
      * Permission is hereby granted, free of charge, to any person obtaining a copy of this
      * software and associated documentation files (the "Software"), to deal in the Software
@@ -2032,6 +2031,7 @@ define("cultures/globalize.culture.en-US", function(){});
      * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
      * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
      * OTHER DEALINGS IN THE SOFTWARE.
+     * ```
      */
     /*jshint
          asi:true,
@@ -2116,13 +2116,13 @@ define("cultures/globalize.culture.en-US", function(){});
          * string, in which case the replacement variable are replaced
          * and returned simply, or the template can be a DOM element,
          * in which case the template is assumed to be the DOM Element's
-         * innerHTML, and then the replacement variables are parsed.
+         * `innerHTML`, and then the replacement variables are parsed.
          *
-         * Replacement variables are of the form %VARIABLE%, and
+         * Replacement variables are of the form `%VARIABLE%`, and
          * can occur anywhere, not just within strings in HTML.
          *
          * The replacements array is of the form
-         *   { "VARIABLE": replacement, "VARIABLE2": replacement, ... }
+         *     { "VARIABLE": replacement, "VARIABLE2": replacement, ... }
          *
          * @method template
          * @param  {Node|String} templateElement
@@ -2180,9 +2180,9 @@ define("cultures/globalize.culture.en-US", function(){});
           }, 1000 );
         },
         /**
-         * The following functions are related to globalization and localization, which
-         * are now considered to be core functions (previously it was broken out in
-         * PKLOC)
+         * > The following functions are related to globalization and localization, which
+         * > are now considered to be core functions (previously it was broken out in
+         * > PKLOC)
          */
         /**
          * @typedef {String} Locale
@@ -2206,9 +2206,11 @@ define("cultures/globalize.culture.en-US", function(){});
          */
         localizedText: {},
         /**
-         * Given a locale string, normalize it to the form of la-RE or la, depending on the length.
-         * "enus", "en_us", "en_---__--US", "EN-US" --> "en-US"
-         * "en", "en-", "EN!" --> "en"
+         * Given a locale string, normalize it to the form of `la-RE` or `la`, depending on the length.
+         * ```
+         *     "enus", "en_us", "en_---__--US", "EN-US" --> "en-US"
+         *     "en", "en-", "EN!" --> "en"
+         * ```
          * @method normalizeLocale
          * @param {Locale} theLocale
          */
@@ -2287,8 +2289,8 @@ define("cultures/globalize.culture.en-US", function(){});
           }
         },
         /**
-         * Returns the user's locale (e.g., en-US or fr-FR). If one
-         * can't be found, "en-US" is returned. If `currentUserLocale`
+         * Returns the user's locale (e.g., `en-US` or `fr-FR`). If one
+         * can't be found, `en-US` is returned. If `currentUserLocale`
          * is already defined, it won't attempt to recalculate it.
          * @method getUserLocale
          * @return {Locale}
@@ -2396,8 +2398,8 @@ define("cultures/globalize.culture.en-US", function(){});
         /**
          * Convenience function for translating text. Key is the only
          * required value and case doesn't matter (it's uppercased). Replacement
-         * variables can be specified using replacement variables of the form { "VAR":"VALUE" },
-         * using %VAR% in the key/value returned. If locale is specified, it
+         * variables can be specified using replacement variables of the form `{ "VAR":"VALUE" }`,
+         * using `%VAR%` in the key/value returned. If `locale` is specified, it
          * takes precedence over the user's current locale.
          *
          * @method T
@@ -2521,11 +2523,11 @@ define("cultures/globalize.culture.en-US", function(){});
  *
  * Provides date/time convenience methods
  *
- * datetime.js
  * @module datetime.js
  * @author Kerri Shotts
  * @version 0.4
  *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -2541,7 +2543,7 @@ define("cultures/globalize.culture.en-US", function(){});
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
-
+ * ```
  */
 /*jshint
          asi:true,
@@ -2566,15 +2568,16 @@ define( 'yasmf/util/datetime',[],function() {
   return {
     /**
      * Returns the current time in the Unix time format
+     * @method getUnixTime
      * @return {UnixTime}
      */
     getUnixTime: function() {
       return ( new Date() ).getTime();
     },
     /**
-     * PRECISION_x Constants
-     * These specify the amount of precision required for getPartsFromSeconds.
-     * For example, if PRECISION_DAYS is specified, the number of parts obtained
+     * # PRECISION_x Constants
+     * These specify the amount of precision required for `getPartsFromSeconds`.
+     * For example, if `PRECISION_DAYS` is specified, the number of parts obtained
      * consist of days, hours, minutes, and seconds.
      */
     PRECISION_SECONDS: 1,
@@ -2589,8 +2592,8 @@ define( 'yasmf/util/datetime',[],function() {
     /**
      * Takes a given number of seconds and returns an object consisting of the number of seconds, minutes, hours, etc.
      * The value is limited by the precision parameter -- which must be specified. Which ever value is specified will
-     * be the maximum limit for the routine; that is PRECISION_DAYS will never return a result for weeks or years.
-     *
+     * be the maximum limit for the routine; that is `PRECISION_DAYS` will never return a result for weeks or years.
+     * @method getPartsFromSeconds
      * @param {number} seconds
      * @param {number} precision
      * @returns {TimeParts}
@@ -2625,7 +2628,6 @@ define( 'yasmf/util/datetime',[],function() {
  * Provides convenience methods for parsing unix-style path names. If the
  * path separator is changed from "/" to "\", it should parse Windows paths as well.
  *
- * filename.js
  * @module filename.js
  * @author Kerri Shotts
  * @version 0.4
@@ -2669,7 +2671,7 @@ define( 'yasmf/util/datetime',[],function() {
 define( 'yasmf/util/filename',[],function() {
   var PKFILE = {
     /**
-     * Version
+     * @property Version
      * @type {String}
      */
     version: "00.04.100",
@@ -2791,7 +2793,6 @@ define( 'yasmf/util/filename',[],function() {
  *
  * Provides miscellaneous functions that had no other category.
  *
- * misc.js
  * @module misc.js
  * @author Kerri Shotts
  * @version 0.4
@@ -2858,11 +2859,10 @@ define( 'yasmf/util/misc',[],function() {
  * Provides basic device-handling convenience functions for determining if the device
  * is an iDevice or a Droid Device, and what the orientation is.
  *
- * device.js
  * @module device.js
  * @author Kerri Shotts
  * @version 0.4
- *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -2878,6 +2878,7 @@ define( 'yasmf/util/misc',[],function() {
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -3121,8 +3122,6 @@ define( 'yasmf/util/device',[],function() {
  *
  * # Base Object
  *
- * ## object.js
- *
  * @module object.js
  * @author Kerri Shotts
  * @version 0.4
@@ -3160,7 +3159,8 @@ define( 'yasmf/util/device',[],function() {
  trailing:false,
  undef:true,
  white:false,
- onevar:false
+ onevar:false,
+ camelCase:false
  */
 /*global define, console*/
 define( 'yasmf/util/object',[],function() {
@@ -3720,71 +3720,95 @@ define( 'yasmf/util/object',[],function() {
      * @param {Object} propertyOptions  the various options as described above.
      */
     self.defineProperty = function( propertyName, propertyOptions ) {
-      var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
-      // set the default options and copy the specified options
       var options = {
         default: undefined,
         read: true,
         write: true,
         get: null,
         set: null,
-        selfDiscover: true
+        selfDiscover: true,
+        prefix: "",
+        configurable: true,
+        backingVariable: true
       };
+      // private properties are handled differently -- we want to be able to search for
+      // _getPrivateProperty, not get_privateProperty
+      if ( propertyName.substr( 0, 1 ) === "_" ) {
+        options.prefix = "_";
+      }
+      // allow other potential prefixes
+      if ( options.prefix !== "" ) {
+        if ( propertyName.substr( 0, 1 ) === options.prefix ) {
+          propertyName = propertyName.substr( 1 );
+        }
+      }
+      // merge our default options with the user options
       for ( var property in propertyOptions ) {
         if ( propertyOptions.hasOwnProperty( property ) ) {
           options[ property ] = propertyOptions[ property ];
         }
       }
+      // Capital Camel Case our function names
+      var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
+      var getFnName = options.prefix + "get" + fnName,
+        setFnName = options.prefix + "set" + fnName,
+        _propertyName = options.prefix + "_" + propertyName,
+        _y_getFnName = options.prefix + "_y_get" + fnName,
+        _y_setFnName = options.prefix + "_y_set" + fnName,
+        _y__getFnName = options.prefix + "_y__get" + fnName,
+        _y__setFnName = options.prefix + "_y__set" + fnName;
       // if get/set are not specified, we'll attempt to self-discover them
       if ( options.get === null && options.selfDiscover ) {
-        if ( typeof self[ "get" + fnName ] === 'function' ) {
-          options.get = self[ "get" + fnName ];
+        if ( typeof self[ getFnName ] === 'function' ) {
+          options.get = self[ getFnName ];
         }
       }
       if ( options.set === null && options.selfDiscover ) {
-        if ( typeof self[ "set" + fnName ] === 'function' ) {
-          options.set = self[ "set" + fnName ];
+        if ( typeof self[ setFnName ] === 'function' ) {
+          options.set = self[ setFnName ];
         }
       }
       // create the private variable
-      self[ "_" + propertyName ] = options.default;
+      if ( options.backingVariable ) {
+        self[ _propertyName ] = options.default;
+      }
       if ( !options.read && !options.write ) {
         return; // not read/write, so nothing more.
       }
       var defPropOptions = {
-        configurable: true
+        configurable: options.configurable
       };
       if ( options.read ) {
-        self[ "___get" + fnName ] = options.get;
-        self[ "__get" + fnName ] = function() {
+        self[ _y__getFnName ] = options.get;
+        self[ _y_getFnName ] = function() {
           // if there is a getter, use it
-          if ( typeof self[ "___get" + fnName ] === 'function' ) {
-            return self[ "___get" + fnName ]( self[ "_" + propertyName ] );
+          if ( typeof self[ _y__getFnName ] === 'function' ) {
+            return self[ _y__getFnName ]( self[ _propertyName ] );
           }
           // otherwise return the private variable
           else {
-            return self[ "_" + propertyName ];
+            return self[ _propertyName ];
           }
         };
-        if ( typeof self[ "get" + fnName ] === 'undefined' ) {
-          self[ "get" + fnName ] = self[ "__get" + fnName ];
+        if ( typeof self[ getFnName ] === 'undefined' ) {
+          self[ getFnName ] = self[ _y_getFnName ];
         }
-        defPropOptions.get = self[ "__get" + fnName ];
+        defPropOptions.get = self[ _y_getFnName ];
       }
       if ( options.write ) {
-        self[ "___set" + fnName ] = options.set;
-        self[ "__set" + fnName ] = function( v ) {
-          var oldV = self[ "_" + propertyName ];
-          if ( typeof self[ "___set" + fnName ] === 'function' ) {
-            self[ "___set" + fnName ]( v, oldV );
+        self[ _y__setFnName ] = options.set;
+        self[ _y_setFnName ] = function( v ) {
+          var oldV = self[ _propertyName ];
+          if ( typeof self[ _y__setFnName ] === 'function' ) {
+            self[ _y__setFnName ]( v, oldV );
           } else {
-            self[ "_" + propertyName ] = v;
+            self[ _propertyName ] = v;
           }
         };
-        if ( typeof self[ "set" + fnName ] === 'undefined' ) {
-          self[ "set" + fnName ] = self[ "__set" + fnName ];
+        if ( typeof self[ setFnName ] === 'undefined' ) {
+          self[ setFnName ] = self[ _y_setFnName ];
         }
-        defPropOptions.set = self[ "__set" + fnName ];
+        defPropOptions.set = self[ _y_setFnName ];
       }
       Object.defineProperty( self, propertyName, defPropOptions );
     };
@@ -3828,7 +3852,6 @@ define( 'yasmf/util/object',[],function() {
      *
      */
     self.defineObservableProperty = function( propertyName, propertyOptions ) {
-      var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
       // set the default options and copy the specified options
       var options = {
         observable: true,
@@ -3840,8 +3863,32 @@ define( 'yasmf/util/object',[],function() {
         validate: null,
         set: null,
         selfDiscover: true,
-        notifyAlways: false
+        notifyAlways: false,
+        prefix: "",
+        configurable: true
       };
+      // private properties are handled differently -- we want to be able to search for
+      // _getPrivateProperty, not get_privateProperty
+      if ( propertyName.substr( 0, 1 ) === "_" ) {
+        options.prefix = "_";
+      }
+      // allow other potential prefixes
+      if ( options.prefix !== "" ) {
+        if ( propertyName.substr( 0, 1 ) === options.prefix ) {
+          propertyName = propertyName.substr( 1 );
+        }
+      }
+      var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
+      var getObservableFnName = options.prefix + "getObservable" + fnName,
+        setObservableFnName = options.prefix + "setObservable" + fnName,
+        validateObservableFnName = options.prefix + "validateObservable" + fnName,
+        _y_propertyName = options.prefix + "_y_" + propertyName,
+        _y_getFnName = options.prefix + "_y_get" + fnName,
+        _y_setFnName = options.prefix + "_y_set" + fnName,
+        _y_validateFnName = options.prefix + "_y_validate" + fnName,
+        _y__getFnName = options.prefix + "_y__get" + fnName,
+        _y__setFnName = options.prefix + "_y__set" + fnName,
+        _y__validateFnName = options.prefix + "_y__validate" + fnName;
       for ( var property in propertyOptions ) {
         if ( propertyOptions.hasOwnProperty( property ) ) {
           options[ property ] = propertyOptions[ property ];
@@ -3849,18 +3896,18 @@ define( 'yasmf/util/object',[],function() {
       }
       // if get/set are not specified, we'll attempt to self-discover them
       if ( options.get === null && options.selfDiscover ) {
-        if ( typeof self[ "getObservable" + fnName ] === 'function' ) {
-          options.get = self[ "getObservable" + fnName ];
+        if ( typeof self[ getObservableFnName ] === 'function' ) {
+          options.get = self[ getObservableFnName ];
         }
       }
       if ( options.set === null && options.selfDiscover ) {
-        if ( typeof self[ "setObservable" + fnName ] === 'function' ) {
-          options.set = self[ "setObservable" + fnName ];
+        if ( typeof self[ setObservableFnName ] === 'function' ) {
+          options.set = self[ setObservableFnName ];
         }
       }
       if ( options.validate === null && options.selfDiscover ) {
-        if ( typeof self[ "validateObservable" + fnName ] === 'function' ) {
-          options.validate = self[ "validateObservable" + fnName ];
+        if ( typeof self[ validateObservableFnName ] === 'function' ) {
+          options.validate = self[ validateObservableFnName ];
         }
       }
       // if the property is observable, register its notification
@@ -3868,7 +3915,7 @@ define( 'yasmf/util/object',[],function() {
         self.registerNotification( options.notification );
       }
       // create the private variable; __ here to avoid self-defined _
-      self[ "__" + propertyName ] = options.default;
+      self[ _y_propertyName ] = options.default;
       if ( !options.read && !options.write ) {
         return; // not read/write, so nothing more.
       }
@@ -3876,33 +3923,33 @@ define( 'yasmf/util/object',[],function() {
         configurable: true
       };
       if ( options.read ) {
-        self[ "___get" + fnName ] = options.get;
-        self[ "__get" + fnName ] = function() {
+        self[ _y__getFnName ] = options.get;
+        self[ _y_getFnName ] = function() {
           // if there is a getter, use it
-          if ( typeof self[ "___get" + fnName ] === 'function' ) {
-            return self[ "___get" + fnName ]( self[ "__" + propertyName ] );
+          if ( typeof self[ _y__getFnName ] === 'function' ) {
+            return self[ _y__getFnName ]( self[ _y_propertyName ] );
           }
           // otherwise return the private variable
           else {
-            return self[ "__" + propertyName ];
+            return self[ _y_propertyName ];
           }
         };
-        defPropOptions.get = self[ "__get" + fnName ];
+        defPropOptions.get = self[ _y_getFnName ];
       }
       if ( options.write ) {
-        self[ "___validate" + fnName ] = options.validate;
-        self[ "___set" + fnName ] = options.set;
-        self[ "__set" + fnName ] = function( v ) {
-          var oldV = self[ "__" + propertyName ];
+        self[ _y__validateFnName ] = options.validate;
+        self[ _y__setFnName ] = options.set;
+        self[ _y_setFnName ] = function( v ) {
+          var oldV = self[ _y_propertyName ];
           var valid = true;
-          if ( typeof self[ "___validate" + fnName ] === 'function' ) {
-            valid = self[ "___validate" + fnName ]( v );
+          if ( typeof self[ _y__validateFnName ] === 'function' ) {
+            valid = self[ _y__validateFnName ]( v );
           }
           if ( valid ) {
-            if ( typeof self[ "___set" + fnName ] === 'function' ) {
-              self[ "__" + propertyName ] = self[ "___set" + fnName ]( v, oldV );
+            if ( typeof self[ _y__setFnName ] === 'function' ) {
+              self[ _y_propertyName ] = self[ _y__setFnName ]( v, oldV );
             } else {
-              self[ "__" + propertyName ] = v;
+              self[ _y_propertyName ] = v;
             }
             if ( v !== oldV || options.notifyAlways ) {
               if ( options.observable ) {
@@ -3914,7 +3961,7 @@ define( 'yasmf/util/object',[],function() {
             }
           }
         };
-        defPropOptions.set = self[ "__set" + fnName ];
+        defPropOptions.set = self[ _y_setFnName ];
       }
       Object.defineProperty( self, propertyName, defPropOptions );
     };
@@ -3966,6 +4013,7 @@ define( 'yasmf/util/object',[],function() {
       // clear any listeners.
       self._notificationListeners = {};
       self._tagListeners = {};
+      self._constructObjectCategories( BaseObject.ON_DESTROY_CATEGORY );
       // ready to be destroyed
     };
     // self-categorize
@@ -3988,9 +4036,10 @@ define( 'yasmf/util/object',[],function() {
    * @type {{}}
    * @private
    */
-  BaseObject._objectCategories = [ {}, {} ];
+  BaseObject._objectCategories = [ {}, {}, {} ];
   BaseObject.ON_CREATE_CATEGORY = 0;
   BaseObject.ON_INIT_CATEGORY = 1;
+  BaseObject.ON_DESTROY_CATEGORY = 2;
   /**
    * Register a category constructor for a specific class. The function must take `self` as a parameter, and must
    * not assume the presence of any other category
@@ -4028,7 +4077,7 @@ define( 'yasmf/util/object',[],function() {
     if ( typeof BaseObject._objectCategories[ priority ][ className ] === "undefined" ) {
       BaseObject._objectCategories[ priority ][ className ] = [];
     }
-    BaseObject._objectCategories[ priority ][ className ].push( categoryConstructor );
+    BaseObject._objectCategories[ priority ][ className ].push( method );
   };
   BaseObject.meta = {
     version: '00.04.900',
@@ -4047,11 +4096,10 @@ define( 'Q',[],function() {
  *
  * FileManager implements methods that interact with the HTML5 API
  *
- * core.js
- * @module core.js
+ * @module fileManager.js
  * @author Kerri Shotts
  * @version 0.4
- *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -4067,6 +4115,7 @@ define( 'Q',[],function() {
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -4089,1058 +4138,1216 @@ define( 'Q',[],function() {
  */
 /*global define, Q, LocalFileSystem, console*/
 define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, BaseObject ) {
-  /**
-   * @typedef {{}} Promise
-   */
-  var DEBUG = false;
-  /**
-   * Requests a quota from the file system
-   * @param  {*} fileSystemType    PERSISTENT or TEMPORARY
-   * @param  {Number} requestedDataSize The quota we're asking for
-   * @return {Promise}                   The promise
-   */
-  function _requestQuota( fileSystemType, requestedDataSize ) {
-    var deferred = Q.defer();
-    if ( DEBUG ) {
-      console.log( [ "_requestQuota: ", fileSystemType, requestedDataSize ].join( " " ) )
-    }
-    // make sure we can actually ask for a quota
-    // Chrome currently has navigator.webkitPersistentStorage and navigator.webkitTemporaryStorage
-    // No idea what this is going to be unprefixed...
-    try {
-      var PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.PERSISTENT :
-        window.PERSISTENT;
-      var storageInfo = fileSystemType == PERSISTENT ? navigator.webkitPersistentStorage :
-        navigator.webkitTemporaryStorage;
-      if ( storageInfo ) {
-        // now make sure we can request a quota
-        if ( storageInfo.requestQuota ) {
-          // request the quota
-          storageInfo.requestQuota( requestedDataSize, function success( grantedBytes ) {
+  var IN_YASMF = true;
+  return ( function( Q, BaseObject, window ) {
+    /**
+     * Defined by Q, actually, but defined here to make type handling nicer
+     * @typedef {{}} Promise
+     */
+    var DEBUG = false;
+    /**
+     * Requests a quota from the file system
+     * @method _requestQuota
+     * @private
+     * @param  {*} fileSystemType    PERSISTENT or TEMPORARY
+     * @param  {Number} requestedDataSize The quota we're asking for
+     * @return {Promise}                   The promise
+     */
+    function _requestQuota( fileSystemType, requestedDataSize ) {
+      var deferred = Q.defer();
+      if ( DEBUG ) {
+        console.log( [ "_requestQuota: ", fileSystemType, requestedDataSize ].join(
+          " " ) )
+      }
+      try {
+        // attempt to ask for a quota
+        var PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ?
+          LocalFileSystem.PERSISTENT : window.PERSISTENT;
+        // Chrome has `webkitPersistentStorage` and `navigator.webkitTemporaryStorage`
+        var storageInfo = fileSystemType == PERSISTENT ? navigator.webkitPersistentStorage :
+          navigator.webkitTemporaryStorage;
+        if ( storageInfo ) {
+          // now make sure we can request a quota
+          if ( storageInfo.requestQuota ) {
+            // request the quota
+            storageInfo.requestQuota( requestedDataSize, function success(
+              grantedBytes ) {
+              if ( DEBUG ) {
+                console.log( [ "_requestQuota: quota granted: ", fileSystemType,
+                  grantedBytes
+                ].join( " " ) )
+              }
+              deferred.resolve( grantedBytes );
+            }, function failure( anError ) {
+              if ( DEBUG ) {
+                console.log( [ "_requestQuota: quota rejected: ", fileSystemType,
+                  requestedDataSize, anError
+                ].join( " " ) )
+              }
+              deferred.reject( anError );
+            } );
+          } else {
+            // not everything supports asking for a quota -- like Cordova.
+            // Instead, let's assume we get permission
             if ( DEBUG ) {
-              console.log( [ "_requestQuota: quota granted: ", fileSystemType,
-                grantedBytes
+              console.log( [
+                "_requestQuota: couldn't request quota -- no requestQuota: ",
+                fileSystemType, requestedDataSize
               ].join( " " ) )
             }
-            deferred.resolve( grantedBytes );
-          }, function failure( anError ) {
-            if ( DEBUG ) {
-              console.log( [ "_requestQuota: quota rejected: ", fileSystemType,
-                requestedDataSize, anError
-              ].join( " " ) )
-            }
-            deferred.reject( anError );
-          } );
+            deferred.resolve( requestedDataSize );
+          }
         } else {
-          // not everything supports asking for a quota -- like Cordova
-          // instead, let's assume we get permission
           if ( DEBUG ) {
-            console.log( [ "_requestQuota: couldn't request quota -- no requestQuota: ",
+            console.log( [
+              "_requestQuota: couldn't request quota -- no storageInfo: ",
               fileSystemType, requestedDataSize
             ].join( " " ) )
           }
           deferred.resolve( requestedDataSize );
         }
-      } else {
-        if ( DEBUG ) {
-          console.log( [ "_requestQuota: couldn't request quota -- no storageInfo: ",
-            fileSystemType, requestedDataSize
-          ].join( " " ) )
-        }
-        deferred.resolve( requestedDataSize );
-      }
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Request a file system with the requested size (obtained first by getting a quota)
-   * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
-   * @param  {Number} requestedDataSize The quota
-   * @return {Promise}                   The promise
-   */
-  function _requestFileSystem( fileSystemType, requestedDataSize ) {
-    var deferred = Q.defer();
-    if ( DEBUG ) {
-      console.log( [ "_requestFileSystem: ", fileSystemType, requestedDataSize ].join(
-        " " ) )
-    }
-    try {
-      var requestFileSystem = window.webkitRequestFileSystem || window.requestFileSystem;
-      requestFileSystem( fileSystemType, requestedDataSize, function success(
-        theFileSystem ) {
-        if ( DEBUG ) {
-          console.log( [ "_requestFileSystem: got a file system", theFileSystem ].join(
-            " " ) )
-        }
-        deferred.resolve( theFileSystem );
-      }, function failure( anError ) {
-        if ( DEBUG ) {
-          console.log( [ "_requestFileSystem: couldn't get a file system",
-            fileSystemType
-          ].join( " " ) )
-        }
+      } catch ( anError ) {
         deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Resolves theURI to a fileEntry or directoryEntry, if possible.
-   * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
-   */
-  function _resolveLocalFileSystemURL( theURL ) {
-    var deferred = Q.defer();
-    if ( DEBUG ) {
-      console.log( [ "_resolveLocalFileSystemURL: ", theURL ].join( " " ) )
-    }
-    try {
-      var parts = theURL.split( ":" );
-      var protocol, path;
-      if ( parts.length > 2 ) {
-        throw new Error( "The URI is not well-formed; missing protocol: " + theURL );
       }
-      if ( parts.length < 2 ) {
-        protocol = "file";
-        path = parts[ 0 ];
-      } else {
-        protocol = parts[ 0 ];
-        path = parts[ 1 ];
+      return deferred.promise;
+    }
+    /**
+     * Request a file system with the requested size (obtained first by getting a quota)
+     * @method _requestFileSystem
+     * @private
+     * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
+     * @param  {Number} requestedDataSize The quota
+     * @return {Promise}                   The promise
+     */
+    function _requestFileSystem( fileSystemType, requestedDataSize ) {
+      var deferred = Q.defer();
+      if ( DEBUG ) {
+        console.log( [ "_requestFileSystem: ", fileSystemType, requestedDataSize ].join(
+          " " ) )
       }
-      var pathComponents = path.split( "/" );
-      var newPathComponents = [];
-      pathComponents.forEach( function( part ) {
-        part = part.trim();
-        if ( part !== "" ) { // remove /private if it is the first item in the new array, for iOS sake
-          if ( !( ( part === "private" || part === "localhost" ) && newPathComponents
-            .length === 0 ) ) {
-            newPathComponents.push( part );
+      try {
+        // fix issue #2 by chasen where using `webkitRequestFileSystem` was having problems
+        // on Android 4.2.2
+        var requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+        requestFileSystem( fileSystemType, requestedDataSize, function success(
+          theFileSystem ) {
+          if ( DEBUG ) {
+            console.log( [ "_requestFileSystem: got a file system", theFileSystem ]
+              .join( " " ) )
           }
+          deferred.resolve( theFileSystem );
+        }, function failure( anError ) {
+          if ( DEBUG ) {
+            console.log( [ "_requestFileSystem: couldn't get a file system",
+              fileSystemType
+            ].join( " " ) )
+          }
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Resolves theURI to a fileEntry or directoryEntry, if possible.
+     * If `theURL` contains `private` or `localhost` as its first element, it will be removed. If
+     * `theURL` does not have a URL scheme, `file://` will be assumed.
+     * @method _resolveLocalFileSystemURL
+     * @private
+     * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
+     */
+    function _resolveLocalFileSystemURL( theURL ) {
+      var deferred = Q.defer();
+      if ( DEBUG ) {
+        console.log( [ "_resolveLocalFileSystemURL: ", theURL ].join( " " ) )
+      }
+      try {
+        // split the parts of the URL
+        var parts = theURL.split( ":" );
+        var protocol, path;
+        // can only have two parts
+        if ( parts.length > 2 ) {
+          throw new Error( "The URI is not well-formed; missing protocol: " +
+            theURL );
         }
-      } );
-      var theNewURI = newPathComponents.join( "/" );
-      theNewURI = protocol + ":///" + theNewURI;
-      window.resolveLocalFileSystemURL( theNewURI, function( theEntry ) {
-        deferred.resolve( theEntry );
-      }, function( anError ) {
+        // if only one part, we assume `file` as the protocol
+        if ( parts.length < 2 ) {
+          protocol = "file";
+          path = parts[ 0 ];
+        } else {
+          protocol = parts[ 0 ];
+          path = parts[ 1 ];
+        }
+        // split the path components
+        var pathComponents = path.split( "/" );
+        var newPathComponents = [];
+        // iterate over each component and trim as we go
+        pathComponents.forEach( function( part ) {
+          part = part.trim();
+          if ( part !== "" ) { // remove /private if it is the first item in the new array, for iOS sake
+            if ( !( ( part === "private" || part === "localhost" ) &&
+              newPathComponents.length === 0 ) ) {
+              newPathComponents.push( part );
+            }
+          }
+        } );
+        // rejoin the path components
+        var theNewURI = newPathComponents.join( "/" );
+        // add the protocol
+        theNewURI = protocol + ":///" + theNewURI;
+        // and resolve the URL.
+        window.resolveLocalFileSystemURL( theNewURI, function( theEntry ) {
+          deferred.resolve( theEntry );
+        }, function( anError ) {
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
         deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
+      }
+      return deferred.promise;
     }
-    return deferred.promise;
-  }
-  /**
-   * @typedef {{}} DirectoryEntry
-   */
-  /**
-   * Returns a directory entry based on the path from the parent using
-   * the specified options ( or {} )
-   * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
-   * @param  {String} path    The relative or absolute path
-   * @param  {Object} options The options (that is, create the directory if it doesn't exist, etc.)
-   * @return {Promise}         The promise
-   */
-  function _getDirectoryEntry( parent, path, options ) {
-    if ( DEBUG ) {
-      console.log( [ "_getDirectoryEntry:", parent, path, options ].join( " " ) )
+    /**
+     * @typedef {{}} DirectoryEntry
+     * HTML5 File API Directory Type
+     */
+    /**
+     * Returns a directory entry based on the path from the parent using
+     * the specified options, if specified. `options` takes the form:
+     * ` {create: true/false, exclusive true/false }`
+     * @method _getDirectoryEntry
+     * @private
+     * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
+     * @param  {String} path    The relative or absolute path or a {DirectoryEntry}
+     * @param  {Object} options The options (that is, create the directory if it doesn't exist, etc.)
+     * @return {Promise}         The promise
+     */
+    function _getDirectoryEntry( parent, path, options ) {
+      if ( DEBUG ) {
+        console.log( [ "_getDirectoryEntry:", parent, path, options ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        if ( typeof path === "object" ) {
+          deferred.resolve( path );
+        } else {
+          parent.getDirectory( path, options || {}, function success(
+            theDirectoryEntry ) {
+            deferred.resolve( theDirectoryEntry );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        }
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
     }
-    var deferred = Q.defer();
-    try {
-      if ( typeof path === "object" ) {
-        deferred.resolve( path );
-      } else {
-        parent.getDirectory( path, options || {}, function success( theDirectoryEntry ) {
-          deferred.resolve( theDirectoryEntry );
+    /**
+     * Returns a file entry based on the path from the parent using
+     * the specified options. `options` takes the form of `{ create: true/false, exclusive: true/false}`
+     * @method getFileEntry
+     * @private
+     * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
+     * @param  {String} path    The relative or absolute path
+     * @param  {Object} options The options (that is, create the file if it doesn't exist, etc.)
+     * @return {Promise}         The promise
+     */
+    function _getFileEntry( parent, path, options ) {
+      if ( DEBUG ) {
+        console.log( [ "_getFileEntry:", parent, path, options ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        if ( typeof path === "object" ) {
+          deferred.resolve( path );
+        } else {
+          parent.getFile( path, options || {}, function success( theFileEntry ) {
+            deferred.resolve( theFileEntry );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        }
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * @typedef {{}} FileEntry
+     * HTML5 File API File Entry
+     */
+    /**
+     * Returns a file object based on the file entry.
+     * @method _getFileObject
+     * @private
+     * @param  {FileEntry} fileEntry The file Entry
+     * @return {Promise}           The Promise
+     */
+    function _getFileObject( fileEntry ) {
+      if ( DEBUG ) {
+        console.log( [ "_getFileObject:", fileEntry ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        fileEntry.file( function success( theFile ) {
+          deferred.resolve( theFile );
         }, function failure( anError ) {
           deferred.reject( anError );
         } );
+      } catch ( anError ) {
+        deferred.reject( anError );
       }
-    } catch ( anError ) {
-      deferred.reject( anError );
+      return deferred.promise;
     }
-    return deferred.promise;
-  }
-  /**
-   * Returns a file entry based on the path from the parent using
-   * the specified options ( or {} )
-   * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
-   * @param  {String} path    The relative or absolute path
-   * @param  {Object} options The options (that is, create the file if it doesn't exist, etc.)
-   * @return {Promise}         The promise
-   */
-  function _getFileEntry( parent, path, options ) {
-    if ( DEBUG ) {
-      console.log( [ "_getFileEntry:", parent, path, options ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      if ( typeof path === "object" ) {
-        deferred.resolve( path );
-      } else {
-        parent.getFile( path, options || {}, function success( theFileEntry ) {
-          deferred.resolve( theFileEntry );
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
+    /**
+     * Reads the file contents from a file object. readAsKind indicates how
+     * to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").
+     * @method _readFileContents
+     * @private
+     * @param  {File} fileObject File to read
+     * @param  {String} readAsKind "Text", "DataURL", "BinaryString", "ArrayBuffer"
+     * @return {Promise}            The Promise
+     */
+    function _readFileContents( fileObject, readAsKind ) {
+      if ( DEBUG ) {
+        console.log( [ "_readFileContents:", fileObject, readAsKind ].join( " " ) )
       }
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * @typedef {{}} FileEntry
-   */
-  /**
-   * Returns a file object based on the file entry.
-   * @param  {FileEntry} fileEntry The file Entry
-   * @return {Promise}           The Promise
-   */
-  function _getFileObject( fileEntry ) {
-    if ( DEBUG ) {
-      console.log( [ "_getFileObject:", fileEntry ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      fileEntry.file( function success( theFile ) {
-        deferred.resolve( theFile );
-      }, function failure( anError ) {
-        deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Reads the file contents from a file object. readAsKind indicates how
-   * to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").
-   * @param  {File} fileObject File to read
-   * @param  {String} readAsKind "Text", "DataURL", "BinaryString", "ArrayBuffer"
-   * @return {Promise}            The Promise
-   */
-  function _readFileContents( fileObject, readAsKind ) {
-    if ( DEBUG ) {
-      console.log( [ "_readFileContents:", fileObject, readAsKind ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      var fileReader = new FileReader();
-      fileReader.onloadend = function( e ) {
-        deferred.resolve( e.target.result );
-      };
-      fileReader.onerror = function( anError ) {
-        deferred.reject( anError );
-      };
-      fileReader[ "readAs" + readAsKind ]( fileObject );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Creates a file writer for the file entry
-   * @param  {FileEntry} fileEntry The file entry to write to
-   * @return {Promise}           the Promise
-   */
-  function _createFileWriter( fileEntry ) {
-    if ( DEBUG ) {
-      console.log( [ "_createFileWriter:", fileEntry ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      var fileWriter = fileEntry.createWriter( function success( theFileWriter ) {
-        deferred.resolve( theFileWriter );
-      }, function failure( anError ) {
-        deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * @typedef {{}} FileWriter
-   */
-  /**
-   * Write the contents to the fileWriter
-   * @param  {FileWriter} fileWriter Obtained from _createFileWriter
-   * @param  {*} contents   The contents to write
-   * @return {Promise}            the Promise
-   */
-  function _writeFileContents( fileWriter, contents ) {
-    if ( DEBUG ) {
-      console.log( [ "_writeFileContents:", fileWriter, contents ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      fileWriter.onwrite = function( e ) {
-        fileWriter.onwrite = function( e ) {
-          deferred.resolve( e );
+      var deferred = Q.defer();
+      try {
+        var fileReader = new FileReader();
+        fileReader.onloadend = function( e ) {
+          deferred.resolve( e.target.result );
         };
-        fileWriter.write( contents );
-      };
-      fileWriter.onError = function( anError ) {
-        deferred.reject( anError );
-      };
-      fileWriter.truncate( 0 ); // clear out the contents, first
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Copy the file to the specified parent directory, with an optional new name
-   * @param  {FileEntry} theFileEntry            The file to copy
-   * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the file to
-   * @param  {String} theNewName              The new name of the file ( or undefined simply to copy )
-   * @return {Promise}                         The Promise
-   */
-  function _copyFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
-    if ( DEBUG ) {
-      console.log( [ "_copyFile:", theFileEntry, theParentDirectoryEntry, theNewName ].join(
-        " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      theFileEntry.copyTo( theParentDirectoryEntry, theNewName, function success(
-        theNewFileEntry ) {
-        deferred.resolve( theNewFileEntry );
-      }, function failure( anError ) {
-        deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Move the file to the specified parent directory, with an optional new name
-   * @param  {FileEntry} theFileEntry            The file to move or rename
-   * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the file to (or the same as the file in order to rename)
-   * @param  {String} theNewName              The new name of the file ( or undefined simply to move )
-   * @return {Promise}                         The Promise
-   */
-  function _moveFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
-    if ( DEBUG ) {
-      console.log( [ "_moveFile:", theFileEntry, theParentDirectoryEntry, theNewName ].join(
-        " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      theFileEntry.moveTo( theParentDirectoryEntry, theNewName, function success(
-        theNewFileEntry ) {
-        deferred.resolve( theNewFileEntry );
-      }, function failure( anError ) {
-        deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Remove the file from the file system
-   * @param  {FileEntry} theFileEntry The file to remove
-   * @return {Promise}              The Promise
-   */
-  function _removeFile( theFileEntry ) {
-    if ( DEBUG ) {
-      console.log( [ "_removeFile:", theFileEntry ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      theFileEntry.remove( function success() {
-        deferred.resolve();
-      }, function failure( anError ) {
-        deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Copies a directory to the specified directory, with an optional new name. The directory
-   * is copied recursively.
-   * @param  {DirectoryEntry} theDirectoryEntry       The directory to copy
-   * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the first directory to
-   * @param  {String} theNewName              The optional new name for the directory
-   * @return {Promise}                         A promise
-   */
-  function _copyDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
-    if ( DEBUG ) {
-      console.log( [ "_copyDirectory:", theDirectoryEntry, theParentDirectoryEntry,
-        theNewName
-      ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, function success(
-        theNewDirectoryEntry ) {
-        deferred.resolve( theNewDirectoryEntry );
-      }, function failure( anError ) {
-        deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Moves a directory to the specified directory, with an optional new name. The directory
-   * is moved recursively.
-   * @param  {DirectoryEntry} theDirectoryEntry       The directory to move
-   * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the first directory to
-   * @param  {String} theNewName              The optional new name for the directory
-   * @return {Promise}                         A promise
-   */
-  function _moveDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
-    if ( DEBUG ) {
-      console.log( [ "_moveDirectory:", theDirectoryEntry, theParentDirectoryEntry,
-        theNewName
-      ].join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, function success(
-        theNewDirectoryEntry ) {
-        deferred.resolve( theNewDirectoryEntry );
-      }, function failure( anError ) {
-        deferred.reject( anError );
-      } );
-    } catch ( anError ) {
-      deferred.reject( anError );
-    }
-    return deferred.promise;
-  }
-  /**
-   * Removes a directory from the file system. If recursively is true, the directory is removed
-   * recursively.
-   * @param  {DirectoryEntry} theDirectoryEntry The directory to remove
-   * @param  {Boolean} recursively       If true, remove recursively
-   * @return {Promise}                   The Promise
-   */
-  function _removeDirectory( theDirectoryEntry, recursively ) {
-    if ( DEBUG ) {
-      console.log( [ "_removeDirectory:", theDirectoryEntry, "recursively", recursively ]
-        .join( " " ) )
-    }
-    var deferred = Q.defer();
-    try {
-      if ( !recursively ) {
-        theDirectoryEntry.remove( function success() {
-          deferred.resolve();
-        }, function failure( anError ) {
+        fileReader.onerror = function( anError ) {
           deferred.reject( anError );
-        } );
-      } else {
-        theDirectoryEntry.removeRecursively( function success() {
-          deferred.resolve();
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
+        };
+        fileReader[ "readAs" + readAsKind ]( fileObject );
+      } catch ( anError ) {
+        deferred.reject( anError );
       }
-    } catch ( anError ) {
-      deferred.reject( anError );
+      return deferred.promise;
     }
-    return deferred.promise;
-  }
-  /**
-   * Reads the contents of a directory
-   * @param  {DirectoryEntry} theDirectoryEntry The directory to list
-   * @return {Promise}                   The promise
-   */
-  function _readDirectoryContents( theDirectoryEntry ) {
-    if ( DEBUG ) {
-      console.log( [ "_readDirectoryContents:", theDirectoryEntry ].join( " " ) )
+    /**
+     * Creates a file writer for the file entry; `fileEntry` must exist
+     * @method _createFileWriter
+     * @private
+     * @param  {FileEntry} fileEntry The file entry to write to
+     * @return {Promise}           the Promise
+     */
+    function _createFileWriter( fileEntry ) {
+      if ( DEBUG ) {
+        console.log( [ "_createFileWriter:", fileEntry ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        var fileWriter = fileEntry.createWriter( function success( theFileWriter ) {
+          deferred.resolve( theFileWriter );
+        }, function failure( anError ) {
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
     }
-    var deferred = Q.defer();
-    try {
-      var directoryReader = theDirectoryEntry.createReader();
-      var entries = [];
+    /**
+     * @typedef {{}} FileWriter
+     * HTML5 File API File Writer Type
+     */
+    /**
+     * Write the contents to the fileWriter; `contents` should be a Blob.
+     * @method _writeFileContents
+     * @private
+     * @param  {FileWriter} fileWriter Obtained from _createFileWriter
+     * @param  {*} contents   The contents to write
+     * @return {Promise}            the Promise
+     */
+    function _writeFileContents( fileWriter, contents ) {
+      if ( DEBUG ) {
+        console.log( [ "_writeFileContents:", fileWriter, contents ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        fileWriter.onwrite = function( e ) {
+          fileWriter.onwrite = function( e ) {
+            deferred.resolve( e );
+          };
+          fileWriter.write( contents );
+        };
+        fileWriter.onError = function( anError ) {
+          deferred.reject( anError );
+        };
+        fileWriter.truncate( 0 ); // clear out the contents, first
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Copy the file to the specified parent directory, with an optional new name
+     * @method _copyFile
+     * @private
+     * @param  {FileEntry} theFileEntry            The file to copy
+     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the file to
+     * @param  {String} theNewName              The new name of the file ( or undefined simply to copy )
+     * @return {Promise}                         The Promise
+     */
+    function _copyFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
+      if ( DEBUG ) {
+        console.log( [ "_copyFile:", theFileEntry, theParentDirectoryEntry,
+          theNewName
+        ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        theFileEntry.copyTo( theParentDirectoryEntry, theNewName, function success(
+          theNewFileEntry ) {
+          deferred.resolve( theNewFileEntry );
+        }, function failure( anError ) {
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Move the file to the specified parent directory, with an optional new name
+     * @method _moveFile
+     * @private
+     * @param  {FileEntry} theFileEntry            The file to move or rename
+     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the file to (or the same as the file in order to rename)
+     * @param  {String} theNewName              The new name of the file ( or undefined simply to move )
+     * @return {Promise}                         The Promise
+     */
+    function _moveFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
+      if ( DEBUG ) {
+        console.log( [ "_moveFile:", theFileEntry, theParentDirectoryEntry,
+          theNewName
+        ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        theFileEntry.moveTo( theParentDirectoryEntry, theNewName, function success(
+          theNewFileEntry ) {
+          deferred.resolve( theNewFileEntry );
+        }, function failure( anError ) {
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Remove the file from the file system
+     * @method _removeFile
+     * @private
+     * @param  {FileEntry} theFileEntry The file to remove
+     * @return {Promise}              The Promise
+     */
+    function _removeFile( theFileEntry ) {
+      if ( DEBUG ) {
+        console.log( [ "_removeFile:", theFileEntry ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        theFileEntry.remove( function success() {
+          deferred.resolve();
+        }, function failure( anError ) {
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Copies a directory to the specified directory, with an optional new name. The directory
+     * is copied recursively.
+     * @method _copyDirectory
+     * @private
+     * @param  {DirectoryEntry} theDirectoryEntry       The directory to copy
+     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the first directory to
+     * @param  {String} theNewName              The optional new name for the directory
+     * @return {Promise}                         A promise
+     */
+    function _copyDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
+      if ( DEBUG ) {
+        console.log( [ "_copyDirectory:", theDirectoryEntry,
+          theParentDirectoryEntry,
+          theNewName
+        ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, function success(
+          theNewDirectoryEntry ) {
+          deferred.resolve( theNewDirectoryEntry );
+        }, function failure( anError ) {
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Moves a directory to the specified directory, with an optional new name. The directory
+     * is moved recursively.
+     * @method _moveDirectory
+     * @private
+     * @param  {DirectoryEntry} theDirectoryEntry       The directory to move
+     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the first directory to
+     * @param  {String} theNewName              The optional new name for the directory
+     * @return {Promise}                         A promise
+     */
+    function _moveDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
+      if ( DEBUG ) {
+        console.log( [ "_moveDirectory:", theDirectoryEntry,
+          theParentDirectoryEntry,
+          theNewName
+        ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, function success(
+          theNewDirectoryEntry ) {
+          deferred.resolve( theNewDirectoryEntry );
+        }, function failure( anError ) {
+          deferred.reject( anError );
+        } );
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Removes a directory from the file system. If recursively is true, the directory is removed
+     * recursively.
+     * @method _removeDirectory
+     * @private
+     * @param  {DirectoryEntry} theDirectoryEntry The directory to remove
+     * @param  {Boolean} recursively       If true, remove recursively
+     * @return {Promise}                   The Promise
+     */
+    function _removeDirectory( theDirectoryEntry, recursively ) {
+      if ( DEBUG ) {
+        console.log( [ "_removeDirectory:", theDirectoryEntry, "recursively",
+          recursively
+        ].join( " " ) )
+      }
+      var deferred = Q.defer();
+      try {
+        if ( !recursively ) {
+          theDirectoryEntry.remove( function success() {
+            deferred.resolve();
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } else {
+          theDirectoryEntry.removeRecursively( function success() {
+            deferred.resolve();
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        }
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
+    }
+    /**
+     * Reads the contents of a directory
+     * @method _readDirectoryContents
+     * @private
+     * @param  {DirectoryEntry} theDirectoryEntry The directory to list
+     * @return {Promise}                   The promise
+     */
+    function _readDirectoryContents( theDirectoryEntry ) {
+      if ( DEBUG ) {
+        console.log( [ "_readDirectoryContents:", theDirectoryEntry ].join( " " ) )
+      }
 
       function readEntries() {
         directoryReader.readEntries( function success( theEntries ) {
           if ( !theEntries.length ) {
             deferred.resolve( entries );
           } else {
-            entries = entries.concat( Array.prototype.slice.call( theEntries || [], 0 ) );
+            entries = entries.concat( Array.prototype.slice.call( theEntries || [],
+              0 ) );
             readEntries();
           }
         }, function failure( anError ) {
           deferred.reject( anError );
         } );
       }
-      readEntries();
-    } catch ( anError ) {
-      deferred.reject( anError );
+      var deferred = Q.defer();
+      try {
+        var directoryReader = theDirectoryEntry.createReader();
+        var entries = [];
+        readEntries();
+      } catch ( anError ) {
+        deferred.reject( anError );
+      }
+      return deferred.promise;
     }
-    return deferred.promise;
-  }
-  var _className = "UTIL.FileManager";
-  var FileManager = function() {
-    var self;
-    var hasBaseObject = ( typeof BaseObject !== "undefined" );
-    if ( hasBaseObject ) {
-      self = new BaseObject();
-      self.subclass( _className );
-      self.registerNotification( "changedCurrentWorkingDirectory" );
-    } else {
-      self = {};
-    }
-    // get the persistent and temporary filesystem constants
-    self.PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.PERSISTENT :
-      window.PERSISTENT;
-    self.TEMPORARY = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.TEMPORARY :
-      window.TEMPORARY;
-    self.FILETYPE = {
-      TEXT: "Text",
-      DATA_URL: "DataURL",
-      BINARY: "BinaryString",
-      ARRAY_BUFFER: "ArrayBuffer"
-    };
-    self.getGlobalDebug = function() {
-      return DEBUG;
-    };
-    self.setGlobalDebug = function( debug ) {
-      DEBUG = debug;
-    };
-    Object.defineProperty( self, "globalDebug", {
-      get: self.getGlobalDebug,
-      set: self.setGlobalDebug,
-      configurable: true
-    } );
     /**
-     * the fileSystemType can either be self.PERSISTENT or self.TEMPORARY, and is only
-     * set during an INIT operation. It cannot be set at any other time.
+     * @class FileManager
      */
-    self._fileSystemType = null; // can only be changed during INIT
-    self.getFileSystemType = function() {
-      return self._fileSystemType;
-    };
-    Object.defineProperty( self, "fileSystemType", {
-      get: self.getFileSystemType,
-      configurable: true
-    } );
-    /**
-     * The requested quota -- stored for future reference, since we ask for it
-     * specifically during an INIT operation. It cannot be changed.
-     */
-    self._requestedQuota = 0; // can only be changed during INIT
-    self.getRequestedQuota = function() {
-      return self._requestedQuota;
-    };
-    Object.defineProperty( self, "requestedQuota", {
-      get: self.getRequestedQuota,
-      configurable: true
-    } );
-    /**
-     * The actual quota obtained from the system. It cannot be changed, and is
-     * only obtained during an INIT.
-     * @type {Number}
-     */
-    self._actualQuota = 0;
-    self.getActualQuota = function() {
-      return self._actualQuota;
-    };
-    Object.defineProperty( self, "actualQuota", {
-      get: self.getActualQuota,
-      configurable: true
-    } );
-    /**
-     * @typedef {{}} FileSystem
-     */
-    /**
-     * The current filesystem -- either the temporary or persistent one; it can't be changed
-     * @type {FileSystem}
-     */
-    self._fileSystem = null;
-    self.getFileSystem = function() {
-      return self._fileSystem;
-    };
-    Object.defineProperty( self, "fileSystem", {
-      get: self.getFileSystem,
-      configurable: true
-    } );
-    /**
-     * Current Working Directory Entry
-     * @type {[type]}
-     */
-    self._root = null;
-    self._cwd = null;
-    self.getCurrentWorkingDirectory = function() {
-      return self._cwd;
-    };
-    self.setCurrentWorkingDirectory = function( theCWD ) {
-      self._cwd = theCWD;
+    var _className = "UTIL.FileManager";
+    var FileManager = function() {
+      var self;
+      // determine if we have a `BaseObject` available or not
+      var hasBaseObject = ( typeof BaseObject !== "undefined" );
       if ( hasBaseObject ) {
-        self.notify( "changedCurrentWorkingDirectory" );
+        // if we do, subclass it
+        self = new BaseObject();
+        self.subclass( _className );
+        self.registerNotification( "changedCurrentWorkingDirectory" );
+      } else {
+        // otherwise, base off {}
+        self = {};
       }
-    };
-    Object.defineProperty( self, "cwd", {
-      get: self.getCurrentWorkingDirectory,
-      set: self.setCurrentWorkingDirectory,
-      configurable: true
-    } );
-    Object.defineProperty( self, "currentWorkingDirectory", {
-      get: self.getCurrentWorkingDirectory,
-      set: self.setCurrentWorkingDirectory,
-      configurable: true
-    } );
-    /**
-     * Current Working Directory stack
-     * @type {Array}
-     */
-    self._cwds = [];
-    /**
-     * Push the current working directory on to the stack
-     */
-    self.pushCurrentWorkingDirectory = function() {
-      self._cwds.push( self._cwd );
-    };
-    /**
-     * Pop the topmost directory on the stack and change to it
-     */
-    self.popCurrentWorkingDirectory = function() {
-      self.setCurrentWorkingDirectory( self._cwds.pop() );
-    };
-    self.resolveLocalFileSystemURL = function( theURI ) {
-      var deferred = Q.defer();
-      _resolveLocalFileSystemURL( theURI ).then( function gotEntry( theEntry ) {
-        deferred.resolve( theEntry );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Returns the file entry for the given path (useful for
-     * getting the full path of a file)
-     */
-    self.getFileEntry = function( theFilePath, options ) {
-      var deferred = Q.defer();
-      _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
-        theFileEntry ) {
-        deferred.resolve( theFileEntry );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Returns the file object for a given file (useful for getting
-     * the size of a file)
-     */
-    self.getFile = function( theFilePath, options ) {
-      return self.getFileEntry( theFilePath, options ).then( _getFileObject );
-    };
-    /**
-     * Returns the directory entry for a given path
-     */
-    self.getDirectoryEntry = function( theDirectoryPath, options ) {
-      var deferred = Q.defer();
-      _getDirectoryEntry( self._cwd, theDirectoryPath, options ).then( function gotDirectoryEntry(
-        theDirectoryEntry ) {
-        deferred.resolve( theDirectoryEntry );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * returns the URL for a given file
-     */
-    self.getFileURL = function( theFilePath, options ) {
-      var deferred = Q.defer();
-      _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
-        theFileEntry ) {
-        deferred.resolve( theFileEntry.toURL() );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Returns a URL for the given directory
-     */
-    self.getDirectoryURL = function( thePath, options ) {
-      var deferred = Q.defer();
-      _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry(
-        theDirectoryEntry ) {
-        deferred.resolve( theDirectoryEntry.toURL() );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    self.getNativeURL = function( theEntry ) {
-      var thePath = theEntry;
-      if ( typeof theEntry !== "string" ) {
-        thePath = theEntry.fullPath();
+      // get the persistent and temporary filesystem constants
+      self.PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ?
+        LocalFileSystem.PERSISTENT : window.PERSISTENT;
+      self.TEMPORARY = ( typeof LocalFileSystem !== "undefined" ) ?
+        LocalFileSystem.TEMPORARY : window.TEMPORARY;
+      // determine the various file types we support
+      self.FILETYPE = {
+        TEXT: "Text",
+        DATA_URL: "DataURL",
+        BINARY: "BinaryString",
+        ARRAY_BUFFER: "ArrayBuffer"
+      };
+      /**
+       * Returns the value of the global `DEBUG` variable.
+       * @method getGlobalDebug
+       * @returns {Boolean}
+       */
+      self.getGlobalDebug = function() {
+        return DEBUG;
+      };
+      /**
+       * Sets the global DEBUG variable. If `true`, debug messages are logged to the console.
+       * @method setGlobalDebug
+       * @param {Boolean} debug
+       */
+      self.setGlobalDebug = function( debug ) {
+        DEBUG = debug;
+      };
+      /**
+       * @property globalDebug
+       * @type {Boolean} If `true`, logs messages to console as operations occur.
+       */
+      Object.defineProperty( self, "globalDebug", {
+        get: self.getGlobalDebug,
+        set: self.setGlobalDebug,
+        configurable: true
+      } );
+      /**
+       * the fileSystemType can either be `self.PERSISTENT` or `self.TEMPORARY`, and is only
+       * set during an `init` operation. It cannot be set at any other time.
+       * @property fileSystemType
+       * @type {FileSystem}
+       */
+      self._fileSystemType = null; // can only be changed during INIT
+      self.getFileSystemType = function() {
+        return self._fileSystemType;
+      };
+      Object.defineProperty( self, "fileSystemType", {
+        get: self.getFileSystemType,
+        configurable: true
+      } );
+      /**
+       * The requested quota -- stored for future reference, since we ask for it
+       * specifically during an `init` operation. It cannot be changed.
+       * @property requestedQuota
+       * @type {Number}
+       */
+      self._requestedQuota = 0; // can only be changed during INIT
+      self.getRequestedQuota = function() {
+        return self._requestedQuota;
+      };
+      Object.defineProperty( self, "requestedQuota", {
+        get: self.getRequestedQuota,
+        configurable: true
+      } );
+      /**
+       * The actual quota obtained from the system. It cannot be changed, and is
+       * only obtained during `init`. The result does not have to match the
+       * `requestedQuota`. If it doesn't match, it may be representative of the
+       * actual space available, depending on the platform
+       * @property actualQuota
+       * @type {Number}
+       */
+      self._actualQuota = 0;
+      self.getActualQuota = function() {
+        return self._actualQuota;
+      };
+      Object.defineProperty( self, "actualQuota", {
+        get: self.getActualQuota,
+        configurable: true
+      } );
+      /**
+       * @typedef {{}} FileSystem
+       * HTML5 File API File System
+       */
+      /**
+       * The current filesystem -- either the temporary or persistent one; it can't be changed
+       * @property fileSystem
+       * @type {FileSystem}
+       */
+      self._fileSystem = null;
+      self.getFileSystem = function() {
+        return self._fileSystem;
+      };
+      Object.defineProperty( self, "fileSystem", {
+        get: self.getFileSystem,
+        configurable: true
+      } );
+      /**
+       * Current Working Directory Entry
+       * @property cwd
+       * @type {DirectoryEntry}
+       */
+      self._root = null;
+      self._cwd = null;
+      self.getCurrentWorkingDirectory = function() {
+        return self._cwd;
+      };
+      self.setCurrentWorkingDirectory = function( theCWD ) {
+        self._cwd = theCWD;
+        if ( hasBaseObject ) {
+          self.notify( "changedCurrentWorkingDirectory" );
+        }
+      };
+      Object.defineProperty( self, "cwd", {
+        get: self.getCurrentWorkingDirectory,
+        set: self.setCurrentWorkingDirectory,
+        configurable: true
+      } );
+      Object.defineProperty( self, "currentWorkingDirectory", {
+        get: self.getCurrentWorkingDirectory,
+        set: self.setCurrentWorkingDirectory,
+        configurable: true
+      } );
+      /**
+       * Current Working Directory stack
+       * @property _cwds
+       * @private
+       * @type {Array}
+       */
+      self._cwds = [];
+      /**
+       * Push the current working directory on to the stack
+       * @method pushCurrentWorkingDirectory
+       */
+      self.pushCurrentWorkingDirectory = function() {
+        self._cwds.push( self._cwd );
+      };
+      /**
+       * Pop the topmost directory on the stack and change to it
+       * @method popCurrentWorkingDirectory
+       */
+      self.popCurrentWorkingDirectory = function() {
+        self.setCurrentWorkingDirectory( self._cwds.pop() );
+      };
+      /**
+       * Resolves a URL to a local file system. If the URL scheme is not present, `file`
+       * is assumed.
+       * @param {String} theURI The URI to resolve
+       */
+      self.resolveLocalFileSystemURL = function( theURI ) {
+        var deferred = Q.defer();
+        _resolveLocalFileSystemURL( theURI ).then( function gotEntry( theEntry ) {
+          deferred.resolve( theEntry );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Returns the file entry for the given path (useful for
+       * getting the full path of a file). `options` is of the
+       * form `{create: true/false, exclusive: true/false}`
+       * @method getFileEntry
+       * @param {String} theFilePath The file path or FileEntry object
+       * @param {*} options creation options
+       */
+      self.getFileEntry = function( theFilePath, options ) {
+        var deferred = Q.defer();
+        _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
+          theFileEntry ) {
+          deferred.resolve( theFileEntry );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Returns the file object for a given file (useful for getting
+       * the size of a file); `option` is of the form `{create: true/false, exclusive: true/false}`
+       * @method getFile
+       * @param {String} theFilePath
+       * @param {*} option
+       */
+      self.getFile = function( theFilePath, options ) {
+        return self.getFileEntry( theFilePath, options ).then( _getFileObject );
+      };
+      /**
+       * Returns the directory entry for a given path
+       * @method getDirectoryEntry
+       * @param {String} theDirectoryPath
+       * @param {*} options
+       */
+      self.getDirectoryEntry = function( theDirectoryPath, options ) {
+        var deferred = Q.defer();
+        _getDirectoryEntry( self._cwd, theDirectoryPath, options ).then( function gotDirectoryEntry(
+          theDirectoryEntry ) {
+          deferred.resolve( theDirectoryEntry );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * returns the URL for a given file
+       * @method getFileURL
+       * @param {String} theFilePath
+       * @param {*} options
+       */
+      self.getFileURL = function( theFilePath, options ) {
+        var deferred = Q.defer();
+        _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
+          theFileEntry ) {
+          deferred.resolve( theFileEntry.toURL() );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Returns a URL for the given directory
+       * @method getDirectoryURL
+       * @param {String} thePath
+       * @param {*} options
+       */
+      self.getDirectoryURL = function( thePath, options ) {
+        var deferred = Q.defer();
+        _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry(
+          theDirectoryEntry ) {
+          deferred.resolve( theDirectoryEntry.toURL() );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Returns the native URL for an entry by combining the `fullPath` of the entry
+       * with the `nativeURL` of the `root` directory if absolute or of the `current`
+       * directory if not absolute.
+       * @method getNativeURL
+       * @param {String} theEntry Path of the file or directory; can also be a File/DirectoryEntry
+       */
+      self.getNativeURL = function( theEntry ) {
+        var thePath = theEntry;
+        if ( typeof theEntry !== "string" ) {
+          thePath = theEntry.fullPath();
+        }
+        var isAbsolute = ( thePath.substr( 0, 1 ) === "/" );
+        var theRootPath = isAbsolute ? self._root.nativeURL : self.cwd.nativeURL;
+        return theRootPath + ( isAbsolute ? "" : "/" ) + thePath;
+      };
+      /**
+       * returns the native file path for a given file
+       * @method getNativeFileURL
+       * @param {String} theFilePath
+       * @param {*} options
+       */
+      self.getNativeFileURL = function( theFilePath, options ) {
+        var deferred = Q.defer();
+        _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
+          theFileEntry ) {
+          deferred.resolve( theFileEntry.nativeURL );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Returns a URL for the given directory
+       * @method getNativeDirectoryURL
+       * @param {String} thePath
+       * @param {*} options
+       */
+      self.getNativeDirectoryURL = function( thePath, options ) {
+        var deferred = Q.defer();
+        _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry(
+          theDirectoryEntry ) {
+          deferred.resolve( theDirectoryEntry.nativeURL );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Change to an arbitrary directory
+       * @method changeDirectory
+       * @param  {String} theNewPath The path to the directory, relative to cwd
+       * @return {Promise}            The Promise
+       */
+      self.changeDirectory = function( theNewPath ) {
+        var deferred = Q.defer();
+        _getDirectoryEntry( self._cwd, theNewPath, {} ).then( function gotDirectory(
+          theNewDirectory ) {
+          self.cwd = theNewDirectory;
+        } ).then( function allDone() {
+          deferred.resolve( self );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Read an arbitrary file's contents.
+       * @method readFileContents
+       * @param  {String} theFilePath The path to the file, relative to cwd
+       * @param  {Object} options     The options to use when opening the file (such as creating it)
+       * @param  {String} readAsKind  How to read the file -- best to use self.FILETYPE.TEXT, etc.
+       * @return {Promise}             The Promise
+       */
+      self.readFileContents = function( theFilePath, options, readAsKind ) {
+        var deferred = Q.defer();
+        _getFileEntry( self._cwd, theFilePath, options || {} ).then( function gotTheFileEntry(
+          theFileEntry ) {
+          return _getFileObject( theFileEntry );
+        } ).then( function gotTheFileObject( theFileObject ) {
+          return _readFileContents( theFileObject, readAsKind || "Text" );
+        } ).then( function getTheFileContents( theFileContents ) {
+          deferred.resolve( theFileContents );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Read an arbitrary directory's entries.
+       * @method readDirectoryContents
+       * @param  {String} theDirectoryPath The path to the directory, relative to cwd; "." if not specified
+       * @param  {Object} options          The options to use when opening the directory (such as creating it)
+       * @return {Promise}             The Promise
+       */
+      self.readDirectoryContents = function( theDirectoryPath, options ) {
+        var deferred = Q.defer();
+        _getDirectoryEntry( self._cwd, theDirectoryPath || ".", options || {} ).then(
+          function gotTheDirectoryEntry( theDirectoryEntry ) {
+            return _readDirectoryContents( theDirectoryEntry );
+          } ).then( function gotTheDirectoryEntries( theEntries ) {
+          deferred.resolve( theEntries );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Write data to an arbitrary file
+       * @method writeFileContents
+       * @param  {String} theFilePath The file name to write to, relative to cwd
+       * @param  {Object} options     The options to use when opening the file
+       * @param  {*} theData     The data to write
+       * @return {Promise}             The Promise
+       */
+      self.writeFileContents = function( theFilePath, options, theData ) {
+        var deferred = Q.defer();
+        _getFileEntry( self._cwd, theFilePath, options || {
+          create: true,
+          exclusive: false
+        } ).then( function gotTheFileEntry( theFileEntry ) {
+          return _createFileWriter( theFileEntry );
+        } ).then( function gotTheFileWriter( theFileWriter ) {
+          return _writeFileContents( theFileWriter, theData );
+        } ).then( function allDone() {
+          deferred.resolve( self );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Creates an arbitrary directory
+       * @method createDirectory
+       * @param  {String} theDirectoryPath The path, relative to cwd
+       * @return {Promise}                  The Promise
+       */
+      self.createDirectory = function( theDirectoryPath ) {
+        var deferred = Q.defer();
+        _getDirectoryEntry( self._cwd, theDirectoryPath, {
+          create: true,
+          exclusive: false
+        } ).then( function gotDirectory( theNewDirectory ) {
+          deferred.resolve( theNewDirectory );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Copies a file to a new directory, with an optional new name
+       * @method copyFile
+       * @param  {String} sourceFilePath      Path to file, relative to cwd
+       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+       * @param  {String} withNewName         New name, if desired
+       * @return {Promise}                     The Promise
+       */
+      self.copyFile = function( sourceFilePath, targetDirectoryPath, withNewName ) {
+        var deferred = Q.defer();
+        var theFileToCopy;
+        _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry(
+          aFileToCopy ) {
+          theFileToCopy = aFileToCopy;
+          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+        } ).then( function gotDirectoryEntry( theTargetDirectory ) {
+          return _copyFile( theFileToCopy, theTargetDirectory, withNewName );
+        } ).then( function allDone( theNewFileEntry ) {
+          deferred.resolve( theNewFileEntry );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Copies a directory to a new directory, with an optional new name
+       * @method copyDirectory
+       * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
+       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+       * @param  {String} withNewName         New name, if desired
+       * @return {Promise}                     The Promise
+       */
+      self.copyDirectory = function( sourceDirectoryPath, targetDirectoryPath,
+        withNewName ) {
+        var deferred = Q.defer();
+        var theDirectoryToCopy;
+        _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
+          sourceDirectoryEntry ) {
+          theDirectoryToCopy = sourceDirectoryEntry;
+          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+        } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
+          return _copyDirectory( theDirectoryToCopy, theTargetDirectory,
+            withNewName );
+        } ).then( function allDone( theNewDirectoryEntry ) {
+          deferred.resolve( theNewDirectoryEntry );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * @method moveFile
+       * Moves a file to a new directory, with an optional new name
+       * @param  {String} sourceFilePath      Path to file, relative to cwd
+       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+       * @param  {String} withNewName         New name, if desired
+       * @return {Promise}                     The Promise
+       */
+      self.moveFile = function( sourceFilePath, targetDirectoryPath, withNewName ) {
+        var deferred = Q.defer();
+        var theFileToMove;
+        _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry(
+          aFileToMove ) {
+          theFileToMove = aFileToMove;
+          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+        } ).then( function gotDirectoryEntry( theTargetDirectory ) {
+          return _moveFile( theFileToMove, theTargetDirectory, withNewName );
+        } ).then( function allDone( theNewFileEntry ) {
+          deferred.resolve( theNewFileEntry );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Moves a directory to a new directory, with an optional new name
+       * @method moveDirectory
+       * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
+       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+       * @param  {String} withNewName         New name, if desired
+       * @return {Promise}                     The Promise
+       */
+      self.moveDirectory = function( sourceDirectoryPath, targetDirectoryPath,
+        withNewName ) {
+        var deferred = Q.defer();
+        var theDirectoryToMove;
+        _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
+          sourceDirectoryEntry ) {
+          theDirectoryToMove = sourceDirectoryEntry;
+          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+        } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
+          return _moveDirectory( theDirectoryToMove, theTargetDirectory,
+            withNewName );
+        } ).then( function allDone( theNewDirectoryEntry ) {
+          deferred.resolve( theNewDirectoryEntry );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Renames a file to a new name, in the cwd
+       * @method renameFile
+       * @param  {String} sourceFilePath      Path to file, relative to cwd
+       * @param  {String} withNewName         New name
+       * @return {Promise}                     The Promise
+       */
+      self.renameFile = function( sourceFilePath, withNewName ) {
+        return self.moveFile( sourceFilePath, ".", withNewName );
+      };
+      /**
+       * Renames a directory to a new name, in the cwd
+       * @method renameDirectory
+       * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
+       * @param  {String} withNewName         New name
+       * @return {Promise}                     The Promise
+       */
+      self.renameDirectory = function( sourceDirectoryPath, withNewName ) {
+        return self.moveDirectory( sourceDirectoryPath, ".", withNewName );
+      };
+      /**
+       * Deletes a file
+       * @method deleteFile
+       * @param  {String} theFilePath Path to file, relative to cwd
+       * @return {Promise}             The Promise
+       */
+      self.deleteFile = function( theFilePath ) {
+        var deferred = Q.defer();
+        _getFileEntry( self._cwd, theFilePath, {} ).then( function gotTheFileToDelete(
+          theFileEntry ) {
+          return _removeFile( theFileEntry );
+        } ).then( function allDone() {
+          deferred.resolve( self );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Removes a directory, possibly recursively
+       * @method removeDirectory
+       * @param  {String} theDirectoryPath path to directory, relative to cwd
+       * @param  {Boolean} recursively      If true, recursive remove
+       * @return {Promise}                  The promise
+       */
+      self.removeDirectory = function( theDirectoryPath, recursively ) {
+        var deferred = Q.defer();
+        _getDirectoryEntry( self._cwd, theDirectoryPath, {} ).then( function gotTheDirectoryToDelete(
+          theDirectoryEntry ) {
+          return _removeDirectory( theDirectoryEntry, recursively );
+        } ).then( function allDone() {
+          deferred.resolve( self );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      /**
+       * Asks the browser for the requested quota, and then requests the file system
+       * and sets the cwd to the root directory.
+       * @method _initializeFileSystem
+       * @private
+       * @return {Promise} The promise
+       */
+      self._initializeFileSystem = function() {
+        var deferred = Q.defer();
+        _requestQuota( self.fileSystemType, self.requestedQuota ).then( function gotQuota(
+          theQuota ) {
+          self._actualQuota = theQuota;
+          return _requestFileSystem( self.fileSystemType, self.actualQuota );
+        } ).then( function gotFS( theFS ) {
+          self._fileSystem = theFS;
+          //self._cwd = theFS.root;
+          return _getDirectoryEntry( theFS.root, "", {} );
+        } ).then( function gotRootDirectory( theRootDirectory ) {
+          self._root = theRootDirectory;
+          self._cwd = theRootDirectory;
+        } ).then( function allDone() {
+          deferred.resolve( self );
+        } ).catch( function( anError ) {
+          deferred.reject( anError );
+        } ).done();
+        return deferred.promise;
+      };
+      if ( self.overrideSuper ) {
+        self.overrideSuper( self.class, "init", self.init );
       }
-      var isAbsolute = ( thePath.substr( 0, 1 ) === "/" );
-      var theRootPath = isAbsolute ? self._root.nativeURL : self.cwd.nativeURL;
-      return theRootPath + ( isAbsolute ? "" : "/" ) + thePath;
+      /**
+       * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
+       * and requested quota size. Both must be specified.
+       * @method init
+       * @param {FileSystem} fileSystemType
+       * @param {Number} requestedQuota
+       */
+      self.init = function( fileSystemType, requestedQuota ) {
+        if ( self.super ) {
+          self.super( _className, "init" );
+        }
+        if ( typeof fileSystemType === "undefined" ) {
+          throw new Error(
+            "No file system type specified; specify PERSISTENT or TEMPORARY." );
+        }
+        if ( typeof requestedQuota === "undefined" ) {
+          throw new Error( "No quota requested. If you don't know, specify ZERO." );
+        }
+        self._requestedQuota = requestedQuota;
+        self._fileSystemType = fileSystemType;
+        return self._initializeFileSystem(); // this returns a promise, so we can .then after.
+      };
+      /**
+       * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
+       * and requested quota size. Both must be specified.
+       * @method initWithOptions
+       * @param {*} options
+       */
+      self.initWithOptions = function( options ) {
+        if ( typeof options === "undefined" ) {
+          throw new Error( "No options specified. Need type and quota." );
+        }
+        if ( typeof options.fileSystemType === "undefined" ) {
+          throw new Error(
+            "No file system type specified; specify PERSISTENT or TEMPORARY." );
+        }
+        if ( typeof options.requestedQuota === "undefined" ) {
+          throw new Error( "No quota requested. If you don't know, specify ZERO." );
+        }
+        return self.init( options.fileSystemType, options.requestedQuota );
+      };
+      return self;
     };
-    /**
-     * returns the native file path for a given file
-     */
-    self.getNativeFileURL = function( theFilePath, options ) {
-      var deferred = Q.defer();
-      _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
-        theFileEntry ) {
-        deferred.resolve( theFileEntry.nativeURL );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
+    // meta information
+    FileManager.meta = {
+      version: '00.04.450',
+      class: _className,
+      autoInitializable: false,
+      categorizable: false
     };
-    /**
-     * Returns a URL for the given directory
-     */
-    self.getNativeDirectoryURL = function( thePath, options ) {
-      var deferred = Q.defer();
-      _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry(
-        theDirectoryEntry ) {
-        deferred.resolve( theDirectoryEntry.nativeURL );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Change to an arbitrary directory
-     * @param  {String} theNewPath The path to the directory, relative to cwd
-     * @return {Promise}            The Promise
-     */
-    self.changeDirectory = function( theNewPath ) {
-      var deferred = Q.defer();
-      _getDirectoryEntry( self._cwd, theNewPath, {} ).then( function gotDirectory(
-        theNewDirectory ) {
-        self.cwd = theNewDirectory;
-      } ).then( function allDone() {
-        deferred.resolve( self );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Read an arbitrary file's contents.
-     * @param  {String} theFilePath The path to the file, relative to cwd
-     * @param  {Object} options     The options to use when opening the file (such as creating it)
-     * @param  {String} readAsKind  How to read the file -- best to use self.FILETYPE.TEXT, etc.
-     * @return {Promise}             The Promise
-     */
-    self.readFileContents = function( theFilePath, options, readAsKind ) {
-      var deferred = Q.defer();
-      _getFileEntry( self._cwd, theFilePath, options || {} ).then( function gotTheFileEntry(
-        theFileEntry ) {
-        return _getFileObject( theFileEntry );
-      } ).then( function gotTheFileObject( theFileObject ) {
-        return _readFileContents( theFileObject, readAsKind || "Text" );
-      } ).then( function getTheFileContents( theFileContents ) {
-        deferred.resolve( theFileContents );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Read an arbitrary directory's entries.
-     * @param  {String} theDirectoryPath The path to the directory, relative to cwd; "." if not specified
-     * @param  {Object} options          The options to use when opening the directory (such as creating it)
-     * @return {Promise}             The Promise
-     */
-    self.readDirectoryContents = function( theDirectoryPath, options ) {
-      var deferred = Q.defer();
-      _getDirectoryEntry( self._cwd, theDirectoryPath || ".", options || {} ).then(
-        function gotTheDirectoryEntry( theDirectoryEntry ) {
-          return _readDirectoryContents( theDirectoryEntry );
-        } ).then( function gotTheDirectoryEntries( theEntries ) {
-        deferred.resolve( theEntries );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Write data to an arbitrary file
-     * @param  {String} theFilePath The file name to write to, relative to cwd
-     * @param  {Object} options     The options to use when opening the file
-     * @param  {*} theData     The data to write
-     * @return {Promise}             The Promise
-     */
-    self.writeFileContents = function( theFilePath, options, theData ) {
-      var deferred = Q.defer();
-      _getFileEntry( self._cwd, theFilePath, options || {
-        create: true,
-        exclusive: false
-      } ).then( function gotTheFileEntry( theFileEntry ) {
-        return _createFileWriter( theFileEntry );
-      } ).then( function gotTheFileWriter( theFileWriter ) {
-        return _writeFileContents( theFileWriter, theData );
-      } ).then( function allDone() {
-        deferred.resolve( self );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Creates an arbitrary directory
-     * @param  {String} theDirectoryPath The path, relative to cwd
-     * @return {Promise}                  The Promise
-     */
-    self.createDirectory = function( theDirectoryPath ) {
-      var deferred = Q.defer();
-      _getDirectoryEntry( self._cwd, theDirectoryPath, {
-        create: true,
-        exclusive: false
-      } ).then( function gotDirectory( theNewDirectory ) {
-        deferred.resolve( theNewDirectory );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Copies a file to a new directory, with an optional new name
-     * @param  {String} sourceFilePath      Path to file, relative to cwd
-     * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-     * @param  {String} withNewName         New name, if desired
-     * @return {Promise}                     The Promise
-     */
-    self.copyFile = function( sourceFilePath, targetDirectoryPath, withNewName ) {
-      var deferred = Q.defer();
-      var theFileToCopy;
-      _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry(
-        aFileToCopy ) {
-        theFileToCopy = aFileToCopy;
-        return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-      } ).then( function gotDirectoryEntry( theTargetDirectory ) {
-        return _copyFile( theFileToCopy, theTargetDirectory, withNewName );
-      } ).then( function allDone( theNewFileEntry ) {
-        deferred.resolve( theNewFileEntry );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Copies a directory to a new directory, with an optional new name
-     * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
-     * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-     * @param  {String} withNewName         New name, if desired
-     * @return {Promise}                     The Promise
-     */
-    self.copyDirectory = function( sourceDirectoryPath, targetDirectoryPath,
-      withNewName ) {
-      var deferred = Q.defer();
-      var theDirectoryToCopy;
-      _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
-        sourceDirectoryEntry ) {
-        theDirectoryToCopy = sourceDirectoryEntry;
-        return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-      } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
-        return _copyDirectory( theDirectoryToCopy, theTargetDirectory, withNewName );
-      } ).then( function allDone( theNewDirectoryEntry ) {
-        deferred.resolve( theNewDirectoryEntry );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Moves a file to a new directory, with an optional new name
-     * @param  {String} sourceFilePath      Path to file, relative to cwd
-     * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-     * @param  {String} withNewName         New name, if desired
-     * @return {Promise}                     The Promise
-     */
-    self.moveFile = function( sourceFilePath, targetDirectoryPath, withNewName ) {
-      var deferred = Q.defer();
-      var theFileToMove;
-      _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry(
-        aFileToMove ) {
-        theFileToMove = aFileToMove;
-        return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-      } ).then( function gotDirectoryEntry( theTargetDirectory ) {
-        return _moveFile( theFileToMove, theTargetDirectory, withNewName );
-      } ).then( function allDone( theNewFileEntry ) {
-        deferred.resolve( theNewFileEntry );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Moves a directory to a new directory, with an optional new name
-     * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
-     * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-     * @param  {String} withNewName         New name, if desired
-     * @return {Promise}                     The Promise
-     */
-    self.moveDirectory = function( sourceDirectoryPath, targetDirectoryPath,
-      withNewName ) {
-      var deferred = Q.defer();
-      var theDirectoryToMove;
-      _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
-        sourceDirectoryEntry ) {
-        theDirectoryToMove = sourceDirectoryEntry;
-        return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-      } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
-        return _moveDirectory( theDirectoryToMove, theTargetDirectory, withNewName );
-      } ).then( function allDone( theNewDirectoryEntry ) {
-        deferred.resolve( theNewDirectoryEntry );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Renames a file to a new name, in the cwd
-     * @param  {String} sourceFilePath      Path to file, relative to cwd
-     * @param  {String} withNewName         New name
-     * @return {Promise}                     The Promise
-     */
-    self.renameFile = function( sourceFilePath, withNewName ) {
-      return self.moveFile( sourceFilePath, ".", withNewName );
-    };
-    /**
-     * Renames a directory to a new name, in the cwd
-     * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
-     * @param  {String} withNewName         New name
-     * @return {Promise}                     The Promise
-     */
-    self.renameDirectory = function( sourceDirectoryPath, withNewName ) {
-      return self.moveDirectory( sourceDirectoryPath, ".", withNewName );
-    };
-    /**
-     * Deletes a file
-     * @param  {String} theFilePath Path to file, relative to cwd
-     * @return {Promise}             The Promise
-     */
-    self.deleteFile = function( theFilePath ) {
-      var deferred = Q.defer();
-      _getFileEntry( self._cwd, theFilePath, {} ).then( function gotTheFileToDelete(
-        theFileEntry ) {
-        return _removeFile( theFileEntry );
-      } ).then( function allDone() {
-        deferred.resolve( self );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Removes a directory, possibly recursively
-     * @param  {String} theDirectoryPath path to directory, relative to cwd
-     * @param  {Boolean} recursively      If true, recursive remove
-     * @return {Promise}                  The promise
-     */
-    self.removeDirectory = function( theDirectoryPath, recursively ) {
-      var deferred = Q.defer();
-      _getDirectoryEntry( self._cwd, theDirectoryPath, {} ).then( function gotTheDirectoryToDelete(
-        theDirectoryEntry ) {
-        return _removeDirectory( theDirectoryEntry, recursively );
-      } ).then( function allDone() {
-        deferred.resolve( self );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Asks the browser for the requested quota, and then requests the file system
-     * and sets the cwd to the root directory.
-     * @return {Promise} The promise
-     */
-    self._initializeFileSystem = function() {
-      var deferred = Q.defer();
-      _requestQuota( self.fileSystemType, self.requestedQuota ).then( function gotQuota(
-        theQuota ) {
-        self._actualQuota = theQuota;
-        return _requestFileSystem( self.fileSystemType, self.actualQuota );
-      } ).then( function gotFS( theFS ) {
-        self._fileSystem = theFS;
-        //self._cwd = theFS.root;
-        return _getDirectoryEntry( theFS.root, "", {} );
-      } ).then( function gotRootDirectory( theRootDirectory ) {
-        self._root = theRootDirectory;
-        self._cwd = theRootDirectory;
-      } ).then( function allDone() {
-        deferred.resolve( self );
-      } ).catch( function( anError ) {
-        deferred.reject( anError );
-      } ).done();
-      return deferred.promise;
-    };
-    /**
-     * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
-     * and requested quota size. Both must be specified.
-     */
-    if ( self.overrideSuper ) {
-      self.overrideSuper( self.class, "init", self.init );
+    // assign to `window` if stand-alone
+    if ( window ) {
+      window.FileManager = FileManager
     }
-    self.init = function( fileSystemType, requestedQuota ) {
-      if ( self.super ) {
-        self.super( _className, "init" );
-      }
-      // we need both:
-      if ( typeof fileSystemType === "undefined" ) {
-        throw new Error(
-          "No file system type specified; specify PERSISTENT or TEMPORARY." );
-      }
-      if ( typeof requestedQuota === "undefined" ) {
-        throw new Error( "No quota requested. If you don't know, specify ZERO." );
-      }
-      self._requestedQuota = requestedQuota;
-      self._fileSystemType = fileSystemType;
-      return self._initializeFileSystem(); // this returns a promise, so we can .then after.
-    };
-    /**
-     * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
-     * and requested quota size. Both must be specified.
-     */
-    self.initWithOptions = function( options ) {
-      if ( typeof options === "undefined" ) {
-        throw new Error( "No options specified. Need type and quota." );
-      }
-      if ( typeof options.fileSystemType === "undefined" ) {
-        throw new Error(
-          "No file system type specified; specify PERSISTENT or TEMPORARY." );
-      }
-      if ( typeof options.requestedQuota === "undefined" ) {
-        throw new Error( "No quota requested. If you don't know, specify ZERO." );
-      }
-      return self.init( options.fileSystemType, options.requestedQuota );
-    };
-    return self;
-  };
-  FileManager.meta = {
-    version: '00.04.450',
-    class: _className,
-    autoInitializable: false,
-    categorizable: false
-  };
-  return FileManager;
+    // return factory
+    return FileManager;
+  } )( Q, BaseObject, ( typeof IN_YASMF !== "undefined" ) ? undefined : window );
 } );
 
 /**
  *
  * Core of YASMF-UI; defines the version and basic UI  convenience methods.
  *
- * core.js
  * @module core.js
  * @author Kerri Shotts
  * @version 0.4
- *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -5156,6 +5363,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -5587,10 +5795,10 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
  *
  * Basic cross-platform mobile Event Handling for YASMF
  *
- * events.js
+ * @module events.js
  * @author Kerri Shotts
  * @version 0.4
- *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -5606,6 +5814,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -5773,10 +5982,11 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
  * View Containers are simple objects that provide very basic view management with
  * a thin layer over the corresponding DOM element.
  *
- * viewContainer.js
+ * @module viewContainer.js
  * @author Kerri Shotts
  * @version 0.4
  *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -5792,6 +6002,7 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -5815,172 +6026,255 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
 define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function( BaseObject ) {
   var _className = "ViewContainer";
   var ViewContainer = function() {
-    var self = new BaseObject();
-    self.subclass( _className );
-    self.registerNotification( "viewWasPushed" );
-    self.registerNotification( "viewWasPopped" );
-    self.registerNotification( "viewWillAppear" );
-    self.registerNotification( "viewWillDisappear" );
-    self.registerNotification( "viewDidAppear" );
-    self.registerNotification( "viewDidDisappear" );
-    self._element = null;
-    self._elementClass = "ui-container";
-    self._elementId = null;
-    self._elementTag = "div";
-    self._parentElement = null;
-    self.defineObservableProperty( "title" );
-    self.createElement = function() {
-      self._element = document.createElement( self._elementTag );
-      if ( self.elementClass !== null ) {
-        self._element.className = self.elementClass;
+      var self = new BaseObject();
+      self.subclass( _className );
+      // # Notifications
+      // * `viewWasPushed` is fired by a containing `ViewController` when the view is added
+      //   to the view stack
+      // * `viewWasPopped` is fired by a container when the view is removed from the view stack
+      // * `viewWillAppear` is fired by a container when the view is about to appear (one should avoid
+      //   any significant DOM changes or calculations during this time, or animations may stutter)
+      // * `viewWillDisappear` is fired by a container when the view is about to disappear
+      // * `viewDidAppear` is fired by a container when the view is on screen.
+      // * `viewDidDisappear` is fired by a container when the view is off screen.
+      self.registerNotification( "viewWasPushed" );
+      self.registerNotification( "viewWasPopped" );
+      self.registerNotification( "viewWillAppear" );
+      self.registerNotification( "viewWillDisappear" );
+      self.registerNotification( "viewDidAppear" );
+      self.registerNotification( "viewDidDisappear" );
+      // private properties used to manage the corresponding DOM element
+      self._element = null;
+      self._elementClass = "ui-container"; // default; can be changed to any class for styling purposes
+      self._elementId = null; // bad design decision -- probably going to mark this as deprecated soon
+      self._elementTag = "div"; // some elements might need to be something other than a DIV
+      self._parentElement = null; // owning element
+      /**
+       * The title isn't displayed anywhere (unless you use it yourself in `renderToElement`, but
+       * is useful for containers that want to know the title of their views.
+       * @property title
+       * @type {String}
+       * @observable
+       */
+      self.defineObservableProperty( "title" );
+      /**
+       * Creates the internal elements.
+       * @method createElement
+       */
+      self.createElement = function() {
+        self._element = document.createElement( self._elementTag );
+        if ( self.elementClass !== null ) {
+          self._element.className = self.elementClass;
+        }
+        if ( self.elementId !== null ) {
+          self._element.id = self.elementId;
+        }
       }
-      if ( self.elementId !== null ) {
-        self._element.id = self.elementId;
+      /**
+       * Creates the internal elements if necessary (that is, if they aren't already in existence)
+       * @method createElementIfNotCreated
+       */
+      self.createElementIfNotCreated = function() {
+        if ( self._element === null ) {
+          self.createElement();
+        }
       }
-    }
-    self.createElementIfNotCreated = function() {
-      if ( self._element === null ) {
-        self.createElement();
+      /**
+       * The `element` property allow direct access to the DOM element backing the view
+       * @property element
+       * @type {DOMElement}
+       */
+      self.getElement = function() {
+        self.createElementIfNotCreated();
+        return self._element;
       }
-    }
-    self.getElement = function() {
-      self.createElementIfNotCreated();
-      return self._element;
-    }
-    self.setElement = function( theElement ) {
-      self._element = theElement;
-    }
-    Object.defineProperty( self, "element", {
-      get: self.getElement,
-      set: self.setElement,
-      configurable: true
-    } );
-    self.getElementClass = function() {
-      return self._elementClass;
-    }
-    self.setElementClass = function( theClassName ) {
-      self._elementClass = theClassName;
-      if ( self._element !== null ) {
-        self._element.className = theClassName;
+      self.defineProperty( "element", {
+        read: true,
+        write: true,
+        default: null
+      } );
+      /**
+       * The `elementClass` property indicates the class of the DOM element. Changing
+       * the class will alter the backing DOM element if created.
+       * @property elementClass
+       * @type {String}
+       * @default "ui-container"
+       */
+      self.setElementClass = function( theClassName ) {
+        self._elementClass = theClassName;
+        if ( self._element !== null ) {
+          self._element.className = theClassName;
+        }
       }
-    }
-    Object.defineProperty( self, "elementClass", {
-      get: self.getElementClass,
-      set: self.setElementClass,
-      configurable: true
-    } );
-    self.getElementId = function() {
-      return self._elementId;
-    }
-    self.setElementId = function( theElementId ) {
-      self._elementId = theElementId;
-      if ( self._element !== null ) {
-        self._element.id = theElementId;
+      self.defineProperty( "elementClass", {
+        read: true,
+        write: true,
+        default: "ui-container"
+      } );
+      /**
+       * Determines the `id` for the backing DOM element. Not the best choice to
+       * use, since this must be unique within the DOM. Probably going to become
+       * deprecated eventually
+       */
+      self.setElementId = function( theElementId ) {
+        self._elementId = theElementId;
+        if ( self._element !== null ) {
+          self._element.id = theElementId;
+        }
       }
-    }
-    Object.defineProperty( self, "elementId", {
-      get: self.getElementId,
-      set: self.setElementId,
-      configurable: true
-    } );
-    self.getElementTag = function() {
-      return self._elementTag;
-    }
-    self.setElementTag = function( theTagName ) {
-      self._elementTag = theTagName;
-    }
-    Object.defineProperty( self, "elementTag", {
-      get: self.getElementTag,
-      set: self.setElementTag,
-      configurable: true
-    } );
-    self.getParentElement = function() {
-      return self._parentElement;
-    }
-    self.setParentElement = function( theParentElement ) {
-      if ( self._parentElement !== null && self._element !== null ) {
-        // remove ourselves from the existing parent element first
-        self._parentElement.removeChild( self._element );
-        self._parentElement = null;
+      self.defineProperty( "elementId", {
+        read: true,
+        write: true,
+        default: null
+      } );
+      /**
+       * Determines the type of DOM Element; by default this is a DIV.
+       * @property elementTag
+       * @type {String}
+       * @default "div"
+       */
+      self.defineProperty( "elementTag", {
+        read: true,
+        write: true,
+        default: "div"
+      } );
+      /**
+       * Indicates the parent element, if it exists. This is a DOM element
+       * that owns this view (parent -> child). Changing the parent removes
+       * this element from the parent and reparents to another element.
+       * @property parentElement
+       * @type {DOMElement}
+       */
+      self.setParentElement = function( theParentElement ) {
+        if ( self._parentElement !== null && self._element !== null ) {
+          // remove ourselves from the existing parent element first
+          self._parentElement.removeChild( self._element );
+          self._parentElement = null;
+        }
+        self._parentElement = theParentElement;
+        if ( self._parentElement !== null && self._element !== null ) {
+          self._parentElement.appendChild( self._element );
+        }
       }
-      self._parentElement = theParentElement;
-      if ( self._parentElement !== null && self._element !== null ) {
-        self._parentElement.appendChild( self._element );
+      self.defineProperty( "parentElement", {
+        read: true,
+        write: true,
+        default: null
+      } );
+      /**
+       * @method render
+       * @return {String|DOMElement|DocumentFragment}
+       * `render` is called by `renderToElement`. The idea behind this is to generate
+       * a return value consisting of the DOM tree necessary to create the view's
+       * contents.
+       **/
+      self.render = function() {
+        // right now, this doesn't do anything, but it's here for inheritance purposes
+        return "Error: Abstract Method";
       }
-    }
-    Object.defineProperty( self, "parentElement", {
-      get: self.getParentElement,
-      set: self.setParentElement,
-      configurable: true
-    } );
-    self.render = function() {
-      // right now, this doesn't do anything, but it's here for inheritance purposes
-      return "Error: Abstract Method";
-    }
-    self.renderToElement = function() {
-      self.element.innerHTML = self.render();
-    }
-    self.overrideSuper( self.class, "init", self.init );
-    self.init = function( theElementId, theElementTag, theElementClass,
-      theParentElement ) {
-      self.super( _className, "init" ); // super has no parameters
-      // set our Id, Tag, and Class
-      if ( typeof theElementId !== "undefined" ) {
-        self.elementId = theElementId;
+      /**
+       * Renders the content of the view. Can be called more than once, but more
+       * often is called once during `init`. Calls `render` immediately and
+       * assigns it to `element`'s `innerHTML` -- this implicitly creates the
+       * DOM elements backing the view if they weren't already created.
+       * @method renderToElement
+       */
+      self.renderToElement = function() {
+        var renderOutput = self.render();
+        if ( typeof renderOutput === "string" ) {
+          self.element.innerHTML = self.render();
+        } else if ( typeof renderOutput === "object" ) {
+          self.element.innerHTML = "";
+          self.element.appendChild( renderOutput );
+        }
       }
-      if ( typeof theElementTag !== "undefined" ) {
-        self.elementTag = theElementTag;
-      }
-      if ( typeof theElementClass !== "undefined" ) {
-        self.elementClass = theElementClass;
-      }
-      // render ourselves to the element (via render); this implicitly creates the element
-      // with the above properties.
-      self.renderToElement();
-      // add ourselves to our parent.
-      if ( typeof theParentElement !== "undefined" ) {
-        self.parentElement = theParentElement;
-      }
+      /**
+       * Initializes the view container; returns `self`
+       * @method init
+       * @param {String} [theElementId]
+       * @param {String} [theElementTag]
+       * @param {String} [theElementClass]
+       * @param {DOMElement} [theParentElement]
+       * @returns {Object}
+       */
+      self.override( function init( theElementId, theElementTag, theElementClass,
+        theParentElement ) {
+        self.super( _className, "init" ); // super has no parameters
+        // set our Id, Tag, and Class
+        if ( typeof theElementId !== "undefined" ) {
+          self.elementId = theElementId;
+        }
+        if ( typeof theElementTag !== "undefined" ) {
+          self.elementTag = theElementTag;
+        }
+        if ( typeof theElementClass !== "undefined" ) {
+          self.elementClass = theElementClass;
+        }
+        // render ourselves to the element (via render); this implicitly creates the element
+        // with the above properties.
+        self.renderToElement();
+        // add ourselves to our parent.
+        if ( typeof theParentElement !== "undefined" ) {
+          self.parentElement = theParentElement;
+        }
+        return self;
+      } );
+      /**
+       * Initializes the view container. `options` can specify any of the following properties:
+       *
+       *  * `id` - the `id` of the element
+       *  * `tag` - the element tag to use (`div` is the default)
+       *  * `class` - the class name to use (`ui-container` is the default)
+       *  * `parent` - the parent DOMElement
+       *
+       * @method initWithOptions
+       * @param {Object} options
+       * @return {Object}
+       */
+      self.initWithOptions = function( options ) {
+        var theElementId, theElementTag, theElementClass, theParentElement;
+        if ( typeof options !== "undefined" ) {
+          if ( typeof options.id !== "undefined" ) {
+            theElementId = options.id;
+          }
+          if ( typeof options.tag !== "undefined" ) {
+            theElementTag = options.tag;
+          }
+          if ( typeof options.class !== "undefined" ) {
+            theElementClass = options.class;
+          }
+          if ( typeof options.parent !== "undefined" ) {
+            theParentElement = options.parent;
+          }
+        }
+        self.init( theElementId, theElementTag, theElementClass, theParentElement );
+        if ( typeof options !== "undefined" ) {
+          if ( typeof options.title !== "undefined" ) {
+            self.title = options.title;
+          }
+        }
+        return self;
+      };
+      /**
+       * Clean up
+       * @method destroy
+       */
+      self.override( function destroy() {
+        // remove ourselves from the parent view, if attached
+        if ( self._parentElement !== null && self._element !== null ) {
+          // remove ourselves from the existing parent element first
+          self._parentElement.removeChild( self._element );
+          self._parentElement = null;
+        }
+        // and let our super know that it can clean p
+        self.super( _className, "destroy" );
+      } );
+      // handle auto-initialization
+      self._autoInit.apply( self, arguments );
+      // return the new object
       return self;
     }
-    self.initWithOptions = function( options ) {
-      var theElementId, theElementTag, theElementClass, theParentElement;
-      if ( typeof options !== "undefined" ) {
-        if ( typeof options.id !== "undefined" ) {
-          theElementId = options.id;
-        }
-        if ( typeof options.tag !== "undefined" ) {
-          theElementTag = options.tag;
-        }
-        if ( typeof options.class !== "undefined" ) {
-          theElementClass = options.class;
-        }
-        if ( typeof options.parent !== "undefined" ) {
-          theParentElement = options.parent;
-        }
-      }
-      self.init( theElementId, theElementTag, theElementClass, theParentElement );
-      if ( typeof options !== "undefined" ) {
-        if ( typeof options.title !== "undefined" ) {
-          self.title = options.title;
-        }
-      }
-      return self;
-    }
-    self.overrideSuper( self.class, "destroy", self.destroy );
-    self.destroy = function() {
-      // remove ourselves from the parent view, if attached
-      if ( self._parentElement !== null && self._element !== null ) {
-        // remove ourselves from the existing parent element first
-        self._parentElement.removeChild( self._element );
-        self._parentElement = null;
-      }
-      // and let our super know that it can clean p
-      self.super( _className, "destroy" );
-    }
-    self._autoInit.apply( self, arguments );
-    return self;
-  }
+    // return the new factory
   return ViewContainer;
 } );
 
@@ -5988,10 +6282,10 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function( BaseObject )
  *
  * Navigation Controllers provide basic support for view stack management (as in push, pop)
  *
- * navigationController.js
+ * @module navigationController.js
  * @author Kerri Shotts
  * @version 0.4
- *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -6007,6 +6301,7 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function( BaseObject )
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -6032,21 +6327,28 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
   var NavigationController = function() {
     var self = new ViewContainer();
     self.subclass( _className );
+    // # Notifications
+    //
+    // * `viewPushed` is fired when a view is pushed onto the view stack. The view pushed is passed as a parameter.
+    // * `viewPopped` is fired when a view is popped off the view stack. The view popped is passed as a parameter.
+    //
     self.registerNotification( "viewPushed" );
     self.registerNotification( "viewPopped" );
-    self.registerNotification( "modalViewPushed" );
     /**
      * The array of views that this navigation controller manages.
+     * @property subviews
      * @type {Array}
      */
-    self._subviews = [];
-    self.getSubviews = function() {
-      return self._subviews;
-    }
-    Object.defineProperty( self, "subviews", {
-      get: self.getSubviews,
-      configurable: true
+    self.defineProperty( "subviews", {
+      read: true,
+      write: false,
+      default: []
     } );
+    /**
+     * Indicates the current top view
+     * @property topView
+     * @type {Object}
+     */
     self.getTopView = function() {
       if ( self._subviews.length > 0 ) {
         return self._subviews[ self._subviews.length - 1 ];
@@ -6054,10 +6356,16 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         return null;
       }
     }
-    Object.defineProperty( self, "topView", {
-      get: self.getTopView,
-      configurable: true
+    self.defineProperty( "topView", {
+      read: true,
+      write: false,
+      backingValue: false
     } );
+    /**
+     * Returns the initial view in the view stack
+     * @property rootView
+     * @type {Object}
+     */
     self.getRootView = function() {
       if ( self._subviews.length > 0 ) {
         return self._subviews[ 0 ];
@@ -6089,23 +6397,43 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
       theNewRoot.element.classList.add( "ui-root-view" );
       theNewRoot.notify( "viewDidAppear" ); // and notify it that it's actually there.
     }
-    Object.defineProperty( self, "rootView", {
-      get: self.getRootView,
-      set: self.setRootView,
-      configurable: true
+    self.defineProperty( "rootView", {
+      read: true,
+      write: true,
+      backingValue: false
     } );
     self._preventClicks = null;
+    /**
+     * Creates a click-prevention element -- essentially a transparent DIV that
+     * fills the screen.
+     * @method _createClickPreventionElement
+     * @private
+     */
     self._createClickPreventionElement = function() {
       self.createElementIfNotCreated();
       self._preventClicks = document.createElement( "div" );
       self._preventClicks.className = "ui-prevent-clicks";
       self.element.appendChild( self._preventClicks );
     }
+    /**
+     * Create a click-prevention element if necessary
+     * @method _createClickPreventionElementIfNotCreated
+     * @private
+     */
     self._createClickPreventionElementIfNotCreated = function() {
       if ( self._preventClicks === null ) {
         self._createClickPreventionElement();
       }
     }
+    /**
+     * push a view onto the view stack.
+     *
+     * @method pushView
+     * @param {ViewContainer} aView
+     * @param {Boolean} [withAnimation] Determine if the view should be pushed with an animation, default is `true`
+     * @param {Number} [withDelay] Number of seconds for the animation, default is `0.3`
+     * @param {String} [withType] CSS Animation, default is `ease-in-out`
+     */
     self.pushView = function( aView, withAnimation, withDelay, withType ) {
       var theHidingView = self.topView;
       var theShowingView = aView;
@@ -6201,6 +6529,14 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         }, animationDelay * 1000 );
       }, 50 );
     }
+    /**
+     * pops the top view from the view stack
+     *
+     * @method popView
+     * @param {Boolean} withAnimation Use animation when popping, default `true`
+     * @param {String} withDelay Duration of animation in seconds, Default `0.3`
+     * @param {String} withType CSS Animation, default is `ease-in-out`
+     */
     self.popView = function( withAnimation, withDelay, withType ) {
       var usingAnimation = true;
       var animationDelay = 0.3;
@@ -6291,8 +6627,8 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         theShowingView.notify( "viewWillAppear" );
         // tell the view it's visible after the delay has passed
         setTimeout( function() {
-          thePoppingView.notify( "viewWasPopped" );
           thePoppingView.notify( "viewDidDisappear" );
+          thePoppingView.notify( "viewWasPopped" );
           theShowingView.notify( "viewDidAppear" );
           // tell anyone who is listening who got popped
           self.notify( "viewPopped", [ thePoppingView ] );
@@ -6304,34 +6640,50 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         }, ( animationDelay * 1000 ) );
       }, 50 );
     }
-    self.overrideSuper( self.class, "render", self.render );
-    self.render = function() {
+    /**
+     * @method render
+     * @abstract
+     */
+    self.override( function render() {
       return ""; // nothing to render!
-    }
-    self.overrideSuper( self.class, "renderToElement", self.renderToElement );
-    self.renderToElement = function() {
+    } );
+    /**
+     * Create elements and click prevention elements if necessary; otherwise there's nothing to do
+     * @method renderToElement
+     */
+    self.override( function renderToElement() {
       self.createElementIfNotCreated();
       self._createClickPreventionElementIfNotCreated();
       return; // nothing to do.
-    }
-    self.overrideSuper( self.class, "init", self.init );
-    self.init = function( theRootView, theElementId, theElementTag, theElementClass,
-      theParentElement ) {
+    } );
+    /**
+     * Initialize the navigation controller
+     * @method init
+     * @return {Object}
+     */
+    self.override( function init( theRootView, theElementId, theElementTag,
+      theElementClass, theParentElement ) {
       if ( typeof theRootView === "undefined" ) {
         throw new Error(
           "Can't initialize a navigation controller without a root view." );
       }
       // do what a normal view container does
-      self.super( _className, "init", [ theElementId, theElementTag, theElementClass,
+      self.super( _className, "init", [ theElementId, theElementTag,
+        theElementClass,
         theParentElement
       ] );
       // now add the root view
       self.rootView = theRootView;
       return self;
-    }
-    self.overrideSuper( self.class, "initWithOptions", self.initWithOptions );
-    self.initWithOptions = function( options ) {
-      var theRootView, theElementId, theElementTag, theElementClass, theParentElement;
+    } );
+    /**
+     * Initialize the navigation controller
+     * @method initWithOptions
+     * @return {Object}
+     */
+    self.override( function initWithOptions( options ) {
+      var theRootView, theElementId, theElementTag, theElementClass,
+        theParentElement;
       if ( typeof options !== "undefined" ) {
         if ( typeof options.id !== "undefined" ) {
           theElementId = options.id;
@@ -6351,7 +6703,8 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
       }
       return self.init( theRootView, theElementId, theElementTag, theElementClass,
         theParentElement );
-    }
+    } );
+    // handle auto initialization
     self._autoInit.apply( self, arguments );
     return self;
   }
@@ -6362,10 +6715,10 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
  *
  * Split View Controllers provide basic support for side-by-side views
  *
- * splitViewController.js
+ * @module splitViewController.js
  * @author Kerri Shotts
  * @version 0.4
- *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -6381,6 +6734,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -6406,36 +6760,52 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
   var SplitViewController = function() {
     var self = new ViewContainer();
     self.subclass( _className );
+    // # Notifications
+    //
+    // * `viewsChanged` - fired when the left or right side view changes
+    //
     self.registerNotification( "viewsChanged" );
-    self._viewType = "split"; // other valid: off-canvas, split-overlay
-    self.getViewType = function() {
-      return self._viewType;
-    }
+    /**
+     * Indicates the type of split canvas:
+     *
+     * * `split`: typical split-view - left and right side shares space on screen
+     * * `off-canvas`: off-canvas view AKA Facebook split view. Left side is off screen and can slide in
+     * * `split-overlay`: left side slides over the right side when visible
+     *
+     * @property viewType
+     * @type {String}
+     */
     self.setViewType = function( theViewType ) {
       self.element.classList.remove( "ui-" + self._viewType + "-view" );
       self._viewType = theViewType;
       self.element.classList.add( "ui-" + theViewType + "-view" );
       self.leftViewStatus = "invisible";
     }
-    Object.defineProperty( self, "viewType", {
-      get: self.getViewType,
-      set: self.setViewType,
-      configurable: true
+    self.defineProperty( "viewType", {
+      read: true,
+      write: true,
+      default: "split"
     } );
-    self._leftViewStatus = "invisible"; // options: visible, invisible
-    self.getLeftViewStatus = function() {
-      return self._leftViewStatus;
-    }
+    /**
+     * Indicates whether or not the left view is `visible` or `invisible`.
+     *
+     * @property leftViewStatus
+     * @type {String}
+     */
     self.setLeftViewStatus = function( viewStatus ) {
       self.element.classList.remove( "ui-left-side-" + self._leftViewStatus );
       self._leftViewStatus = viewStatus;
       self.element.classList.add( "ui-left-side-" + viewStatus );
     }
-    Object.defineProperty( self, "leftViewStatus", {
-      get: self.getLeftViewStatus,
-      set: self.setLeftViewStatus,
-      configurable: true
+    self.defineProperty( "leftViewStatus", {
+      read: true,
+      write: true,
+      default: "invisible"
     } );
+    /**
+     * Toggle the visibility of the left side view
+     * @method toggleLeftView
+     */
     self.toggleLeftView = function() {
       if ( self.leftViewStatus === "visible" ) {
         self.leftViewStatus = "invisible";
@@ -6445,18 +6815,22 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
     }
     /**
      * The array of views that this split view controller manages.
+     * @property subviews
      * @type {Array}
      */
-    self._subviews = [ null, null ];
-    self.getSubviews = function() {
-      return self._subviews;
-    }
-    Object.defineProperty( self, "subviews", {
-      get: self.getSubviews,
-      configurable: true
+    self.defineProperty( "subviews", {
+      read: true,
+      write: false,
+      default: [ null, null ]
     } );
+    // internal elements
     self._leftElement = null;
     self._rightElement = null;
+    /**
+     * Create the left and right elements
+     * @method _createElements
+     * @private
+     */
     self._createElements = function() {
       if ( self._leftElement !== null ) {
         self.element.removeChild( self._leftElement );
@@ -6471,19 +6845,56 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       self.element.appendChild( self._leftElement );
       self.element.appendChild( self._rightElement );
     }
+    /**
+     * Create the left and right elements if necessary
+     * @method _createElementsIfNecessary
+     * @private
+     */
     self._createElementsIfNecessary = function() {
       if ( self._leftElement !== null && self._rightElement !== null ) {
         return;
       }
       self._createElements();
     }
+    /**
+     * Assigns a view to a given side
+     * @method _assignViewToSide
+     * @param {DOMElement} whichElement
+     * @param {ViewContainer} aView
+     * @private
+     */
     self._assignViewToSide = function( whichElement, aView ) {
       self._createElementsIfNecessary();
       aView.splitViewController = self;
-      aView.notify( "viewWillAppear" ); // notify the view
+      aView.notify( "viewWasPushed" ); // notify the view it was "pushed"
+      aView.notify( "viewWillAppear" ); // notify the view it will appear
       aView.parentElement = whichElement; // and make us the parent
       aView.notify( "viewDidAppear" ); // and notify it that it's actually there.
-    }
+    };
+    /**
+     * Unparents a view on a given side, sending all the requisite notifications
+     *
+     * @method _unparentSide
+     * @param {Number} sideIndex
+     * @private
+     */
+    self._unparentSide = function( sideIndex ) {
+      if ( self._subviews.length >= sideIndex ) {
+        var aView = self._subviews[ sideIndex ];
+        if ( aView !== null ) {
+          aView.notify( "viewWillDisappear" ); // notify the view that it is going to disappear
+          aView.parentElement = null; // remove the view
+          aView.notify( "viewDidDisappear" ); // notify the view that it did disappear
+          aView.notify( "viewWasPopped" ); // notify the view that it was "popped"
+          delete aView.splitViewController;
+        }
+      }
+    };
+    /**
+     * Allows access to the left view
+     * @property leftView
+     * @type {ViewContainer}
+     */
     self.getLeftView = function() {
       if ( self._subviews.length > 0 ) {
         return self._subviews[ 0 ];
@@ -6492,6 +6903,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       }
     }
     self.setLeftView = function( aView ) {
+      self._unparentSide( 0 ); // send disappear notices
       if ( self._subviews.length > 0 ) {
         self._subviews[ 0 ] = aView;
       } else {
@@ -6500,11 +6912,16 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       self._assignViewToSide( self._leftElement, aView );
       self.notify( "viewsChanged" );
     }
-    Object.defineProperty( self, "leftView", {
-      get: self.getLeftView,
-      set: self.setLeftView,
-      configurable: true
+    self.defineProperty( "leftView", {
+      read: true,
+      write: true,
+      backingValue: false
     } );
+    /**
+     * Allows access to the right view
+     * @property rightView
+     * @type {ViewContainer}
+     */
     self.getRightView = function() {
       if ( self._subviews.length > 1 ) {
         return self._subviews[ 1 ];
@@ -6513,6 +6930,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       }
     }
     self.setRightView = function( aView ) {
+      self._unparentSide( 1 ); // send disappear notices for right side
       if ( self._subviews.length > 1 ) {
         self._subviews[ 1 ] = aView;
       } else {
@@ -6521,23 +6939,38 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       self._assignViewToSide( self._rightElement, aView );
       self.notify( "viewsChanged" );
     }
-    Object.defineProperty( self, "rightView", {
-      get: self.getRightView,
-      set: self.setRightView,
-      configurable: true
+    self.defineProperty( "rightView", {
+      read: true,
+      write: true,
+      backingValue: false
     } );
-    self.overrideSuper( self.class, "render", self.render );
-    self.render = function() {
+    /**
+     * @method render
+     * @abstract
+     */
+    self.override( function render() {
       return ""; // nothing to render!
-    }
-    self.overrideSuper( self.class, "renderToElement", self.renderToElement );
-    self.renderToElement = function() {
+    } );
+    /**
+     * Creates the left and right elements if necessary
+     * @method renderToElement
+     */
+    self.override( function renderToElement() {
       self._createElementsIfNecessary();
       return; // nothing to do.
-    }
-    self.overrideSuper( self.class, "init", self.init );
-    self.init = function( theLeftView, theRightView, theElementId, theElementTag,
-      theElementClass, theParentElement ) {
+    } );
+    /**
+     * Initialize the split view controller
+     * @method init
+     * @param {ViewContainer} theLeftView
+     * @param {ViewContainer} theRightView
+     * @param {String} [theElementId]
+     * @param {String} [theElementClass]
+     * @param {String} [theElementTag]
+     * @param {DOMElement} [theParentElement]
+     */
+    self.override( function init( theLeftView, theRightView, theElementId,
+      theElementTag, theElementClass, theParentElement ) {
       if ( typeof theLeftView === "undefined" ) {
         throw new Error(
           "Can't initialize a navigation controller without a left view." );
@@ -6547,16 +6980,20 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
           "Can't initialize a navigation controller without a right view." );
       }
       // do what a normal view container does
-      self.super( _className, "init", [ theElementId, theElementTag, theElementClass,
+      self.super( _className, "init", [ theElementId, theElementTag,
+        theElementClass,
         theParentElement
       ] );
       // now add the left and right views
       self.leftView = theLeftView;
       self.rightView = theRightView;
       return self;
-    }
-    self.overrideSuper( self.class, "initWithOptions", self.initWithOptions );
-    self.initWithOptions = function( options ) {
+    } );
+    /**
+     * Initialize the split view controller
+     * @method initWithOptions
+     */
+    self.override( function initWithOptions( options ) {
       var theLeftView, theRightView, theElementId, theElementTag, theElementClass,
         theParentElement;
       if ( typeof options !== "undefined" ) {
@@ -6590,8 +7027,15 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
         }
       }
       return self;
-    };
+    } );
+    /**
+     * Destroy our elements and clean up
+     *
+     * @method destroy
+     */
     self.override( function destroy() {
+      self._unparentSide( 0 );
+      self._unparentSide( 1 );
       if ( self._leftElement !== null ) {
         self.element.removeChild( self._leftElement );
       }
@@ -6602,6 +7046,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       self._rightElement = null;
       self.super( _className, "destroy" );
     } );
+    // auto initialize
     self._autoInit.apply( self, arguments );
     return self;
   }
@@ -6612,10 +7057,10 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
  *
  * Tab View Controllers provide basic support for tabbed views
  *
- * tabViewController.js
+ * @module tabViewController.js
  * @author Kerri Shotts
  * @version 0.4
- *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -6631,6 +7076,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
            asi:true,
@@ -6657,11 +7103,20 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
   var TabViewController = function() {
     var self = new ViewContainer();
     self.subclass( _className );
+    // # Notifications
+    //
+    // * `viewsChanged` - Fired when the views change
     self.registerNotification( "viewsChanged" );
+    // internal elements
     self._tabElements = []; // each tab on the tab bar
     self._tabBarElement = null; // contains our bar button group
     self._barButtonGroup = null; // contains all our tabs
     self._viewContainer = null; // contains all our subviews
+    /**
+     * Create the tab bar element
+     * @method _createTabBarElement
+     * @private
+     */
     self._createTabBarElement = function() {
       self._tabBarElement = document.createElement( "div" );
       self._tabBarElement.className = "ui-tab-bar ui-tab-default-position";
@@ -6669,33 +7124,61 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
       self._barButtonGroup.className = "ui-bar-button-group ui-align-center";
       self._tabBarElement.appendChild( self._barButtonGroup );
     }
+    /**
+     * Create the tab bar element if necessary
+     * @method _createTabBarElementIfNecessary
+     * @private
+     */
     self._createTabBarElementIfNecessary = function() {
       if ( self._tabBarElement === null ) {
         self._createTabBarElement();
       }
     }
+    /**
+     * create the view container that will hold all the views this tab bar owns
+     * @method _createViewContainer
+     * @private
+     */
     self._createViewContainer = function() {
       self._viewContainer = document.createElement( "div" );
       self._viewContainer.className =
         "ui-container ui-avoid-tab-bar ui-tab-default-position";
     }
+    /**
+     * @method _createViewContainerIfNecessary
+     * @private
+     */
     self._createViewContainerIfNecessary = function() {
       if ( self._viewContainer === null ) {
         self._createViewContainer();
       }
     }
+    /**
+     * Create all the elements and the DOM structure
+     * @method _createElements
+     * @private
+     */
     self._createElements = function() {
       self._createTabBarElementIfNecessary();
       self._createViewContainerIfNecessary();
       self.element.appendChild( self._tabBarElement );
       self.element.appendChild( self._viewContainer );
     }
+    /**
+     * @method _createElementsIfNecessary
+     * @private
+     */
     self._createElementsIfNecessary = function() {
       if ( self._tabBarElement !== null || self._viewContainer !== null ) {
         return;
       }
       self._createElements();
     }
+    /**
+     * Create a tab element and attach the appropriate event listener
+     * @method _createTabElement
+     * @private
+     */
     self._createTabElement = function( aView, idx ) {
       var e = document.createElement( "div" );
       e.className = "ui-bar-button ui-tint-color";
@@ -6706,6 +7189,12 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
       } );
       return e;
     }
+    /**
+     * The position of the the tab bar
+     * Valid options include: `default`, `top`, and `bottom`
+     * @property barPosition
+     * @type {TabViewController.BAR\_POSITION}
+     */
     self.setObservableBarPosition = function( newPosition, oldPosition ) {
       self._createElementsIfNecessary();
       self._tabBarElement.classList.remove( "ui-tab-" + oldPosition + "-position" );
@@ -6717,6 +7206,12 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
     self.defineObservableProperty( "barPosition", {
       default: "default"
     } );
+    /**
+     * The alignment of the bar items
+     * Valid options are: `left`, `center`, `right`
+     * @property barAlignment
+     * @type {TabViewController.BAR\_ALIGNMENT}
+     */
     self.setObservableBarAlignment = function( newAlignment, oldAlignment ) {
       self._createElementsIfNecessary();
       self._barButtonGroup.classList.remove( "ui-align-" + oldAlignment );
@@ -6728,20 +7223,33 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
     } );
     /**
      * The array of views that this tab view controller manages.
+     * @property subviews
      * @type {Array}
      */
-    //self._subviews = [];
     self.defineProperty( "subviews", {
+      read: true,
       write: false,
       default: []
     } );
+    /**
+     * Add a subview to the tab bar.
+     * @method addSubview
+     * @property {ViewContainer} view
+     */
     self.addSubview = function( view ) {
       self._createElementsIfNecessary();
       var e = self._createTabElement( view, self._tabElements.length );
       self._barButtonGroup.appendChild( e );
       self._tabElements.push( e );
       self._subviews.push( view );
+      view.tabViewController = self;
+      view.notify( "viewWasPushed" );
     }
+    /**
+     * Remove a specific view from the tab bar.
+     * @method removeSubview
+     * @property {ViewContainer} view
+     */
     self.removeSubview = function( view ) {
       self._createElementsIfNecessary();
       var i = self._subviews.indexOf( view );
@@ -6767,7 +7275,16 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
         }
         self.selectedTab = curSelectedTab;
       }
+      view.notify( "viewWasPopped" );
+      delete view.tabViewController;
     }
+    /**
+     * Determines which tab is selected; changing will display the appropriate
+     * tab.
+     *
+     * @property selectedTab
+     * @type {Number}
+     */
     self.setObservableSelectedTab = function( newIndex, oldIndex ) {
       var oldView, newView;
       self._createElementsIfNecessary();
@@ -6800,26 +7317,44 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
       default: -1,
       notifyAlways: true
     } );
-    self.overrideSuper( self.class, "render", self.render );
-    self.render = function() {
+    /**
+     * @method render
+     */
+    self.override( function render() {
       return ""; // nothing to render!
-    }
-    self.overrideSuper( self.class, "renderToElement", self.renderToElement );
-    self.renderToElement = function() {
+    } );
+    /**
+     * @method renderToElement
+     */
+    self.override( function renderToElement() {
       self._createElementsIfNecessary();
       return; // nothing to do.
-    }
-    self.overrideSuper( self.class, "init", self.init );
-    self.init = function( theElementId, theElementTag, theElementClass,
+    } );
+    /**
+     * Initialize the tab controller
+     * @method init
+     * @param {String} [theElementId]
+     * @param {String} [theElementTag]
+     * @param {String} [theElementClass]
+     * @param {DOMElement} [theParentElement]
+     * @return {Object}
+     */
+    self.override( function init( theElementId, theElementTag, theElementClass,
       theParentElement ) {
       // do what a normal view container does
-      self.super( _className, "init", [ theElementId, theElementTag, theElementClass,
+      self.super( _className, "init", [ theElementId, theElementTag,
+        theElementClass,
         theParentElement
       ] );
       return self;
-    }
-    self.overrideSuper( self.class, "initWithOptions", self.initWithOptions );
-    self.initWithOptions = function( options ) {
+    } );
+    /**
+     * Initialize the tab controller
+     * @method initWithOptions
+     * @param {Object} options
+     * @return {Object}
+     */
+    self.override( function initWithOptions( options ) {
       var theElementId, theElementTag, theElementClass, theParentElement;
       if ( typeof options !== "undefined" ) {
         if ( typeof options.id !== "undefined" ) {
@@ -6845,7 +7380,8 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
         }
       }
       return self;
-    }
+    } );
+    // auto init
     self._autoInit.apply( self, arguments );
     return self;
   }
@@ -6866,11 +7402,11 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
  *
  * Provides native-like alert methods, including prompts and messages.
  *
- * alert.js
  * @module alert.js
  * @author Kerri Shotts
  * @version 0.4
  *
+ * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -6886,6 +7422,7 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
  */
 /*jshint
          asi:true,
@@ -6914,66 +7451,59 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
       var self = new BaseObject();
       self.subclass( _className );
       /*
-       * dismissed just indicates that the alert was dismissed (either by the user
-       * or by code). buttonTapped passes along which button was tapped.
+       * # Notifications
+       *
+       * * `buttonTapped` indicates which button was tapped when the view is dismissing
+       * * `dismissed` indicates that the alert was dismissed (by user or code)
        */
       self.registerNotification( "buttonTapped" );
       self.registerNotification( "dismissed" );
       /**
        * The title to show in the alert.
+       * @property title
        * @type {String}
        */
-      self._title = _y.T( "Alert" );
-      self._titleElement = null;
-      self.getTitle = function() {
-        return self._title;
-      }
+      self._titleElement = null; // the corresponding DOM element
       self.setTitle = function( theTitle ) {
         self._title = theTitle;
         if ( self._titleElement !== null ) {
           self._titleElement.innerHTML = theTitle;
         }
       }
-      Object.defineProperty( self, "title", {
-        get: self.getTitle,
-        set: self.setTitle,
-        configurable: true
+      self.defineProperty( "title", {
+        read: true,
+        write: true,
+        default: _y.T( "ALERT" )
       } );
       /**
        * The body of the alert. Leave blank if you don't need to show
        * anything more than the title.
+       * @property text
        * @type {String}
        */
-      self._text = "";
       self._textElement = null;
-      self.getText = function() {
-        return self._text;
-      }
       self.setText = function( theText ) {
         self._text = theText;
         if ( self._textElement !== null ) {
           self._textElement.innerHTML = theText;
         }
       }
-      Object.defineProperty( self, "text", {
-        get: self.getText,
-        set: self.setText,
-        configurable: true
+      self.defineProperty( "text", {
+        read: true,
+        write: true
       } );
       /**
        * The alert's buttons are specified in this property. The layout
-       * is expected to be: [ { title: title [, type: type] [, tag: tag] } [, {} ...] ]
+       * is expected to be: `[ { title: title [, type: type] [, tag: tag] } [, {} ...] ]`
        *
        * Each button's type can be "normal", "bold", "destructive". The tag may be
        * null; if it is, it is assigned the button index. If a tag is specifed (common
        * for cancel buttons), that is the return value.
+       * @property buttons
        * @type {Array}
        */
       self._buttons = [];
       self._buttonContainer = null;
-      self.getButtons = function() {
-        return self._buttons;
-      }
       self.setButtons = function( theButtons ) {
         function dismissWithIndex( idx ) {
           return function() {
@@ -7019,38 +7549,41 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
           }
         }
       }
-      Object.defineProperty( self, "buttons", {
-        get: self.getButtons,
-        set: self.setButtons,
-        configurable: true
+      self.defineProperty( "buttons", {
+        read: true,
+        write: true,
+        default: []
       } );
+      // other DOM elements we need to construct the alert
       self._rootElement = null; // root element contains the container
       self._alertElement = null; // points to the alert itself
       self._vaElement = null; // points to the DIV used to vertically align us
       self._deferred = null; // stores a promise
       /**
        * If true, show() returns a promise.
+       * @property usePromise
        * @type {boolean}
        */
-      self._usePromise = false;
-      self.getUsePromise = function() {
-        return self._usePromise;
-      }
-      Object.defineProperty( self, "usePromise", {
-        get: self.getUsePromise,
-        configurable: true
+      self.defineProperty( "usePromise", {
+        read: true,
+        write: false,
+        default: false
       } );
-      self._visible = false;
-      self.getVisible = function() {
-        return self._visible;
-      }
-      Object.defineProperty( self, "visible", {
-        get: self.getVisible,
-        configurable: true
+      /**
+       * Indicates if the alert is veisible.
+       * @property visible
+       * @type {Boolean}
+       */
+      self.defineProperty( "visible", {
+        read: true,
+        write: false,
+        default: false
       } );
       /**
        * Creates the DOM elements for an Alert. Assumes the styles are
        * already in the style sheet.
+       * @method _createElements
+       * @private
        */
       self._createElements = function() {
         self._rootElement = document.createElement( "div" );
@@ -7073,12 +7606,14 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
       }
       /**
        * Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.
+       * @method backButtonPressed
        */
       self.backButtonPressed = function() {
         self.dismiss( -1 );
       }
       /**
        * Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.
+       * @method hide
        * @return {[type]} [description]
        */
       self.hide = function() {
@@ -7086,6 +7621,7 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
       }
       /**
        * Shows an alert.
+       * @method show
        * @return {Promise} a promise if usePromise = true
        */
       self.show = function() {
@@ -7119,6 +7655,12 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
           return self._deferred.promise;
         }
       }
+      /**
+       * Dismisses the alert with the sepcified button index
+       *
+       * @method dismiss
+       * @param {Number} idx
+       */
       self.dismiss = function( idx ) {
         if ( !self.visible ) {
           return;
@@ -7155,17 +7697,20 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
       }
       /**
        * Initializes the Alert and calls _createElements.
+       * @method init
+       * @return {Object}
        */
-      self.overrideSuper( self.class, "init", self.init );
-      self.init = function init() {
+      self.override( function init() {
         self.super( _className, "init" );
         self._createElements();
-      };
+        return self;
+      } );
       /**
        * Initializes the Alert. Options includes title, text, buttons, and promise.
+       * @method overrideSuper
+       * @return {Object}
        */
-      self.overrideSuper( self.class, "initWithOptions", self.initWithOptions );
-      self.initWithOptions = function initWithOptions( options ) {
+      self.override( function initWithOptions( options ) {
         self.init();
         if ( typeof options !== "undefined" ) {
           if ( typeof options.title !== "undefined" ) {
@@ -7181,9 +7726,11 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
             self._usePromise = options.promise;
           }
         }
-      };
+        return self;
+      } );
       /**
        * Clean up after ourselves.
+       * @method destroy
        */
       self.overrideSuper( self.class, "destroy", self.destroy );
       self.destroy = function destroy() {
@@ -7200,10 +7747,13 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
         self._buttonContainer = null;
         self.super( _className, "destroy" );
       };
+      // handle auto-init
+      self._autoInit.apply( self, arguments );
       return self;
     }
     /**
      * Creates a button suitable for an Alert
+     * @method button
      * @param  {String} title   The title of the button
      * @param  {Object} options The additional options: type and tag
      * @return {Object}         A button
@@ -7230,6 +7780,7 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
   }
   /**
    * Creates an OK-style Alert. It only has an OK button.
+   * @method OK
    * @param {Object} options Specify the title, text, and promise options if desired.
    */
   Alert.OK = function( options ) {
@@ -7257,6 +7808,7 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
   }
   /**
    * Creates an OK/Cancel-style Alert. It only has an OK and CANCEL button.
+   * @method Confirm
    * @param {Object} options Specify the title, text, and promise options if desired.
    */
   Alert.Confirm = function( options ) {
@@ -7290,14 +7842,21 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
 
 /**
  *
- * YASMF-UTIL (Yet Another Simple Mobile Framework Utilities) provides basic utilities
- * for working on mobile devices.
+ * # YASMF-Next (Yet Another Simple Mobile Framework Next Gen)
  *
- * It provides several convenience functions (such as _y.ge) and various modules (such
- * as device, filename, etc).
+ * YASMF-Next is the successor to the YASMF framework. While that framework was useful
+ * and usable even in a production environment, as my experience has grown, it became
+ * necessary to re-architect the entire framework in order to provide a modern
+ * mobile framework.
  *
- * yasmf-util.js
- * @module yasmf-util.js
+ * YASMF-Next is the result. It's young, under active development, and not at all
+ * compatible with YASMF v0.2. It uses all sorts of more modern technologies such as
+ * SASS for CSS styling, AMD, etc.
+ *
+ * YASMF-Next is intended to be a simple and fast framework for mobile and desktop
+ * devices. It provides several utility functions and also provides a UI framework.
+ *
+ * @module _y
  * @author Kerri Shotts
  * @version 0.4
  *
@@ -7353,6 +7912,7 @@ define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/f
   _y.UI.Alert = require( 'yasmf/ui/alert' );
   return _y;
 } );
+
   var library = require('yasmf');
   if(typeof module !== 'undefined' && module.exports) {
     module.exports = library;
