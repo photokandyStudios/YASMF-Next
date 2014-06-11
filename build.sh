@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# Build script for yasmf-util
+# Build script for yasmf-next
 # execute in project root
-# requires node, js-beautify, groc to be installed
+# requires requirejs, js-beautify, groc, sass to be installed
 #
 # Copy assets
 echo "Copying assets..."
@@ -14,8 +14,8 @@ sh ./beautify.shl
 #
 # Build RequireJS
 echo "RequireJS Build..."
-node ./vendor/requirejs/node_modules/requirejs/bin/r.js -o ./build.js
-node ./vendor/requirejs/node_modules/requirejs/bin/r.js -o ./build-min.js
+r.js -o ./build.js
+r.js -o ./build-min.js
 #
 # compile SASS (requires sass from sass-lang.com)
 echo "SASS Build..."
