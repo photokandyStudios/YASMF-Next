@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><title>util/core</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/core"><meta name="groc-project-path" content="lib/yasmf/util/core.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/core.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module core.js author Kerri Shotts and version 0.4</p>
 
-<p>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
@@ -14,11 +14,12 @@ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PA
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.</span></p>
+OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
 
-<p>Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.</p>
+<p></span></p>
 
-<p>core.js</p></div></div><div class="code"><div class="wrapper">    <span class="cm">/*jshint</span>
+<p>Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.</p></div></div><div class="code"><div class="wrapper">    <span class="cm">/*jshint</span>
 <span class="cm">         asi:true,</span>
 <span class="cm">         bitwise:true,</span>
 <span class="cm">         browser:true,</span>
@@ -116,13 +117,13 @@ if <code>property</code> is defined.</p>
 string, in which case the replacement variable are replaced
 and returned simply, or the template can be a DOM element,
 in which case the template is assumed to be the DOM Element's
-innerHTML, and then the replacement variables are parsed.</p>
+<code>innerHTML</code>, and then the replacement variables are parsed.</p>
 
-<p>Replacement variables are of the form %VARIABLE%, and
+<p>Replacement variables are of the form <code>%VARIABLE%</code>, and
 can occur anywhere, not just within strings in HTML.</p>
 
 <p>The replacements array is of the form
-  { "VARIABLE": replacement, "VARIABLE2": replacement, ... }</p>
+    { "VARIABLE": replacement, "VARIABLE2": replacement, ... }</p>
 
 <p>Parameters:</p>
 
@@ -183,15 +184,19 @@ a call to <code>getUserLocale</code>, but it can be written to
 at any time in order to override <code>getUserLocale</code>'s
 calculation of the user's locale., default (empty string), and of type <em>Locale</em></span></p>
 
-<p>The following functions are related to globalization and localization, which
-are now considered to be core functions (previously it was broken out in
-PKLOC)</p></div></div><div class="code"><div class="wrapper">        <span class="nx">currentUserLocale</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property localizedText of type <em>Object</em></span></p>
+<blockquote>
+  <p>The following functions are related to globalization and localization, which
+  are now considered to be core functions (previously it was broken out in
+  PKLOC)</p>
+</blockquote></div></div><div class="code"><div class="wrapper">        <span class="nx">currentUserLocale</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property localizedText of type <em>Object</em></span></p>
 
 <p>A translation matrix. Used by <code>addTranslation(s)</code> and <code>T</code>.</p></div></div><div class="code"><div class="wrapper">        <span class="nx">localizedText</span><span class="o">:</span> <span class="p">{},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method normalizeLocale</span></p>
 
-<p>Given a locale string, normalize it to the form of la-RE or la, depending on the length.
-"enus", "en<em>us", "en</em>---__--US", "EN-US" --> "en-US"
-"en", "en-", "EN!" --> "en"</p>
+<p>Given a locale string, normalize it to the form of <code>la-RE</code> or <code>la</code>, depending on the length.</p>
+
+<pre><code>    "enus", "en_us", "en_---__--US", "EN-US" --&gt; "en-US"
+    "en", "en-", "EN!" --&gt; "en"
+</code></pre>
 
 <p>Parameters:</p>
 
@@ -274,8 +279,8 @@ PKLOC)</p></div></div><div class="code"><div class="wrapper">        <span class
           <span class="p">}</span>
         <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getUserLocale</span></p>
 
-<p>Returns the user's locale (e.g., en-US or fr-FR). If one
-can't be found, "en-US" is returned. If <code>currentUserLocale</code>
+<p>Returns the user's locale (e.g., <code>en-US</code> or <code>fr-FR</code>). If one
+can't be found, <code>en-US</code> is returned. If <code>currentUserLocale</code>
 is already defined, it won't attempt to recalculate it.</p>
 
 <p><strong>Returns a Locale</strong></p></div></div><div class="code"><div class="wrapper">        <span class="nx">getUserLocale</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -360,8 +365,8 @@ any lookup is attempted.</p>
 
 <p>Convenience function for translating text. Key is the only
 required value and case doesn't matter (it's uppercased). Replacement
-variables can be specified using replacement variables of the form { "VAR":"VALUE" },
-using %VAR% in the key/value returned. If locale is specified, it
+variables can be specified using replacement variables of the form <code>{ "VAR":"VALUE" }</code>,
+using <code>%VAR%</code> in the key/value returned. If <code>locale</code> is specified, it
 takes precedence over the user's current locale.</p>
 
 <p>Parameters:</p>

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><title>util/datetime</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/datetime"><meta name="groc-project-path" content="lib/yasmf/util/datetime.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/datetime.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module datetime.js author Kerri Shotts and version 0.4</p>
 
-<p>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
@@ -14,11 +14,12 @@ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PA
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.</span></p>
+OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
 
-<p>Provides date/time convenience methods</p>
+<p></span></p>
 
-<p>datetime.js</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+<p>Provides date/time convenience methods</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
 <span class="cm">         asi:true,</span>
 <span class="cm">         bitwise:true,</span>
 <span class="cm">         browser:true,</span>
@@ -38,22 +39,25 @@ OTHER DEALINGS IN THE SOFTWARE.</span></p>
 <span class="cm"> */</span>
 <span class="cm">/*global define*/</span>
 <span class="nx">define</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Returns the current time in the Unix time format</p>
+  <span class="k">return</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getUnixTime</span></p>
+
+<p>Returns the current time in the Unix time format</p>
 
 <p><strong>Returns an UnixTime</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">getUnixTime</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="p">(</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="p">).</span><span class="nx">getTime</span><span class="p">();</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>PRECISION<em>x Constants
-These specify the amount of precision required for getPartsFromSeconds.
-For example, if PRECISION</em>DAYS is specified, the number of parts obtained
+    <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="precision-x-constants">PRECISION_x Constants</h1>
+
+<p>These specify the amount of precision required for <code>getPartsFromSeconds</code>.
+For example, if <code>PRECISION_DAYS</code> is specified, the number of parts obtained
 consist of days, hours, minutes, and seconds.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">PRECISION_SECONDS</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="nx">PRECISION_MINUTES</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="nx">PRECISION_HOURS</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
     <span class="nx">PRECISION_DAYS</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
     <span class="nx">PRECISION_WEEKS</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="nx">PRECISION_YEARS</span><span class="o">:</span> <span class="mi">6</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> typedef {{fractions: number, seconds: number, minutes: number, hours: number, days: number, weeks: number, years: number}} TimeParts
+    <span class="nx">PRECISION_YEARS</span><span class="o">:</span> <span class="mi">6</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getPartsFromSeconds typedef {{fractions: number, seconds: number, minutes: number, hours: number, days: number, weeks: number, years: number}} TimeParts
 Takes a given number of seconds and returns an object consisting of the number of seconds, minutes, hours, etc.
 The value is limited by the precision parameter -- which must be specified. Which ever value is specified will
-be the maximum limit for the routine; that is PRECISION_DAYS will never return a result for weeks or years.</span></p>
+be the maximum limit for the routine; that is <code>PRECISION_DAYS</code> will never return a result for weeks or years.</span></p>
 
 <p>Parameters:</p>
 

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><title>ui/viewContainer</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/viewContainer"><meta name="groc-project-path" content="lib/yasmf/ui/viewContainer.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/viewContainer.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> author Kerri Shotts and version 0.4</p>
+<!DOCTYPE html><html lang="en"><head><title>ui/viewContainer</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/viewContainer"><meta name="groc-project-path" content="lib/yasmf/ui/viewContainer.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/viewContainer.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module viewContainer.js author Kerri Shotts and version 0.4</p>
 
-<p>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
@@ -14,12 +14,13 @@ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PA
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.</span></p>
+OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
+
+<p></span></p>
 
 <p>View Containers are simple objects that provide very basic view management with
-a thin layer over the corresponding DOM element.</p>
-
-<p>viewContainer.js</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+a thin layer over the corresponding DOM element.</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
 <span class="cm">         asi:true,</span>
 <span class="cm">         bitwise:true,</span>
 <span class="cm">         browser:true,</span>
@@ -41,155 +42,193 @@ a thin layer over the corresponding DOM element.</p>
 <span class="nx">define</span><span class="p">(</span> <span class="p">[</span> <span class="s2">&quot;yasmf/util/object&quot;</span> <span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">BaseObject</span> <span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">_className</span> <span class="o">=</span> <span class="s2">&quot;ViewContainer&quot;</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">ViewContainer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWasPushed&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWasPopped&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWillAppear&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWillDisappear&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewDidAppear&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewDidDisappear&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_elementClass</span> <span class="o">=</span> <span class="s2">&quot;ui-container&quot;</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_elementId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_elementTag</span> <span class="o">=</span> <span class="s2">&quot;div&quot;</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span><span class="p">(</span> <span class="s2">&quot;title&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">createElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_elementTag</span> <span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementClass</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementClass</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementId</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementId</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">createElementIfNotCreated</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">===</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">createElement</span><span class="p">();</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">getElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">createElementIfNotCreated</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theElement</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">=</span> <span class="nx">theElement</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;element&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getElement</span><span class="p">,</span>
-      <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setElement</span><span class="p">,</span>
-      <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-    <span class="p">}</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">getElementClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_elementClass</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setElementClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theClassName</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_elementClass</span> <span class="o">=</span> <span class="nx">theClassName</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">theClassName</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;elementClass&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getElementClass</span><span class="p">,</span>
-      <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setElementClass</span><span class="p">,</span>
-      <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-    <span class="p">}</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">getElementId</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_elementId</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setElementId</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theElementId</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_elementId</span> <span class="o">=</span> <span class="nx">theElementId</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">theElementId</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;elementId&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getElementId</span><span class="p">,</span>
-      <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setElementId</span><span class="p">,</span>
-      <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-    <span class="p">}</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">getElementTag</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_elementTag</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setElementTag</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theTagName</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_elementTag</span> <span class="o">=</span> <span class="nx">theTagName</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;elementTag&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getElementTag</span><span class="p">,</span>
-      <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setElementTag</span><span class="p">,</span>
-      <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-    <span class="p">}</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">getParentElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setParentElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theParentElement</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove ourselves from the existing parent element first</p></div></div><div class="code"><div class="wrapper">        <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="p">);</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="nx">theParentElement</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="s2">&quot;parentElement&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">get</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getParentElement</span><span class="p">,</span>
-      <span class="nx">set</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setParentElement</span><span class="p">,</span>
-      <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span>
-    <span class="p">}</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>right now, this doesn't do anything, but it's here for inheritance purposes</p></div></div><div class="code"><div class="wrapper">      <span class="k">return</span> <span class="s2">&quot;Error: Abstract Method&quot;</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span>
-      <span class="nx">theParentElement</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span> <span class="p">);</span> <span class="c1">// super has no parameters</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set our Id, Tag, and Class</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementId</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">elementId</span> <span class="o">=</span> <span class="nx">theElementId</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementTag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">elementTag</span> <span class="o">=</span> <span class="nx">theElementTag</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementClass</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">elementClass</span> <span class="o">=</span> <span class="nx">theElementClass</span><span class="p">;</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>render ourselves to the element (via render); this implicitly creates the element
-with the above properties.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add ourselves to our parent.</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theParentElement</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">theParentElement</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">theElementId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="notifications">Notifications</h1>
+
+<ul>
+<li><code>viewWasPushed</code> is fired by a containing <code>ViewController</code> when the view is added
+to the view stack</li>
+<li><code>viewWasPopped</code> is fired by a container when the view is removed from the view stack</li>
+<li><code>viewWillAppear</code> is fired by a container when the view is about to appear (one should avoid
+any significant DOM changes or calculations during this time, or animations may stutter)</li>
+<li><code>viewWillDisappear</code> is fired by a container when the view is about to disappear</li>
+<li><code>viewDidAppear</code> is fired by a container when the view is on screen.</li>
+<li><code>viewDidDisappear</code> is fired by a container when the view is off screen.</li>
+</ul></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWasPushed&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWasPopped&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWillAppear&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewWillDisappear&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewDidAppear&quot;</span> <span class="p">);</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;viewDidDisappear&quot;</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>private properties used to manage the corresponding DOM element</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_elementClass</span> <span class="o">=</span> <span class="s2">&quot;ui-container&quot;</span><span class="p">;</span> <span class="c1">// default; can be changed to any class for styling purposes</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_elementId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// bad design decision -- probably going to mark this as deprecated soon</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_elementTag</span> <span class="o">=</span> <span class="s2">&quot;div&quot;</span><span class="p">;</span> <span class="c1">// some elements might need to be something other than a DIV</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// owning element</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property title observable and of type <em>String</em></span></p>
+
+<p>The title isn't displayed anywhere (unless you use it yourself in <code>renderToElement</code>, but
+is useful for containers that want to know the title of their views.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span><span class="p">(</span> <span class="s2">&quot;title&quot;</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method createElement</span></p>
+
+<p>Creates the internal elements.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">createElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_elementTag</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementClass</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementClass</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">theElementTag</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementId</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">elementId</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">theElementClass</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method createElementIfNotCreated</span></p>
+
+<p>Creates the internal elements if necessary (that is, if they aren't already in existence)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">createElementIfNotCreated</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">===</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">createElement</span><span class="p">();</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">theParentElement</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span><span class="p">;</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property element of type <em>DOMElement</em></span></p>
+
+<p>The <code>element</code> property allow direct access to the DOM element backing the view</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">getElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">createElementIfNotCreated</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;element&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="kc">null</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property elementClass of type <em>String</em> and default ui-container</span></p>
+
+<p>The <code>elementClass</code> property indicates the class of the DOM element. Changing
+the class will alter the backing DOM element if created.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">setElementClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theClassName</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_elementClass</span> <span class="o">=</span> <span class="nx">theClassName</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">theClassName</span><span class="p">;</span>
         <span class="p">}</span>
       <span class="p">}</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;elementClass&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="s2">&quot;ui-container&quot;</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Determines the <code>id</code> for the backing DOM element. Not the best choice to
+use, since this must be unique within the DOM. Probably going to become
+deprecated eventually</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">setElementId</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theElementId</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_elementId</span> <span class="o">=</span> <span class="nx">theElementId</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">theElementId</span><span class="p">;</span>
         <span class="p">}</span>
       <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove ourselves from the parent view, if attached</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove ourselves from the existing parent element first</p></div></div><div class="code"><div class="wrapper">        <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="p">);</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and let our super know that it can clean p</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="nx">ViewContainer</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;elementId&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="kc">null</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property elementTag of type <em>String</em> and default div</span></p>
+
+<p>Determines the type of DOM Element; by default this is a DIV.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;elementTag&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="s2">&quot;div&quot;</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property parentElement of type <em>DOMElement</em></span></p>
+
+<p>Indicates the parent element, if it exists. This is a DOM element
+that owns this view (parent -> child). Changing the parent removes
+this element from the parent and reparents to another element.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">setParentElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theParentElement</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove ourselves from the existing parent element first</p></div></div><div class="code"><div class="wrapper">          <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="p">);</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="nx">theParentElement</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;parentElement&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="k">default</span><span class="o">:</span> <span class="kc">null</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method render</span></p>
+
+<p><strong>Returns a String or a DOMElement or a DocumentFragment</strong><br/>(<code>render</code> is called by <code>renderToElement</code>. The idea behind this is to generate a return value consisting of the DOM tree necessary to create the view's contents. *)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>right now, this doesn't do anything, but it's here for inheritance purposes</p></div></div><div class="code"><div class="wrapper">        <span class="k">return</span> <span class="s2">&quot;Error: Abstract Method&quot;</span><span class="p">;</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method renderToElement</span></p>
+
+<p>Renders the content of the view. Can be called more than once, but more
+often is called once during <code>init</code>. Calls <code>render</code> immediately and
+assigns it to <code>element</code>'s <code>innerHTML</code> -- this implicitly creates the
+DOM elements backing the view if they weren't already created.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">renderOutput</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">renderOutput</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">renderOutput</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">renderOutput</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>
+
+<p>Initializes the view container; returns <code>self</code></p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>theElementId is optional and must be a String.</strong></p></li>
+<li><p><strong>theElementTag is optional and must be a String.</strong></p></li>
+<li><p><strong>theElementClass is optional and must be a String.</strong></p></li>
+<li><p><strong>theParentElement is optional and must be a DOMElement.</strong></p></li>
+</ul>
+
+<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">override</span><span class="p">(</span> <span class="kd">function</span> <span class="nx">init</span><span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span>
+        <span class="nx">theParentElement</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span> <span class="p">);</span> <span class="c1">// super has no parameters</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set our Id, Tag, and Class</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementId</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">elementId</span> <span class="o">=</span> <span class="nx">theElementId</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementTag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">elementTag</span> <span class="o">=</span> <span class="nx">theElementTag</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theElementClass</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">elementClass</span> <span class="o">=</span> <span class="nx">theElementClass</span><span class="p">;</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>render ourselves to the element (via render); this implicitly creates the element
+with the above properties.</p></div></div><div class="code"><div class="wrapper">        <span class="nx">self</span><span class="p">.</span><span class="nx">renderToElement</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add ourselves to our parent.</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theParentElement</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">theParentElement</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method initWithOptions</span></p>
+
+<p>Initializes the view container. <code>options</code> can specify any of the following properties:</p>
+
+<ul>
+<li><code>id</code> - the <code>id</code> of the element</li>
+<li><code>tag</code> - the element tag to use (<code>div</code> is the default)</li>
+<li><code>class</code> - the class name to use (<code>ui-container</code> is the default)</li>
+<li><code>parent</code> - the parent DOMElement</li>
+</ul>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>options must be an Object.</strong></li>
+</ul>
+
+<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">theElementId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">theElementTag</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">theElementClass</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">theParentElement</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parent</span><span class="p">;</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span> <span class="nx">theElementId</span><span class="p">,</span> <span class="nx">theElementTag</span><span class="p">,</span> <span class="nx">theElementClass</span><span class="p">,</span> <span class="nx">theParentElement</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+      <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method destroy</span></p>
+
+<p>Clean up</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">override</span><span class="p">(</span> <span class="kd">function</span> <span class="nx">destroy</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove ourselves from the parent view, if attached</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove ourselves from the existing parent element first</p></div></div><div class="code"><div class="wrapper">          <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_element</span> <span class="p">);</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">_parentElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and let our super know that it can clean p</p></div></div><div class="code"><div class="wrapper">        <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>handle auto-initialization</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the new object</p></div></div><div class="code"><div class="wrapper">      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the new factory</p></div></div><div class="code"><div class="wrapper">  <span class="k">return</span> <span class="nx">ViewContainer</span><span class="p">;</span>
 <span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>

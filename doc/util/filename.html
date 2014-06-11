@@ -20,9 +20,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 <p></span></p>
 
 <p>Provides convenience methods for parsing unix-style path names. If the
-path separator is changed from "/" to "\", it should parse Windows paths as well.</p>
-
-<p>filename.js</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
+path separator is changed from "/" to "\", it should parse Windows paths as well.</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
 <span class="cm">         asi:true,</span>
 <span class="cm">         bitwise:true,</span>
 <span class="cm">         browser:true,</span>
@@ -42,9 +40,7 @@ path separator is changed from "/" to "\", it should parse Windows paths as well
 <span class="cm"> */</span>
 <span class="cm">/*global define*/</span>
 <span class="nx">define</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">PKFILE</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> of type <em>String</em></span></p>
-
-<p>Version</p></div></div><div class="code"><div class="wrapper">    <span class="nx">version</span><span class="o">:</span> <span class="s2">&quot;00.04.100&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property invalidCharacters default ["/","\",":","|","&lt;",">","*","?",";","%"] and of type <em>Array</em></span></p>
+  <span class="kd">var</span> <span class="nx">PKFILE</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property Version of type <em>String</em></span></p></div></div><div class="code"><div class="wrapper">    <span class="nx">version</span><span class="o">:</span> <span class="s2">&quot;00.04.100&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property invalidCharacters default ["/","\",":","|","&lt;",">","*","?",";","%"] and of type <em>Array</em></span></p>
 
 <p>Specifies the characters that are not allowed in file names.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">invalidCharacters</span><span class="o">:</span> <span class="s2">&quot;/,\\,:,|,&lt;,&gt;,*,?,;,%&quot;</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span> <span class="s2">&quot;,&quot;</span> <span class="p">),</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property extensionSeparator default . and of type <em>String</em></span></p>
 
