@@ -36,7 +36,7 @@ There are occasions where one needs to change the `rootView` (especially since o
 
 	nc.rootView = anotherView;
 	
-> If there are other views currently on the view stack (that is, `rootView!=topView`), those views are all popped off the stack with no animation, and the `rootView` is replaced by the new view.
+> **Note:** If there are other views currently on the view stack (that is, `rootView!=topView`), those views are all popped off the stack with no animation, and the `rootView` is replaced by the new view.
 
 Although it is possible to navigate the hierarchy of a Navigation Controller (and any other view controllers), it's not suggested that you do so. Doing so requires that your code be tightly coupled with the structure of your view hierarchy -- which is far from ideal. Better to use a router or post notifications when you need to talk to other views.
 

@@ -2,11 +2,11 @@
 
 Much of YASMF's user interface framework (and a few other objects) inherit from `BaseObject` (defined in `util/object.js`). Although not required, if you want to create your own classes that inherit from this base class, you should understand `BaseObject`.
 
-A `BaseObject` is first, and foremost, a regular JavaScript object. That said, it doesn't rely on prototypal inheritance in order to acheive object inheritance -- rather, it relies on *classical inheritance*.
+A `BaseObject` is first, and foremost, a regular JavaScript object. That said, it doesn't rely on prototypal inheritance in order to achieve object inheritance -- rather, it relies on *classical inheritance*.
 
 This choice is certainly polarizing in the JavaScript community, but even ES6 is slowly coming this way (with the addition of the `class` keyword). Although prototypal inheritance is extremely powerful and flexible, most OOP is taught from a classical perspective, and it only makes sense that JavaScript embrace the concept. In that regard, YASMF is early to the party.
 
-That's not to say that YASMF's implementation is perfect or pretty. Short of modifying the language grammar itself (ala CoffeeScript), there's only so much one can do to simulate classical features in a language with no inherent support for them.
+That's not to say that YASMF's implementation is perfect or pretty. Short of modifying the language grammar itself (*a la* CoffeeScript), there's only so much one can do to simulate classical features in a language with no inherent support for them.
 
 ## Class Constructor
 
@@ -55,7 +55,7 @@ var aNewClassObject = (new ANewClass ()).init();
 
 ## Explicit Destruction
 
-Technically, any instantiated object is garbage collected just like any other JavaScript object. Normally this wouldn't be a problem, except `BaseObject`s need to do cleanup prior to their destruction (removing event listeners, etc.). As such, all classes deriving from `BaseObject` have a `destroy` method, and it should be called prior to marking the object as freeable:
+Technically, any instantiated object is garbage collected just like any other JavaScript object. Normally this wouldn't be a problem, except `BaseObject`s need to do cleanup prior to their destruction (removing event listeners, etc.). As such, all classes deriving from `BaseObject` have a `destroy` method, and it should be called prior to marking the object as free-able:
 
 ```
 aNewClassObject.destroy(); // clean up
@@ -109,7 +109,7 @@ self.anInstanceVariable = 0; // default value
 
 If no appropriate default value exists, use `undefined`.
 
-> Private instance variables should be marked with an `_`
+> **Note:** Private instance variables should be marked with an `_`
 
 ## Properties
 
@@ -365,9 +365,11 @@ self.init = function ( args ) {
   self.super(_className, "init", [args]); // arguments should work instead of [args] if all arguments should be passed
   // carry on
 }
+```
 
 OR
 
+```
 self.override ( function init ( args ) {
   self.super(_className, "init", [args]); // arguments should work instead of [args] if all arguments should be passed
   // carry on
