@@ -4139,7 +4139,7 @@ define( 'Q',[],function() {
 /*global define, Q, LocalFileSystem, console*/
 define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, BaseObject ) {
   var IN_YASMF = true;
-  return ( function( Q, BaseObject, window ) {
+  return ( function( Q, BaseObject, globalContext ) {
     /**
      * Defined by Q, actually, but defined here to make type handling nicer
      * @typedef {{}} Promise
@@ -5332,8 +5332,8 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
       categorizable: false
     };
     // assign to `window` if stand-alone
-    if ( window ) {
-      window.FileManager = FileManager
+    if ( globalContext ) {
+      globalContext.FileManager = FileManager
     }
     // return factory
     return FileManager;
@@ -6359,7 +6359,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
     self.defineProperty( "topView", {
       read: true,
       write: false,
-      backingValue: false
+      backingVariable: false
     } );
     /**
      * Returns the initial view in the view stack
@@ -6400,7 +6400,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
     self.defineProperty( "rootView", {
       read: true,
       write: true,
-      backingValue: false
+      backingVariable: false
     } );
     self._preventClicks = null;
     /**
@@ -6915,7 +6915,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
     self.defineProperty( "leftView", {
       read: true,
       write: true,
-      backingValue: false
+      backingVariable: false
     } );
     /**
      * Allows access to the right view
@@ -6942,7 +6942,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
     self.defineProperty( "rightView", {
       read: true,
       write: true,
-      backingValue: false
+      backingVariable: false
     } );
     /**
      * @method render
