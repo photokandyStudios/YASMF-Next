@@ -1,12 +1,11 @@
-define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function( _y,
-  DemoListViewHTML, Hammer ) {
+define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function ( _y, DemoListViewHTML, Hammer ) {
   var _className = "DemoListView";
-  var DemoListView = function() {
+  var DemoListView = function () {
     var self = new _y.UI.ViewContainer();
     self.subclass( _className );
     self._listContainer = null;
     self._alertButton = null;
-    self.testAlerts = function() {
+    self.testAlerts = function () {
       function logTappedButton( sender, notice, data ) {
         var buttonIndex = data[ 0 ];
         console.log( "Button tapped in alert (" + sender.title + "): " + buttonIndex );
@@ -70,9 +69,9 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function( _y
         ]
       } );
       fourAlert.addListenerForNotification( "buttonTapped", logTappedButton );
-      fourAlert.show().then( function( idx ) {
+      fourAlert.show().then( function ( idx ) {
         console.log( "Promise resolved: " + idx );
-      } ).catch( function( e ) {
+      } ).catch( function ( e ) {
         console.log( "Promise rejected: " + e );
       } ).done();
       // change the title of FourAlert after it is shown.
@@ -93,9 +92,7 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function( _y
       Hammer( self._alertButton ).on( "tap", self.testAlerts );
     } );
     self.override( function init() {
-      self.super( _className, "init", [ undefined, "div",
-        "DemoListView ui-container", undefined
-      ] );
+      self.super( _className, "init", [ undefined, "div", "DemoListView ui-container", undefined ] );
     } );
     self.override( function destroy() {
       self._listContainer = null;

@@ -21,7 +21,7 @@ requirejs.config( {
     "yasmf": [ "Q" ]
   }
 } );
-require( [ 'yasmf', 'app/main', 'cultures/globalize.culture.es-US' ], function( _y, APP ) {
+require( [ 'yasmf', 'app/main', 'cultures/globalize.culture.es-US' ], function ( _y, APP ) {
   window._y = _y;
   window.APP = APP;
   APP.start();

@@ -1,6 +1,6 @@
-define( [ "yasmf", "app/views/DemoListView" ], function( _y, DemoListView ) {
+define( [ "yasmf", "app/views/DemoListView" ], function ( _y, DemoListView ) {
   var APP = {};
-  APP.start = function() {
+  APP.start = function () {
     var aDemoListView = new DemoListView();
     aDemoListView.init();
     var aNavigationController = new _y.UI.NavigationController();
