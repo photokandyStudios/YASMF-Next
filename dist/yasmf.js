@@ -2007,517 +2007,509 @@ Globalize.addCultureInfo( "en-US", "default", {
 
 define("cultures/globalize.culture.en-US", function(){});
 
+/**
+ *
+ * Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.
+ *
+ * @module core.js
+ * @author Kerri Shotts
+ * @version 0.4
+ *
+ * ```
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */
+/*jshint
+     asi:true,
+     bitwise:true,
+     browser:true,
+     camelcase:true,
+     curly:true,
+     eqeqeq:false,
+     forin:true,
+     noarg:true,
+     noempty:true,
+     plusplus:false,
+     smarttabs:true,
+     sub:true,
+     trailing:false,
+     undef:true,
+     white:false,
+     onevar:false
+*/
+/*global define, Globalize, device, document, window, setTimeout, navigator, console*/
+define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], function () {
+  var _y = {
+    VERSION: "0.4.100",
     /**
-     *
-     * Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.
-     *
-     * @module core.js
-     * @author Kerri Shotts
-     * @version 0.4
-     *
-     * ```
-     * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
-     * Permission is hereby granted, free of charge, to any person obtaining a copy of this
-     * software and associated documentation files (the "Software"), to deal in the Software
-     * without restriction, including without limitation the rights to use, copy, modify,
-     * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-     * permit persons to whom the Software is furnished to do so, subject to the following
-     * conditions:
-     * The above copyright notice and this permission notice shall be included in all copies
-     * or substantial portions of the Software.
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-     * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-     * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-     * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
-     * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-     * OTHER DEALINGS IN THE SOFTWARE.
-     * ```
+     * Returns an element from the DOM with the specified
+     * ID. Similar to (but not like) jQuery's $(), except
+     * that this is a pure DOM element.
+     * @method ge
+     * @param  {String} elementId
+     * @return {Node}
      */
-    /*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
-    */
-    /*global define, Globalize, device*/
-    define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], function() {
-      var _y = {
-        VERSION: '0.4.100',
-        /**
-         * Returns an element from the DOM with the specified
-         * ID. Similar to (but not like) jQuery's $(), except
-         * that this is a pure DOM element.
-         * @method ge
-         * @param  {String} elementId
-         * @return {Node}
-         */
-        ge: function( elementId ) {
-          return document.getElementById( elementId );
-        },
-        /**
-         * Returns an element from the DOM using `querySelector`.
-         * @method qs
-         * @param {String} selector
-         * @returns {Node}
-         */
-        qs: function( selector ) {
-          return document.querySelector( selector );
-        },
-        /**
-         * Returns an array of all elements matching a given
-         * selector. The array is processed to be a real array,
-         * not a nodeList.
-         * @method gac
-         * @param  {String} selector
-         * @return {Array} of Nodes
-         */
-        gac: function( selector ) {
-          return Array.prototype.slice.call( document.querySelectorAll( selector ) );
-        },
-        /**
-         * Returns an array of elements matching a given selector.
-         * @method qsa
-         * @param {String} selector
-         * @returns {Array} of Nodes
-         */
-        qsa: function( selector ) {
-          return Array.prototype.slice.call( document.querySelectorAll( selector ) );
-        },
-        /**
-         * Returns a Computed CSS Style ready for interrogation if
-         * `property` is not defined, or the actual property value
-         * if `property` is defined.
-         * @method gsc
-         * @param {Node} element  A specific DOM element
-         * @param {String} [property]  A CSS property to query
-         * @returns {*}
-         */
-        gsc: function( element, property ) {
-          var computedStyle = window.getComputedStyle( element );
-          if ( typeof property !== "undefined" ) {
-            return computedStyle.getPropertyValue( property );
+    ge: function ( elementId ) {
+      return document.getElementById( elementId );
+    },
+    /**
+     * Returns an element from the DOM using `querySelector`.
+     * @method qs
+     * @param {String} selector
+     * @returns {Node}
+     */
+    qs: function ( selector ) {
+      return document.querySelector( selector );
+    },
+    /**
+     * Returns an array of all elements matching a given
+     * selector. The array is processed to be a real array,
+     * not a nodeList.
+     * @method gac
+     * @param  {String} selector
+     * @return {Array} of Nodes
+     */
+    gac: function ( selector ) {
+      return Array.prototype.slice.call( document.querySelectorAll( selector ) );
+    },
+    /**
+     * Returns an array of elements matching a given selector.
+     * @method qsa
+     * @param {String} selector
+     * @returns {Array} of Nodes
+     */
+    qsa: function ( selector ) {
+      return Array.prototype.slice.call( document.querySelectorAll( selector ) );
+    },
+    /**
+     * Returns a Computed CSS Style ready for interrogation if
+     * `property` is not defined, or the actual property value
+     * if `property` is defined.
+     * @method gsc
+     * @param {Node} element  A specific DOM element
+     * @param {String} [property]  A CSS property to query
+     * @returns {*}
+     */
+    gsc: function ( element, property ) {
+      var computedStyle = window.getComputedStyle( element );
+      if ( typeof property !== "undefined" ) {
+        return computedStyle.getPropertyValue( property );
+      }
+      return computedStyle;
+    },
+    /**
+     * Returns a parsed template. The template can be a simple
+     * string, in which case the replacement variable are replaced
+     * and returned simply, or the template can be a DOM element,
+     * in which case the template is assumed to be the DOM Element's
+     * `innerHTML`, and then the replacement variables are parsed.
+     *
+     * Replacement variables are of the form `%VARIABLE%`, and
+     * can occur anywhere, not just within strings in HTML.
+     *
+     * The replacements array is of the form
+     *     { "VARIABLE": replacement, "VARIABLE2": replacement, ... }
+     *
+     * @method template
+     * @param  {Node|String} templateElement
+     * @param  {Object} replacements
+     * @return {String}
+     */
+    template: function ( templateElement, replacements ) {
+      var templateHTML = templateElement.innerHTML || templateElement;
+      for ( var theVar in replacements ) {
+        if ( replacements.hasOwnProperty( theVar ) ) {
+          var thisVar = "%" + theVar.toUpperCase() + "%";
+          while ( templateHTML.indexOf( thisVar ) > -1 ) {
+            templateHTML = templateHTML.replace( thisVar, replacements[ theVar ] );
           }
-          return computedStyle;
-        },
-        /**
-         * Returns a parsed template. The template can be a simple
-         * string, in which case the replacement variable are replaced
-         * and returned simply, or the template can be a DOM element,
-         * in which case the template is assumed to be the DOM Element's
-         * `innerHTML`, and then the replacement variables are parsed.
-         *
-         * Replacement variables are of the form `%VARIABLE%`, and
-         * can occur anywhere, not just within strings in HTML.
-         *
-         * The replacements array is of the form
-         *     { "VARIABLE": replacement, "VARIABLE2": replacement, ... }
-         *
-         * @method template
-         * @param  {Node|String} templateElement
-         * @param  {Object} replacements
-         * @return {String}
-         */
-        template: function( templateElement, replacements ) {
-          var templateHTML = templateElement.innerHTML || templateElement;
-          for ( var theVar in replacements ) {
-            if ( replacements.hasOwnProperty( theVar ) ) {
-              var thisVar = '%' + theVar.toUpperCase() + '%';
-              while ( templateHTML.indexOf( thisVar ) > -1 ) {
-                templateHTML = templateHTML.replace( thisVar, replacements[ theVar ] );
-              }
-            }
-          }
-          return templateHTML;
-        },
-        /**
-         * Indicates if the app is running in a Cordova container.
-         * Only valid if `executeWhenReady` is used to start an app.
-         * @property underCordova
-         * @default false
-         */
-        underCordova: false,
-        /**
-         * Handles the conundrum of executing a block of code when
-         * the mobile device or desktop browser is ready. If running
-         * under Cordova, the `deviceready` event will fire, and
-         * the `callback` will execute. Otherwise, after 1s, the
-         * `callback` will execute *if it hasn't already*.
-         *
-         * @method executeWhenReady
-         * @param {Function} callback
-         */
-        executeWhenReady: function( callback ) {
-          var executed = false;
-          document.addEventListener( "deviceready", function() {
-            if ( !executed ) {
-              executed = true;
-              _y.underCordova = true;
-              if ( typeof callback === "function" ) {
-                callback();
-              }
-            }
-          }, false );
-          setTimeout( function() {
-            if ( !executed ) {
-              executed = true;
-              _y.underCordova = false;
-              if ( typeof callback === "function" ) {
-                callback();
-              }
-            }
-          }, 1000 );
-        },
-        /**
-         * > The following functions are related to globalization and localization, which
-         * > are now considered to be core functions (previously it was broken out in
-         * > PKLOC)
-         */
-        /**
-         * @typedef {String} Locale
-         */
-        /**
-         * Indicates the user's locale. It's only valid after
-         * a call to `getUserLocale`, but it can be written to
-         * at any time in order to override `getUserLocale`'s
-         * calculation of the user's locale.
-         *
-         * @property currentUserLocale
-         * @default (empty string)
-         * @type {Locale}
-         */
-        currentUserLocale: "",
-        /**
-         * A translation matrix. Used by `addTranslation(s)` and `T`.
-         *
-         * @property localizedText
-         * @type {Object}
-         */
-        localizedText: {},
-        /**
-         * Given a locale string, normalize it to the form of `la-RE` or `la`, depending on the length.
-         * ```
-         *     "enus", "en_us", "en_---__--US", "EN-US" --> "en-US"
-         *     "en", "en-", "EN!" --> "en"
-         * ```
-         * @method normalizeLocale
-         * @param {Locale} theLocale
-         */
-        normalizeLocale: function( theLocale ) {
-          var theNewLocale = theLocale;
-          if ( theNewLocale.length < 2 ) {
-            throw new Error( "Fatal: invalid locale; not of the format la-RE." );
-          }
-          var theLanguage = theNewLocale.substr( 0, 2 ).toLowerCase();
-          var theRegion = theNewLocale.substr( -2 ).toUpperCase();
-          if ( theNewLocale.length < 4 ) {
-            theRegion = ""; // there can't possibly be a valid region on a 3-char string
-          }
-          if ( theRegion !== "" ) {
-            theNewLocale = theLanguage + "-" + theRegion;
-          } else {
-            theNewLocale = theLanguage;
-          }
-          return theNewLocale;
-        },
-        /**
-         * Sets the current locale for jQuery/Globalize
-         * @method setGlobalizationLocale
-         * @param {Locale} theLocale
-         */
-        setGlobalizationLocale: function( theLocale ) {
-          var theNewLocale = _y.normalizeLocale( theLocale );
-          Globalize.culture( theNewLocale );
-        },
-        /**
-         * Add a translation to the existing translation matrix
-         * @method addTranslation
-         * @param {Locale} locale
-         * @param {String} key
-         * @param {String} value
-         */
-        addTranslation: function( locale, key, value ) {
-          var self = _y;
-          // we'll store translations with upper-case locales, so case never matters
-          var theNewLocale = self.normalizeLocale( locale ).toUpperCase();
-          // store the value
-          if ( typeof self.localizedText[ theNewLocale ] === "undefined" ) {
-            self.localizedText[ theNewLocale ] = {};
-          }
-          self.localizedText[ theNewLocale ][ key.toUpperCase() ] = value;
-        },
-        /**
-         * Add translations in batch, as follows:
-         * ```
-         *   {
-         *     "HELLO":
-         *     {
-         *       "en-US": "Hello",
-         *       "es-US": "Hola"
-         *     },
-         *     "GOODBYE":
-         *     {
-         *       "en-US": "Bye",
-         *       "es-US": "Adios"
-         *     }
-         *   }
-         * ```
-         * @method addTranslations
-         * @param {Object} o
-         */
-        addTranslations: function( o ) {
-          var self = _y;
-          for ( var key in o ) {
-            if ( o.hasOwnProperty( key ) ) {
-              for ( var locale in o[ key ] ) {
-                if ( o[ key ].hasOwnProperty( locale ) ) {
-                  self.addTranslation( locale, key, o[ key ][ locale ] );
-                }
-              }
-            }
-          }
-        },
-        /**
-         * Returns the user's locale (e.g., `en-US` or `fr-FR`). If one
-         * can't be found, `en-US` is returned. If `currentUserLocale`
-         * is already defined, it won't attempt to recalculate it.
-         * @method getUserLocale
-         * @return {Locale}
-         */
-        getUserLocale: function() {
-          var self = _y;
-          if ( self.currentUserLocale ) {
-            return self.currentUserLocale;
-          }
-          var currentPlatform = "unknown";
-          if ( typeof device != 'undefined' ) {
-            currentPlatform = device.platform;
-          }
-          var userLocale = "en-US";
-          // a suitable default
-          if ( currentPlatform == "Android" ) {
-            // parse the navigator.userAgent
-            var userAgent = navigator.userAgent;
-            // inspired by http://stackoverflow.com/a/7728507/741043
-            var tempLocale = userAgent.match( /Android.*([a-zA-Z]{2}-[a-zA-Z]{2})/ );
-            if ( tempLocale ) {
-              userLocale = tempLocale[ 1 ];
-            }
-          } else {
-            userLocale = navigator.language || navigator.browserLanguage || navigator
-              .systemLanguage || navigator.userLanguage;
-          }
-          self.currentUserLocale = self.normalizeLocale( userLocale );
-          return self.currentUserLocale;
-        },
-        /**
-         * Gets the device locale, if available. It depends on the
-         * Globalization plugin provided by Cordova, but if the
-         * plugin is not available, it assumes the device locale
-         * can't be determined rather than throw an error.
-         *
-         * Once the locale is determined one way or the other, `callback`
-         * is called.
-         *
-         * @method getDeviceLocale
-         * @param {Function} callback
-         */
-        getDeviceLocale: function( callback ) {
-          var self = _y;
-          if ( typeof navigator.globalization !== "undefined" ) {
-            if ( typeof navigator.globalization.getLocaleName !== "undefined" ) {
-              navigator.globalization.getLocaleName( function( locale ) {
-                self.currentUserLocale = self.normalizeLocale( locale.value );
-                if ( typeof callback === "function" ) {
-                  callback();
-                }
-              }, function() {
-                // error; go ahead and call the callback, but don't set the locale
-                console.log( "WARN: Couldn't get user locale from device." );
-                if ( typeof callback === "function" ) {
-                  callback();
-                }
-              } );
-              return;
-            }
-          }
+        }
+      }
+      return templateHTML;
+    },
+    /**
+     * Indicates if the app is running in a Cordova container.
+     * Only valid if `executeWhenReady` is used to start an app.
+     * @property underCordova
+     * @default false
+     */
+    underCordova: false,
+    /**
+     * Handles the conundrum of executing a block of code when
+     * the mobile device or desktop browser is ready. If running
+     * under Cordova, the `deviceready` event will fire, and
+     * the `callback` will execute. Otherwise, after 1s, the
+     * `callback` will execute *if it hasn't already*.
+     *
+     * @method executeWhenReady
+     * @param {Function} callback
+     */
+    executeWhenReady: function ( callback ) {
+      var executed = false;
+      document.addEventListener( "deviceready", function () {
+        if ( !executed ) {
+          executed = true;
+          _y.underCordova = true;
           if ( typeof callback === "function" ) {
             callback();
           }
-        },
-        /**
-         * Looks up a translation for a given `key` and locale. If
-         * the translation does not exist, `undefined` is returned.
-         *
-         * The `key` is converted to uppercase, and the locale is
-         * properly normalized and then converted to uppercase before
-         * any lookup is attempted.
-         *
-         * @method lookupTranslation
-         * @param {String} key
-         * @param {Locale} [theLocale]
-         * @returns {*}
-         */
-        lookupTranslation: function( key, theLocale ) {
-          var self = _y;
-          var upperKey = key.toUpperCase();
-          var userLocale = theLocale || self.getUserLocale();
-          userLocale = self.normalizeLocale( userLocale ).toUpperCase();
-          // look it up by checking if userLocale exists, and then if the key (uppercased) exists
-          if ( typeof self.localizedText[ userLocale ] !== "undefined" ) {
-            if ( typeof self.localizedText[ userLocale ][ upperKey ] !== "undefined" ) {
-              return self.localizedText[ userLocale ][ upperKey ];
-            }
-          }
-          // if not found, we don't return anything
-          return void( 0 );
-        },
-        /**
-         * @property localeOfLastResort
-         * @default "en-US"
-         * @type {Locale}
-         */
-        localeOfLastResort: "en-US",
-        /**
-         * @property languageOfLastResort
-         * @default "en"
-         * @type {Locale}
-         */
-        languageOfLastResort: "en",
-        /**
-         * Convenience function for translating text. Key is the only
-         * required value and case doesn't matter (it's uppercased). Replacement
-         * variables can be specified using replacement variables of the form `{ "VAR":"VALUE" }`,
-         * using `%VAR%` in the key/value returned. If `locale` is specified, it
-         * takes precedence over the user's current locale.
-         *
-         * @method T
-         * @param {String} key
-         * @param {Object} [parms] replacement variables
-         * @param {Locale} [locale]
-         */
-        T: function( key, parms, locale ) {
-          var self = _y;
-          var userLocale = locale || self.getUserLocale();
-          var currentValue;
-          if ( typeof( currentValue = self.lookupTranslation( key, userLocale ) ) ===
-            "undefined" ) {
-            // we haven't found it under the given locale (of form: xx-XX), try the fallback locale (xx)
-            userLocale = userLocale.substr( 0, 2 );
-            if ( typeof( currentValue = self.lookupTranslation( key, userLocale ) ) ===
-              "undefined" ) {
-              // we haven't found it under any of the given locales; try the language of last resort
-              if ( typeof( currentValue = self.lookupTranslation( key, self.languageOfLastResort ) ) ===
-                "undefined" ) {
-                // we haven't found it under any of the given locales; try locale of last resort
-                if ( typeof( currentValue = self.lookupTranslation( key, self.localeOfLastResort ) ) ===
-                  "undefined" ) {
-                  // we didn't find it at all... we'll use the key
-                  currentValue = key;
-                }
-              }
-            }
-          }
-          return self.template( currentValue, parms );
-        },
-        /**
-         * Convenience function for localizing numbers according the format (optional) and
-         * the locale (optional). theFormat is typically the number of places to use; "n" if
-         * not specified.
-         *
-         * @method N
-         * @param {Number} theNumber
-         * @param {Number|String} theFormat
-         * @param {Locale} [theLocale]
-         */
-        N: function( theNumber, theFormat, theLocale ) {
-          var self = _y;
-          var iFormat = "n" + ( ( typeof theFormat === "undefined" ) ? "0" :
-            theFormat );
-          var iLocale = theLocale || self.getUserLocale();
-          self.setGlobalizationLocale( iLocale );
-          return Globalize.format( theNumber, iFormat );
-        },
-        /**
-         * Convenience function for localizing currency. theFormat is the number of decimal places
-         * or "2" if not specified. If there are more places than digits, padding is added; if there
-         * are fewer places, rounding is performed.
-         *
-         * @method C
-         * @param {Number} theNumber
-         * @param {String} theFormat
-         * @param {Locale} [theLocale]
-         */
-        C: function( theNumber, theFormat, theLocale ) {
-          var self = _y;
-          var iFormat = "c" + ( ( typeof theFormat === "undefined" ) ? "2" :
-            theFormat );
-          var iLocale = theLocale || self.getUserLocale();
-          self.setGlobalizationLocale( iLocale );
-          return Globalize.format( theNumber, iFormat );
-        },
-        /**
-         * Convenience function for localizing percentages. theFormat specifies the number of
-         * decimal places; two if not specified.
-         * @method PCT
-         * @param {Number} theNumber
-         * @param {Number} theFormat
-         * @param {Locale} [theLocale]
-         */
-        PCT: function( theNumber, theFormat, theLocale ) {
-          var self = _y;
-          var iFormat = "p" + ( ( typeof theFormat === "undefined" ) ? "2" :
-            theFormat );
-          var iLocale = theLocale || self.getUserLocale();
-          self.setGlobalizationLocale( iLocale );
-          return Globalize.format( theNumber, iFormat );
-        },
-        /**
-         * Convenience function for localizing dates.
-         *
-         * theFormat specifies the format; "d" is assumed if not provided.
-         *
-         * @method D
-         * @param {Date} theDate
-         * @param {String} theFormat
-         * @param {Locale} [theLocale]
-         */
-        D: function( theDate, theFormat, theLocale ) {
-          var self = _y;
-          var iFormat = theFormat || "d";
-          var iLocale = theLocale || self.getUserLocale();
-          self.setGlobalizationLocale( iLocale );
-          return Globalize.format( theDate, iFormat );
-        },
-        /**
-         * Convenience function for jQuery/Globalize's `format` method
-         * @method format
-         * @param {*} theValue
-         * @param {String} theFormat
-         * @param {Locale} [theLocale]
-         * @returns {*}
-         */
-        format: function( theValue, theFormat, theLocale ) {
-          var self = _y;
-          var iFormat = theFormat;
-          var iLocale = theLocale || self.getUserLocale();
-          self.setGlobalizationLocale( iLocale );
-          return Globalize.format( theValue, iFormat );
         }
-      };
-      return _y;
-    } );
+      }, false );
+      setTimeout( function () {
+        if ( !executed ) {
+          executed = true;
+          _y.underCordova = false;
+          if ( typeof callback === "function" ) {
+            callback();
+          }
+        }
+      }, 1000 );
+    },
+    /**
+     * > The following functions are related to globalization and localization, which
+     * > are now considered to be core functions (previously it was broken out in
+     * > PKLOC)
+     */
+    /**
+     * @typedef {String} Locale
+     */
+    /**
+     * Indicates the user's locale. It's only valid after
+     * a call to `getUserLocale`, but it can be written to
+     * at any time in order to override `getUserLocale`'s
+     * calculation of the user's locale.
+     *
+     * @property currentUserLocale
+     * @default (empty string)
+     * @type {Locale}
+     */
+    currentUserLocale: "",
+    /**
+     * A translation matrix. Used by `addTranslation(s)` and `T`.
+     *
+     * @property localizedText
+     * @type {Object}
+     */
+    localizedText: {},
+    /**
+     * Given a locale string, normalize it to the form of `la-RE` or `la`, depending on the length.
+     * ```
+     *     "enus", "en_us", "en_---__--US", "EN-US" --> "en-US"
+     *     "en", "en-", "EN!" --> "en"
+     * ```
+     * @method normalizeLocale
+     * @param {Locale} theLocale
+     */
+    normalizeLocale: function ( theLocale ) {
+      var theNewLocale = theLocale;
+      if ( theNewLocale.length < 2 ) {
+        throw new Error( "Fatal: invalid locale; not of the format la-RE." );
+      }
+      var theLanguage = theNewLocale.substr( 0, 2 ).toLowerCase(),
+        theRegion = theNewLocale.substr( -2 ).toUpperCase();
+      if ( theNewLocale.length < 4 ) {
+        theRegion = ""; // there can't possibly be a valid region on a 3-char string
+      }
+      if ( theRegion !== "" ) {
+        theNewLocale = theLanguage + "-" + theRegion;
+      } else {
+        theNewLocale = theLanguage;
+      }
+      return theNewLocale;
+    },
+    /**
+     * Sets the current locale for jQuery/Globalize
+     * @method setGlobalizationLocale
+     * @param {Locale} theLocale
+     */
+    setGlobalizationLocale: function ( theLocale ) {
+      var theNewLocale = _y.normalizeLocale( theLocale );
+      Globalize.culture( theNewLocale );
+    },
+    /**
+     * Add a translation to the existing translation matrix
+     * @method addTranslation
+     * @param {Locale} locale
+     * @param {String} key
+     * @param {String} value
+     */
+    addTranslation: function ( locale, key, value ) {
+      var self = _y,
+        // we'll store translations with upper-case locales, so case never matters
+        theNewLocale = self.normalizeLocale( locale ).toUpperCase();
+      // store the value
+      if ( typeof self.localizedText[ theNewLocale ] === "undefined" ) {
+        self.localizedText[ theNewLocale ] = {};
+      }
+      self.localizedText[ theNewLocale ][ key.toUpperCase() ] = value;
+    },
+    /**
+     * Add translations in batch, as follows:
+     * ```
+     *   {
+     *     "HELLO":
+     *     {
+     *       "en-US": "Hello",
+     *       "es-US": "Hola"
+     *     },
+     *     "GOODBYE":
+     *     {
+     *       "en-US": "Bye",
+     *       "es-US": "Adios"
+     *     }
+     *   }
+     * ```
+     * @method addTranslations
+     * @param {Object} o
+     */
+    addTranslations: function ( o ) {
+      var self = _y;
+      for ( var key in o ) {
+        if ( o.hasOwnProperty( key ) ) {
+          for ( var locale in o[ key ] ) {
+            if ( o[ key ].hasOwnProperty( locale ) ) {
+              self.addTranslation( locale, key, o[ key ][ locale ] );
+            }
+          }
+        }
+      }
+    },
+    /**
+     * Returns the user's locale (e.g., `en-US` or `fr-FR`). If one
+     * can't be found, `en-US` is returned. If `currentUserLocale`
+     * is already defined, it won't attempt to recalculate it.
+     * @method getUserLocale
+     * @return {Locale}
+     */
+    getUserLocale: function () {
+      var self = _y;
+      if ( self.currentUserLocale ) {
+        return self.currentUserLocale;
+      }
+      var currentPlatform = "unknown";
+      if ( typeof device !== "undefined" ) {
+        currentPlatform = device.platform;
+      }
+      var userLocale = "en-US";
+      // a suitable default
+      if ( currentPlatform === "Android" ) {
+        // parse the navigator.userAgent
+        var userAgent = navigator.userAgent,
+          // inspired by http://stackoverflow.com/a/7728507/741043
+          tempLocale = userAgent.match( /Android.*([a-zA-Z]{2}-[a-zA-Z]{2})/ );
+        if ( tempLocale ) {
+          userLocale = tempLocale[ 1 ];
+        }
+      } else {
+        userLocale = navigator.language || navigator.browserLanguage || navigator.systemLanguage || navigator.userLanguage;
+      }
+      self.currentUserLocale = self.normalizeLocale( userLocale );
+      return self.currentUserLocale;
+    },
+    /**
+     * Gets the device locale, if available. It depends on the
+     * Globalization plugin provided by Cordova, but if the
+     * plugin is not available, it assumes the device locale
+     * can't be determined rather than throw an error.
+     *
+     * Once the locale is determined one way or the other, `callback`
+     * is called.
+     *
+     * @method getDeviceLocale
+     * @param {Function} callback
+     */
+    getDeviceLocale: function ( callback ) {
+      var self = _y;
+      if ( typeof navigator.globalization !== "undefined" ) {
+        if ( typeof navigator.globalization.getLocaleName !== "undefined" ) {
+          navigator.globalization.getLocaleName( function ( locale ) {
+            self.currentUserLocale = self.normalizeLocale( locale.value );
+            if ( typeof callback === "function" ) {
+              callback();
+            }
+          }, function () {
+            // error; go ahead and call the callback, but don't set the locale
+            console.log( "WARN: Couldn't get user locale from device." );
+            if ( typeof callback === "function" ) {
+              callback();
+            }
+          } );
+          return;
+        }
+      }
+      if ( typeof callback === "function" ) {
+        callback();
+      }
+    },
+    /**
+     * Looks up a translation for a given `key` and locale. If
+     * the translation does not exist, `undefined` is returned.
+     *
+     * The `key` is converted to uppercase, and the locale is
+     * properly normalized and then converted to uppercase before
+     * any lookup is attempted.
+     *
+     * @method lookupTranslation
+     * @param {String} key
+     * @param {Locale} [theLocale]
+     * @returns {*}
+     */
+    lookupTranslation: function ( key, theLocale ) {
+      var self = _y,
+        upperKey = key.toUpperCase(),
+        userLocale = theLocale || self.getUserLocale();
+      userLocale = self.normalizeLocale( userLocale ).toUpperCase();
+      // look it up by checking if userLocale exists, and then if the key (uppercased) exists
+      if ( typeof self.localizedText[ userLocale ] !== "undefined" ) {
+        if ( typeof self.localizedText[ userLocale ][ upperKey ] !== "undefined" ) {
+          return self.localizedText[ userLocale ][ upperKey ];
+        }
+      }
+      // if not found, we don't return anything
+      return void( 0 );
+    },
+    /**
+     * @property localeOfLastResort
+     * @default "en-US"
+     * @type {Locale}
+     */
+    localeOfLastResort: "en-US",
+    /**
+     * @property languageOfLastResort
+     * @default "en"
+     * @type {Locale}
+     */
+    languageOfLastResort: "en",
+    /**
+     * Convenience function for translating text. Key is the only
+     * required value and case doesn't matter (it's uppercased). Replacement
+     * variables can be specified using replacement variables of the form `{ "VAR":"VALUE" }`,
+     * using `%VAR%` in the key/value returned. If `locale` is specified, it
+     * takes precedence over the user's current locale.
+     *
+     * @method T
+     * @param {String} key
+     * @param {Object} [parms] replacement variables
+     * @param {Locale} [locale]
+     */
+    T: function ( key, parms, locale ) {
+      var self = _y,
+        userLocale = locale || self.getUserLocale(),
+        currentValue;
+      if ( typeof ( currentValue = self.lookupTranslation( key, userLocale ) ) === "undefined" ) {
+        // we haven't found it under the given locale (of form: xx-XX), try the fallback locale (xx)
+        userLocale = userLocale.substr( 0, 2 );
+        if ( typeof ( currentValue = self.lookupTranslation( key, userLocale ) ) === "undefined" ) {
+          // we haven't found it under any of the given locales; try the language of last resort
+          if ( typeof ( currentValue = self.lookupTranslation( key, self.languageOfLastResort ) ) === "undefined" ) {
+            // we haven't found it under any of the given locales; try locale of last resort
+            if ( typeof ( currentValue = self.lookupTranslation( key, self.localeOfLastResort ) ) === "undefined" ) {
+              // we didn't find it at all... we'll use the key
+              currentValue = key;
+            }
+          }
+        }
+      }
+      return self.template( currentValue, parms );
+    },
+    /**
+     * Convenience function for localizing numbers according the format (optional) and
+     * the locale (optional). theFormat is typically the number of places to use; "n" if
+     * not specified.
+     *
+     * @method N
+     * @param {Number} theNumber
+     * @param {Number|String} theFormat
+     * @param {Locale} [theLocale]
+     */
+    N: function ( theNumber, theFormat, theLocale ) {
+      var self = _y,
+        iFormat = "n" + ( ( typeof theFormat === "undefined" ) ? "0" : theFormat ),
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      return Globalize.format( theNumber, iFormat );
+    },
+    /**
+     * Convenience function for localizing currency. theFormat is the number of decimal places
+     * or "2" if not specified. If there are more places than digits, padding is added; if there
+     * are fewer places, rounding is performed.
+     *
+     * @method C
+     * @param {Number} theNumber
+     * @param {String} theFormat
+     * @param {Locale} [theLocale]
+     */
+    C: function ( theNumber, theFormat, theLocale ) {
+      var self = _y,
+        iFormat = "c" + ( ( typeof theFormat === "undefined" ) ? "2" : theFormat ),
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      return Globalize.format( theNumber, iFormat );
+    },
+    /**
+     * Convenience function for localizing percentages. theFormat specifies the number of
+     * decimal places; two if not specified.
+     * @method PCT
+     * @param {Number} theNumber
+     * @param {Number} theFormat
+     * @param {Locale} [theLocale]
+     */
+    PCT: function ( theNumber, theFormat, theLocale ) {
+      var self = _y,
+        iFormat = "p" + ( ( typeof theFormat === "undefined" ) ? "2" : theFormat ),
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      return Globalize.format( theNumber, iFormat );
+    },
+    /**
+     * Convenience function for localizing dates.
+     *
+     * theFormat specifies the format; "d" is assumed if not provided.
+     *
+     * @method D
+     * @param {Date} theDate
+     * @param {String} theFormat
+     * @param {Locale} [theLocale]
+     */
+    D: function ( theDate, theFormat, theLocale ) {
+      var self = _y,
+        iFormat = theFormat || "d",
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      return Globalize.format( theDate, iFormat );
+    },
+    /**
+     * Convenience function for jQuery/Globalize's `format` method
+     * @method format
+     * @param {*} theValue
+     * @param {String} theFormat
+     * @param {Locale} [theLocale]
+     * @returns {*}
+     */
+    format: function ( theValue, theFormat, theLocale ) {
+      var self = _y,
+        iFormat = theFormat,
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      return Globalize.format( theValue, iFormat );
+    }
+  };
+  return _y;
+} );
 
 /**
  *
@@ -2564,14 +2556,14 @@ define("cultures/globalize.culture.en-US", function(){});
          onevar:false
  */
 /*global define*/
-define( 'yasmf/util/datetime',[],function() {
+define( 'yasmf/util/datetime',[],function () {
   return {
     /**
      * Returns the current time in the Unix time format
      * @method getUnixTime
      * @return {UnixTime}
      */
-    getUnixTime: function() {
+    getUnixTime: function () {
       return ( new Date() ).getTime();
     },
     /**
@@ -2598,11 +2590,11 @@ define( 'yasmf/util/datetime',[],function() {
      * @param {number} precision
      * @returns {TimeParts}
      */
-    getPartsFromSeconds: function( seconds, precision ) {
-      var partValues = [ 0, 0, 0, 0, 0, 0, 0 ];
-      var modValues = [ 1, 60, 3600, 86400, 604800, 31557600 ];
+    getPartsFromSeconds: function ( seconds, precision ) {
+      var partValues = [ 0, 0, 0, 0, 0, 0, 0 ],
+        modValues = [ 1, 60, 3600, 86400, 604800, 31557600 ];
       for ( var i = precision; i > 0; i-- ) {
-        if ( i == 1 ) {
+        if ( i === 1 ) {
           partValues[ i - 1 ] = seconds % modValues[ i - 1 ];
         } else {
           partValues[ i - 1 ] = Math.floor( seconds % modValues[ i - 1 ] );
@@ -2668,7 +2660,7 @@ define( 'yasmf/util/datetime',[],function() {
          onevar:false
  */
 /*global define*/
-define( 'yasmf/util/filename',[],function() {
+define( 'yasmf/util/filename',[],function () {
   var PKFILE = {
     /**
      * @property Version
@@ -2712,13 +2704,12 @@ define( 'yasmf/util/filename',[],function() {
      * @param  {String} theFileName
      * @return {String}
      */
-    makeValid: function( theFileName ) {
+    makeValid: function ( theFileName ) {
       var self = PKFILE;
       var theNewFileName = theFileName;
       for ( var i = 0; i < self.invalidCharacters.length; i++ ) {
         var d = 0;
-        while ( theNewFileName.indexOf( self.invalidCharacters[ i ] ) > -1 && ( d++ ) <
-          50 ) {
+        while ( theNewFileName.indexOf( self.invalidCharacters[ i ] ) > -1 && ( d++ ) < 50 ) {
           theNewFileName = theNewFileName.replace( self.invalidCharacters[ i ], self.replacementCharacter );
         }
       }
@@ -2731,14 +2722,13 @@ define( 'yasmf/util/filename',[],function() {
      * @param  {String} theFileName
      * @return {String}
      */
-    getFilePart: function( theFileName ) {
+    getFilePart: function ( theFileName ) {
       var self = PKFILE;
       var theSlashPosition = theFileName.lastIndexOf( self.pathSeparator );
       if ( theSlashPosition < 0 ) {
         return theFileName;
       }
-      return theFileName.substr( theSlashPosition + 1, theFileName.length -
-        theSlashPosition );
+      return theFileName.substr( theSlashPosition + 1, theFileName.length - theSlashPosition );
     },
     /**
      * Returns the path portion of a full path.
@@ -2746,7 +2736,7 @@ define( 'yasmf/util/filename',[],function() {
      * @param  {String} theFileName
      * @return {String}
      */
-    getPathPart: function( theFileName ) {
+    getPathPart: function ( theFileName ) {
       var self = PKFILE;
       var theSlashPosition = theFileName.lastIndexOf( self.pathSeparator );
       if ( theSlashPosition < 0 ) {
@@ -2760,7 +2750,7 @@ define( 'yasmf/util/filename',[],function() {
      * @param  {String} theFileName
      * @return {String}
      */
-    getFileNamePart: function( theFileName ) {
+    getFileNamePart: function ( theFileName ) {
       var self = PKFILE;
       var theFileNameNoPath = self.getFilePart( theFileName );
       var theDotPosition = theFileNameNoPath.lastIndexOf( self.extensionSeparator );
@@ -2775,15 +2765,14 @@ define( 'yasmf/util/filename',[],function() {
      * @param  {String} theFileName
      * @return {String}
      */
-    getFileExtensionPart: function( theFileName ) {
+    getFileExtensionPart: function ( theFileName ) {
       var self = PKFILE;
       var theFileNameNoPath = self.getFilePart( theFileName );
       var theDotPosition = theFileNameNoPath.lastIndexOf( self.extensionSeparator );
       if ( theDotPosition < 0 ) {
         return "";
       }
-      return theFileNameNoPath.substr( theDotPosition + 1, theFileNameNoPath.length -
-        theDotPosition - 1 );
+      return theFileNameNoPath.substr( theDotPosition + 1, theFileNameNoPath.length - theDotPosition - 1 );
     }
   };
   return PKFILE;
@@ -2833,7 +2822,7 @@ define( 'yasmf/util/filename',[],function() {
          onevar:false
  */
 /*global define*/
-define( 'yasmf/util/misc',[],function() {
+define( 'yasmf/util/misc',[],function () {
   return {
     /**
      * Returns a pseudo-UUID. Not guaranteed to be unique (far from it, probably), but
@@ -2842,12 +2831,12 @@ define( 'yasmf/util/misc',[],function() {
      * @method makeFauxUUID
      * @return {String}
      */
-    makeFauxUUID: function() {
+    makeFauxUUID: function () {
       var d = new Date().getTime();
-      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace( /[xy]/g, function( c ) {
+      var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace( /[xy]/g, function ( c ) {
         var r = ( d + Math.random() * 16 ) % 16 | 0;
         d = Math.floor( d / 16 );
-        return ( c == 'x' ? r : ( r & 0x7 | 0x8 ) ).toString( 16 );
+        return ( c === "x" ? r : ( r & 0x7 | 0x8 ) ).toString( 16 );
       } );
       return uuid;
     }
@@ -2896,10 +2885,10 @@ define( 'yasmf/util/misc',[],function() {
          trailing:false,
          undef:true,
          white:false,
-         onevar:false 
+         onevar:false
  */
-/*global define, device */
-define( 'yasmf/util/device',[],function() {
+/*global define, device, navigator, window */
+define( 'yasmf/util/device',[],function () {
   /**
    *
    * PKDEVICE provides simple methods for getting device information, such as platform,
@@ -2947,28 +2936,27 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {String} the device platform, lowercase.
      */
-    platform: function() {
+    platform: function () {
       if ( PKDEVICE.platformOverride ) {
         return PKDEVICE.platformOverride.toLowerCase();
       }
-      if ( typeof device == "undefined" || !device.platform ) {
+      if ( typeof device === "undefined" || !device.platform ) {
         // detect mobile devices first
-        if ( navigator.platform == "iPad" || navigator.platform == "iPad Simulator" ||
-          navigator.platform == "iPhone" || navigator.platform == "iPhone Simulator" ||
-          navigator.platform == "iPod" ) {
+        if ( navigator.platform === "iPad" || navigator.platform === "iPad Simulator" || navigator.platform === "iPhone" ||
+          navigator.platform === "iPhone Simulator" || navigator.platform === "iPod" ) {
           return "ios";
         }
         if ( navigator.userAgent.toLowerCase().indexOf( "android" ) > -1 ) {
           return "android";
         }
         // no reason why we can't return other information
-        if ( navigator.platform.indexOf( "Mac" > -1 ) ) {
+        if ( navigator.platform.indexOf( "Mac" ) > -1 ) {
           return "mac";
         }
-        if ( navigator.platform.indexOf( "Win" > -1 ) ) {
+        if ( navigator.platform.indexOf( "Win" ) > -1 ) {
           return "windows";
         }
-        if ( navigator.platform.indexOf( "Linux" > -1 ) ) {
+        if ( navigator.platform.indexOf( "Linux" ) > -1 ) {
           return "linux";
         }
         return "unknown";
@@ -2993,15 +2981,14 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {String} `tablet` or `phone`, as appropriate
      */
-    formFactor: function() {
+    formFactor: function () {
       if ( PKDEVICE.formFactorOverride ) {
         return PKDEVICE.formFactorOverride.toLowerCase();
       }
-      if ( navigator.platform == "iPad" ) {
+      if ( navigator.platform === "iPad" ) {
         return "tablet";
       }
-      if ( ( navigator.platform == "iPhone" ) || ( navigator.platform ==
-        "iPhone Simulator" ) ) {
+      if ( ( navigator.platform === "iPhone" ) || ( navigator.platform === "iPhone Simulator" ) ) {
         return "phone";
       }
       var ua = navigator.userAgent.toLowerCase();
@@ -3017,8 +3004,7 @@ define( 'yasmf/util/device',[],function() {
       }
       // the following is hacky, and not guaranteed to work all the time,
       // especially as phones get bigger screens with higher DPI.
-      if ( ( Math.max( window.screen.width, window.screen.height ) / window.devicePixelRatio ) >=
-        900 ) {
+      if ( ( Math.max( window.screen.width, window.screen.height ) / window.devicePixelRatio ) >= 900 ) {
         return "tablet";
       }
       return "phone";
@@ -3027,15 +3013,15 @@ define( 'yasmf/util/device',[],function() {
      * Determines if the device is a tablet (or tablet-sized, more accurately)
      * @return {Boolean}
      */
-    isTablet: function() {
-      return PKDEVICE.formFactor() == "tablet";
+    isTablet: function () {
+      return PKDEVICE.formFactor() === "tablet";
     },
     /**
      * Determines if the device is a tablet (or tablet-sized, more accurately)
      * @return {Boolean}
      */
-    isPhone: function() {
-      return PKDEVICE.formFactor() == "phone";
+    isPhone: function () {
+      return PKDEVICE.formFactor() === "phone";
     },
     /**
      *
@@ -3045,9 +3031,8 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {boolean} `true` if the device is in a Portrait orientation; `false` otherwise
      */
-    isPortrait: function() {
-      return window.orientation === 0 || window.orientation == 180 || window.location
-        .href.indexOf( "?portrait" ) > -1;
+    isPortrait: function () {
+      return window.orientation === 0 || window.orientation === 180 || window.location.href.indexOf( "?portrait" ) > -1;
     },
     /**
      *
@@ -3057,7 +3042,7 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {boolean} `true` if the device is in a landscape orientation; `false` otherwise
      */
-    isLandscape: function() {
+    isLandscape: function () {
       if ( window.location.href.indexOf( "?landscape" ) > -1 ) {
         return true;
       }
@@ -3071,7 +3056,7 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {boolean} `true` if the device has a `window.devicePixelRatio` greater than `1.0`; `false` otherwise
      */
-    isRetina: function() {
+    isRetina: function () {
       return window.devicePixelRatio > 1;
     },
     /**
@@ -3081,7 +3066,7 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {boolean}
      */
-    iPad: function() {
+    iPad: function () {
       return PKDEVICE.platform() === "ios" && PKDEVICE.formFactor() === "tablet";
     },
     /**
@@ -3091,7 +3076,7 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {boolean}
      */
-    iPhone: function() {
+    iPhone: function () {
       return PKDEVICE.platform() === "ios" && PKDEVICE.formFactor() === "phone";
     },
     /**
@@ -3101,7 +3086,7 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {boolean}
      */
-    droidPhone: function() {
+    droidPhone: function () {
       return PKDEVICE.platform() === "android" && PKDEVICE.formFactor() === "phone";
     },
     /**
@@ -3111,7 +3096,7 @@ define( 'yasmf/util/device',[],function() {
      * @static
      * @returns {boolean}
      */
-    droidTablet: function() {
+    droidTablet: function () {
       return PKDEVICE.platform() === "android" && PKDEVICE.formFactor() === "tablet";
     }
   };
@@ -3162,8 +3147,8 @@ define( 'yasmf/util/device',[],function() {
  onevar:false,
  camelCase:false
  */
-/*global define, console*/
-define( 'yasmf/util/object',[],function() {
+/*global define, console, setTimeout*/
+define( 'yasmf/util/object',[],function () {
   var _className = "BaseObject";
   /**
    * BaseObject is the base object for all complex objects used by YASMF;
@@ -3184,7 +3169,7 @@ define( 'yasmf/util/object',[],function() {
    *
    * @class BaseObject
    */
-  var BaseObject = function() {
+  var BaseObject = function () {
     var self = this;
     /**
      *
@@ -3212,7 +3197,7 @@ define( 'yasmf/util/object',[],function() {
      * @method subclass
      * @param {String} newClass - the new unique class of the object
      */
-    self.subclass = function( newClass ) {
+    self.subclass = function ( newClass ) {
       self._classHierarchy.push( newClass );
     };
     /**
@@ -3226,7 +3211,7 @@ define( 'yasmf/util/object',[],function() {
      * @returns {String} the class of the instance
      *
      */
-    self.getClass = function() {
+    self.getClass = function () {
       return self._classHierarchy[ self._classHierarchy.length - 1 ];
     };
     /**
@@ -3256,7 +3241,7 @@ define( 'yasmf/util/object',[],function() {
      *                                        the instance's class is used.
      * @returns {String} the super-class of the specified class.
      */
-    self.getSuperClassOfClass = function( aClass ) {
+    self.getSuperClassOfClass = function ( aClass ) {
       var theClass = aClass || self.class;
       var i = self._classHierarchy.indexOf( theClass );
       if ( i > -1 ) {
@@ -3299,7 +3284,7 @@ define( 'yasmf/util/object',[],function() {
      * @param {Function} theActualFunction  the actual function (or pointer to function)
      *
      */
-    self.overrideSuper = function( theClass, theFunctionName, theActualFunction ) {
+    self.overrideSuper = function ( theClass, theFunctionName, theActualFunction ) {
       var superClass = self.getSuperClassOfClass( theClass );
       if ( !self._super[ superClass ] ) {
         self._super[ superClass ] = {};
@@ -3321,7 +3306,7 @@ define( 'yasmf/util/object',[],function() {
      *
      * @param {Function} theNewFunction - The function to override. Must have the name of the overriding function.
      */
-    self.override = function( theNewFunction ) {
+    self.override = function ( theNewFunction ) {
       var theFunctionName = theNewFunction.name;
       if ( theFunctionName !== "" ) {
         self.overrideSuper( self.class, theFunctionName, self[ theFunctionName ] );
@@ -3338,7 +3323,7 @@ define( 'yasmf/util/object',[],function() {
      * @param {Array} [args]  Any number of parameters to pass to the super method
      *
      */
-    self.super = function( theClass, theFunctionName, args ) {
+    self.super = function ( theClass, theFunctionName, args ) {
       var superClass = self.getSuperClassOfClass( theClass );
       if ( self._super[ superClass ] ) {
         if ( self._super[ superClass ][ theFunctionName ] ) {
@@ -3360,14 +3345,12 @@ define( 'yasmf/util/object',[],function() {
       if ( typeof pri !== "undefined" ) {
         priority = pri;
       }
-      if ( typeof BaseObject._objectCategories[ priority ][ self.class ] !==
-        "undefined" ) {
-        BaseObject._objectCategories[ priority ][ self.class ].forEach( function(
-          categoryConstructor ) {
+      if ( typeof BaseObject._objectCategories[ priority ][ self.class ] !== "undefined" ) {
+        BaseObject._objectCategories[ priority ][ self.class ].forEach( function ( categoryConstructor ) {
           try {
             categoryConstructor( self );
           } catch ( e ) {
-            console.log( 'Error during category construction: ' + e.message );
+            console.log( "Error during category construction: " + e.message );
           }
         } );
       }
@@ -3379,7 +3362,7 @@ define( 'yasmf/util/object',[],function() {
      * @method init
      *
      */
-    self.init = function() {
+    self.init = function () {
       self._constructObjectCategories( BaseObject.ON_INIT_CATEGORY );
       return self;
     };
@@ -3423,17 +3406,16 @@ define( 'yasmf/util/object',[],function() {
      * @param {*} theValue  the value to assign to the tag.
      *
      */
-    self.setTagForKey = function( theKey, theValue ) {
+    self.setTagForKey = function ( theKey, theValue ) {
       self._tags[ theKey ] = theValue;
-      var notifyListener = function( theListener, theKey, theValue ) {
-        return function() {
+      var notifyListener = function ( theListener, theKey, theValue ) {
+        return function () {
           theListener( self, theKey, theValue );
         };
       };
       if ( self._tagListeners[ theKey ] ) {
         for ( var i = 0; i < self._tagListeners[ theKey ].length; i++ ) {
-          setTimeout( notifyListener( self._tagListeners[ theKey ][ i ], theKey,
-            theValue ), 0 );
+          setTimeout( notifyListener( self._tagListeners[ theKey ][ i ], theKey, theValue ), 0 );
         }
       }
     };
@@ -3448,7 +3430,7 @@ define( 'yasmf/util/object',[],function() {
      * @returns {*} the value of the key
      *
      */
-    self.getTagForKey = function( theKey ) {
+    self.getTagForKey = function ( theKey ) {
       return self._tags[ theKey ];
     };
     /**
@@ -3469,7 +3451,7 @@ define( 'yasmf/util/object',[],function() {
      * @param {Function} theListener  the function (or reference) to call
      *                    when the value changes.
      */
-    self.addTagListenerForKey = function( theKey, theListener ) {
+    self.addTagListenerForKey = function ( theKey, theListener ) {
       if ( !self._tagListeners[ theKey ] ) {
         self._tagListeners[ theKey ] = [];
       }
@@ -3486,7 +3468,7 @@ define( 'yasmf/util/object',[],function() {
      * @param {Function} theListener  the function (or reference) to remove.
      *
      */
-    self.removeTagListenerForKey = function( theKey, theListener ) {
+    self.removeTagListenerForKey = function ( theKey, theListener ) {
       if ( !self._tagListeners[ theKey ] ) {
         self._tagListeners[ theKey ] = [];
       }
@@ -3504,7 +3486,7 @@ define( 'yasmf/util/object',[],function() {
      * @param {*} theValue  the value for the tag
      *
      */
-    self.setTag = function( theValue ) {
+    self.setTag = function ( theValue ) {
       self.setTagForKey( "__default", theValue );
     };
     /**
@@ -3515,7 +3497,7 @@ define( 'yasmf/util/object',[],function() {
      * @method getTag
      * @returns {*} the value of the tag.
      */
-    self.getTag = function() {
+    self.getTag = function () {
       return self.getTagForKey( "__default" );
     };
     /**
@@ -3552,23 +3534,34 @@ define( 'yasmf/util/object',[],function() {
      *
      * > By default, no notifications are registered.
      *
+     * If the first parameter is an object, multiple listeners can be registered:
+     * { "viewWillAppear": handler, "viewDidAppear": handler2}.
+     *
      * @method addListenerForNotification
-     * @param {String} theNotification  the name of the notification
+     * @param {String|*} theNotification  the name of the notification
      * @param {Function} theListener  the function (or reference) to be called when the
      *                                notification is triggered.
-     *
+     * @returns {*} returns self for chaining
      */
-    self.addListenerForNotification = function( theNotification, theListener ) {
+    self.addListenerForNotification = function ( theNotification, theListener, async ) {
+      if ( typeof theNotification === "object" ) {
+        for ( var n in theNotification ) {
+          if ( theNotification.hasOwnProperty( n ) ) {
+            self.addListenerForNotification( n, theNotification[ n ], theListener ); // async would shift up
+          }
+        }
+        return self;
+      }
       if ( !self._notificationListeners[ theNotification ] ) {
-        console.log( theNotification + " has not been registered." );
-        return;
+        self.registerNotification( theNotification, ( typeof async !== "undefined" ) ? async : false );
       }
       self._notificationListeners[ theNotification ].push( theListener );
       if ( self._traceNotifications ) {
-        console.log( "Adding listener " + theListener + " for notification " +
-          theNotification );
+        console.log( "Adding listener " + theListener + " for notification " + theNotification );
       }
+      return self;
     };
+    self.on = self.addListenerForNotification;
     /**
      * Removes a listener from a notification. If a notification has not been
      * registered (via `registerNotification`), an error is logged on the console
@@ -3581,20 +3574,29 @@ define( 'yasmf/util/object',[],function() {
      * @param {String} theNotification  the notification
      * @param {Function} theListener  The function or reference to remove
      */
-    self.removeListenerForNotification = function( theNotification, theListener ) {
+    self.removeListenerForNotification = function ( theNotification, theListener ) {
+      if ( typeof theNotification === "object" ) {
+        for ( var n in theNotification ) {
+          if ( theNotification.hasOwnProperty( n ) ) {
+            self.removeListenerForNotification( n, theNotification[ n ] );
+          }
+        }
+        return self;
+      }
       if ( !self._notificationListeners[ theNotification ] ) {
         console.log( theNotification + " has not been registered." );
-        return;
+        return self;
       }
       var i = self._notificationListeners[ theNotification ].indexOf( theListener );
       if ( self._traceNotifications ) {
-        console.log( "Removing listener " + theListener + " (index: " + i +
-          ") from  notification " + theNotification );
+        console.log( "Removing listener " + theListener + " (index: " + i + ") from  notification " + theNotification );
       }
       if ( i > -1 ) {
         self._notificationListeners[ theNotification ].splice( i, 1 );
       }
+      return self;
     };
+    self.off = self.removeListenerForNotification;
     /**
      * Registers a notification so that listeners can then be attached. Notifications
      * should be registered as soon as possible, otherwise listeners may attempt to
@@ -3604,17 +3606,86 @@ define( 'yasmf/util/object',[],function() {
      * @param {String} theNotification  the name of the notification.
      * @param {Boolean} async  if true, notifications are sent wrapped in setTimeout
      */
-    self.registerNotification = function( theNotification, async ) {
+    self.registerNotification = function ( theNotification, async ) {
       if ( typeof self._notificationListeners[ theNotification ] === "undefined" ) {
         self._notificationListeners[ theNotification ] = [];
-        self._notificationListeners[ theNotification ]._useAsyncNotifications = (
-          typeof async !== "undefined" ? async : true );
+        self._notificationListeners[ theNotification ]._useAsyncNotifications = ( typeof async !== "undefined" ? async : true );
       }
       if ( self._traceNotifications ) {
         console.log( "Registering notification " + theNotification );
       }
     };
     self._traceNotifications = false;
+
+    function _doNotification( theNotification, options ) {
+      var args,
+        lastOnly = false;
+      if ( typeof options !== "undefined" ) {
+        args = ( typeof options.args !== "undefined" ) ? options.args : undefined;
+        lastOnly = ( typeof options.lastOnly !== "undefined" ) ? options.lastOnly : false;
+      }
+      if ( !self._notificationListeners[ theNotification ] ) {
+        console.log( theNotification + " has not been registered." );
+        return;
+      }
+      if ( self._traceNotifications ) {
+        console.log( "Notifying " + self._notificationListeners[ theNotification ].length + " listeners for " + theNotification +
+          " ( " + args + " ) " );
+      }
+      var async = self._notificationListeners[ theNotification ]._useAsyncNotifications,
+        notifyListener = function ( theListener, theNotification, args ) {
+          return function () {
+            try {
+              theListener.apply( self, [ self, theNotification, args ].concat( arguments ) );
+            } catch ( err ) {
+              console.log( "WARNING", theNotification, "experienced an uncaught error:", err );
+            }
+          };
+        },
+        handlers = self._notificationListeners[ theNotification ].slice(); // copy!
+      if ( lastOnly && handlers.length > 1 ) {
+        handlers = [ handlers.pop() ];
+      }
+      // attach * handlers
+      var handler, push = false;
+      for ( var listener in self._notificationListeners ) {
+        if ( self._notificationListeners.hasOwnProperty( listener ) ) {
+          handler = self._notificationListeners[ listener ];
+          push = false;
+          if ( listener.indexOf( "*" ) > -1 ) {
+            // candidate listener; see if it matches
+            if ( listener === "*" ) {
+              push = true;
+            } else
+            if ( listener.substr( 0, 1 ) === "*" && listener.substr( 1 ) === theNotification.substr( -1 * ( listener.length - 1 ) ) ) {
+              push = true;
+            } else
+            if ( listener.substr( -1, 1 ) === "*" && listener.substr( 0, listener.length - 1 ) === theNotification.substr( 0,
+              listener.length - 1 ) ) {
+              push = true;
+            } else {
+              var starPos = listener.indexOf( "*" );
+              if ( listener.substr( 0, starPos ) === theNotification.substr( 0, starPos ) && listener.substr( starPos + 1 ) ===
+                theNotification.substr( -1 * ( listener.length - starPos - 1 ) ) ) {
+                push = true;
+              }
+            }
+            if ( push ) {
+              handler.forEach( function ( handler ) {
+                handlers.push( handler );
+              } );
+            }
+          }
+        }
+      }
+      for ( var i = 0, l = handlers.length; i < l; i++ ) {
+        if ( async ) {
+          setTimeout( notifyListener( handlers[ i ], theNotification, args ), 0 );
+        } else {
+          ( notifyListener( handlers[ i ], theNotification, args ) )();
+        }
+      }
+    }
     /**
      * Notifies all listeners of a particular notification that the notification
      * has been triggered. If the notification hasn't been registered via
@@ -3625,32 +3696,13 @@ define( 'yasmf/util/object',[],function() {
      * @param {String} theNotification  the notification to trigger
      * @param {*} [args]  Arguments to pass to the listener; usually an array
      */
-    self.notify = function( theNotification, args ) {
-      if ( !self._notificationListeners[ theNotification ] ) {
-        console.log( theNotification + " has not been registered." );
-        return;
-      }
-      if ( self._traceNotifications ) {
-        console.log( "Notifying " + self._notificationListeners[ theNotification ].length +
-          " listeners for " + theNotification + " ( " + args + " ) " );
-      }
-      var async = self._notificationListeners[ theNotification ]._useAsyncNotifications;
-      var notifyListener = function( theListener, theNotification, args ) {
-        return function() {
-          theListener( self, theNotification, args );
-        };
-      };
-      for ( var i = 0; i < self._notificationListeners[ theNotification ].length; i++ ) {
-        if ( async ) {
-          setTimeout( notifyListener( self._notificationListeners[ theNotification ][
-            i
-          ], theNotification, args ), 0 );
-        } else {
-          ( notifyListener( self._notificationListeners[ theNotification ][ i ],
-            theNotification, args ) )();
-        }
-      }
+    self.notify = function ( theNotification, args ) {
+      _doNotification( theNotification, {
+        args: args,
+        lastOnly: false
+      } );
     };
+    self.emit = self.notify;
     /**
      * @method notifyMostRecent
      *
@@ -3662,29 +3714,13 @@ define( 'yasmf/util/object',[],function() {
      * @param {String} theNotification  the specific notification to trigger
      * @param {*} [args]  Arguments to pass to the listener; usually an array
      */
-    self.notifyMostRecent = function( theNotification, args ) {
-      if ( !self._notificationListeners[ theNotification ] ) {
-        console.log( theNotification + " has not been registered." );
-        return;
-      }
-      if ( self._traceNotifications ) {
-        console.log( "Notifying " + self._notificationListeners[ theNotification ].length +
-          " listeners for " + theNotification + " ( " + args + " ) " );
-      }
-      var async = self._notificationListeners[ theNotification ]._useAsyncNotifications;
-      var i = self._notificationListeners[ theNotification ].length - 1;
-      if ( i >= 0 ) {
-        if ( async ) {
-          setTimeout( function() {
-            self._notificationListeners[ theNotification ][ i ]( self,
-              theNotification, args );
-          }, 0 );
-        } else {
-          self._notificationListeners[ theNotification ][ i ]( self, theNotification,
-            args );
-        }
-      }
+    self.notifyMostRecent = function ( theNotification, args ) {
+      _doNotification( theNotification, {
+        args: args,
+        lastOnly: true
+      } );
     };
+    self.emitToLast = self.notifyMostRecent;
     /**
      *
      * Defines a property on the object. Essentially shorthand for `Object.defineProperty`. An
@@ -3719,7 +3755,7 @@ define( 'yasmf/util/object',[],function() {
      * @param {String} propertyName  the name of the property; use camelCase
      * @param {Object} propertyOptions  the various options as described above.
      */
-    self.defineProperty = function( propertyName, propertyOptions ) {
+    self.defineProperty = function ( propertyName, propertyOptions ) {
       var options = {
         default: undefined,
         read: true,
@@ -3759,12 +3795,12 @@ define( 'yasmf/util/object',[],function() {
         _y__setFnName = options.prefix + "_y__set" + fnName;
       // if get/set are not specified, we'll attempt to self-discover them
       if ( options.get === null && options.selfDiscover ) {
-        if ( typeof self[ getFnName ] === 'function' ) {
+        if ( typeof self[ getFnName ] === "function" ) {
           options.get = self[ getFnName ];
         }
       }
       if ( options.set === null && options.selfDiscover ) {
-        if ( typeof self[ setFnName ] === 'function' ) {
+        if ( typeof self[ setFnName ] === "function" ) {
           options.set = self[ setFnName ];
         }
       }
@@ -3780,9 +3816,9 @@ define( 'yasmf/util/object',[],function() {
       };
       if ( options.read ) {
         self[ _y__getFnName ] = options.get;
-        self[ _y_getFnName ] = function() {
+        self[ _y_getFnName ] = function () {
           // if there is a getter, use it
-          if ( typeof self[ _y__getFnName ] === 'function' ) {
+          if ( typeof self[ _y__getFnName ] === "function" ) {
             return self[ _y__getFnName ]( self[ _propertyName ] );
           }
           // otherwise return the private variable
@@ -3790,22 +3826,25 @@ define( 'yasmf/util/object',[],function() {
             return self[ _propertyName ];
           }
         };
-        if ( typeof self[ getFnName ] === 'undefined' ) {
+        if ( typeof self[ getFnName ] === "undefined" ) {
           self[ getFnName ] = self[ _y_getFnName ];
         }
         defPropOptions.get = self[ _y_getFnName ];
       }
       if ( options.write ) {
         self[ _y__setFnName ] = options.set;
-        self[ _y_setFnName ] = function( v ) {
+        self[ _y_setFnName ] = function ( v ) {
           var oldV = self[ _propertyName ];
-          if ( typeof self[ _y__setFnName ] === 'function' ) {
+          if ( typeof self[ _y__setFnName ] === "function" ) {
             self[ _y__setFnName ]( v, oldV );
           } else {
             self[ _propertyName ] = v;
           }
+          if ( oldV !== v ) {
+            self.notifyDataBindingElementsForKeyPath( propertyName );
+          }
         };
-        if ( typeof self[ setFnName ] === 'undefined' ) {
+        if ( typeof self[ setFnName ] === "undefined" ) {
           self[ setFnName ] = self[ _y_setFnName ];
         }
         defPropOptions.set = self[ _y_setFnName ];
@@ -3851,7 +3890,7 @@ define( 'yasmf/util/object',[],function() {
      * @param {Object} propertyOptions the options for this property.
      *
      */
-    self.defineObservableProperty = function( propertyName, propertyOptions ) {
+    self.defineObservableProperty = function ( propertyName, propertyOptions ) {
       // set the default options and copy the specified options
       var options = {
         observable: true,
@@ -3896,17 +3935,17 @@ define( 'yasmf/util/object',[],function() {
       }
       // if get/set are not specified, we'll attempt to self-discover them
       if ( options.get === null && options.selfDiscover ) {
-        if ( typeof self[ getObservableFnName ] === 'function' ) {
+        if ( typeof self[ getObservableFnName ] === "function" ) {
           options.get = self[ getObservableFnName ];
         }
       }
       if ( options.set === null && options.selfDiscover ) {
-        if ( typeof self[ setObservableFnName ] === 'function' ) {
+        if ( typeof self[ setObservableFnName ] === "function" ) {
           options.set = self[ setObservableFnName ];
         }
       }
       if ( options.validate === null && options.selfDiscover ) {
-        if ( typeof self[ validateObservableFnName ] === 'function' ) {
+        if ( typeof self[ validateObservableFnName ] === "function" ) {
           options.validate = self[ validateObservableFnName ];
         }
       }
@@ -3924,9 +3963,9 @@ define( 'yasmf/util/object',[],function() {
       };
       if ( options.read ) {
         self[ _y__getFnName ] = options.get;
-        self[ _y_getFnName ] = function() {
+        self[ _y_getFnName ] = function () {
           // if there is a getter, use it
-          if ( typeof self[ _y__getFnName ] === 'function' ) {
+          if ( typeof self[ _y__getFnName ] === "function" ) {
             return self[ _y__getFnName ]( self[ _y_propertyName ] );
           }
           // otherwise return the private variable
@@ -3939,17 +3978,20 @@ define( 'yasmf/util/object',[],function() {
       if ( options.write ) {
         self[ _y__validateFnName ] = options.validate;
         self[ _y__setFnName ] = options.set;
-        self[ _y_setFnName ] = function( v ) {
-          var oldV = self[ _y_propertyName ];
-          var valid = true;
-          if ( typeof self[ _y__validateFnName ] === 'function' ) {
+        self[ _y_setFnName ] = function ( v ) {
+          var oldV = self[ _y_propertyName ],
+            valid = true;
+          if ( typeof self[ _y__validateFnName ] === "function" ) {
             valid = self[ _y__validateFnName ]( v );
           }
           if ( valid ) {
-            if ( typeof self[ _y__setFnName ] === 'function' ) {
+            if ( typeof self[ _y__setFnName ] === "function" ) {
               self[ _y_propertyName ] = self[ _y__setFnName ]( v, oldV );
             } else {
               self[ _y_propertyName ] = v;
+            }
+            if ( oldV !== v ) {
+              self.notifyDataBindingElementsForKeyPath( propertyName );
             }
             if ( v !== oldV || options.notifyAlways ) {
               if ( options.observable ) {
@@ -3964,6 +4006,129 @@ define( 'yasmf/util/object',[],function() {
         defPropOptions.set = self[ _y_setFnName ];
       }
       Object.defineProperty( self, propertyName, defPropOptions );
+    };
+    /*
+     * data binding
+     */
+    self._dataBindings = [];
+    /**
+     * dataBindOn - Configure a data binding to an HTML element (el) for
+     * a particular property (keyPath). Returns self for chaining.
+     *
+     * @param  {Node}   el      the DOM element to bind to; must support the change event
+     * @param  {string} keyPath the property to observe (shallow only; doesn't follow dots.)
+     * @return {*}              self; chain away!
+     */
+    self.dataBindOn = function dataBindOn( el, keyPath ) {
+      if ( self._dataBindings[ keyPath ] === undefined ) {
+        self._dataBindings[ keyPath ] = [];
+      }
+      self._dataBindings[ keyPath ].push( el );
+      el.setAttribute( "data-y-keyPath", keyPath );
+      el.addEventListener( "change", self.updatePropertyForKeyPath, false );
+      return self;
+    };
+    /**
+     * dataBindOff - Turn off data binding for a particular element and
+     * keypath.
+     *
+     * @param  {Node}   el      element to remove data binding from
+     * @param  {string} keyPath keypath to stop observing
+     * @return {*}              self; chain away!
+     */
+    self.dataBindOff = function dataBindOff( el, keyPath ) {
+      var keyPathEls = self._dataBindings[ keyPath ],
+        elPos;
+      if ( keyPathEls !== undefined ) {
+        elPos = keyPathEls.indexOf( el );
+        if ( elPos > -1 ) {
+          keyPathEls.splice( elPos, 1 );
+          el.removeAttribute( "data-y-keyPath" );
+          el.removeEventListener( "change", self.updatePropertyForKeyPath );
+        }
+      }
+      return self;
+    };
+    /**
+     * dataBindAllOffForKeyPath - Remove all data bindings for a given property
+     *
+     * @param  {String} keyPath keypath to stop observing
+     * @return {*}              self; chain away
+     */
+    self.dataBindAllOffForKeyPath = function dataBindAllOffForKeyPath( keyPath ) {
+      var keyPathEls = self._dataBindings[ keyPath ];
+      if ( keyPathEls !== undefined ) {
+        keyPathEls.forEach( function ( el ) {
+          el.removeAttribute( "data-y-keyPath" );
+          el.removeEventListener( "change", self.updatePropertyForKeyPath );
+        } );
+        keyPathEls = [];
+      }
+      return self;
+    };
+    /**
+     * dataBindAllOff - Remove all data bindings for this object
+     *
+     * @return {*}  self
+     */
+    self.dataBindAllOff = function dataBindAllOff() {
+      for ( var keyPath in self._dataBindings ) {
+        if ( self._dataBindings.hasOwnProperty( keyPath ) ) {
+          self.dataBindAllOffForKeyPath( keyPath );
+        }
+      }
+    };
+    /**
+     * updatePropertyForKeyPath - Update a property on this object based on the
+     * keyPath and value. If called as an event handler, `this` refers to the
+     * triggering element, and keyPath is on `data-y-keyPath` attribute.
+     *
+     * @param  {String} keyPath property to set
+     * @param  {*} value        value to set
+     */
+    self.updatePropertyForKeyPath = function updatePropertyForKeyPath( keyPath, value ) {
+      try {
+        if ( this !== self && this instanceof Node ) {
+          // we've been called from an event handler
+          self[ this.getAttribute( "data-y-keyPath" ) ] = this.value;
+          return;
+        }
+        self[ keyPath ] = value;
+      } catch ( err ) {
+        console.log( "Failed to update", keyPath, "with", value );
+      }
+    };
+    // called when a field changes:
+    /**
+     * notifyDataBindingElementsForKeyPath - notify all elements attached to a
+     * key path that the source value has changed. Called by all properties created
+     * with defineProperty and defineObservableProperty.
+     *
+     * @param  {String} keyPath keypath of elements to notify
+     */
+    self.notifyDataBindingElementsForKeyPath = function notifyDataBindingElementsForKeyPath( keyPath ) {
+      try {
+        var keyPathEls = self._dataBindings[ keyPath ],
+          el;
+        if ( keyPathEls !== undefined ) {
+          for ( var i = 0, l = keyPathEls.length; i < l; i++ ) {
+            el = keyPathEls[ i ];
+            if ( typeof el.value !== "undefined" ) {
+              el.value = self[ keyPath ];
+            } else
+            if ( typeof el.textContent !== "undefined" ) {
+              el.textContent = self[ keyPath ];
+            } else
+            if ( typeof el.innerText !== "undefined" ) {
+              el.innerText = self[ keyPath ];
+            } else {
+              console.log( "Data bind failure; browser doesn't understand value, textContent, or innerText." );
+            }
+          }
+        }
+      } catch ( err ) {
+        console.log( "Failed to update elements for ", keyPath );
+      }
     };
     /**
      * Auto initializes the object based on the arguments passed to the object constructor. Any object
@@ -3985,9 +4150,9 @@ define( 'yasmf/util/object',[],function() {
      * @returns {*}
      * @private
      */
-    self._autoInit = function() {
+    self._autoInit = function () {
       if ( arguments.length > 0 ) {
-        if ( arguments.length == 1 ) {
+        if ( arguments.length === 1 ) {
           // chances are this is an initWithOptions, but make sure the incoming parameter is an object
           if ( typeof arguments[ 0 ] === "object" ) {
             if ( typeof self.initWithOptions !== "undefined" ) {
@@ -4009,7 +4174,7 @@ define( 'yasmf/util/object',[],function() {
      * the attached listeners.
      * @method destroy
      */
-    self.destroy = function() {
+    self.destroy = function () {
       // clear any listeners.
       self._notificationListeners = {};
       self._tagListeners = {};
@@ -4022,6 +4187,32 @@ define( 'yasmf/util/object',[],function() {
     self._autoInit.apply( self, arguments );
     // done
     return self;
+  };
+  /**
+   * promote - Promotes a non-BaseObject into a BaseObject by copying all its methods to
+   * the new object and copying all its properties as observable properties.
+   *
+   * @param  {*} nonBaseObject The non-BaseObject to promote
+   * @return {BaseObject}               BaseObject
+   */
+  BaseObject.promote = function promote( nonBaseObject ) {
+    var newBaseObject, theProp;
+    if ( nonBaseObject !== undefined ) {
+      newBaseObject = new BaseObject();
+      for ( var prop in nonBaseObject ) {
+        if ( nonBaseObject.hasOwnProperty( prop ) ) {
+          theProp = nonBaseObject[ prop ];
+          if ( typeof theProp === "function" ) {
+            newBaseObject[ prop ] = theProp;
+          } else {
+            newBaseObject.defineObservableProperty( prop, {
+              default: theProp
+            } );
+          }
+        }
+      }
+    }
+    return newBaseObject;
   };
   /**
    * Object categories. Of the form:
@@ -4056,11 +4247,9 @@ define( 'yasmf/util/object',[],function() {
    * @method registerCategoryConstructor
    * @param {Object} options
    */
-  BaseObject.registerCategoryConstructor = function registerCategoryConstructor(
-    options ) {
+  BaseObject.registerCategoryConstructor = function registerCategoryConstructor( options ) {
     if ( typeof options === "undefined" ) {
-      throw new Error(
-        "registerCategoryConstructor requires a class name and a constructor method." );
+      throw new Error( "registerCategoryConstructor requires a class name and a constructor method." );
     }
     if ( typeof options.class !== "undefined" ) {
       throw new Error( "registerCategoryConstructor requires options.class" );
@@ -4080,7 +4269,7 @@ define( 'yasmf/util/object',[],function() {
     BaseObject._objectCategories[ priority ][ className ].push( method );
   };
   BaseObject.meta = {
-    version: '00.04.900',
+    version: "00.04.900",
     class: _className,
     autoInitializable: true,
     categorizable: true
@@ -4088,7 +4277,7 @@ define( 'yasmf/util/object',[],function() {
   return BaseObject;
 } );
 
-define( 'Q',[],function() {
+define( 'Q',[],function () {
   return window.Q;
 } );
 
@@ -4136,10 +4325,10 @@ define( 'Q',[],function() {
          onevar:false,
          loopfunc:true
  */
-/*global define, Q, LocalFileSystem, console*/
-define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, BaseObject ) {
+/*globals define, Q, LocalFileSystem, console, window, navigator, FileReader*/
+define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function ( Q, BaseObject ) {
   var IN_YASMF = true;
-  return ( function( Q, BaseObject, globalContext ) {
+  return ( function ( Q, BaseObject, globalContext ) {
     /**
      * Defined by Q, actually, but defined here to make type handling nicer
      * @typedef {{}} Promise
@@ -4156,33 +4345,29 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
     function _requestQuota( fileSystemType, requestedDataSize ) {
       var deferred = Q.defer();
       if ( DEBUG ) {
-        console.log( [ "_requestQuota: ", fileSystemType, requestedDataSize ].join(
-          " " ) )
+        console.log( [ "_requestQuota: ", fileSystemType, requestedDataSize ].join( " " ) );
       }
       try {
         // attempt to ask for a quota
-        var PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ?
-          LocalFileSystem.PERSISTENT : window.PERSISTENT;
-        // Chrome has `webkitPersistentStorage` and `navigator.webkitTemporaryStorage`
-        var storageInfo = fileSystemType == PERSISTENT ? navigator.webkitPersistentStorage :
-          navigator.webkitTemporaryStorage;
+        var PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.PERSISTENT : window.PERSISTENT,
+          // Chrome has `webkitPersistentStorage` and `navigator.webkitTemporaryStorage`
+          storageInfo = fileSystemType === PERSISTENT ? navigator.webkitPersistentStorage : navigator.webkitTemporaryStorage;
         if ( storageInfo ) {
           // now make sure we can request a quota
           if ( storageInfo.requestQuota ) {
             // request the quota
-            storageInfo.requestQuota( requestedDataSize, function success(
-              grantedBytes ) {
+            storageInfo.requestQuota( requestedDataSize, function success( grantedBytes ) {
               if ( DEBUG ) {
                 console.log( [ "_requestQuota: quota granted: ", fileSystemType,
                   grantedBytes
-                ].join( " " ) )
+                ].join( " " ) );
               }
               deferred.resolve( grantedBytes );
             }, function failure( anError ) {
               if ( DEBUG ) {
                 console.log( [ "_requestQuota: quota rejected: ", fileSystemType,
                   requestedDataSize, anError
-                ].join( " " ) )
+                ].join( " " ) );
               }
               deferred.reject( anError );
             } );
@@ -4190,19 +4375,17 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
             // not everything supports asking for a quota -- like Cordova.
             // Instead, let's assume we get permission
             if ( DEBUG ) {
-              console.log( [
-                "_requestQuota: couldn't request quota -- no requestQuota: ",
+              console.log( [ "_requestQuota: couldn't request quota -- no requestQuota: ",
                 fileSystemType, requestedDataSize
-              ].join( " " ) )
+              ].join( " " ) );
             }
             deferred.resolve( requestedDataSize );
           }
         } else {
           if ( DEBUG ) {
-            console.log( [
-              "_requestQuota: couldn't request quota -- no storageInfo: ",
+            console.log( [ "_requestQuota: couldn't request quota -- no storageInfo: ",
               fileSystemType, requestedDataSize
-            ].join( " " ) )
+            ].join( " " ) );
           }
           deferred.resolve( requestedDataSize );
         }
@@ -4222,25 +4405,22 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
     function _requestFileSystem( fileSystemType, requestedDataSize ) {
       var deferred = Q.defer();
       if ( DEBUG ) {
-        console.log( [ "_requestFileSystem: ", fileSystemType, requestedDataSize ].join(
-          " " ) )
+        console.log( [ "_requestFileSystem: ", fileSystemType, requestedDataSize ].join( " " ) );
       }
       try {
         // fix issue #2 by chasen where using `webkitRequestFileSystem` was having problems
         // on Android 4.2.2
         var requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-        requestFileSystem( fileSystemType, requestedDataSize, function success(
-          theFileSystem ) {
+        requestFileSystem( fileSystemType, requestedDataSize, function success( theFileSystem ) {
           if ( DEBUG ) {
-            console.log( [ "_requestFileSystem: got a file system", theFileSystem ]
-              .join( " " ) )
+            console.log( [ "_requestFileSystem: got a file system", theFileSystem ].join( " " ) );
           }
           deferred.resolve( theFileSystem );
         }, function failure( anError ) {
           if ( DEBUG ) {
             console.log( [ "_requestFileSystem: couldn't get a file system",
               fileSystemType
-            ].join( " " ) )
+            ].join( " " ) );
           }
           deferred.reject( anError );
         } );
@@ -4260,16 +4440,15 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
     function _resolveLocalFileSystemURL( theURL ) {
       var deferred = Q.defer();
       if ( DEBUG ) {
-        console.log( [ "_resolveLocalFileSystemURL: ", theURL ].join( " " ) )
+        console.log( [ "_resolveLocalFileSystemURL: ", theURL ].join( " " ) );
       }
       try {
         // split the parts of the URL
-        var parts = theURL.split( ":" );
-        var protocol, path;
+        var parts = theURL.split( ":" ),
+          protocol, path;
         // can only have two parts
         if ( parts.length > 2 ) {
-          throw new Error( "The URI is not well-formed; missing protocol: " +
-            theURL );
+          throw new Error( "The URI is not well-formed; missing protocol: " + theURL );
         }
         // if only one part, we assume `file` as the protocol
         if ( parts.length < 2 ) {
@@ -4280,14 +4459,13 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
           path = parts[ 1 ];
         }
         // split the path components
-        var pathComponents = path.split( "/" );
-        var newPathComponents = [];
+        var pathComponents = path.split( "/" ),
+          newPathComponents = [];
         // iterate over each component and trim as we go
-        pathComponents.forEach( function( part ) {
+        pathComponents.forEach( function ( part ) {
           part = part.trim();
           if ( part !== "" ) { // remove /private if it is the first item in the new array, for iOS sake
-            if ( !( ( part === "private" || part === "localhost" ) &&
-              newPathComponents.length === 0 ) ) {
+            if ( !( ( part === "private" || part === "localhost" ) && newPathComponents.length === 0 ) ) {
               newPathComponents.push( part );
             }
           }
@@ -4297,9 +4475,9 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
         // add the protocol
         theNewURI = protocol + ":///" + theNewURI;
         // and resolve the URL.
-        window.resolveLocalFileSystemURL( theNewURI, function( theEntry ) {
+        window.resolveLocalFileSystemURL( theNewURI, function ( theEntry ) {
           deferred.resolve( theEntry );
-        }, function( anError ) {
+        }, function ( anError ) {
           deferred.reject( anError );
         } );
       } catch ( anError ) {
@@ -4324,15 +4502,14 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _getDirectoryEntry( parent, path, options ) {
       if ( DEBUG ) {
-        console.log( [ "_getDirectoryEntry:", parent, path, options ].join( " " ) )
+        console.log( [ "_getDirectoryEntry:", parent, path, options ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
         if ( typeof path === "object" ) {
           deferred.resolve( path );
         } else {
-          parent.getDirectory( path, options || {}, function success(
-            theDirectoryEntry ) {
+          parent.getDirectory( path, options || {}, function success( theDirectoryEntry ) {
             deferred.resolve( theDirectoryEntry );
           }, function failure( anError ) {
             deferred.reject( anError );
@@ -4355,7 +4532,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _getFileEntry( parent, path, options ) {
       if ( DEBUG ) {
-        console.log( [ "_getFileEntry:", parent, path, options ].join( " " ) )
+        console.log( [ "_getFileEntry:", parent, path, options ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
@@ -4386,7 +4563,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _getFileObject( fileEntry ) {
       if ( DEBUG ) {
-        console.log( [ "_getFileObject:", fileEntry ].join( " " ) )
+        console.log( [ "_getFileObject:", fileEntry ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
@@ -4411,15 +4588,15 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _readFileContents( fileObject, readAsKind ) {
       if ( DEBUG ) {
-        console.log( [ "_readFileContents:", fileObject, readAsKind ].join( " " ) )
+        console.log( [ "_readFileContents:", fileObject, readAsKind ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
         var fileReader = new FileReader();
-        fileReader.onloadend = function( e ) {
+        fileReader.onloadend = function ( e ) {
           deferred.resolve( e.target.result );
         };
-        fileReader.onerror = function( anError ) {
+        fileReader.onerror = function ( anError ) {
           deferred.reject( anError );
         };
         fileReader[ "readAs" + readAsKind ]( fileObject );
@@ -4437,7 +4614,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _createFileWriter( fileEntry ) {
       if ( DEBUG ) {
-        console.log( [ "_createFileWriter:", fileEntry ].join( " " ) )
+        console.log( [ "_createFileWriter:", fileEntry ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
@@ -4465,17 +4642,17 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _writeFileContents( fileWriter, contents ) {
       if ( DEBUG ) {
-        console.log( [ "_writeFileContents:", fileWriter, contents ].join( " " ) )
+        console.log( [ "_writeFileContents:", fileWriter, contents ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
-        fileWriter.onwrite = function( e ) {
-          fileWriter.onwrite = function( e ) {
+        fileWriter.onwrite = function ( e ) {
+          fileWriter.onwrite = function ( e ) {
             deferred.resolve( e );
           };
           fileWriter.write( contents );
         };
-        fileWriter.onError = function( anError ) {
+        fileWriter.onError = function ( anError ) {
           deferred.reject( anError );
         };
         fileWriter.truncate( 0 ); // clear out the contents, first
@@ -4497,12 +4674,11 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
       if ( DEBUG ) {
         console.log( [ "_copyFile:", theFileEntry, theParentDirectoryEntry,
           theNewName
-        ].join( " " ) )
+        ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
-        theFileEntry.copyTo( theParentDirectoryEntry, theNewName, function success(
-          theNewFileEntry ) {
+        theFileEntry.copyTo( theParentDirectoryEntry, theNewName, function success( theNewFileEntry ) {
           deferred.resolve( theNewFileEntry );
         }, function failure( anError ) {
           deferred.reject( anError );
@@ -4525,12 +4701,11 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
       if ( DEBUG ) {
         console.log( [ "_moveFile:", theFileEntry, theParentDirectoryEntry,
           theNewName
-        ].join( " " ) )
+        ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
-        theFileEntry.moveTo( theParentDirectoryEntry, theNewName, function success(
-          theNewFileEntry ) {
+        theFileEntry.moveTo( theParentDirectoryEntry, theNewName, function success( theNewFileEntry ) {
           deferred.resolve( theNewFileEntry );
         }, function failure( anError ) {
           deferred.reject( anError );
@@ -4549,7 +4724,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _removeFile( theFileEntry ) {
       if ( DEBUG ) {
-        console.log( [ "_removeFile:", theFileEntry ].join( " " ) )
+        console.log( [ "_removeFile:", theFileEntry ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
@@ -4578,12 +4753,11 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
         console.log( [ "_copyDirectory:", theDirectoryEntry,
           theParentDirectoryEntry,
           theNewName
-        ].join( " " ) )
+        ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
-        theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, function success(
-          theNewDirectoryEntry ) {
+        theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, function success( theNewDirectoryEntry ) {
           deferred.resolve( theNewDirectoryEntry );
         }, function failure( anError ) {
           deferred.reject( anError );
@@ -4608,12 +4782,11 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
         console.log( [ "_moveDirectory:", theDirectoryEntry,
           theParentDirectoryEntry,
           theNewName
-        ].join( " " ) )
+        ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
-        theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, function success(
-          theNewDirectoryEntry ) {
+        theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, function success( theNewDirectoryEntry ) {
           deferred.resolve( theNewDirectoryEntry );
         }, function failure( anError ) {
           deferred.reject( anError );
@@ -4636,7 +4809,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
       if ( DEBUG ) {
         console.log( [ "_removeDirectory:", theDirectoryEntry, "recursively",
           recursively
-        ].join( " " ) )
+        ].join( " " ) );
       }
       var deferred = Q.defer();
       try {
@@ -4667,26 +4840,25 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
      */
     function _readDirectoryContents( theDirectoryEntry ) {
       if ( DEBUG ) {
-        console.log( [ "_readDirectoryContents:", theDirectoryEntry ].join( " " ) )
+        console.log( [ "_readDirectoryContents:", theDirectoryEntry ].join( " " ) );
       }
+      var directoryReader = theDirectoryEntry.createReader(),
+        entries = [],
+        deferred = Q.defer();
 
       function readEntries() {
         directoryReader.readEntries( function success( theEntries ) {
           if ( !theEntries.length ) {
             deferred.resolve( entries );
           } else {
-            entries = entries.concat( Array.prototype.slice.call( theEntries || [],
-              0 ) );
+            entries = entries.concat( Array.prototype.slice.call( theEntries || [], 0 ) );
             readEntries();
           }
         }, function failure( anError ) {
           deferred.reject( anError );
         } );
       }
-      var deferred = Q.defer();
       try {
-        var directoryReader = theDirectoryEntry.createReader();
-        var entries = [];
         readEntries();
       } catch ( anError ) {
         deferred.reject( anError );
@@ -4696,648 +4868,942 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
     /**
      * @class FileManager
      */
-    var _className = "UTIL.FileManager";
-    var FileManager = function() {
-      var self;
-      // determine if we have a `BaseObject` available or not
-      var hasBaseObject = ( typeof BaseObject !== "undefined" );
-      if ( hasBaseObject ) {
-        // if we do, subclass it
-        self = new BaseObject();
-        self.subclass( _className );
-        self.registerNotification( "changedCurrentWorkingDirectory" );
-      } else {
-        // otherwise, base off {}
-        self = {};
-      }
-      // get the persistent and temporary filesystem constants
-      self.PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ?
-        LocalFileSystem.PERSISTENT : window.PERSISTENT;
-      self.TEMPORARY = ( typeof LocalFileSystem !== "undefined" ) ?
-        LocalFileSystem.TEMPORARY : window.TEMPORARY;
-      // determine the various file types we support
-      self.FILETYPE = {
-        TEXT: "Text",
-        DATA_URL: "DataURL",
-        BINARY: "BinaryString",
-        ARRAY_BUFFER: "ArrayBuffer"
-      };
-      /**
-       * Returns the value of the global `DEBUG` variable.
-       * @method getGlobalDebug
-       * @returns {Boolean}
-       */
-      self.getGlobalDebug = function() {
-        return DEBUG;
-      };
-      /**
-       * Sets the global DEBUG variable. If `true`, debug messages are logged to the console.
-       * @method setGlobalDebug
-       * @param {Boolean} debug
-       */
-      self.setGlobalDebug = function( debug ) {
-        DEBUG = debug;
-      };
-      /**
-       * @property globalDebug
-       * @type {Boolean} If `true`, logs messages to console as operations occur.
-       */
-      Object.defineProperty( self, "globalDebug", {
-        get: self.getGlobalDebug,
-        set: self.setGlobalDebug,
-        configurable: true
-      } );
-      /**
-       * the fileSystemType can either be `self.PERSISTENT` or `self.TEMPORARY`, and is only
-       * set during an `init` operation. It cannot be set at any other time.
-       * @property fileSystemType
-       * @type {FileSystem}
-       */
-      self._fileSystemType = null; // can only be changed during INIT
-      self.getFileSystemType = function() {
-        return self._fileSystemType;
-      };
-      Object.defineProperty( self, "fileSystemType", {
-        get: self.getFileSystemType,
-        configurable: true
-      } );
-      /**
-       * The requested quota -- stored for future reference, since we ask for it
-       * specifically during an `init` operation. It cannot be changed.
-       * @property requestedQuota
-       * @type {Number}
-       */
-      self._requestedQuota = 0; // can only be changed during INIT
-      self.getRequestedQuota = function() {
-        return self._requestedQuota;
-      };
-      Object.defineProperty( self, "requestedQuota", {
-        get: self.getRequestedQuota,
-        configurable: true
-      } );
-      /**
-       * The actual quota obtained from the system. It cannot be changed, and is
-       * only obtained during `init`. The result does not have to match the
-       * `requestedQuota`. If it doesn't match, it may be representative of the
-       * actual space available, depending on the platform
-       * @property actualQuota
-       * @type {Number}
-       */
-      self._actualQuota = 0;
-      self.getActualQuota = function() {
-        return self._actualQuota;
-      };
-      Object.defineProperty( self, "actualQuota", {
-        get: self.getActualQuota,
-        configurable: true
-      } );
-      /**
-       * @typedef {{}} FileSystem
-       * HTML5 File API File System
-       */
-      /**
-       * The current filesystem -- either the temporary or persistent one; it can't be changed
-       * @property fileSystem
-       * @type {FileSystem}
-       */
-      self._fileSystem = null;
-      self.getFileSystem = function() {
-        return self._fileSystem;
-      };
-      Object.defineProperty( self, "fileSystem", {
-        get: self.getFileSystem,
-        configurable: true
-      } );
-      /**
-       * Current Working Directory Entry
-       * @property cwd
-       * @type {DirectoryEntry}
-       */
-      self._root = null;
-      self._cwd = null;
-      self.getCurrentWorkingDirectory = function() {
-        return self._cwd;
-      };
-      self.setCurrentWorkingDirectory = function( theCWD ) {
-        self._cwd = theCWD;
+    var _className = "UTIL.FileManager",
+      FileManager = function () {
+        var self,
+          // determine if we have a `BaseObject` available or not
+          hasBaseObject = ( typeof BaseObject !== "undefined" );
         if ( hasBaseObject ) {
-          self.notify( "changedCurrentWorkingDirectory" );
+          // if we do, subclass it
+          self = new BaseObject();
+          self.subclass( _className );
+          self.registerNotification( "changedCurrentWorkingDirectory" );
+        } else {
+          // otherwise, base off {}
+          self = {};
         }
-      };
-      Object.defineProperty( self, "cwd", {
-        get: self.getCurrentWorkingDirectory,
-        set: self.setCurrentWorkingDirectory,
-        configurable: true
-      } );
-      Object.defineProperty( self, "currentWorkingDirectory", {
-        get: self.getCurrentWorkingDirectory,
-        set: self.setCurrentWorkingDirectory,
-        configurable: true
-      } );
-      /**
-       * Current Working Directory stack
-       * @property _cwds
-       * @private
-       * @type {Array}
-       */
-      self._cwds = [];
-      /**
-       * Push the current working directory on to the stack
-       * @method pushCurrentWorkingDirectory
-       */
-      self.pushCurrentWorkingDirectory = function() {
-        self._cwds.push( self._cwd );
-      };
-      /**
-       * Pop the topmost directory on the stack and change to it
-       * @method popCurrentWorkingDirectory
-       */
-      self.popCurrentWorkingDirectory = function() {
-        self.setCurrentWorkingDirectory( self._cwds.pop() );
-      };
-      /**
-       * Resolves a URL to a local file system. If the URL scheme is not present, `file`
-       * is assumed.
-       * @param {String} theURI The URI to resolve
-       */
-      self.resolveLocalFileSystemURL = function( theURI ) {
-        var deferred = Q.defer();
-        _resolveLocalFileSystemURL( theURI ).then( function gotEntry( theEntry ) {
-          deferred.resolve( theEntry );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Returns the file entry for the given path (useful for
-       * getting the full path of a file). `options` is of the
-       * form `{create: true/false, exclusive: true/false}`
-       * @method getFileEntry
-       * @param {String} theFilePath The file path or FileEntry object
-       * @param {*} options creation options
-       */
-      self.getFileEntry = function( theFilePath, options ) {
-        var deferred = Q.defer();
-        _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
-          theFileEntry ) {
-          deferred.resolve( theFileEntry );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Returns the file object for a given file (useful for getting
-       * the size of a file); `option` is of the form `{create: true/false, exclusive: true/false}`
-       * @method getFile
-       * @param {String} theFilePath
-       * @param {*} option
-       */
-      self.getFile = function( theFilePath, options ) {
-        return self.getFileEntry( theFilePath, options ).then( _getFileObject );
-      };
-      /**
-       * Returns the directory entry for a given path
-       * @method getDirectoryEntry
-       * @param {String} theDirectoryPath
-       * @param {*} options
-       */
-      self.getDirectoryEntry = function( theDirectoryPath, options ) {
-        var deferred = Q.defer();
-        _getDirectoryEntry( self._cwd, theDirectoryPath, options ).then( function gotDirectoryEntry(
-          theDirectoryEntry ) {
-          deferred.resolve( theDirectoryEntry );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * returns the URL for a given file
-       * @method getFileURL
-       * @param {String} theFilePath
-       * @param {*} options
-       */
-      self.getFileURL = function( theFilePath, options ) {
-        var deferred = Q.defer();
-        _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
-          theFileEntry ) {
-          deferred.resolve( theFileEntry.toURL() );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Returns a URL for the given directory
-       * @method getDirectoryURL
-       * @param {String} thePath
-       * @param {*} options
-       */
-      self.getDirectoryURL = function( thePath, options ) {
-        var deferred = Q.defer();
-        _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry(
-          theDirectoryEntry ) {
-          deferred.resolve( theDirectoryEntry.toURL() );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Returns the native URL for an entry by combining the `fullPath` of the entry
-       * with the `nativeURL` of the `root` directory if absolute or of the `current`
-       * directory if not absolute.
-       * @method getNativeURL
-       * @param {String} theEntry Path of the file or directory; can also be a File/DirectoryEntry
-       */
-      self.getNativeURL = function( theEntry ) {
-        var thePath = theEntry;
-        if ( typeof theEntry !== "string" ) {
-          thePath = theEntry.fullPath();
-        }
-        var isAbsolute = ( thePath.substr( 0, 1 ) === "/" );
-        var theRootPath = isAbsolute ? self._root.nativeURL : self.cwd.nativeURL;
-        return theRootPath + ( isAbsolute ? "" : "/" ) + thePath;
-      };
-      /**
-       * returns the native file path for a given file
-       * @method getNativeFileURL
-       * @param {String} theFilePath
-       * @param {*} options
-       */
-      self.getNativeFileURL = function( theFilePath, options ) {
-        var deferred = Q.defer();
-        _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry(
-          theFileEntry ) {
-          deferred.resolve( theFileEntry.nativeURL );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Returns a URL for the given directory
-       * @method getNativeDirectoryURL
-       * @param {String} thePath
-       * @param {*} options
-       */
-      self.getNativeDirectoryURL = function( thePath, options ) {
-        var deferred = Q.defer();
-        _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry(
-          theDirectoryEntry ) {
-          deferred.resolve( theDirectoryEntry.nativeURL );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Change to an arbitrary directory
-       * @method changeDirectory
-       * @param  {String} theNewPath The path to the directory, relative to cwd
-       * @return {Promise}            The Promise
-       */
-      self.changeDirectory = function( theNewPath ) {
-        var deferred = Q.defer();
-        _getDirectoryEntry( self._cwd, theNewPath, {} ).then( function gotDirectory(
-          theNewDirectory ) {
-          self.cwd = theNewDirectory;
-        } ).then( function allDone() {
-          deferred.resolve( self );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Read an arbitrary file's contents.
-       * @method readFileContents
-       * @param  {String} theFilePath The path to the file, relative to cwd
-       * @param  {Object} options     The options to use when opening the file (such as creating it)
-       * @param  {String} readAsKind  How to read the file -- best to use self.FILETYPE.TEXT, etc.
-       * @return {Promise}             The Promise
-       */
-      self.readFileContents = function( theFilePath, options, readAsKind ) {
-        var deferred = Q.defer();
-        _getFileEntry( self._cwd, theFilePath, options || {} ).then( function gotTheFileEntry(
-          theFileEntry ) {
-          return _getFileObject( theFileEntry );
-        } ).then( function gotTheFileObject( theFileObject ) {
-          return _readFileContents( theFileObject, readAsKind || "Text" );
-        } ).then( function getTheFileContents( theFileContents ) {
-          deferred.resolve( theFileContents );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Read an arbitrary directory's entries.
-       * @method readDirectoryContents
-       * @param  {String} theDirectoryPath The path to the directory, relative to cwd; "." if not specified
-       * @param  {Object} options          The options to use when opening the directory (such as creating it)
-       * @return {Promise}             The Promise
-       */
-      self.readDirectoryContents = function( theDirectoryPath, options ) {
-        var deferred = Q.defer();
-        _getDirectoryEntry( self._cwd, theDirectoryPath || ".", options || {} ).then(
-          function gotTheDirectoryEntry( theDirectoryEntry ) {
+        // get the persistent and temporary filesystem constants
+        self.PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.PERSISTENT : window.PERSISTENT;
+        self.TEMPORARY = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.TEMPORARY : window.TEMPORARY;
+        // determine the various file types we support
+        self.FILETYPE = {
+          TEXT: "Text",
+          DATA_URL: "DataURL",
+          BINARY: "BinaryString",
+          ARRAY_BUFFER: "ArrayBuffer"
+        };
+        /**
+         * Returns the value of the global `DEBUG` variable.
+         * @method getGlobalDebug
+         * @returns {Boolean}
+         */
+        self.getGlobalDebug = function () {
+          return DEBUG;
+        };
+        /**
+         * Sets the global DEBUG variable. If `true`, debug messages are logged to the console.
+         * @method setGlobalDebug
+         * @param {Boolean} debug
+         */
+        self.setGlobalDebug = function ( debug ) {
+          DEBUG = debug;
+        };
+        /**
+         * @property globalDebug
+         * @type {Boolean} If `true`, logs messages to console as operations occur.
+         */
+        Object.defineProperty( self, "globalDebug", {
+          get: self.getGlobalDebug,
+          set: self.setGlobalDebug,
+          configurable: true
+        } );
+        /**
+         * the fileSystemType can either be `self.PERSISTENT` or `self.TEMPORARY`, and is only
+         * set during an `init` operation. It cannot be set at any other time.
+         * @property fileSystemType
+         * @type {FileSystem}
+         */
+        self._fileSystemType = null; // can only be changed during INIT
+        self.getFileSystemType = function () {
+          return self._fileSystemType;
+        };
+        Object.defineProperty( self, "fileSystemType", {
+          get: self.getFileSystemType,
+          configurable: true
+        } );
+        /**
+         * The requested quota -- stored for future reference, since we ask for it
+         * specifically during an `init` operation. It cannot be changed.
+         * @property requestedQuota
+         * @type {Number}
+         */
+        self._requestedQuota = 0; // can only be changed during INIT
+        self.getRequestedQuota = function () {
+          return self._requestedQuota;
+        };
+        Object.defineProperty( self, "requestedQuota", {
+          get: self.getRequestedQuota,
+          configurable: true
+        } );
+        /**
+         * The actual quota obtained from the system. It cannot be changed, and is
+         * only obtained during `init`. The result does not have to match the
+         * `requestedQuota`. If it doesn't match, it may be representative of the
+         * actual space available, depending on the platform
+         * @property actualQuota
+         * @type {Number}
+         */
+        self._actualQuota = 0;
+        self.getActualQuota = function () {
+          return self._actualQuota;
+        };
+        Object.defineProperty( self, "actualQuota", {
+          get: self.getActualQuota,
+          configurable: true
+        } );
+        /**
+         * @typedef {{}} FileSystem
+         * HTML5 File API File System
+         */
+        /**
+         * The current filesystem -- either the temporary or persistent one; it can't be changed
+         * @property fileSystem
+         * @type {FileSystem}
+         */
+        self._fileSystem = null;
+        self.getFileSystem = function () {
+          return self._fileSystem;
+        };
+        Object.defineProperty( self, "fileSystem", {
+          get: self.getFileSystem,
+          configurable: true
+        } );
+        /**
+         * Current Working Directory Entry
+         * @property cwd
+         * @type {DirectoryEntry}
+         */
+        self._root = null;
+        self._cwd = null;
+        self.getCurrentWorkingDirectory = function () {
+          return self._cwd;
+        };
+        self.setCurrentWorkingDirectory = function ( theCWD ) {
+          self._cwd = theCWD;
+          if ( hasBaseObject ) {
+            self.notify( "changedCurrentWorkingDirectory" );
+          }
+        };
+        Object.defineProperty( self, "cwd", {
+          get: self.getCurrentWorkingDirectory,
+          set: self.setCurrentWorkingDirectory,
+          configurable: true
+        } );
+        Object.defineProperty( self, "currentWorkingDirectory", {
+          get: self.getCurrentWorkingDirectory,
+          set: self.setCurrentWorkingDirectory,
+          configurable: true
+        } );
+        /**
+         * Current Working Directory stack
+         * @property _cwds
+         * @private
+         * @type {Array}
+         */
+        self._cwds = [];
+        /**
+         * Push the current working directory on to the stack
+         * @method pushCurrentWorkingDirectory
+         */
+        self.pushCurrentWorkingDirectory = function () {
+          self._cwds.push( self._cwd );
+        };
+        /**
+         * Pop the topmost directory on the stack and change to it
+         * @method popCurrentWorkingDirectory
+         */
+        self.popCurrentWorkingDirectory = function () {
+          self.setCurrentWorkingDirectory( self._cwds.pop() );
+        };
+        /**
+         * Resolves a URL to a local file system. If the URL scheme is not present, `file`
+         * is assumed.
+         * @param {String} theURI The URI to resolve
+         */
+        self.resolveLocalFileSystemURL = function ( theURI ) {
+          var deferred = Q.defer();
+          _resolveLocalFileSystemURL( theURI ).then( function gotEntry( theEntry ) {
+            deferred.resolve( theEntry );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Returns the file entry for the given path (useful for
+         * getting the full path of a file). `options` is of the
+         * form `{create: true/false, exclusive: true/false}`
+         * @method getFileEntry
+         * @param {String} theFilePath The file path or FileEntry object
+         * @param {*} options creation options
+         */
+        self.getFileEntry = function ( theFilePath, options ) {
+          var deferred = Q.defer();
+          _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry( theFileEntry ) {
+            deferred.resolve( theFileEntry );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Returns the file object for a given file (useful for getting
+         * the size of a file); `option` is of the form `{create: true/false, exclusive: true/false}`
+         * @method getFile
+         * @param {String} theFilePath
+         * @param {*} option
+         */
+        self.getFile = function ( theFilePath, options ) {
+          return self.getFileEntry( theFilePath, options ).then( _getFileObject );
+        };
+        /**
+         * Returns the directory entry for a given path
+         * @method getDirectoryEntry
+         * @param {String} theDirectoryPath
+         * @param {*} options
+         */
+        self.getDirectoryEntry = function ( theDirectoryPath, options ) {
+          var deferred = Q.defer();
+          _getDirectoryEntry( self._cwd, theDirectoryPath, options ).then( function gotDirectoryEntry( theDirectoryEntry ) {
+            deferred.resolve( theDirectoryEntry );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * returns the URL for a given file
+         * @method getFileURL
+         * @param {String} theFilePath
+         * @param {*} options
+         */
+        self.getFileURL = function ( theFilePath, options ) {
+          var deferred = Q.defer();
+          _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry( theFileEntry ) {
+            deferred.resolve( theFileEntry.toURL() );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Returns a URL for the given directory
+         * @method getDirectoryURL
+         * @param {String} thePath
+         * @param {*} options
+         */
+        self.getDirectoryURL = function ( thePath, options ) {
+          var deferred = Q.defer();
+          _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry( theDirectoryEntry ) {
+            deferred.resolve( theDirectoryEntry.toURL() );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Returns the native URL for an entry by combining the `fullPath` of the entry
+         * with the `nativeURL` of the `root` directory if absolute or of the `current`
+         * directory if not absolute.
+         * @method getNativeURL
+         * @param {String} theEntry Path of the file or directory; can also be a File/DirectoryEntry
+         */
+        self.getNativeURL = function ( theEntry ) {
+          var thePath = theEntry;
+          if ( typeof theEntry !== "string" ) {
+            thePath = theEntry.fullPath();
+          }
+          var isAbsolute = ( thePath.substr( 0, 1 ) === "/" ),
+            theRootPath = isAbsolute ? self._root.nativeURL : self.cwd.nativeURL;
+          return theRootPath + ( isAbsolute ? "" : "/" ) + thePath;
+        };
+        /**
+         * returns the native file path for a given file
+         * @method getNativeFileURL
+         * @param {String} theFilePath
+         * @param {*} options
+         */
+        self.getNativeFileURL = function ( theFilePath, options ) {
+          var deferred = Q.defer();
+          _getFileEntry( self._cwd, theFilePath, options ).then( function gotFileEntry( theFileEntry ) {
+            deferred.resolve( theFileEntry.nativeURL );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Returns a URL for the given directory
+         * @method getNativeDirectoryURL
+         * @param {String} thePath
+         * @param {*} options
+         */
+        self.getNativeDirectoryURL = function ( thePath, options ) {
+          var deferred = Q.defer();
+          _getDirectoryEntry( self._cwd, thePath || ".", options ).then( function gotDirectoryEntry( theDirectoryEntry ) {
+            deferred.resolve( theDirectoryEntry.nativeURL );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Change to an arbitrary directory
+         * @method changeDirectory
+         * @param  {String} theNewPath The path to the directory, relative to cwd
+         * @return {Promise}            The Promise
+         */
+        self.changeDirectory = function ( theNewPath ) {
+          var deferred = Q.defer();
+          _getDirectoryEntry( self._cwd, theNewPath, {} ).then( function gotDirectory( theNewDirectory ) {
+            self.cwd = theNewDirectory;
+          } ).then( function allDone() {
+            deferred.resolve( self );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Read an arbitrary file's contents.
+         * @method readFileContents
+         * @param  {String} theFilePath The path to the file, relative to cwd
+         * @param  {Object} options     The options to use when opening the file (such as creating it)
+         * @param  {String} readAsKind  How to read the file -- best to use self.FILETYPE.TEXT, etc.
+         * @return {Promise}             The Promise
+         */
+        self.readFileContents = function ( theFilePath, options, readAsKind ) {
+          var deferred = Q.defer();
+          _getFileEntry( self._cwd, theFilePath, options || {} ).then( function gotTheFileEntry( theFileEntry ) {
+            return _getFileObject( theFileEntry );
+          } ).then( function gotTheFileObject( theFileObject ) {
+            return _readFileContents( theFileObject, readAsKind || "Text" );
+          } ).then( function getTheFileContents( theFileContents ) {
+            deferred.resolve( theFileContents );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Read an arbitrary directory's entries.
+         * @method readDirectoryContents
+         * @param  {String} theDirectoryPath The path to the directory, relative to cwd; "." if not specified
+         * @param  {Object} options          The options to use when opening the directory (such as creating it)
+         * @return {Promise}             The Promise
+         */
+        self.readDirectoryContents = function ( theDirectoryPath, options ) {
+          var deferred = Q.defer();
+          _getDirectoryEntry( self._cwd, theDirectoryPath || ".", options || {} ).then( function gotTheDirectoryEntry(
+            theDirectoryEntry ) {
             return _readDirectoryContents( theDirectoryEntry );
           } ).then( function gotTheDirectoryEntries( theEntries ) {
-          deferred.resolve( theEntries );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Write data to an arbitrary file
-       * @method writeFileContents
-       * @param  {String} theFilePath The file name to write to, relative to cwd
-       * @param  {Object} options     The options to use when opening the file
-       * @param  {*} theData     The data to write
-       * @return {Promise}             The Promise
-       */
-      self.writeFileContents = function( theFilePath, options, theData ) {
-        var deferred = Q.defer();
-        _getFileEntry( self._cwd, theFilePath, options || {
-          create: true,
-          exclusive: false
-        } ).then( function gotTheFileEntry( theFileEntry ) {
-          return _createFileWriter( theFileEntry );
-        } ).then( function gotTheFileWriter( theFileWriter ) {
-          return _writeFileContents( theFileWriter, theData );
-        } ).then( function allDone() {
-          deferred.resolve( self );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Creates an arbitrary directory
-       * @method createDirectory
-       * @param  {String} theDirectoryPath The path, relative to cwd
-       * @return {Promise}                  The Promise
-       */
-      self.createDirectory = function( theDirectoryPath ) {
-        var deferred = Q.defer();
-        _getDirectoryEntry( self._cwd, theDirectoryPath, {
-          create: true,
-          exclusive: false
-        } ).then( function gotDirectory( theNewDirectory ) {
-          deferred.resolve( theNewDirectory );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Copies a file to a new directory, with an optional new name
-       * @method copyFile
-       * @param  {String} sourceFilePath      Path to file, relative to cwd
-       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-       * @param  {String} withNewName         New name, if desired
-       * @return {Promise}                     The Promise
-       */
-      self.copyFile = function( sourceFilePath, targetDirectoryPath, withNewName ) {
-        var deferred = Q.defer();
-        var theFileToCopy;
-        _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry(
-          aFileToCopy ) {
-          theFileToCopy = aFileToCopy;
-          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-        } ).then( function gotDirectoryEntry( theTargetDirectory ) {
-          return _copyFile( theFileToCopy, theTargetDirectory, withNewName );
-        } ).then( function allDone( theNewFileEntry ) {
-          deferred.resolve( theNewFileEntry );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Copies a directory to a new directory, with an optional new name
-       * @method copyDirectory
-       * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
-       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-       * @param  {String} withNewName         New name, if desired
-       * @return {Promise}                     The Promise
-       */
-      self.copyDirectory = function( sourceDirectoryPath, targetDirectoryPath,
-        withNewName ) {
-        var deferred = Q.defer();
-        var theDirectoryToCopy;
-        _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
-          sourceDirectoryEntry ) {
-          theDirectoryToCopy = sourceDirectoryEntry;
-          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-        } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
-          return _copyDirectory( theDirectoryToCopy, theTargetDirectory,
-            withNewName );
-        } ).then( function allDone( theNewDirectoryEntry ) {
-          deferred.resolve( theNewDirectoryEntry );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * @method moveFile
-       * Moves a file to a new directory, with an optional new name
-       * @param  {String} sourceFilePath      Path to file, relative to cwd
-       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-       * @param  {String} withNewName         New name, if desired
-       * @return {Promise}                     The Promise
-       */
-      self.moveFile = function( sourceFilePath, targetDirectoryPath, withNewName ) {
-        var deferred = Q.defer();
-        var theFileToMove;
-        _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry(
-          aFileToMove ) {
-          theFileToMove = aFileToMove;
-          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-        } ).then( function gotDirectoryEntry( theTargetDirectory ) {
-          return _moveFile( theFileToMove, theTargetDirectory, withNewName );
-        } ).then( function allDone( theNewFileEntry ) {
-          deferred.resolve( theNewFileEntry );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Moves a directory to a new directory, with an optional new name
-       * @method moveDirectory
-       * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
-       * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
-       * @param  {String} withNewName         New name, if desired
-       * @return {Promise}                     The Promise
-       */
-      self.moveDirectory = function( sourceDirectoryPath, targetDirectoryPath,
-        withNewName ) {
-        var deferred = Q.defer();
-        var theDirectoryToMove;
-        _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
-          sourceDirectoryEntry ) {
-          theDirectoryToMove = sourceDirectoryEntry;
-          return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
-        } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
-          return _moveDirectory( theDirectoryToMove, theTargetDirectory,
-            withNewName );
-        } ).then( function allDone( theNewDirectoryEntry ) {
-          deferred.resolve( theNewDirectoryEntry );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Renames a file to a new name, in the cwd
-       * @method renameFile
-       * @param  {String} sourceFilePath      Path to file, relative to cwd
-       * @param  {String} withNewName         New name
-       * @return {Promise}                     The Promise
-       */
-      self.renameFile = function( sourceFilePath, withNewName ) {
-        return self.moveFile( sourceFilePath, ".", withNewName );
-      };
-      /**
-       * Renames a directory to a new name, in the cwd
-       * @method renameDirectory
-       * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
-       * @param  {String} withNewName         New name
-       * @return {Promise}                     The Promise
-       */
-      self.renameDirectory = function( sourceDirectoryPath, withNewName ) {
-        return self.moveDirectory( sourceDirectoryPath, ".", withNewName );
-      };
-      /**
-       * Deletes a file
-       * @method deleteFile
-       * @param  {String} theFilePath Path to file, relative to cwd
-       * @return {Promise}             The Promise
-       */
-      self.deleteFile = function( theFilePath ) {
-        var deferred = Q.defer();
-        _getFileEntry( self._cwd, theFilePath, {} ).then( function gotTheFileToDelete(
-          theFileEntry ) {
-          return _removeFile( theFileEntry );
-        } ).then( function allDone() {
-          deferred.resolve( self );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Removes a directory, possibly recursively
-       * @method removeDirectory
-       * @param  {String} theDirectoryPath path to directory, relative to cwd
-       * @param  {Boolean} recursively      If true, recursive remove
-       * @return {Promise}                  The promise
-       */
-      self.removeDirectory = function( theDirectoryPath, recursively ) {
-        var deferred = Q.defer();
-        _getDirectoryEntry( self._cwd, theDirectoryPath, {} ).then( function gotTheDirectoryToDelete(
-          theDirectoryEntry ) {
-          return _removeDirectory( theDirectoryEntry, recursively );
-        } ).then( function allDone() {
-          deferred.resolve( self );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      /**
-       * Asks the browser for the requested quota, and then requests the file system
-       * and sets the cwd to the root directory.
-       * @method _initializeFileSystem
-       * @private
-       * @return {Promise} The promise
-       */
-      self._initializeFileSystem = function() {
-        var deferred = Q.defer();
-        _requestQuota( self.fileSystemType, self.requestedQuota ).then( function gotQuota(
-          theQuota ) {
-          self._actualQuota = theQuota;
-          return _requestFileSystem( self.fileSystemType, self.actualQuota );
-        } ).then( function gotFS( theFS ) {
-          self._fileSystem = theFS;
-          //self._cwd = theFS.root;
-          return _getDirectoryEntry( theFS.root, "", {} );
-        } ).then( function gotRootDirectory( theRootDirectory ) {
-          self._root = theRootDirectory;
-          self._cwd = theRootDirectory;
-        } ).then( function allDone() {
-          deferred.resolve( self );
-        } ).catch( function( anError ) {
-          deferred.reject( anError );
-        } ).done();
-        return deferred.promise;
-      };
-      if ( self.overrideSuper ) {
-        self.overrideSuper( self.class, "init", self.init );
-      }
-      /**
-       * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
-       * and requested quota size. Both must be specified.
-       * @method init
-       * @param {FileSystem} fileSystemType
-       * @param {Number} requestedQuota
-       */
-      self.init = function( fileSystemType, requestedQuota ) {
-        if ( self.super ) {
-          self.super( _className, "init" );
+            deferred.resolve( theEntries );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Write data to an arbitrary file
+         * @method writeFileContents
+         * @param  {String} theFilePath The file name to write to, relative to cwd
+         * @param  {Object} options     The options to use when opening the file
+         * @param  {*} theData     The data to write
+         * @return {Promise}             The Promise
+         */
+        self.writeFileContents = function ( theFilePath, options, theData ) {
+          var deferred = Q.defer();
+          _getFileEntry( self._cwd, theFilePath, options || {
+            create: true,
+            exclusive: false
+          } ).then( function gotTheFileEntry( theFileEntry ) {
+            return _createFileWriter( theFileEntry );
+          } ).then( function gotTheFileWriter( theFileWriter ) {
+            return _writeFileContents( theFileWriter, theData );
+          } ).then( function allDone() {
+            deferred.resolve( self );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Creates an arbitrary directory
+         * @method createDirectory
+         * @param  {String} theDirectoryPath The path, relative to cwd
+         * @return {Promise}                  The Promise
+         */
+        self.createDirectory = function ( theDirectoryPath ) {
+          var deferred = Q.defer();
+          _getDirectoryEntry( self._cwd, theDirectoryPath, {
+            create: true,
+            exclusive: false
+          } ).then( function gotDirectory( theNewDirectory ) {
+            deferred.resolve( theNewDirectory );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Copies a file to a new directory, with an optional new name
+         * @method copyFile
+         * @param  {String} sourceFilePath      Path to file, relative to cwd
+         * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+         * @param  {String} withNewName         New name, if desired
+         * @return {Promise}                     The Promise
+         */
+        self.copyFile = function ( sourceFilePath, targetDirectoryPath, withNewName ) {
+          var deferred = Q.defer(),
+            theFileToCopy;
+          _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry( aFileToCopy ) {
+            theFileToCopy = aFileToCopy;
+            return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+          } ).then( function gotDirectoryEntry( theTargetDirectory ) {
+            return _copyFile( theFileToCopy, theTargetDirectory, withNewName );
+          } ).then( function allDone( theNewFileEntry ) {
+            deferred.resolve( theNewFileEntry );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Copies a directory to a new directory, with an optional new name
+         * @method copyDirectory
+         * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
+         * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+         * @param  {String} withNewName         New name, if desired
+         * @return {Promise}                     The Promise
+         */
+        self.copyDirectory = function ( sourceDirectoryPath, targetDirectoryPath, withNewName ) {
+          var deferred = Q.defer(),
+            theDirectoryToCopy;
+          _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
+            sourceDirectoryEntry ) {
+            theDirectoryToCopy = sourceDirectoryEntry;
+            return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+          } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
+            return _copyDirectory( theDirectoryToCopy, theTargetDirectory, withNewName );
+          } ).then( function allDone( theNewDirectoryEntry ) {
+            deferred.resolve( theNewDirectoryEntry );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * @method moveFile
+         * Moves a file to a new directory, with an optional new name
+         * @param  {String} sourceFilePath      Path to file, relative to cwd
+         * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+         * @param  {String} withNewName         New name, if desired
+         * @return {Promise}                     The Promise
+         */
+        self.moveFile = function ( sourceFilePath, targetDirectoryPath, withNewName ) {
+          var deferred = Q.defer(),
+            theFileToMove;
+          _getFileEntry( self._cwd, sourceFilePath, {} ).then( function gotFileEntry( aFileToMove ) {
+            theFileToMove = aFileToMove;
+            return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+          } ).then( function gotDirectoryEntry( theTargetDirectory ) {
+            return _moveFile( theFileToMove, theTargetDirectory, withNewName );
+          } ).then( function allDone( theNewFileEntry ) {
+            deferred.resolve( theNewFileEntry );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Moves a directory to a new directory, with an optional new name
+         * @method moveDirectory
+         * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
+         * @param  {String} targetDirectoryPath Path to new directory, relative to cwd
+         * @param  {String} withNewName         New name, if desired
+         * @return {Promise}                     The Promise
+         */
+        self.moveDirectory = function ( sourceDirectoryPath, targetDirectoryPath, withNewName ) {
+          var deferred = Q.defer(),
+            theDirectoryToMove;
+          _getDirectoryEntry( self._cwd, sourceDirectoryPath, {} ).then( function gotSourceDirectoryEntry(
+            sourceDirectoryEntry ) {
+            theDirectoryToMove = sourceDirectoryEntry;
+            return _getDirectoryEntry( self._cwd, targetDirectoryPath, {} );
+          } ).then( function gotTargetDirectoryEntry( theTargetDirectory ) {
+            return _moveDirectory( theDirectoryToMove, theTargetDirectory, withNewName );
+          } ).then( function allDone( theNewDirectoryEntry ) {
+            deferred.resolve( theNewDirectoryEntry );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Renames a file to a new name, in the cwd
+         * @method renameFile
+         * @param  {String} sourceFilePath      Path to file, relative to cwd
+         * @param  {String} withNewName         New name
+         * @return {Promise}                     The Promise
+         */
+        self.renameFile = function ( sourceFilePath, withNewName ) {
+          return self.moveFile( sourceFilePath, ".", withNewName );
+        };
+        /**
+         * Renames a directory to a new name, in the cwd
+         * @method renameDirectory
+         * @param  {String} sourceDirectoryPath Path to directory, relative to cwd
+         * @param  {String} withNewName         New name
+         * @return {Promise}                     The Promise
+         */
+        self.renameDirectory = function ( sourceDirectoryPath, withNewName ) {
+          return self.moveDirectory( sourceDirectoryPath, ".", withNewName );
+        };
+        /**
+         * Deletes a file
+         * @method deleteFile
+         * @param  {String} theFilePath Path to file, relative to cwd
+         * @return {Promise}             The Promise
+         */
+        self.deleteFile = function ( theFilePath ) {
+          var deferred = Q.defer();
+          _getFileEntry( self._cwd, theFilePath, {} ).then( function gotTheFileToDelete( theFileEntry ) {
+            return _removeFile( theFileEntry );
+          } ).then( function allDone() {
+            deferred.resolve( self );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Removes a directory, possibly recursively
+         * @method removeDirectory
+         * @param  {String} theDirectoryPath path to directory, relative to cwd
+         * @param  {Boolean} recursively      If true, recursive remove
+         * @return {Promise}                  The promise
+         */
+        self.removeDirectory = function ( theDirectoryPath, recursively ) {
+          var deferred = Q.defer();
+          _getDirectoryEntry( self._cwd, theDirectoryPath, {} ).then( function gotTheDirectoryToDelete( theDirectoryEntry ) {
+            return _removeDirectory( theDirectoryEntry, recursively );
+          } ).then( function allDone() {
+            deferred.resolve( self );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        /**
+         * Asks the browser for the requested quota, and then requests the file system
+         * and sets the cwd to the root directory.
+         * @method _initializeFileSystem
+         * @private
+         * @return {Promise} The promise
+         */
+        self._initializeFileSystem = function () {
+          var deferred = Q.defer();
+          _requestQuota( self.fileSystemType, self.requestedQuota ).then( function gotQuota( theQuota ) {
+            self._actualQuota = theQuota;
+            return _requestFileSystem( self.fileSystemType, self.actualQuota );
+          } ).then( function gotFS( theFS ) {
+            self._fileSystem = theFS;
+            //self._cwd = theFS.root;
+            return _getDirectoryEntry( theFS.root, "", {} );
+          } ).then( function gotRootDirectory( theRootDirectory ) {
+            self._root = theRootDirectory;
+            self._cwd = theRootDirectory;
+          } ).then( function allDone() {
+            deferred.resolve( self );
+          } ).
+          catch( function ( anError ) {
+            deferred.reject( anError );
+          } ).done();
+          return deferred.promise;
+        };
+        if ( self.overrideSuper ) {
+          self.overrideSuper( self.class, "init", self.init );
         }
-        if ( typeof fileSystemType === "undefined" ) {
-          throw new Error(
-            "No file system type specified; specify PERSISTENT or TEMPORARY." );
-        }
-        if ( typeof requestedQuota === "undefined" ) {
-          throw new Error( "No quota requested. If you don't know, specify ZERO." );
-        }
-        self._requestedQuota = requestedQuota;
-        self._fileSystemType = fileSystemType;
-        return self._initializeFileSystem(); // this returns a promise, so we can .then after.
+        /**
+         * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
+         * and requested quota size. Both must be specified.
+         * @method init
+         * @param {FileSystem} fileSystemType
+         * @param {Number} requestedQuota
+         */
+        self.init = function ( fileSystemType, requestedQuota ) {
+          if ( self.super ) {
+            self.super( _className, "init" );
+          }
+          if ( typeof fileSystemType === "undefined" ) {
+            throw new Error( "No file system type specified; specify PERSISTENT or TEMPORARY." );
+          }
+          if ( typeof requestedQuota === "undefined" ) {
+            throw new Error( "No quota requested. If you don't know, specify ZERO." );
+          }
+          self._requestedQuota = requestedQuota;
+          self._fileSystemType = fileSystemType;
+          return self._initializeFileSystem(); // this returns a promise, so we can .then after.
+        };
+        /**
+         * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
+         * and requested quota size. Both must be specified.
+         * @method initWithOptions
+         * @param {*} options
+         */
+        self.initWithOptions = function ( options ) {
+          if ( typeof options === "undefined" ) {
+            throw new Error( "No options specified. Need type and quota." );
+          }
+          if ( typeof options.fileSystemType === "undefined" ) {
+            throw new Error( "No file system type specified; specify PERSISTENT or TEMPORARY." );
+          }
+          if ( typeof options.requestedQuota === "undefined" ) {
+            throw new Error( "No quota requested. If you don't know, specify ZERO." );
+          }
+          return self.init( options.fileSystemType, options.requestedQuota );
+        };
+        return self;
       };
-      /**
-       * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
-       * and requested quota size. Both must be specified.
-       * @method initWithOptions
-       * @param {*} options
-       */
-      self.initWithOptions = function( options ) {
-        if ( typeof options === "undefined" ) {
-          throw new Error( "No options specified. Need type and quota." );
-        }
-        if ( typeof options.fileSystemType === "undefined" ) {
-          throw new Error(
-            "No file system type specified; specify PERSISTENT or TEMPORARY." );
-        }
-        if ( typeof options.requestedQuota === "undefined" ) {
-          throw new Error( "No quota requested. If you don't know, specify ZERO." );
-        }
-        return self.init( options.fileSystemType, options.requestedQuota );
-      };
-      return self;
-    };
     // meta information
     FileManager.meta = {
-      version: '00.04.450',
+      version: "00.04.450",
       class: _className,
       autoInitializable: false,
       categorizable: false
     };
     // assign to `window` if stand-alone
     if ( globalContext ) {
-      globalContext.FileManager = FileManager
+      globalContext.FileManager = FileManager;
     }
     // return factory
     return FileManager;
   } )( Q, BaseObject, ( typeof IN_YASMF !== "undefined" ) ? undefined : window );
+} );
+
+/**
+ *
+ * h - simple DOM demplating
+ *
+ * @module h.js
+ * @author Kerri Shotts
+ * @version 0.1
+ *
+ * ```
+ * Copyright (c) 2014 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */
+/*jshint
+     asi:true,
+     bitwise:true,
+     browser:true,
+     camelcase:true,
+     curly:true,
+     eqeqeq:false,
+     forin:true,
+     noarg:true,
+     noempty:true,
+     plusplus:false,
+     smarttabs:true,
+     sub:true,
+     trailing:false,
+     undef:true,
+     white:false,
+     onevar:false
+*/
+/*global define, Node, document*/
+define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
+  /**
+   * internal private method to handle parsing children
+   * and attaching them to their parents
+   *
+   * If the child is a NODE, it is attached directly to the parent as a child
+   * If the child is a FUNCTION, the RESULTS are re-parsed, ultimately to be attached to the parent
+   *   as children
+   * If the child is an ARRAY, each element within the array is re-parsed, ultimately to be attached
+   *   to the parent as children
+   *
+   * @param {Array|Function|Node} child       child to handle and attach
+   * @param {Node} parent                     parent
+   *
+   */
+  function handleChild( child, parent ) {
+    if ( typeof child === "object" ) {
+      if ( child instanceof Array ) {
+        for ( var i = 0, l = child.length; i < l; i++ ) {
+          handleChild( child[ i ], parent );
+        }
+      }
+      if ( child instanceof Node ) {
+        parent.appendChild( child );
+      }
+    }
+    if ( typeof child === "function" ) {
+      handleChild( child(), parent );
+    }
+  }
+  /**
+   * parses an incoming tag into its tag name, id, and class constituents
+   * A tag is of the form "tagName.class#id" or "tagName#id.class". The id and class
+   * are optional.
+   *
+   * @param {string} tag      tag to parse
+   * @return {*} Object of the form { tag: tagName, id: id, class: class }
+   */
+  function parseTag( tag ) {
+    var tagParts = {
+        tag: "",
+        id: undefined,
+        class: undefined
+      },
+      hashPos = tag.indexOf( "#" ),
+      dotPos = tag.indexOf( "." );
+    if ( hashPos < 0 && dotPos < 0 ) {
+      tagParts.tag = tag;
+      return tagParts;
+    }
+    if ( hashPos > 0 && dotPos < 0 ) {
+      tagParts.tag = tag.substr( 0, hashPos );
+      tagParts.id = tag.substr( hashPos + 1, tag.length );
+      return tagParts;
+    }
+    if ( dotPos > 0 && hashPos < 0 ) {
+      tagParts.tag = tag.substr( 0, dotPos );
+      tagParts.class = tag.substr( dotPos + 1, tag.length );
+      return tagParts;
+    }
+    if ( dotPos > 0 && hashPos > 0 && hashPos < dotPos ) {
+      tagParts.tag = tag.substr( 0, hashPos );
+      tagParts.id = tag.substr( hashPos + 1, ( dotPos - hashPos ) - 1 );
+      tagParts.class = tag.substr( dotPos + 1, tag.length );
+      return tagParts;
+    }
+    if ( dotPos > 0 && hashPos > 0 && dotPos < hashPos ) {
+      tagParts.tag = tag.substr( 0, dotPos );
+      tagParts.class = tag.substr( dotPos + 1, ( hashPos - dotPos ) - 1 );
+      tagParts.id = tag.substr( hashPos + 1, tag.length );
+      return tagParts;
+    }
+    return tagParts;
+  }
+  /**
+   * h templating engine
+   *   short for HTML
+   *
+   * Generates a DOM tree (or just a single node) based on a series of method calls
+   * into h. h has one root method (el) that creates all DOM elements, but also has
+   * helper methods for each HTML tag. This means that a UL can be created simply by
+   * calling h.ul.
+   *
+   * Technically there's no such thing as a template using this library, but functions
+   * encapsulating a series of h calls function as an equivalent if properly decoupled
+   * from their surrounds.
+   */
+  var h = {
+      /**
+       * Returns a DOM tree containing the requested element and any further child
+       * elements (as extra parameters)
+       *
+       * @param {string} tag                 tag of the form "tagName.class#id" or "tagName#id.class"
+       * @param {*} tagOptions               options for the tag
+       * @param {Array|Function|String} ...  children that should be attached
+       * @returns {Node}                     DOM tree
+       *
+       * tagOptions should be an object consisting of the following optional segments:
+       *
+       * {
+       *    attrs: {...}                     attributes to add to the element
+       *    styles: {...}                    style attributes to add to the element TODO
+       *    on: {...}                        event handlers to attach to the element TODO
+       *    bind: {...}                      data binding (TODO)
+       * }
+       *
+       */
+      el: function ( tag ) {
+        var e,
+          options,
+          content,
+          tagParts = parseTag( tag ); // parse tag; it should be of the form tag[#id][.class]
+        // create the element; if @DF is used, a document fragment is used instead
+        if ( tagParts.tag !== "@DF" ) {
+          e = document.createElement( tagParts.tag );
+        } else {
+          e = document.createDocumentFragment();
+        }
+        // attach the class and id from the tag name, if available
+        if ( tagParts.class !== undefined ) {
+          e.className = tagParts.class;
+        }
+        if ( tagParts.id !== undefined ) {
+          e.setAttribute( "id", tagParts.id );
+        }
+        // get the arguments as an array, ignoring the first parameter
+        var args = Array.prototype.slice.call( arguments, 1 );
+        // determine what we've passed in the second/third parameter
+        // if it is an object (but not a node or array), it's a list of
+        // options to attach to the element. If it is a string, it's text
+        // content that should be added using .textContent.
+        // note: we could parse the entire argument list, but that would
+        // a bit absurd.
+        for ( var i = 0; i < 2; i++ ) {
+          if ( typeof args[ 0 ] !== "undefined" ) {
+            if ( typeof args[ 0 ] === "object" ) {
+              // could be a DOM node, an array, or tag options
+              if ( !( args[ 0 ] instanceof Node ) && !( args[ 0 ] instanceof Array ) ) {
+                options = args.shift();
+              }
+            }
+            if ( typeof args[ 0 ] === "string" ) {
+              // this is text content
+              content = args.shift();
+            }
+          }
+        }
+        // copy over any attributes and styles in options.attrs and options.style
+        if ( typeof options === "object" ) {
+          // add attributes
+          if ( typeof options.attrs !== "undefined" ) {
+            for ( var attr in options.attrs ) {
+              if ( options.attrs.hasOwnProperty( attr ) ) {
+                e.setAttribute( attr, options.attrs[ attr ] );
+              }
+            }
+          }
+          // add styles
+          if ( typeof options.styles !== "undefined" ) {
+            for ( var style in options.styles ) {
+              if ( options.styles.hasOwnProperty( style ) ) {
+                e.style[ style ] = options.styles[ style ];
+              }
+            }
+          }
+          // add event handlers; handler property is expected to be a valid DOM
+          // event, i.e. { "change": function... } or { change: function... }
+          // if the handler is an object, it must be of the form
+          //   { handler: function ...,
+          //     capture: true/false }
+          if ( typeof options.on !== "undefined" ) {
+            for ( var evt in options.on ) {
+              if ( options.on.hasOwnProperty( evt ) ) {
+                if ( typeof options.on[ evt ] === "function" ) {
+                  e.addEventListener( evt, options.on[ evt ].bind( e ), false );
+                } else {
+                  e.addEventListener( evt, options.on[ evt ].handler.bind( e ), typeof options.on[ evt ].capture !== "undefined" ?
+                    options.on[ evt ].capture : false );
+                }
+              }
+            }
+          }
+          // Data binding only occurs if using YASMF's BaseObject for now (built-in pubsub)
+          // along with observable properties
+          // the binding object is of the form { object: objectRef, keyPath: "keyPath" }
+          if ( typeof options.bind !== "undefined" ) {
+            if ( typeof BaseObject !== "undefined" ) {
+              if ( options.bind.object instanceof BaseObject ) {
+                // we have an object that has observable properties
+                options.bind.object.dataBindOn( e, options.bind.keyPath );
+                // get the current value so it can be displayed
+                content = options.bind.object[ options.bind.keyPath ];
+              }
+            }
+          }
+          // allow elements to be stored into a context
+          // store must be an object of the form {object:objectRef, keyPath: "keyPath" }
+          if ( typeof options.store !== "undefined" ) {
+            options.store.object[ options.store.keyPath ] = e;
+          }
+        }
+        // if we have content, go ahead and add it
+        // if we're an element that has a value, we attach it to the value
+        // property instead of textContent. If textContent is not available
+        // we use innerText; if that's not available, we complain and do
+        // nothing. Falling back to innerHTML isn't an option, as that's what
+        // we are explicitly trying to avoid.
+        if ( typeof content === "string" || typeof content === "number" ) {
+          if ( typeof e.value !== "undefined" ) {
+            e.value = content;
+          } else {
+            if ( typeof e.textContent !== "undefined" ) {
+              e.textContent = content;
+            } else {
+              if ( typeof e.innerText !== "undefined" ) {
+                e.innerText = content;
+              } else {
+                console.log( "WARNING! This browser doesn't support textContent or innerText." );
+              }
+            }
+          }
+        }
+        // Handle children; handleChild appends each one to the parent
+        var child, l;
+        for ( i = 0, l = args.length; i < l; i++ ) {
+          //console.log(i);
+          child = args[ i ];
+          handleChild( child, e );
+        }
+        // return the element (and associated tree)
+        return e;
+      }
+    },
+    // create bindings for each HTML element (from: https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
+    els = [ "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio", "b", "base", "basefont", "bdi",
+      "bdo", "bgsound", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code",
+      "col", "colgroup", "content", "data", "datalist", "dd", "decorator", "del", "details", "dfn", "dialog", "dir", "div", "dl",
+      "dt", "element", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frameset", "h1", "h2", "h3",
+      "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "isindex", "kbd",
+      "keygen", "label", "legend", "li", "link", "listing", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter",
+      "nav", "nobr", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "plaintext",
+      "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "shadow", "small", "source",
+      "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea",
+      "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "xmp"
+    ];
+  els.forEach( function ( el ) {
+    h[ el ] = h.el.bind( h, el );
+  } );
+  return h;
 } );
 
 /**
@@ -5384,7 +5850,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function( Q, Base
          onevar:false
  */
 /*global define*/
-define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( theDevice, BaseObject ) {
+define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function ( theDevice, BaseObject ) {
   var UI = {};
   /**
    * Version of the UI Namespace
@@ -5400,7 +5866,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @param  {value} theValue
    * @returns {void}
    */
-  UI.styleElement = function( theElement, theStyle, theValue ) {
+  UI.styleElement = function ( theElement, theStyle, theValue ) {
     var prefixes = [ "-webkit-", "-moz-", "-ms-", "-o-", "" ];
     for ( var i = 0; i < prefixes.length; i++ ) {
       var thePrefix = prefixes[ i ];
@@ -5411,7 +5877,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
       theElement.style.setProperty( theNewStyle, theNewValue );
     }
   };
-  UI.styleElements = function( theElements, theStyle, theValue ) {
+  UI.styleElements = function ( theElements, theStyle, theValue ) {
     var i;
     for ( i = 0; i < theElements.length; i++ ) {
       UI.styleElement( theElements[ i ], theStyle, theValue );
@@ -5428,15 +5894,14 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @param {color} theColor - theColor to convert.
    * @returns {string} a CSS value suitable for color properties
    */
-  UI.colorToRGBA = function( theColor ) {
+  UI.colorToRGBA = function ( theColor ) {
     if ( !theColor ) {
       return "inherit";
     }
     //noinspection JSUnresolvedVariable
     if ( theColor.alpha !== 0 ) {
       //noinspection JSUnresolvedVariable
-      return "rgba(" + theColor.red + "," + theColor.green + "," + theColor.blue + "," +
-        theColor.alpha + ")";
+      return "rgba(" + theColor.red + "," + theColor.green + "," + theColor.blue + "," + theColor.alpha + ")";
     } else {
       return "transparent";
     }
@@ -5457,7 +5922,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @returns {color}
    *
    */
-  UI.makeColor = function( r, g, b, a ) {
+  UI.makeColor = function ( r, g, b, a ) {
     return {
       red: r,
       green: g,
@@ -5476,7 +5941,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @returns {color} a color ready for changes
    *
    */
-  UI.copyColor = function( theColor ) {
+  UI.copyColor = function ( theColor ) {
     //noinspection JSUnresolvedVariable
     return UI.makeColor( theColor.red, theColor.green, theColor.blue, theColor.alpha );
   };
@@ -5490,119 +5955,119 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @method blackColor
    * @returns {color} a black color.
    */
-  UI.COLOR.blackColor = function() {
+  UI.COLOR.blackColor = function () {
     return UI.makeColor( 0, 0, 0, 1.0 );
   };
   /** @static
    * @method darkGrayColor
    * @returns {color} a dark gray color.
    */
-  UI.COLOR.darkGrayColor = function() {
+  UI.COLOR.darkGrayColor = function () {
     return UI.makeColor( 85, 85, 85, 1.0 );
   };
   /** @static
    * @method GrayColor
    * @returns {color} a gray color.
    */
-  UI.COLOR.GrayColor = function() {
+  UI.COLOR.GrayColor = function () {
     return UI.makeColor( 127, 127, 127, 1.0 );
   };
   /** @static
    * @method lightGrayColor
    * @returns {color} a light gray color.
    */
-  UI.COLOR.lightGrayColor = function() {
+  UI.COLOR.lightGrayColor = function () {
     return UI.makeColor( 170, 170, 170, 1.0 );
   };
   /** @static
    * @method whiteColor
    * @returns {color} a white color.
    */
-  UI.COLOR.whiteColor = function() {
+  UI.COLOR.whiteColor = function () {
     return UI.makeColor( 255, 255, 255, 1.0 );
   };
   /** @static
    * @method blueColor
    * @returns {color} a blue color.
    */
-  UI.COLOR.blueColor = function() {
+  UI.COLOR.blueColor = function () {
     return UI.makeColor( 0, 0, 255, 1.0 );
   };
   /** @static
    * @method greenColor
    * @returns {color} a green color.
    */
-  UI.COLOR.greenColor = function() {
+  UI.COLOR.greenColor = function () {
     return UI.makeColor( 0, 255, 0, 1.0 );
   };
   /** @static
    * @method redColor
    * @returns {color} a red color.
    */
-  UI.COLOR.redColor = function() {
+  UI.COLOR.redColor = function () {
     return UI.makeColor( 255, 0, 0, 1.0 );
   };
   /** @static
    * @method cyanColor
    * @returns {color} a cyan color.
    */
-  UI.COLOR.cyanColor = function() {
+  UI.COLOR.cyanColor = function () {
     return UI.makeColor( 0, 255, 255, 1.0 );
   };
   /** @static
    * @method yellowColor
    * @returns {color} a yellow color.
    */
-  UI.COLOR.yellowColor = function() {
+  UI.COLOR.yellowColor = function () {
     return UI.makeColor( 255, 255, 0, 1.0 );
   };
   /** @static
    * @method magentaColor
    * @returns {color} a magenta color.
    */
-  UI.COLOR.magentaColor = function() {
+  UI.COLOR.magentaColor = function () {
     return UI.makeColor( 255, 0, 255, 1.0 );
   };
   /** @static
    * @method orangeColor
    * @returns {color} a orange color.
    */
-  UI.COLOR.orangeColor = function() {
+  UI.COLOR.orangeColor = function () {
     return UI.makeColor( 255, 127, 0, 1.0 );
   };
   /** @static
    * @method purpleColor
    * @returns {color} a purple color.
    */
-  UI.COLOR.purpleColor = function() {
+  UI.COLOR.purpleColor = function () {
     return UI.makeColor( 127, 0, 127, 1.0 );
   };
   /** @static
    * @method brownColor
    * @returns {color} a brown color.
    */
-  UI.COLOR.brownColor = function() {
+  UI.COLOR.brownColor = function () {
     return UI.makeColor( 153, 102, 51, 1.0 );
   };
   /** @static
    * @method lightTextColor
    * @returns {color} a light text color suitable for display on dark backgrounds.
    */
-  UI.COLOR.lightTextColor = function() {
+  UI.COLOR.lightTextColor = function () {
     return UI.makeColor( 240, 240, 240, 1.0 );
   };
   /** @static
    * @method darkTextColor
    * @returns {color} a dark text color suitable for display on light backgrounds.
    */
-  UI.COLOR.darkTextColor = function() {
+  UI.COLOR.darkTextColor = function () {
     return UI.makeColor( 15, 15, 15, 1.0 );
   };
   /** @static
    * @method clearColor
    * @returns {color} a transparent color.
    */
-  UI.COLOR.clearColor = function() {
+  UI.COLOR.clearColor = function () {
     return UI.makeColor( 0, 0, 0, 0.0 );
   };
   /**
@@ -5621,7 +6086,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @static
    * @protected
    */
-  UI._createRootContainer = function() {
+  UI._createRootContainer = function () {
     UI._rootContainer = document.createElement( "div" );
     UI._rootContainer.className = "ui-container";
     UI._rootContainer.id = "rootContainer";
@@ -5644,7 +6109,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @static
    * @param {ViewContainer} theView
    */
-  UI.setRootView = function( theView ) {
+  UI.setRootView = function ( theView ) {
     if ( UI._rootContainer === null ) {
       UI._createRootContainer();
     }
@@ -5660,7 +6125,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @method removeRootView
    * @static
    */
-  UI.removeRootView = function() {
+  UI.removeRootView = function () {
     if ( UI._rootView !== null ) {
       UI._rootView.parentElement = null;
     }
@@ -5674,26 +6139,26 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @static
    * @returns {ViewContainer}
    */
-  UI.getRootView = function() {
+  UI.getRootView = function () {
     return UI._rootView;
   };
   Object.defineProperty( UI, "rootView", {
     get: UI.getRootView,
     set: UI.setRootView
   } );
-  UI._BackButtonHandler = function() {
+  UI._BackButtonHandler = function () {
     var self = new BaseObject();
     self.subclass( "BackButtonHandler" );
     self.registerNotification( "backButtonPressed" );
     self._lastBackButtonTime = -1;
-    self.handleBackButton = function() {
+    self.handleBackButton = function () {
       var currentTime = ( new Date() ).getTime();
       if ( self._lastBackButtonTime < currentTime - 1000 ) {
         self._lastBackButtonTime = ( new Date() ).getTime();
         self.notifyMostRecent( "backButtonPressed" );
       }
     };
-    document.addEventListener( 'backbutton', self.handleBackButton, false );
+    document.addEventListener( "backbutton", self.handleBackButton, false );
     return self;
   };
   /**
@@ -5711,11 +6176,11 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
    * @type _BackButtonHandler
    */
   UI.backButton = new UI._BackButtonHandler();
-  UI._OrientationHandler = function() {
+  UI._OrientationHandler = function () {
     var self = new BaseObject();
     self.subclass( "OrientationHandler" );
     self.registerNotification( "orientationChanged" );
-    self.handleOrientationChange = function() {
+    self.handleOrientationChange = function () {
       var curDevice;
       var curOrientation;
       var curFormFactor;
@@ -5750,12 +6215,12 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
         curConvenience = "droid-phone";
       }
       if ( typeof document.body !== "undefined" && document.body !== null ) {
-        document.body.setAttribute( "class", curDevice + " " + curFormFactor + " " +
-          curOrientation + " " + curScale + " " + curConvenience );
+        document.body.setAttribute( "class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " +
+          curConvenience );
       }
       self.notify( "orientationChanged" );
     };
-    window.addEventListener( 'orientationchange', self.handleOrientationChange, false );
+    window.addEventListener( "orientationchange", self.handleOrientationChange, false );
     if ( typeof document.body !== "undefined" && document.body !== null ) {
       self.handleOrientationChange();
     } else {
@@ -5835,7 +6300,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function( 
          onevar:false
  */
 /*global define*/
-define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
+define( 'yasmf/ui/event',[ "yasmf/util/device" ], function ( theDevice ) {
   /**
    * Translates touch events to mouse events if the platform doesn't support
    * touch events. Leaves other events unaffected.
@@ -5845,14 +6310,14 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
    * @private
    * @param {String} theEvent - the event name to translate
    */
-  var _translateEvent = function( theEvent ) {
+  var _translateEvent = function ( theEvent ) {
     var theTranslatedEvent = theEvent;
     if ( !theTranslatedEvent ) {
       return theTranslatedEvent;
     }
     var platform = theDevice.platform();
-    var nonTouchPlatform = ( platform == "wince" || platform == "unknown" || platform ==
-      "mac" || platform == "windows" || platform == "linux" );
+    var nonTouchPlatform = ( platform === "wince" || platform === "unknown" || platform === "mac" || platform === "windows" ||
+      platform === "linux" );
     if ( nonTouchPlatform && theTranslatedEvent.toLowerCase().indexOf( "touch" ) > -1 ) {
       theTranslatedEvent = theTranslatedEvent.replace( "touch", "mouse" );
       theTranslatedEvent = theTranslatedEvent.replace( "start", "down" );
@@ -5879,7 +6344,7 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
    * @returns {NormalizedEvent}
    *
    */
-  event.convert = function( that, e ) {
+  event.convert = function ( that, e ) {
     if ( typeof e === "undefined" ) {
       e = window.event;
     }
@@ -5935,7 +6400,7 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
    * @param {NormalizedEvent} e - the event to cancel
    *
    */
-  event.cancel = function( e ) {
+  event.cancel = function ( e ) {
     if ( e._originalEvent.cancelBubble ) {
       e._originalEvent.cancelBubble();
     }
@@ -5957,7 +6422,7 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
    * @param {Function} theFunction  the function to call when the event is fired
    *
    */
-  event.addListener = function( theElement, theEvent, theFunction ) {
+  event.addListener = function ( theElement, theEvent, theFunction ) {
     var theTranslatedEvent = _translateEvent( theEvent.toLowerCase() );
     theElement.addEventListener( theTranslatedEvent, theFunction, false );
   };
@@ -5970,7 +6435,7 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
    * @param {Function} theFunction  the function to remove
    *
    */
-  event.removeListener = function( theElement, theEvent, theFunction ) {
+  event.removeListener = function ( theElement, theEvent, theFunction ) {
     var theTranslatedEvent = _translateEvent( theEvent.toLowerCase() );
     theElement.removeEventListener( theTranslatedEvent, theFunction );
   };
@@ -6023,258 +6488,257 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function( theDevice ) {
          onevar:false
  */
 /*global define*/
-define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function( BaseObject ) {
+define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function ( BaseObject ) {
   var _className = "ViewContainer";
-  var ViewContainer = function() {
-      var self = new BaseObject();
-      self.subclass( _className );
-      // # Notifications
-      // * `viewWasPushed` is fired by a containing `ViewController` when the view is added
-      //   to the view stack
-      // * `viewWasPopped` is fired by a container when the view is removed from the view stack
-      // * `viewWillAppear` is fired by a container when the view is about to appear (one should avoid
-      //   any significant DOM changes or calculations during this time, or animations may stutter)
-      // * `viewWillDisappear` is fired by a container when the view is about to disappear
-      // * `viewDidAppear` is fired by a container when the view is on screen.
-      // * `viewDidDisappear` is fired by a container when the view is off screen.
-      self.registerNotification( "viewWasPushed" );
-      self.registerNotification( "viewWasPopped" );
-      self.registerNotification( "viewWillAppear" );
-      self.registerNotification( "viewWillDisappear" );
-      self.registerNotification( "viewDidAppear" );
-      self.registerNotification( "viewDidDisappear" );
-      // private properties used to manage the corresponding DOM element
-      self._element = null;
-      self._elementClass = "ui-container"; // default; can be changed to any class for styling purposes
-      self._elementId = null; // bad design decision -- probably going to mark this as deprecated soon
-      self._elementTag = "div"; // some elements might need to be something other than a DIV
-      self._parentElement = null; // owning element
-      /**
-       * The title isn't displayed anywhere (unless you use it yourself in `renderToElement`, but
-       * is useful for containers that want to know the title of their views.
-       * @property title
-       * @type {String}
-       * @observable
-       */
-      self.defineObservableProperty( "title" );
-      /**
-       * Creates the internal elements.
-       * @method createElement
-       */
-      self.createElement = function() {
-        self._element = document.createElement( self._elementTag );
-        if ( self.elementClass !== null ) {
-          self._element.className = self.elementClass;
-        }
-        if ( self.elementId !== null ) {
-          self._element.id = self.elementId;
-        }
+  var ViewContainer = function () {
+    var self = new BaseObject();
+    self.subclass( _className );
+    // # Notifications
+    // * `viewWasPushed` is fired by a containing `ViewController` when the view is added
+    //   to the view stack
+    // * `viewWasPopped` is fired by a container when the view is removed from the view stack
+    // * `viewWillAppear` is fired by a container when the view is about to appear (one should avoid
+    //   any significant DOM changes or calculations during this time, or animations may stutter)
+    // * `viewWillDisappear` is fired by a container when the view is about to disappear
+    // * `viewDidAppear` is fired by a container when the view is on screen.
+    // * `viewDidDisappear` is fired by a container when the view is off screen.
+    self.registerNotification( "viewWasPushed" );
+    self.registerNotification( "viewWasPopped" );
+    self.registerNotification( "viewWillAppear" );
+    self.registerNotification( "viewWillDisappear" );
+    self.registerNotification( "viewDidAppear" );
+    self.registerNotification( "viewDidDisappear" );
+    // private properties used to manage the corresponding DOM element
+    self._element = null;
+    self._elementClass = "ui-container"; // default; can be changed to any class for styling purposes
+    self._elementId = null; // bad design decision -- probably going to mark this as deprecated soon
+    self._elementTag = "div"; // some elements might need to be something other than a DIV
+    self._parentElement = null; // owning element
+    /**
+     * The title isn't displayed anywhere (unless you use it yourself in `renderToElement`, but
+     * is useful for containers that want to know the title of their views.
+     * @property title
+     * @type {String}
+     * @observable
+     */
+    self.defineObservableProperty( "title" );
+    /**
+     * Creates the internal elements.
+     * @method createElement
+     */
+    self.createElement = function () {
+      self._element = document.createElement( self._elementTag );
+      if ( self.elementClass !== null ) {
+        self._element.className = self.elementClass;
       }
-      /**
-       * Creates the internal elements if necessary (that is, if they aren't already in existence)
-       * @method createElementIfNotCreated
-       */
-      self.createElementIfNotCreated = function() {
-        if ( self._element === null ) {
-          self.createElement();
-        }
+      if ( self.elementId !== null ) {
+        self._element.id = self.elementId;
       }
-      /**
-       * The `element` property allow direct access to the DOM element backing the view
-       * @property element
-       * @type {DOMElement}
-       */
-      self.getElement = function() {
-        self.createElementIfNotCreated();
-        return self._element;
+    };
+    /**
+     * Creates the internal elements if necessary (that is, if they aren't already in existence)
+     * @method createElementIfNotCreated
+     */
+    self.createElementIfNotCreated = function () {
+      if ( self._element === null ) {
+        self.createElement();
       }
-      self.defineProperty( "element", {
-        read: true,
-        write: true,
-        default: null
-      } );
-      /**
-       * The `elementClass` property indicates the class of the DOM element. Changing
-       * the class will alter the backing DOM element if created.
-       * @property elementClass
-       * @type {String}
-       * @default "ui-container"
-       */
-      self.setElementClass = function( theClassName ) {
-        self._elementClass = theClassName;
-        if ( self._element !== null ) {
-          self._element.className = theClassName;
-        }
+    };
+    /**
+     * The `element` property allow direct access to the DOM element backing the view
+     * @property element
+     * @type {DOMElement}
+     */
+    self.getElement = function () {
+      self.createElementIfNotCreated();
+      return self._element;
+    };
+    self.defineProperty( "element", {
+      read: true,
+      write: true,
+      default: null
+    } );
+    /**
+     * The `elementClass` property indicates the class of the DOM element. Changing
+     * the class will alter the backing DOM element if created.
+     * @property elementClass
+     * @type {String}
+     * @default "ui-container"
+     */
+    self.setElementClass = function ( theClassName ) {
+      self._elementClass = theClassName;
+      if ( self._element !== null ) {
+        self._element.className = theClassName;
       }
-      self.defineProperty( "elementClass", {
-        read: true,
-        write: true,
-        default: "ui-container"
-      } );
-      /**
-       * Determines the `id` for the backing DOM element. Not the best choice to
-       * use, since this must be unique within the DOM. Probably going to become
-       * deprecated eventually
-       */
-      self.setElementId = function( theElementId ) {
-        self._elementId = theElementId;
-        if ( self._element !== null ) {
-          self._element.id = theElementId;
-        }
+    };
+    self.defineProperty( "elementClass", {
+      read: true,
+      write: true,
+      default: "ui-container"
+    } );
+    /**
+     * Determines the `id` for the backing DOM element. Not the best choice to
+     * use, since this must be unique within the DOM. Probably going to become
+     * deprecated eventually
+     */
+    self.setElementId = function ( theElementId ) {
+      self._elementId = theElementId;
+      if ( self._element !== null ) {
+        self._element.id = theElementId;
       }
-      self.defineProperty( "elementId", {
-        read: true,
-        write: true,
-        default: null
-      } );
-      /**
-       * Determines the type of DOM Element; by default this is a DIV.
-       * @property elementTag
-       * @type {String}
-       * @default "div"
-       */
-      self.defineProperty( "elementTag", {
-        read: true,
-        write: true,
-        default: "div"
-      } );
-      /**
-       * Indicates the parent element, if it exists. This is a DOM element
-       * that owns this view (parent -> child). Changing the parent removes
-       * this element from the parent and reparents to another element.
-       * @property parentElement
-       * @type {DOMElement}
-       */
-      self.setParentElement = function( theParentElement ) {
-        if ( self._parentElement !== null && self._element !== null ) {
-          // remove ourselves from the existing parent element first
-          self._parentElement.removeChild( self._element );
-          self._parentElement = null;
-        }
-        self._parentElement = theParentElement;
-        if ( self._parentElement !== null && self._element !== null ) {
-          self._parentElement.appendChild( self._element );
-        }
+    };
+    self.defineProperty( "elementId", {
+      read: true,
+      write: true,
+      default: null
+    } );
+    /**
+     * Determines the type of DOM Element; by default this is a DIV.
+     * @property elementTag
+     * @type {String}
+     * @default "div"
+     */
+    self.defineProperty( "elementTag", {
+      read: true,
+      write: true,
+      default: "div"
+    } );
+    /**
+     * Indicates the parent element, if it exists. This is a DOM element
+     * that owns this view (parent -> child). Changing the parent removes
+     * this element from the parent and reparents to another element.
+     * @property parentElement
+     * @type {DOMElement}
+     */
+    self.setParentElement = function ( theParentElement ) {
+      if ( self._parentElement !== null && self._element !== null ) {
+        // remove ourselves from the existing parent element first
+        self._parentElement.removeChild( self._element );
+        self._parentElement = null;
       }
-      self.defineProperty( "parentElement", {
-        read: true,
-        write: true,
-        default: null
-      } );
-      /**
-       * @method render
-       * @return {String|DOMElement|DocumentFragment}
-       * `render` is called by `renderToElement`. The idea behind this is to generate
-       * a return value consisting of the DOM tree necessary to create the view's
-       * contents.
-       **/
-      self.render = function() {
-        // right now, this doesn't do anything, but it's here for inheritance purposes
-        return "Error: Abstract Method";
+      self._parentElement = theParentElement;
+      if ( self._parentElement !== null && self._element !== null ) {
+        self._parentElement.appendChild( self._element );
       }
-      /**
-       * Renders the content of the view. Can be called more than once, but more
-       * often is called once during `init`. Calls `render` immediately and
-       * assigns it to `element`'s `innerHTML` -- this implicitly creates the
-       * DOM elements backing the view if they weren't already created.
-       * @method renderToElement
-       */
-      self.renderToElement = function() {
-        var renderOutput = self.render();
-        if ( typeof renderOutput === "string" ) {
-          self.element.innerHTML = self.render();
-        } else if ( typeof renderOutput === "object" ) {
-          self.element.innerHTML = "";
-          self.element.appendChild( renderOutput );
-        }
+    };
+    self.defineProperty( "parentElement", {
+      read: true,
+      write: true,
+      default: null
+    } );
+    /**
+     * @method render
+     * @return {String|DOMElement|DocumentFragment}
+     * `render` is called by `renderToElement`. The idea behind this is to generate
+     * a return value consisting of the DOM tree necessary to create the view's
+     * contents.
+     **/
+    self.render = function () {
+      // right now, this doesn't do anything, but it's here for inheritance purposes
+      return "Error: Abstract Method";
+    };
+    /**
+     * Renders the content of the view. Can be called more than once, but more
+     * often is called once during `init`. Calls `render` immediately and
+     * assigns it to `element`'s `innerHTML` -- this implicitly creates the
+     * DOM elements backing the view if they weren't already created.
+     * @method renderToElement
+     */
+    self.renderToElement = function () {
+      var renderOutput = self.render();
+      if ( typeof renderOutput === "string" ) {
+        self.element.innerHTML = self.render();
+      } else if ( typeof renderOutput === "object" ) {
+        self.element.innerHTML = "";
+        self.element.appendChild( renderOutput );
       }
-      /**
-       * Initializes the view container; returns `self`
-       * @method init
-       * @param {String} [theElementId]
-       * @param {String} [theElementTag]
-       * @param {String} [theElementClass]
-       * @param {DOMElement} [theParentElement]
-       * @returns {Object}
-       */
-      self.override( function init( theElementId, theElementTag, theElementClass,
-        theParentElement ) {
-        self.super( _className, "init" ); // super has no parameters
-        // set our Id, Tag, and Class
-        if ( typeof theElementId !== "undefined" ) {
-          self.elementId = theElementId;
-        }
-        if ( typeof theElementTag !== "undefined" ) {
-          self.elementTag = theElementTag;
-        }
-        if ( typeof theElementClass !== "undefined" ) {
-          self.elementClass = theElementClass;
-        }
-        // render ourselves to the element (via render); this implicitly creates the element
-        // with the above properties.
-        self.renderToElement();
-        // add ourselves to our parent.
-        if ( typeof theParentElement !== "undefined" ) {
-          self.parentElement = theParentElement;
-        }
-        return self;
-      } );
-      /**
-       * Initializes the view container. `options` can specify any of the following properties:
-       *
-       *  * `id` - the `id` of the element
-       *  * `tag` - the element tag to use (`div` is the default)
-       *  * `class` - the class name to use (`ui-container` is the default)
-       *  * `parent` - the parent DOMElement
-       *
-       * @method initWithOptions
-       * @param {Object} options
-       * @return {Object}
-       */
-      self.initWithOptions = function( options ) {
-        var theElementId, theElementTag, theElementClass, theParentElement;
-        if ( typeof options !== "undefined" ) {
-          if ( typeof options.id !== "undefined" ) {
-            theElementId = options.id;
-          }
-          if ( typeof options.tag !== "undefined" ) {
-            theElementTag = options.tag;
-          }
-          if ( typeof options.class !== "undefined" ) {
-            theElementClass = options.class;
-          }
-          if ( typeof options.parent !== "undefined" ) {
-            theParentElement = options.parent;
-          }
-        }
-        self.init( theElementId, theElementTag, theElementClass, theParentElement );
-        if ( typeof options !== "undefined" ) {
-          if ( typeof options.title !== "undefined" ) {
-            self.title = options.title;
-          }
-        }
-        return self;
-      };
-      /**
-       * Clean up
-       * @method destroy
-       */
-      self.override( function destroy() {
-        // remove ourselves from the parent view, if attached
-        if ( self._parentElement !== null && self._element !== null ) {
-          // remove ourselves from the existing parent element first
-          self._parentElement.removeChild( self._element );
-          self._parentElement = null;
-        }
-        // and let our super know that it can clean p
-        self.super( _className, "destroy" );
-      } );
-      // handle auto-initialization
-      self._autoInit.apply( self, arguments );
-      // return the new object
+    };
+    /**
+     * Initializes the view container; returns `self`
+     * @method init
+     * @param {String} [theElementId]
+     * @param {String} [theElementTag]
+     * @param {String} [theElementClass]
+     * @param {DOMElement} [theParentElement]
+     * @returns {Object}
+     */
+    self.override( function init( theElementId, theElementTag, theElementClass, theParentElement ) {
+      self.super( _className, "init" ); // super has no parameters
+      // set our Id, Tag, and Class
+      if ( typeof theElementId !== "undefined" ) {
+        self.elementId = theElementId;
+      }
+      if ( typeof theElementTag !== "undefined" ) {
+        self.elementTag = theElementTag;
+      }
+      if ( typeof theElementClass !== "undefined" ) {
+        self.elementClass = theElementClass;
+      }
+      // render ourselves to the element (via render); this implicitly creates the element
+      // with the above properties.
+      self.renderToElement();
+      // add ourselves to our parent.
+      if ( typeof theParentElement !== "undefined" ) {
+        self.parentElement = theParentElement;
+      }
       return self;
-    }
-    // return the new factory
+    } );
+    /**
+     * Initializes the view container. `options` can specify any of the following properties:
+     *
+     *  * `id` - the `id` of the element
+     *  * `tag` - the element tag to use (`div` is the default)
+     *  * `class` - the class name to use (`ui-container` is the default)
+     *  * `parent` - the parent DOMElement
+     *
+     * @method initWithOptions
+     * @param {Object} options
+     * @return {Object}
+     */
+    self.initWithOptions = function ( options ) {
+      var theElementId, theElementTag, theElementClass, theParentElement;
+      if ( typeof options !== "undefined" ) {
+        if ( typeof options.id !== "undefined" ) {
+          theElementId = options.id;
+        }
+        if ( typeof options.tag !== "undefined" ) {
+          theElementTag = options.tag;
+        }
+        if ( typeof options.class !== "undefined" ) {
+          theElementClass = options.class;
+        }
+        if ( typeof options.parent !== "undefined" ) {
+          theParentElement = options.parent;
+        }
+      }
+      self.init( theElementId, theElementTag, theElementClass, theParentElement );
+      if ( typeof options !== "undefined" ) {
+        if ( typeof options.title !== "undefined" ) {
+          self.title = options.title;
+        }
+      }
+      return self;
+    };
+    /**
+     * Clean up
+     * @method destroy
+     */
+    self.override( function destroy() {
+      // remove ourselves from the parent view, if attached
+      if ( self._parentElement !== null && self._element !== null ) {
+        // remove ourselves from the existing parent element first
+        self._parentElement.removeChild( self._element );
+        self._parentElement = null;
+      }
+      // and let our super know that it can clean p
+      self.super( _className, "destroy" );
+    } );
+    // handle auto-initialization
+    self._autoInit.apply( self, arguments );
+    // return the new object
+    return self;
+  };
+  // return the new factory
   return ViewContainer;
 } );
 
@@ -6322,9 +6786,9 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function( BaseObject )
          onevar:false
  */
 /*global define*/
-define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContainer" ], function( UI, ViewContainer ) {
+define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContainer" ], function ( UI, ViewContainer ) {
   var _className = "NavigationController";
-  var NavigationController = function() {
+  var NavigationController = function () {
     var self = new ViewContainer();
     self.subclass( _className );
     // # Notifications
@@ -6349,13 +6813,13 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
      * @property topView
      * @type {Object}
      */
-    self.getTopView = function() {
+    self.getTopView = function () {
       if ( self._subviews.length > 0 ) {
         return self._subviews[ self._subviews.length - 1 ];
       } else {
         return null;
       }
-    }
+    };
     self.defineProperty( "topView", {
       read: true,
       write: false,
@@ -6366,14 +6830,14 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
      * @property rootView
      * @type {Object}
      */
-    self.getRootView = function() {
+    self.getRootView = function () {
       if ( self._subviews.length > 0 ) {
         return self._subviews[ 0 ];
       } else {
         return null;
       }
-    }
-    self.setRootView = function( theNewRoot ) {
+    };
+    self.setRootView = function ( theNewRoot ) {
       if ( self._subviews.length > 0 ) {
         // must remove all the subviews from the DOM
         for ( var i = 0; i < self._subviews.length; i++ ) {
@@ -6396,7 +6860,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
       theNewRoot.parentElement = self.element; // and make us the parent
       theNewRoot.element.classList.add( "ui-root-view" );
       theNewRoot.notify( "viewDidAppear" ); // and notify it that it's actually there.
-    }
+    };
     self.defineProperty( "rootView", {
       read: true,
       write: true,
@@ -6409,22 +6873,22 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
      * @method _createClickPreventionElement
      * @private
      */
-    self._createClickPreventionElement = function() {
+    self._createClickPreventionElement = function () {
       self.createElementIfNotCreated();
       self._preventClicks = document.createElement( "div" );
       self._preventClicks.className = "ui-prevent-clicks";
       self.element.appendChild( self._preventClicks );
-    }
+    };
     /**
      * Create a click-prevention element if necessary
      * @method _createClickPreventionElementIfNotCreated
      * @private
      */
-    self._createClickPreventionElementIfNotCreated = function() {
+    self._createClickPreventionElementIfNotCreated = function () {
       if ( self._preventClicks === null ) {
         self._createClickPreventionElement();
       }
-    }
+    };
     /**
      * push a view onto the view stack.
      *
@@ -6434,7 +6898,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
      * @param {Number} [withDelay] Number of seconds for the animation, default is `0.3`
      * @param {String} [withType] CSS Animation, default is `ease-in-out`
      */
-    self.pushView = function( aView, withAnimation, withDelay, withType ) {
+    self.pushView = function ( aView, withAnimation, withDelay, withType ) {
       var theHidingView = self.topView;
       var theShowingView = aView;
       var usingAnimation = true;
@@ -6457,62 +6921,47 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
       theShowingView.navigationController = self;
       theShowingView.notify( "viewWasPushed" );
       // get each element's z-index, if specified
-      var theHidingViewZ = parseInt( getComputedStyle( theHidingView.element ).getPropertyValue(
-          "z-index" ) || "0", 10 ),
-        theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue(
-          "z-index" ) || "0", 10 );
+      var theHidingViewZ = parseInt( getComputedStyle( theHidingView.element ).getPropertyValue( "z-index" ) || "0", 10 ),
+        theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue( "z-index" ) || "0", 10 );
       if ( theHidingViewZ >= theShowingViewZ ) {
         theShowingViewZ = theHidingViewZ + 10;
       }
       // then position the view so as to be off-screen, with the current view on screen
-      UI.styleElement( theHidingView.element, "transform", "translate3d(0,0," +
-        theHidingViewZ + "px)" );
-      UI.styleElement( theShowingView.element, "transform", "translate3d(100%,0," +
-        theShowingViewZ + "px)" );
+      UI.styleElement( theHidingView.element, "transform", "translate3d(0,0," + theHidingViewZ + "px)" );
+      UI.styleElement( theShowingView.element, "transform", "translate3d(100%,0," + theShowingViewZ + "px)" );
       // set up an animation
       if ( usingAnimation ) {
-        UI.styleElements( [ theShowingView.element, theHidingView.element ],
-          "transition", "-webkit-transform " + animationDelay + "s " + animationType );
-        UI.styleElements( [ theShowingView.element, theHidingView.element ],
-          "transition", "-moz-transform " + animationDelay + "s " + animationType );
-        UI.styleElements( [ theShowingView.element, theHidingView.element ],
-          "transition", "-ms-transform " + animationDelay + "s " + animationType );
-        UI.styleElements( [ theShowingView.element, theHidingView.element ],
-          "transition", "transform " + animationDelay + "s " + animationType );
-        UI.styleElements( theHidingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "transition", "opacity " + animationDelay +
+        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-webkit-transform " +
+          animationDelay + "s " + animationType );
+        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-moz-transform " + animationDelay +
           "s " + animationType );
-        UI.styleElements( theShowingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "transition", "opacity " + animationDelay +
+        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-ms-transform " + animationDelay +
           "s " + animationType );
-        UI.styleElements( theHidingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "opacity", "1" );
-        UI.styleElements( theShowingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "opacity", "0" );
+        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "transform " + animationDelay + "s " +
+          animationType );
+        UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+          animationDelay + "s " + animationType );
+        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+          animationDelay + "s " + animationType );
+        UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
       } else {
-        UI.styleElements( [ theShowingView.element, theHidingView.element ],
-          "transition", "inherit" );
-        UI.styleElements( theHidingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "transition", "inherit" );
-        UI.styleElements( theShowingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "transition", "inherit" );
+        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "inherit" );
+        UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
+        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
       }
       // and add the element with us as the parent
       theShowingView.parentElement = self.element;
       // display the click prevention element
       self._preventClicks.style.display = "block";
-      setTimeout( function() {
+      setTimeout( function () {
         // tell the topView to move over to the left
-        UI.styleElement( theHidingView.element, "transform", "translate3d(-50%,0," +
-          theHidingViewZ + "px)" );
+        UI.styleElement( theHidingView.element, "transform", "translate3d(-50%,0," + theHidingViewZ + "px)" );
         // and tell our new view to move as well
-        UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," +
-          theShowingViewZ + "px)" );
+        UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," + theShowingViewZ + "px)" );
         if ( usingAnimation ) {
-          UI.styleElements( theHidingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "opacity", "0" );
-          UI.styleElements( theShowingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "opacity", "1" );
+          UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
         }
         // the the view it's about to show...
         theHidingView.notify( "viewWillDisappear" );
@@ -6520,7 +6969,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         // tell anyone who is listening who got pushed
         self.notify( "viewPushed", [ theShowingView ] );
         // tell the view it's visible after the delay has passed
-        setTimeout( function() {
+        setTimeout( function () {
           theHidingView.element.style.display = "none";
           theHidingView.notify( "viewDidDisappear" );
           theShowingView.notify( "viewDidAppear" );
@@ -6528,7 +6977,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
           self._preventClicks.style.display = "none";
         }, animationDelay * 1000 );
       }, 50 );
-    }
+    };
     /**
      * pops the top view from the view stack
      *
@@ -6537,7 +6986,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
      * @param {String} withDelay Duration of animation in seconds, Default `0.3`
      * @param {String} withType CSS Animation, default is `ease-in-out`
      */
-    self.popView = function( withAnimation, withDelay, withType ) {
+    self.popView = function ( withAnimation, withDelay, withType ) {
       var usingAnimation = true;
       var animationDelay = 0.3;
       var animationType = "ease-in-out";
@@ -6560,73 +7009,56 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
       // pop the top view off the stack
       var thePoppingView = self._subviews.pop();
       var theShowingView = self.topView;
-      var thePoppingViewZ = parseInt( getComputedStyle( thePoppingView.element ).getPropertyValue(
-          "z-index" ) || "0", 10 ),
-        theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue(
-          "z-index" ) || "0", 10 );
+      var thePoppingViewZ = parseInt( getComputedStyle( thePoppingView.element ).getPropertyValue( "z-index" ) || "0", 10 ),
+        theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue( "z-index" ) || "0", 10 );
       if ( theShowingViewZ >= thePoppingViewZ ) {
         thePoppingViewZ = theShowingViewZ + 10;
       }
       theShowingView.element.style.display = "inherit";
       // make sure that theShowingView is off screen to the left, and the popping
       // view is at 0
-      UI.styleElements( [ thePoppingView.element, theShowingView.element ],
-        "transition", "inherit" );
-      UI.styleElements( thePoppingView.element.querySelectorAll(
-        ".ui-navigation-bar *" ), "transition", "inherit" );
-      UI.styleElements( theShowingView.element.querySelectorAll(
-        ".ui-navigation-bar *" ), "transition", "inherit" );
-      UI.styleElement( theShowingView.element, "transform", "translate3d(-50%,0," +
-        theShowingViewZ + "px)" );
-      UI.styleElement( thePoppingView.element, "transform", "translate3d(0,0," +
-        thePoppingViewZ + "px" );
+      UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "inherit" );
+      UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
+      UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
+      UI.styleElement( theShowingView.element, "transform", "translate3d(-50%,0," + theShowingViewZ + "px)" );
+      UI.styleElement( thePoppingView.element, "transform", "translate3d(0,0," + thePoppingViewZ + "px" );
       if ( usingAnimation ) {
-        UI.styleElements( theShowingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "opacity", "0" );
-        UI.styleElements( thePoppingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "opacity", "1" );
+        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+        UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
       } else {
-        UI.styleElements( theShowingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "opacity", "1" );
-        UI.styleElements( thePoppingView.element.querySelectorAll(
-          ".ui-navigation-bar *" ), "opacity", "1" );
+        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+        UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
       }
       // set up an animation
       if ( usingAnimation ) {
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ],
-          "transition", "-webkit-transform " + animationDelay + "s " + animationType );
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ],
-          "transition", "-moz-transform " + animationDelay + "s " + animationType );
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ],
-          "transition", "-ms-transform " + animationDelay + "s " + animationType );
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ],
-          "transition", "transform " + animationDelay + "s " + animationType );
-        UI.styleElements( thePoppingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "transition", "opacity " + animationDelay +
+        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-webkit-transform " +
+          animationDelay + "s " + animationType );
+        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-moz-transform " + animationDelay +
           "s " + animationType );
-        UI.styleElements( theShowingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "transition", "opacity " + animationDelay +
+        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-ms-transform " + animationDelay +
           "s " + animationType );
+        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "transform " + animationDelay +
+          "s " + animationType );
+        UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+          animationDelay + "s " + animationType );
+        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+          animationDelay + "s " + animationType );
       }
       // display the click prevention element
       self._preventClicks.style.display = "block";
-      setTimeout( function() {
+      setTimeout( function () {
         // and move everyone
-        UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," +
-          theShowingViewZ + "px)" );
-        UI.styleElement( thePoppingView.element, "transform", "translate3d(100%,0," +
-          thePoppingViewZ + "px)" );
+        UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," + theShowingViewZ + "px)" );
+        UI.styleElement( thePoppingView.element, "transform", "translate3d(100%,0," + thePoppingViewZ + "px)" );
         if ( usingAnimation ) {
-          UI.styleElements( thePoppingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "opacity", "0" );
-          UI.styleElements( theShowingView.element.querySelectorAll(
-            ".ui-navigation-bar *" ), "opacity", "1" );
+          UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
         }
         // the the view it's about to show...
         thePoppingView.notify( "viewWillDisappear" );
         theShowingView.notify( "viewWillAppear" );
         // tell the view it's visible after the delay has passed
-        setTimeout( function() {
+        setTimeout( function () {
           thePoppingView.notify( "viewDidDisappear" );
           thePoppingView.notify( "viewWasPopped" );
           theShowingView.notify( "viewDidAppear" );
@@ -6639,7 +7071,7 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
           delete thePoppingView.navigationController;
         }, ( animationDelay * 1000 ) );
       }, 50 );
-    }
+    };
     /**
      * @method render
      * @abstract
@@ -6661,11 +7093,9 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
      * @method init
      * @return {Object}
      */
-    self.override( function init( theRootView, theElementId, theElementTag,
-      theElementClass, theParentElement ) {
+    self.override( function init( theRootView, theElementId, theElementTag, theElementClass, theParentElement ) {
       if ( typeof theRootView === "undefined" ) {
-        throw new Error(
-          "Can't initialize a navigation controller without a root view." );
+        throw new Error( "Can't initialize a navigation controller without a root view." );
       }
       // do what a normal view container does
       self.super( _className, "init", [ theElementId, theElementTag,
@@ -6701,13 +7131,12 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
           theRootView = options.rootView;
         }
       }
-      return self.init( theRootView, theElementId, theElementTag, theElementClass,
-        theParentElement );
+      return self.init( theRootView, theElementId, theElementTag, theElementClass, theParentElement );
     } );
     // handle auto initialization
     self._autoInit.apply( self, arguments );
     return self;
-  }
+  };
   return NavigationController;
 } );
 
@@ -6755,9 +7184,9 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
          onevar:false
  */
 /*global define*/
-define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer" ], function( UI, ViewContainer ) {
+define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer" ], function ( UI, ViewContainer ) {
   var _className = "SplitViewController";
-  var SplitViewController = function() {
+  var SplitViewController = function () {
     var self = new ViewContainer();
     self.subclass( _className );
     // # Notifications
@@ -6775,12 +7204,12 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @property viewType
      * @type {String}
      */
-    self.setViewType = function( theViewType ) {
+    self.setViewType = function ( theViewType ) {
       self.element.classList.remove( "ui-" + self._viewType + "-view" );
       self._viewType = theViewType;
       self.element.classList.add( "ui-" + theViewType + "-view" );
       self.leftViewStatus = "invisible";
-    }
+    };
     self.defineProperty( "viewType", {
       read: true,
       write: true,
@@ -6792,11 +7221,11 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @property leftViewStatus
      * @type {String}
      */
-    self.setLeftViewStatus = function( viewStatus ) {
+    self.setLeftViewStatus = function ( viewStatus ) {
       self.element.classList.remove( "ui-left-side-" + self._leftViewStatus );
       self._leftViewStatus = viewStatus;
       self.element.classList.add( "ui-left-side-" + viewStatus );
-    }
+    };
     self.defineProperty( "leftViewStatus", {
       read: true,
       write: true,
@@ -6806,13 +7235,13 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * Toggle the visibility of the left side view
      * @method toggleLeftView
      */
-    self.toggleLeftView = function() {
+    self.toggleLeftView = function () {
       if ( self.leftViewStatus === "visible" ) {
         self.leftViewStatus = "invisible";
       } else {
         self.leftViewStatus = "visible";
       }
-    }
+    };
     /**
      * The array of views that this split view controller manages.
      * @property subviews
@@ -6831,7 +7260,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @method _createElements
      * @private
      */
-    self._createElements = function() {
+    self._createElements = function () {
       if ( self._leftElement !== null ) {
         self.element.removeChild( self._leftElement );
       }
@@ -6844,18 +7273,18 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       self._rightElement.className = "ui-container right-side";
       self.element.appendChild( self._leftElement );
       self.element.appendChild( self._rightElement );
-    }
+    };
     /**
      * Create the left and right elements if necessary
      * @method _createElementsIfNecessary
      * @private
      */
-    self._createElementsIfNecessary = function() {
+    self._createElementsIfNecessary = function () {
       if ( self._leftElement !== null && self._rightElement !== null ) {
         return;
       }
       self._createElements();
-    }
+    };
     /**
      * Assigns a view to a given side
      * @method _assignViewToSide
@@ -6863,7 +7292,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @param {ViewContainer} aView
      * @private
      */
-    self._assignViewToSide = function( whichElement, aView ) {
+    self._assignViewToSide = function ( whichElement, aView ) {
       self._createElementsIfNecessary();
       aView.splitViewController = self;
       aView.notify( "viewWasPushed" ); // notify the view it was "pushed"
@@ -6878,7 +7307,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @param {Number} sideIndex
      * @private
      */
-    self._unparentSide = function( sideIndex ) {
+    self._unparentSide = function ( sideIndex ) {
       if ( self._subviews.length >= sideIndex ) {
         var aView = self._subviews[ sideIndex ];
         if ( aView !== null ) {
@@ -6895,14 +7324,14 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @property leftView
      * @type {ViewContainer}
      */
-    self.getLeftView = function() {
+    self.getLeftView = function () {
       if ( self._subviews.length > 0 ) {
         return self._subviews[ 0 ];
       } else {
         return null;
       }
-    }
-    self.setLeftView = function( aView ) {
+    };
+    self.setLeftView = function ( aView ) {
       self._unparentSide( 0 ); // send disappear notices
       if ( self._subviews.length > 0 ) {
         self._subviews[ 0 ] = aView;
@@ -6911,7 +7340,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       }
       self._assignViewToSide( self._leftElement, aView );
       self.notify( "viewsChanged" );
-    }
+    };
     self.defineProperty( "leftView", {
       read: true,
       write: true,
@@ -6922,14 +7351,14 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @property rightView
      * @type {ViewContainer}
      */
-    self.getRightView = function() {
+    self.getRightView = function () {
       if ( self._subviews.length > 1 ) {
         return self._subviews[ 1 ];
       } else {
         return null;
       }
-    }
-    self.setRightView = function( aView ) {
+    };
+    self.setRightView = function ( aView ) {
       self._unparentSide( 1 ); // send disappear notices for right side
       if ( self._subviews.length > 1 ) {
         self._subviews[ 1 ] = aView;
@@ -6938,7 +7367,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
       }
       self._assignViewToSide( self._rightElement, aView );
       self.notify( "viewsChanged" );
-    }
+    };
     self.defineProperty( "rightView", {
       read: true,
       write: true,
@@ -6969,15 +7398,12 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @param {String} [theElementTag]
      * @param {DOMElement} [theParentElement]
      */
-    self.override( function init( theLeftView, theRightView, theElementId,
-      theElementTag, theElementClass, theParentElement ) {
+    self.override( function init( theLeftView, theRightView, theElementId, theElementTag, theElementClass, theParentElement ) {
       if ( typeof theLeftView === "undefined" ) {
-        throw new Error(
-          "Can't initialize a navigation controller without a left view." );
+        throw new Error( "Can't initialize a navigation controller without a left view." );
       }
       if ( typeof theRightView === "undefined" ) {
-        throw new Error(
-          "Can't initialize a navigation controller without a right view." );
+        throw new Error( "Can't initialize a navigation controller without a right view." );
       }
       // do what a normal view container does
       self.super( _className, "init", [ theElementId, theElementTag,
@@ -7016,8 +7442,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
           theRightView = options.rightView;
         }
       }
-      self.init( theLeftView, theRightView, theElementId, theElementTag,
-        theElementClass, theParentElement );
+      self.init( theLeftView, theRightView, theElementId, theElementTag, theElementClass, theParentElement );
       if ( typeof options !== "undefined" ) {
         if ( typeof options.viewType !== "undefined" ) {
           self.viewType = options.viewType;
@@ -7049,7 +7474,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
     // auto initialize
     self._autoInit.apply( self, arguments );
     return self;
-  }
+  };
   return SplitViewController;
 } );
 
@@ -7097,10 +7522,9 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
            onevar:false
    */
 /*global define*/
-define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer", "yasmf/ui/event" ], function( UI,
-  ViewContainer, Event ) {
+define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer", "yasmf/ui/event" ], function ( UI, ViewContainer, Event ) {
   var _className = "TabViewController";
-  var TabViewController = function() {
+  var TabViewController = function () {
     var self = new ViewContainer();
     self.subclass( _className );
     // # Notifications
@@ -7117,92 +7541,91 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
      * @method _createTabBarElement
      * @private
      */
-    self._createTabBarElement = function() {
+    self._createTabBarElement = function () {
       self._tabBarElement = document.createElement( "div" );
       self._tabBarElement.className = "ui-tab-bar ui-tab-default-position";
       self._barButtonGroup = document.createElement( "div" );
       self._barButtonGroup.className = "ui-bar-button-group ui-align-center";
       self._tabBarElement.appendChild( self._barButtonGroup );
-    }
+    };
     /**
      * Create the tab bar element if necessary
      * @method _createTabBarElementIfNecessary
      * @private
      */
-    self._createTabBarElementIfNecessary = function() {
+    self._createTabBarElementIfNecessary = function () {
       if ( self._tabBarElement === null ) {
         self._createTabBarElement();
       }
-    }
+    };
     /**
      * create the view container that will hold all the views this tab bar owns
      * @method _createViewContainer
      * @private
      */
-    self._createViewContainer = function() {
+    self._createViewContainer = function () {
       self._viewContainer = document.createElement( "div" );
-      self._viewContainer.className =
-        "ui-container ui-avoid-tab-bar ui-tab-default-position";
-    }
+      self._viewContainer.className = "ui-container ui-avoid-tab-bar ui-tab-default-position";
+    };
     /**
      * @method _createViewContainerIfNecessary
      * @private
      */
-    self._createViewContainerIfNecessary = function() {
+    self._createViewContainerIfNecessary = function () {
       if ( self._viewContainer === null ) {
         self._createViewContainer();
       }
-    }
+    };
     /**
      * Create all the elements and the DOM structure
      * @method _createElements
      * @private
      */
-    self._createElements = function() {
+    self._createElements = function () {
       self._createTabBarElementIfNecessary();
       self._createViewContainerIfNecessary();
       self.element.appendChild( self._tabBarElement );
       self.element.appendChild( self._viewContainer );
-    }
+    };
     /**
      * @method _createElementsIfNecessary
      * @private
      */
-    self._createElementsIfNecessary = function() {
+    self._createElementsIfNecessary = function () {
       if ( self._tabBarElement !== null || self._viewContainer !== null ) {
         return;
       }
       self._createElements();
-    }
+    };
     /**
      * Create a tab element and attach the appropriate event listener
      * @method _createTabElement
      * @private
      */
-    self._createTabElement = function( aView, idx ) {
+    self._createTabElement = function ( aView, idx ) {
       var e = document.createElement( "div" );
       e.className = "ui-bar-button ui-tint-color";
       e.innerHTML = aView.title;
       e.setAttribute( "data-tag", idx )
-      Event.addListener( e, "touchstart", function() {
+      Event.addListener( e, "touchstart", function () {
         self.selectedTab = parseInt( this.getAttribute( "data-tag" ), 10 );
       } );
       return e;
-    }
+    };
     /**
      * The position of the the tab bar
      * Valid options include: `default`, `top`, and `bottom`
      * @property barPosition
      * @type {TabViewController.BAR\_POSITION}
      */
-    self.setObservableBarPosition = function( newPosition, oldPosition ) {
+    self.setObservableBarPosition = function ( newPosition, oldPosition ) {
       self._createElementsIfNecessary();
       self._tabBarElement.classList.remove( "ui-tab-" + oldPosition + "-position" );
       self._tabBarElement.classList.add( "ui-tab-" + newPosition + "-position" );
       self._viewContainer.classList.remove( "ui-tab-" + oldPosition + "-position" );
       self._viewContainer.classList.add( "ui-tab-" + newPosition + "-position" );
       return newPosition;
-    }
+    };
     self.defineObservableProperty( "barPosition", {
       default: "default"
     } );
@@ -7212,12 +7635,12 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
      * @property barAlignment
      * @type {TabViewController.BAR\_ALIGNMENT}
      */
-    self.setObservableBarAlignment = function( newAlignment, oldAlignment ) {
+    self.setObservableBarAlignment = function ( newAlignment, oldAlignment ) {
       self._createElementsIfNecessary();
       self._barButtonGroup.classList.remove( "ui-align-" + oldAlignment );
       self._barButtonGroup.classList.add( "ui-align-" + newAlignment );
       return newAlignment;
-    }
+    };
     self.defineObservableProperty( "barAlignment", {
       default: "center"
     } );
@@ -7236,7 +7659,7 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
      * @method addSubview
      * @property {ViewContainer} view
      */
-    self.addSubview = function( view ) {
+    self.addSubview = function ( view ) {
       self._createElementsIfNecessary();
       var e = self._createTabElement( view, self._tabElements.length );
       self._barButtonGroup.appendChild( e );
@@ -7244,13 +7667,13 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
       self._subviews.push( view );
       view.tabViewController = self;
       view.notify( "viewWasPushed" );
-    }
+    };
     /**
      * Remove a specific view from the tab bar.
      * @method removeSubview
      * @property {ViewContainer} view
      */
-    self.removeSubview = function( view ) {
+    self.removeSubview = function ( view ) {
       self._createElementsIfNecessary();
       var i = self._subviews.indexOf( view );
       if ( i > -1 ) {
@@ -7277,7 +7700,7 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
       }
       view.notify( "viewWasPopped" );
       delete view.tabViewController;
-    }
+    };
     /**
      * Determines which tab is selected; changing will display the appropriate
      * tab.
@@ -7285,7 +7708,7 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
      * @property selectedTab
      * @type {Number}
      */
-    self.setObservableSelectedTab = function( newIndex, oldIndex ) {
+    self.setObservableSelectedTab = function ( newIndex, oldIndex ) {
       var oldView, newView;
       self._createElementsIfNecessary();
       if ( oldIndex > -1 ) {
@@ -7339,8 +7762,7 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
      * @param {DOMElement} [theParentElement]
      * @return {Object}
      */
-    self.override( function init( theElementId, theElementTag, theElementClass,
-      theParentElement ) {
+    self.override( function init( theElementId, theElementTag, theElementClass, theParentElement ) {
       // do what a normal view container does
       self.super( _className, "init", [ theElementId, theElementTag,
         theElementClass,
@@ -7384,7 +7806,7 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
     // auto init
     self._autoInit.apply( self, arguments );
     return self;
-  }
+  };
   TabViewController.BAR_POSITION = {
     default: "default",
     top: "top",
@@ -7394,7 +7816,7 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
     center: "center",
     left: "left",
     right: "right"
-  }
+  };
   return TabViewController;
 } );
 
@@ -7443,322 +7865,319 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
          onevar:false
  */
 /*global define*/
-define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/object", "yasmf/ui/core",
-  "Q", "yasmf/ui/event"
-], function( _y, theDevice, BaseObject, UI, Q, event ) {
+define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/object", "yasmf/ui/core", "Q", "yasmf/ui/event" ], function ( _y,
+  theDevice, BaseObject, UI, Q, event ) {
   var _className = "Alert";
-  var Alert = function() {
-      var self = new BaseObject();
-      self.subclass( _className );
-      /*
-       * # Notifications
-       *
-       * * `buttonTapped` indicates which button was tapped when the view is dismissing
-       * * `dismissed` indicates that the alert was dismissed (by user or code)
-       */
-      self.registerNotification( "buttonTapped" );
-      self.registerNotification( "dismissed" );
-      /**
-       * The title to show in the alert.
-       * @property title
-       * @type {String}
-       */
-      self._titleElement = null; // the corresponding DOM element
-      self.setTitle = function( theTitle ) {
-        self._title = theTitle;
-        if ( self._titleElement !== null ) {
-          self._titleElement.innerHTML = theTitle;
-        }
-      }
-      self.defineProperty( "title", {
-        read: true,
-        write: true,
-        default: _y.T( "ALERT" )
-      } );
-      /**
-       * The body of the alert. Leave blank if you don't need to show
-       * anything more than the title.
-       * @property text
-       * @type {String}
-       */
-      self._textElement = null;
-      self.setText = function( theText ) {
-        self._text = theText;
-        if ( self._textElement !== null ) {
-          self._textElement.innerHTML = theText;
-        }
-      }
-      self.defineProperty( "text", {
-        read: true,
-        write: true
-      } );
-      /**
-       * The alert's buttons are specified in this property. The layout
-       * is expected to be: `[ { title: title [, type: type] [, tag: tag] } [, {} ...] ]`
-       *
-       * Each button's type can be "normal", "bold", "destructive". The tag may be
-       * null; if it is, it is assigned the button index. If a tag is specifed (common
-       * for cancel buttons), that is the return value.
-       * @property buttons
-       * @type {Array}
-       */
-      self._buttons = [];
-      self._buttonContainer = null;
-      self.setButtons = function( theButtons ) {
-        function dismissWithIndex( idx ) {
-          return function() {
-            self.dismiss( idx );
-          };
-        }
-        var i;
-        // clear out any previous buttons in the DOM
-        if ( self._buttonContainer !== null ) {
-          for ( i = 0; i < self._buttons.length; i++ ) {
-            self._buttonContainer.removeChild( self._buttons[ i ].element );
-          }
-        }
-        self._buttons = theButtons;
-        // determine if we need wide buttons or not
-        var wideButtons = !( ( self._buttons.length >= 2 ) && ( self._buttons.length <=
-          3 ) );
-        // add the buttons back to the DOM if we can
-        if ( self._buttonContainer !== null ) {
-          for ( i = 0; i < self._buttons.length; i++ ) {
-            var e = document.createElement( "div" );
-            var b = self._buttons[ i ];
-            // if the tag is null, give it (i)
-            if ( b.tag === null ) {
-              b.tag = i;
-            }
-            // class is ui-alert-button normal|bold|destructive [wide]
-            // wide buttons are for 1 button or 4+ buttons.
-            e.className = "ui-alert-button " + b.type + " " + ( wideButtons ? "wide" :
-              "" );
-            // title
-            e.innerHTML = b.title;
-            if ( !wideButtons ) {
-              // set the width of each button to fill out the alert equally
-              // 3 buttons gets 33.333%; 2 gets 50%.
-              e.style.width = "" + ( 100 / self._buttons.length ) + "%";
-            }
-            // listen for a touch
-            event.addListener( e, "touchend", dismissWithIndex( i ) );
-            b.element = e;
-            // add the button to the DOM
-            self._buttonContainer.appendChild( b.element );
-          }
-        }
-      }
-      self.defineProperty( "buttons", {
-        read: true,
-        write: true,
-        default: []
-      } );
-      // other DOM elements we need to construct the alert
-      self._rootElement = null; // root element contains the container
-      self._alertElement = null; // points to the alert itself
-      self._vaElement = null; // points to the DIV used to vertically align us
-      self._deferred = null; // stores a promise
-      /**
-       * If true, show() returns a promise.
-       * @property usePromise
-       * @type {boolean}
-       */
-      self.defineProperty( "usePromise", {
-        read: true,
-        write: false,
-        default: false
-      } );
-      /**
-       * Indicates if the alert is veisible.
-       * @property visible
-       * @type {Boolean}
-       */
-      self.defineProperty( "visible", {
-        read: true,
-        write: false,
-        default: false
-      } );
-      /**
-       * Creates the DOM elements for an Alert. Assumes the styles are
-       * already in the style sheet.
-       * @method _createElements
-       * @private
-       */
-      self._createElements = function() {
-        self._rootElement = document.createElement( "div" );
-        self._rootElement.className = "ui-alert-container";
-        self._vaElement = document.createElement( "div" );
-        self._vaElement.className = "ui-alert-vertical-align";
-        self._alertElement = document.createElement( "div" );
-        self._alertElement.className = "ui-alert";
-        self._titleElement = document.createElement( "div" );
-        self._titleElement.className = "ui-alert-title";
-        self._textElement = document.createElement( "div" );
-        self._textElement.className = "ui-alert-text";
-        self._buttonContainer = document.createElement( "div" );
-        self._buttonContainer.className = "ui-alert-button-container";
-        self._alertElement.appendChild( self._titleElement );
-        self._alertElement.appendChild( self._textElement );
-        self._alertElement.appendChild( self._buttonContainer );
-        self._vaElement.appendChild( self._alertElement );
-        self._rootElement.appendChild( self._vaElement );
-      }
-      /**
-       * Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.
-       * @method backButtonPressed
-       */
-      self.backButtonPressed = function() {
-        self.dismiss( -1 );
-      }
-      /**
-       * Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.
-       * @method hide
-       * @return {[type]} [description]
-       */
-      self.hide = function() {
-        self.dismiss( -1 );
-      }
-      /**
-       * Shows an alert.
-       * @method show
-       * @return {Promise} a promise if usePromise = true
-       */
-      self.show = function() {
-        if ( self.visible ) {
-          if ( self.usePromise && self._deferred !== null ) {
-            return self._deferred;
-          }
-          return; // can't do anything more.
-        }
-        // listen for the back button
-        UI.backButton.addListenerForNotification( "backButtonPressed", self.backButtonPressed );
-        // add to the body
-        document.body.appendChild( self._rootElement );
-        // animate in
-        setTimeout( function() {
-          self._rootElement.style.opacity = "1";
-        }, 50 );
-        setTimeout( function() {
-          self._alertElement.style.opacity = "1";
-          UI.styleElement( self._alertElement, "transform", "scale3d(1.05, 1.05,1)" )
-        }, 125 );
-        setTimeout( function() {
-          UI.styleElement( self._alertElement, "transform", "scale3d(0.95, 0.95,1)" )
-        }, 250 );
-        setTimeout( function() {
-          UI.styleElement( self._alertElement, "transform", "scale3d(1.00, 1.00,1)" )
-        }, 375 );
-        self._visible = true;
-        if ( self.usePromise ) {
-          self._deferred = Q.defer();
-          return self._deferred.promise;
-        }
-      }
-      /**
-       * Dismisses the alert with the sepcified button index
-       *
-       * @method dismiss
-       * @param {Number} idx
-       */
-      self.dismiss = function( idx ) {
-        if ( !self.visible ) {
-          return;
-        }
-        // drop the listener for the back button
-        UI.backButton.removeListenerForNotification( "backButtonPressed", self.backButtonPressed );
-        // remove from the body
-        setTimeout( function() {
-          self._alertElement.style.opacity = "0";
-        }, 10 );
-        setTimeout( function() {
-          self._rootElement.style.opacity = "0";
-        }, 250 );
-        setTimeout( function() {
-          document.body.removeChild( self._rootElement );
-        }, 500 );
-        // get notification tag
-        var tag = -1;
-        if ( ( idx > -1 ) && ( idx < self._buttons.length ) ) {
-          tag = self._buttons[ idx ].tag;
-        }
-        // send our notifications as appropriate
-        self.notify( "dismissed" );
-        self.notify( "buttonTapped", [ tag ] );
-        self._visible = false;
-        // and resolve/reject the promise
-        if ( self.usePromise ) {
-          if ( tag > -1 ) {
-            self._deferred.resolve( tag );
-          } else {
-            self._deferred.reject( new Error( tag ) );
-          }
-        }
-      }
-      /**
-       * Initializes the Alert and calls _createElements.
-       * @method init
-       * @return {Object}
-       */
-      self.override( function init() {
-        self.super( _className, "init" );
-        self._createElements();
-        return self;
-      } );
-      /**
-       * Initializes the Alert. Options includes title, text, buttons, and promise.
-       * @method overrideSuper
-       * @return {Object}
-       */
-      self.override( function initWithOptions( options ) {
-        self.init();
-        if ( typeof options !== "undefined" ) {
-          if ( typeof options.title !== "undefined" ) {
-            self.title = options.title;
-          }
-          if ( typeof options.text !== "undefined" ) {
-            self.text = options.text;
-          }
-          if ( typeof options.buttons !== "undefined" ) {
-            self.buttons = options.buttons;
-          }
-          if ( typeof options.promise !== "undefined" ) {
-            self._usePromise = options.promise;
-          }
-        }
-        return self;
-      } );
-      /**
-       * Clean up after ourselves.
-       * @method destroy
-       */
-      self.overrideSuper( self.class, "destroy", self.destroy );
-      self.destroy = function destroy() {
-        if ( self.visible ) {
-          self.hide();
-          setTimeout( destroy, 600 ); // we won't destroy immediately.
-          return;
-        }
-        self._rootElement = null;
-        self._vaElement = null;
-        self._alertElement = null;
-        self._titleElement = null;
-        self._textElement = null;
-        self._buttonContainer = null;
-        self.super( _className, "destroy" );
-      };
-      // handle auto-init
-      self._autoInit.apply( self, arguments );
-      return self;
-    }
-    /**
-     * Creates a button suitable for an Alert
-     * @method button
-     * @param  {String} title   The title of the button
-     * @param  {Object} options The additional options: type and tag
-     * @return {Object}         A button
+  var Alert = function () {
+    var self = new BaseObject();
+    self.subclass( _className );
+    /*
+     * # Notifications
+     *
+     * * `buttonTapped` indicates which button was tapped when the view is dismissing
+     * * `dismissed` indicates that the alert was dismissed (by user or code)
      */
-  Alert.button = function( title, options ) {
+    self.registerNotification( "buttonTapped" );
+    self.registerNotification( "dismissed" );
+    /**
+     * The title to show in the alert.
+     * @property title
+     * @type {String}
+     */
+    self._titleElement = null; // the corresponding DOM element
+    self.setTitle = function ( theTitle ) {
+      self._title = theTitle;
+      if ( self._titleElement !== null ) {
+        self._titleElement.innerHTML = theTitle;
+      }
+    };
+    self.defineProperty( "title", {
+      read: true,
+      write: true,
+      default: _y.T( "ALERT" )
+    } );
+    /**
+     * The body of the alert. Leave blank if you don't need to show
+     * anything more than the title.
+     * @property text
+     * @type {String}
+     */
+    self._textElement = null;
+    self.setText = function ( theText ) {
+      self._text = theText;
+      if ( self._textElement !== null ) {
+        self._textElement.innerHTML = theText;
+      }
+    };
+    self.defineProperty( "text", {
+      read: true,
+      write: true
+    } );
+    /**
+     * The alert's buttons are specified in this property. The layout
+     * is expected to be: `[ { title: title [, type: type] [, tag: tag] } [, {} ...] ]`
+     *
+     * Each button's type can be "normal", "bold", "destructive". The tag may be
+     * null; if it is, it is assigned the button index. If a tag is specifed (common
+     * for cancel buttons), that is the return value.
+     * @property buttons
+     * @type {Array}
+     */
+    self._buttons = [];
+    self._buttonContainer = null;
+    self.setButtons = function ( theButtons ) {
+      function dismissWithIndex( idx ) {
+        return function () {
+          self.dismiss( idx );
+        };
+      }
+      var i;
+      // clear out any previous buttons in the DOM
+      if ( self._buttonContainer !== null ) {
+        for ( i = 0; i < self._buttons.length; i++ ) {
+          self._buttonContainer.removeChild( self._buttons[ i ].element );
+        }
+      }
+      self._buttons = theButtons;
+      // determine if we need wide buttons or not
+      var wideButtons = !( ( self._buttons.length >= 2 ) && ( self._buttons.length <= 3 ) );
+      // add the buttons back to the DOM if we can
+      if ( self._buttonContainer !== null ) {
+        for ( i = 0; i < self._buttons.length; i++ ) {
+          var e = document.createElement( "div" );
+          var b = self._buttons[ i ];
+          // if the tag is null, give it (i)
+          if ( b.tag === null ) {
+            b.tag = i;
+          }
+          // class is ui-alert-button normal|bold|destructive [wide]
+          // wide buttons are for 1 button or 4+ buttons.
+          e.className = "ui-alert-button " + b.type + " " + ( wideButtons ? "wide" : "" );
+          // title
+          e.innerHTML = b.title;
+          if ( !wideButtons ) {
+            // set the width of each button to fill out the alert equally
+            // 3 buttons gets 33.333%; 2 gets 50%.
+            e.style.width = "" + ( 100 / self._buttons.length ) + "%";
+          }
+          // listen for a touch
+          event.addListener( e, "touchend", dismissWithIndex( i ) );
+          b.element = e;
+          // add the button to the DOM
+          self._buttonContainer.appendChild( b.element );
+        }
+      }
+    };
+    self.defineProperty( "buttons", {
+      read: true,
+      write: true,
+      default: []
+    } );
+    // other DOM elements we need to construct the alert
+    self._rootElement = null; // root element contains the container
+    self._alertElement = null; // points to the alert itself
+    self._vaElement = null; // points to the DIV used to vertically align us
+    self._deferred = null; // stores a promise
+    /**
+     * If true, show() returns a promise.
+     * @property usePromise
+     * @type {boolean}
+     */
+    self.defineProperty( "usePromise", {
+      read: true,
+      write: false,
+      default: false
+    } );
+    /**
+     * Indicates if the alert is veisible.
+     * @property visible
+     * @type {Boolean}
+     */
+    self.defineProperty( "visible", {
+      read: true,
+      write: false,
+      default: false
+    } );
+    /**
+     * Creates the DOM elements for an Alert. Assumes the styles are
+     * already in the style sheet.
+     * @method _createElements
+     * @private
+     */
+    self._createElements = function () {
+      self._rootElement = document.createElement( "div" );
+      self._rootElement.className = "ui-alert-container";
+      self._vaElement = document.createElement( "div" );
+      self._vaElement.className = "ui-alert-vertical-align";
+      self._alertElement = document.createElement( "div" );
+      self._alertElement.className = "ui-alert";
+      self._titleElement = document.createElement( "div" );
+      self._titleElement.className = "ui-alert-title";
+      self._textElement = document.createElement( "div" );
+      self._textElement.className = "ui-alert-text";
+      self._buttonContainer = document.createElement( "div" );
+      self._buttonContainer.className = "ui-alert-button-container";
+      self._alertElement.appendChild( self._titleElement );
+      self._alertElement.appendChild( self._textElement );
+      self._alertElement.appendChild( self._buttonContainer );
+      self._vaElement.appendChild( self._alertElement );
+      self._rootElement.appendChild( self._vaElement );
+    };
+    /**
+     * Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.
+     * @method backButtonPressed
+     */
+    self.backButtonPressed = function () {
+      self.dismiss( -1 );
+    };
+    /**
+     * Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.
+     * @method hide
+     * @return {[type]} [description]
+     */
+    self.hide = function () {
+      self.dismiss( -1 );
+    };
+    /**
+     * Shows an alert.
+     * @method show
+     * @return {Promise} a promise if usePromise = true
+     */
+    self.show = function () {
+      if ( self.visible ) {
+        if ( self.usePromise && self._deferred !== null ) {
+          return self._deferred;
+        }
+        return void 0; // can't do anything more.
+      }
+      // listen for the back button
+      UI.backButton.addListenerForNotification( "backButtonPressed", self.backButtonPressed );
+      // add to the body
+      document.body.appendChild( self._rootElement );
+      // animate in
+      setTimeout( function () {
+        self._rootElement.style.opacity = "1";
+      }, 50 );
+      setTimeout( function () {
+        self._alertElement.style.opacity = "1";
+        UI.styleElement( self._alertElement, "transform", "scale3d(1.05, 1.05,1)" )
+      }, 125 );
+      setTimeout( function () {
+        UI.styleElement( self._alertElement, "transform", "scale3d(0.95, 0.95,1)" )
+      }, 250 );
+      setTimeout( function () {
+        UI.styleElement( self._alertElement, "transform", "scale3d(1.00, 1.00,1)" )
+      }, 375 );
+      self._visible = true;
+      if ( self.usePromise ) {
+        self._deferred = Q.defer();
+        return self._deferred.promise;
+      }
+    };
+    /**
+     * Dismisses the alert with the sepcified button index
+     *
+     * @method dismiss
+     * @param {Number} idx
+     */
+    self.dismiss = function ( idx ) {
+      if ( !self.visible ) {
+        return;
+      }
+      // drop the listener for the back button
+      UI.backButton.removeListenerForNotification( "backButtonPressed", self.backButtonPressed );
+      // remove from the body
+      setTimeout( function () {
+        self._alertElement.style.opacity = "0";
+      }, 10 );
+      setTimeout( function () {
+        self._rootElement.style.opacity = "0";
+      }, 250 );
+      setTimeout( function () {
+        document.body.removeChild( self._rootElement );
+      }, 500 );
+      // get notification tag
+      var tag = -1;
+      if ( ( idx > -1 ) && ( idx < self._buttons.length ) ) {
+        tag = self._buttons[ idx ].tag;
+      }
+      // send our notifications as appropriate
+      self.notify( "dismissed" );
+      self.notify( "buttonTapped", [ tag ] );
+      self._visible = false;
+      // and resolve/reject the promise
+      if ( self.usePromise ) {
+        if ( tag > -1 ) {
+          self._deferred.resolve( tag );
+        } else {
+          self._deferred.reject( new Error( tag ) );
+        }
+      }
+    };
+    /**
+     * Initializes the Alert and calls _createElements.
+     * @method init
+     * @return {Object}
+     */
+    self.override( function init() {
+      self.super( _className, "init" );
+      self._createElements();
+      return self;
+    } );
+    /**
+     * Initializes the Alert. Options includes title, text, buttons, and promise.
+     * @method overrideSuper
+     * @return {Object}
+     */
+    self.override( function initWithOptions( options ) {
+      self.init();
+      if ( typeof options !== "undefined" ) {
+        if ( typeof options.title !== "undefined" ) {
+          self.title = options.title;
+        }
+        if ( typeof options.text !== "undefined" ) {
+          self.text = options.text;
+        }
+        if ( typeof options.buttons !== "undefined" ) {
+          self.buttons = options.buttons;
+        }
+        if ( typeof options.promise !== "undefined" ) {
+          self._usePromise = options.promise;
+        }
+      }
+      return self;
+    } );
+    /**
+     * Clean up after ourselves.
+     * @method destroy
+     */
+    self.overrideSuper( self.class, "destroy", self.destroy );
+    self.destroy = function destroy() {
+      if ( self.visible ) {
+        self.hide();
+        setTimeout( destroy, 600 ); // we won't destroy immediately.
+        return;
+      }
+      self._rootElement = null;
+      self._vaElement = null;
+      self._alertElement = null;
+      self._titleElement = null;
+      self._textElement = null;
+      self._buttonContainer = null;
+      self.super( _className, "destroy" );
+    };
+    // handle auto-init
+    self._autoInit.apply( self, arguments );
+    return self;
+  };
+  /**
+   * Creates a button suitable for an Alert
+   * @method button
+   * @param  {String} title   The title of the button
+   * @param  {Object} options The additional options: type and tag
+   * @return {Object}         A button
+   */
+  Alert.button = function ( title, options ) {
     var button = {};
     button.title = title;
     button.type = "normal"; // normal, bold, destructive
@@ -7777,13 +8196,13 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
       }
     }
     return button;
-  }
+  };
   /**
    * Creates an OK-style Alert. It only has an OK button.
    * @method OK
    * @param {Object} options Specify the title, text, and promise options if desired.
    */
-  Alert.OK = function( options ) {
+  Alert.OK = function ( options ) {
     var anOK = new Alert();
     var anOKOptions = {
       title: _y.T( "OK" ),
@@ -7800,18 +8219,18 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
         anOKOptions.text = options.text;
       }
       if ( typeof options.promise !== "undefined" ) {
-        anOKOptions.promise = options.promise
+        anOKOptions.promise = options.promise;
       }
     }
     anOK.initWithOptions( anOKOptions );
     return anOK;
-  }
+  };
   /**
    * Creates an OK/Cancel-style Alert. It only has an OK and CANCEL button.
    * @method Confirm
    * @param {Object} options Specify the title, text, and promise options if desired.
    */
-  Alert.Confirm = function( options ) {
+  Alert.Confirm = function ( options ) {
     var aConfirmation = new Alert();
     var confirmationOptions = {
       title: _y.T( "Confirm" ),
@@ -7831,12 +8250,12 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
         confirmationOptions.text = options.text;
       }
       if ( typeof options.promise !== "undefined" ) {
-        confirmationOptions.promise = options.promise
+        confirmationOptions.promise = options.promise;
       }
     }
     aConfirmation.initWithOptions( confirmationOptions );
     return aConfirmation;
-  }
+  };
   return Alert;
 } );
 
@@ -7895,21 +8314,23 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
          onevar:false
  */
 /*global define*/
-define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/ui/core','yasmf/ui/event','yasmf/ui/viewContainer','yasmf/ui/navigationController','yasmf/ui/splitViewController','yasmf/ui/tabViewController','yasmf/ui/alert'],function( require ) {
-  var _y = require( 'yasmf/util/core' );
-  _y.datetime = require( 'yasmf/util/datetime' );
-  _y.filename = require( 'yasmf/util/filename' );
-  _y.misc = require( 'yasmf/util/misc' );
-  _y.device = require( 'yasmf/util/device' );
-  _y.BaseObject = require( 'yasmf/util/object' );
-  _y.FileManager = require( 'yasmf/util/fileManager' );
-  _y.UI = require( 'yasmf/ui/core' );
-  _y.UI.event = require( 'yasmf/ui/event' );
-  _y.UI.ViewContainer = require( 'yasmf/ui/viewContainer' );
-  _y.UI.NavigationController = require( 'yasmf/ui/navigationController' );
-  _y.UI.SplitViewController = require( 'yasmf/ui/splitViewController' );
-  _y.UI.TabViewController = require( 'yasmf/ui/tabViewController' );
-  _y.UI.Alert = require( 'yasmf/ui/alert' );
+/*eslint */
+define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/util/h','yasmf/ui/core','yasmf/ui/event','yasmf/ui/viewContainer','yasmf/ui/navigationController','yasmf/ui/splitViewController','yasmf/ui/tabViewController','yasmf/ui/alert'],function ( require ) {
+  var _y = require( "yasmf/util/core" );
+  _y.datetime = require( "yasmf/util/datetime" );
+  _y.filename = require( "yasmf/util/filename" );
+  _y.misc = require( "yasmf/util/misc" );
+  _y.device = require( "yasmf/util/device" );
+  _y.BaseObject = require( "yasmf/util/object" );
+  _y.FileManager = require( "yasmf/util/fileManager" );
+  _y.h = require( "yasmf/util/h" );
+  _y.UI = require( "yasmf/ui/core" );
+  _y.UI.event = require( "yasmf/ui/event" );
+  _y.UI.ViewContainer = require( "yasmf/ui/viewContainer" );
+  _y.UI.NavigationController = require( "yasmf/ui/navigationController" );
+  _y.UI.SplitViewController = require( "yasmf/ui/splitViewController" );
+  _y.UI.TabViewController = require( "yasmf/ui/tabViewController" );
+  _y.UI.Alert = require( "yasmf/ui/alert" );
   return _y;
 } );
 
