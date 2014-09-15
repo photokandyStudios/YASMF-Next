@@ -1,0 +1,21 @@
+{
+  "globals": {
+    "require": false,
+    "console": false,
+    "module": false,
+    "window": false,
+    "navigator": false,
+    "setTimeout": false,
+    "document": false,
+    "getComputedStyle": false,
+    "define": false,
+    "requirejs": false,
+    "Node": false
+  },
+  "rules": {
+    "no-underscore-dangle": 0,
+    "new-cap": 0,
+    "no-console": 0,
+    "camelcase": 0
+  }
+}
