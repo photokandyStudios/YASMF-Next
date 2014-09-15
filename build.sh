@@ -22,6 +22,10 @@ echo "SASS Build..."
 sass --trace ./lib/yasmf.scss ./dist/yasmf.css
 echo "Done."
 #
+# GZIP (so we can get compression savings)
+echo "GZIPping..."
+gzip < ./dist/yasmf.min.js > ./dist/yasmf.min.js.gzip
+gzip < ./dist/yasmf.css > ./dist/yasmf.css.gzip
+
 # generate docs
 groc
-
