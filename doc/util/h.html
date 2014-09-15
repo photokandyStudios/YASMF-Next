@@ -133,7 +133,7 @@ elements (as extra parameters)</p>
 <ul><li><strong>... can be an Array, a Function, or a String.</strong><br/>(children that should be attached)</li></ul></li>
 </ul>
 
-<p><strong>Returns a Node</strong><br/>(DOM tree tagOptions should be an object consisting of the following optional segments: { attrs: {...} attributes to add to the element styles: {...} style attributes to add to the element TODO on: {...} event handlers to attach to the element TODO bind: {...} data binding (TODO) })</p></div></div><div class="code"><div class="wrapper">      <span class="nx">el</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">tag</span> <span class="p">)</span> <span class="p">{</span>
+<p><strong>Returns a Node</strong><br/>(DOM tree tagOptions should be an object consisting of the following optional segments: <code>{ attrs: {...} attributes to add to the element styles: {...} style attributes to add to the element on: {...} event handlers to attach to the element bind: { object:, keyPath: } data binding store: { object:, keyPath: } store element to object.keyPath }</code>)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">el</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">tag</span> <span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">e</span><span class="p">,</span>
           <span class="nx">options</span><span class="p">,</span>
           <span class="nx">content</span><span class="p">,</span>
@@ -237,6 +237,6 @@ we are explicitly trying to avoid.</p></div></div><div class="code"><div class="
     <span class="p">];</span>
   <span class="nx">els</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">el</span> <span class="p">)</span> <span class="p">{</span>
     <span class="nx">h</span><span class="p">[</span> <span class="nx">el</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">h</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">el</span> <span class="p">);</span>
-  <span class="p">}</span> <span class="p">);</span>
+  <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>bind document fragment too</p></div></div><div class="code"><div class="wrapper">  <span class="nx">h</span><span class="p">.</span><span class="nx">DF</span> <span class="o">=</span> <span class="nx">h</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span> <span class="nx">h</span><span class="p">,</span> <span class="s2">&quot;@DF&quot;</span> <span class="p">);</span>
   <span class="k">return</span> <span class="nx">h</span><span class="p">;</span>
 <span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>
