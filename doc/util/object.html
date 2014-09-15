@@ -38,8 +38,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 <span class="cm"> onevar:false,</span>
 <span class="cm"> camelCase:false</span>
 <span class="cm"> */</span>
-<span class="cm">/*global define, console*/</span>
-<span class="nx">define</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="cm">/*global define, console, setTimeout*/</span>
+<span class="nx">define</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">_className</span> <span class="o">=</span> <span class="s2">&quot;BaseObject&quot;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> class BaseObject</span></p>
 
 <p>BaseObject is the base object for all complex objects used by YASMF;
@@ -56,7 +56,7 @@ property.</p>
 <p>BaseObject provides inheritance to more than just a constructor: any
 method can be overridden, but it is critical that the super-chain
 be properly initialized. See the <code>super</code> and <code>overrideSuper</code>
-methods for more information.</p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">BaseObject</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+methods for more information.</p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">BaseObject</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>classHierarchy of type _Array</em> and default ["BaseObject"]</span></p>
 
 <p>We need a way to provide inheritance. Most methods only provide
@@ -76,7 +76,7 @@ actual name.</p>
 
 <ul>
 <li><strong>newClass must be a String.</strong><br/>(- the new unique class of the object)</li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">newClass</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">newClass</span> <span class="p">)</span> <span class="p">{</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">newClass</span> <span class="p">);</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getClass</span></p>
 
@@ -85,7 +85,7 @@ actual name.</p>
 is no <code>setter</code> for this property; an object's class
 can <em>not</em> be changed.</p>
 
-<p><strong>Returns a String</strong><br/>(the class of the instance)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p><strong>Returns a String</strong><br/>(the class of the instance)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getClass</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">[</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">];</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property class readOnly and of type <em>String</em></span></p>
 
@@ -109,7 +109,7 @@ the hierarchy.</p>
 <li><strong>aClass is optional, must be a String, and has a default value of currentClass.</strong><br/>(the class for which you want the super class. If not specified, the instance's class is used.)</li>
 </ul>
 
-<p><strong>Returns a String</strong><br/>(the super-class of the specified class.)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">aClass</span> <span class="p">)</span> <span class="p">{</span>
+<p><strong>Returns a String</strong><br/>(the super-class of the specified class.)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">aClass</span> <span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">theClass</span> <span class="o">=</span> <span class="nx">aClass</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_classHierarchy</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">theClass</span> <span class="p">);</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">i</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
@@ -139,7 +139,7 @@ of code that depends on it.</p>
 <li><p><strong>theClass must be a String.</strong><br/>(the class for which the function override is desired)</p></li>
 <li><p><strong>theFunctionName must be a String.</strong><br/>(the name of the function to override)</p></li>
 <li><p><strong>theActualFunction must be a Function.</strong><br/>(the actual function (or pointer to function))</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theClass</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">theActualFunction</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theClass</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">theActualFunction</span> <span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">superClass</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span><span class="p">(</span> <span class="nx">theClass</span> <span class="p">);</span>
       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span> <span class="nx">superClass</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span> <span class="nx">superClass</span> <span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
@@ -157,7 +157,7 @@ of code that depends on it.</p>
 
 <pre><code>obj.override ( function initWithOptions ( options )
     { ... } );
-</code></pre></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">override</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theNewFunction</span> <span class="p">)</span> <span class="p">{</span>
+</code></pre></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">override</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNewFunction</span> <span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">theFunctionName</span> <span class="o">=</span> <span class="nx">theNewFunction</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">theFunctionName</span> <span class="o">!==</span> <span class="s2">&quot;&quot;</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">theFunctionName</span> <span class="p">]</span> <span class="p">);</span>
@@ -173,7 +173,7 @@ of code that depends on it.</p>
 <li><p><strong>theClass must be a String.</strong><br/>(the current class instance)</p></li>
 <li><p><strong>theFunctionName must be a String.</strong><br/>(the name of the function to execute)</p></li>
 <li><p><strong>args is optional and must be an Array.</strong><br/>(Any number of parameters to pass to the super method)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theClass</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="kr">super</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theClass</span><span class="p">,</span> <span class="nx">theFunctionName</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">superClass</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getSuperClassOfClass</span><span class="p">(</span> <span class="nx">theClass</span> <span class="p">);</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span> <span class="nx">superClass</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_super</span><span class="p">[</span> <span class="nx">superClass</span> <span class="p">][</span> <span class="nx">theFunctionName</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
@@ -190,20 +190,18 @@ they must call this method prior to any auto initialization</p></div></div><div 
       <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">pri</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">priority</span> <span class="o">=</span> <span class="nx">pri</span><span class="p">;</span>
       <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">_objectCategories</span><span class="p">[</span> <span class="nx">priority</span> <span class="p">][</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span> <span class="p">]</span> <span class="o">!==</span>
-        <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">_objectCategories</span><span class="p">[</span> <span class="nx">priority</span> <span class="p">][</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span> <span class="p">].</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span>
-          <span class="nx">categoryConstructor</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">_objectCategories</span><span class="p">[</span> <span class="nx">priority</span> <span class="p">][</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span> <span class="p">]</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">_objectCategories</span><span class="p">[</span> <span class="nx">priority</span> <span class="p">][</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span> <span class="p">].</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">categoryConstructor</span> <span class="p">)</span> <span class="p">{</span>
           <span class="k">try</span> <span class="p">{</span>
             <span class="nx">categoryConstructor</span><span class="p">(</span> <span class="nx">self</span> <span class="p">);</span>
           <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span> <span class="nx">e</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;Error during category construction: &#39;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span> <span class="p">);</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Error during category construction: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span> <span class="p">);</span>
           <span class="p">}</span>
         <span class="p">}</span> <span class="p">);</span>
       <span class="p">}</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>
 
-<p>initializes the object</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p>initializes the object</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_constructObjectCategories</span><span class="p">(</span> <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">ON_INIT_CATEGORY</span> <span class="p">);</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>tag of type _Object</em></span></p>
@@ -228,17 +226,16 @@ and <code>theValue</code> (the value of the tag); the tag is <em>already</em> ch
 <ul>
 <li><p><strong>theKey must be a *.</strong><br/>(the name of the tag; "__default" is special and refers to the default tag visible via the <code>tag</code> property.)</p></li>
 <li><p><strong>theValue must be a *.</strong><br/>(the value to assign to the tag.)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">setTagForKey</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">setTagForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">)</span> <span class="p">{</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_tags</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">theValue</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">notifyListener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theListener</span><span class="p">,</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">notifyListener</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theListener</span><span class="p">,</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
           <span class="nx">theListener</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">);</span>
         <span class="p">};</span>
       <span class="p">};</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
         <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">setTimeout</span><span class="p">(</span> <span class="nx">notifyListener</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">][</span> <span class="nx">i</span> <span class="p">],</span> <span class="nx">theKey</span><span class="p">,</span>
-            <span class="nx">theValue</span> <span class="p">),</span> <span class="mi">0</span> <span class="p">);</span>
+          <span class="nx">setTimeout</span><span class="p">(</span> <span class="nx">notifyListener</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">][</span> <span class="nx">i</span> <span class="p">],</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">),</span> <span class="mi">0</span> <span class="p">);</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getTagForKey</span></p>
@@ -252,7 +249,7 @@ result is undefined.</p>
 <li><strong>theKey must be a *.</strong><br/>(the tag; "__default" is special and refers to the default tag visible via the <code>tag</code> property.)</li>
 </ul>
 
-<p><strong>Returns a *</strong><br/>(the value of the key)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getTagForKey</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theKey</span> <span class="p">)</span> <span class="p">{</span>
+<p><strong>Returns a *</strong><br/>(the value of the key)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getTagForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span> <span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_tags</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">];</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method addListenerForKey</span></p>
 
@@ -270,7 +267,7 @@ the time the listener is called.</p>
 <ul>
 <li><p><strong>theKey must be a *.</strong><br/>(The tag for which to add a listener; <code>__default</code> is special and refers the default tag visible via the <code>tag</code> property.)</p></li>
 <li><p><strong>theListener must be a Function.</strong><br/>(the function (or reference) to call when the value changes.)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">addTagListenerForKey</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">addTagListenerForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
       <span class="p">}</span>
@@ -284,7 +281,7 @@ the time the listener is called.</p>
 <ul>
 <li><p><strong>theKey must be a *.</strong><br/>(the tag from which to remove the listener; <code>__default</code> is special and refers to the default tag visible via the <code>tag</code> property.)</p></li>
 <li><p><strong>theListener must be a Function.</strong><br/>(the function (or reference) to remove.)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">removeTagListenerForKey</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">removeTagListenerForKey</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theKey</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span><span class="p">[</span> <span class="nx">theKey</span> <span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
       <span class="p">}</span>
@@ -301,14 +298,14 @@ to <code>__default</code> will be notified.</p>
 
 <ul>
 <li><strong>theValue must be a *.</strong><br/>(the value for the tag)</li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">setTag</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theValue</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">setTag</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theValue</span> <span class="p">)</span> <span class="p">{</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">setTagForKey</span><span class="p">(</span> <span class="s2">&quot;__default&quot;</span><span class="p">,</span> <span class="nx">theValue</span> <span class="p">);</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getTag</span></p>
 
 <p>Returns the value for the given tag (<code>__default</code>). If the tag has never been
 set, the result is undefined.</p>
 
-<p><strong>Returns a *</strong><br/>(the value of the tag.)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getTag</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p><strong>Returns a *</strong><br/>(the value of the tag.)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">getTag</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getTagForKey</span><span class="p">(</span> <span class="s2">&quot;__default&quot;</span> <span class="p">);</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property tag of type <em>*</em></span></p>
 
@@ -332,22 +329,35 @@ you aren't watching the console, the function fails nearly silently.</p>
   <p>By default, no notifications are registered.</p>
 </blockquote>
 
+<p>If the first parameter is an object, multiple listeners can be registered:
+{ "viewWillAppear": handler, "viewDidAppear": handler2}.</p>
+
 <p>Parameters:</p>
 
 <ul>
-<li><p><strong>theNotification must be a String.</strong><br/>(the name of the notification)</p></li>
+<li><p><strong>theNotification can be a String or a *.</strong><br/>(the name of the notification)</p></li>
 <li><p><strong>theListener must be a Function.</strong><br/>(the function (or reference) to be called when the notification is triggered.)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">addListenerForNotification</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span> <span class="p">{</span>
+</ul>
+
+<p><strong>Returns a *</strong><br/>(returns self for chaining)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">addListenerForNotification</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">theListener</span><span class="p">,</span> <span class="nx">async</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theNotification</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">n</span> <span class="k">in</span> <span class="nx">theNotification</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">n</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">addListenerForNotification</span><span class="p">(</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">[</span> <span class="nx">n</span> <span class="p">],</span> <span class="nx">theListener</span> <span class="p">);</span> <span class="c1">// async would shift up</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+      <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span> <span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">async</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="o">?</span> <span class="nx">async</span> <span class="o">:</span> <span class="kc">false</span> <span class="p">);</span>
       <span class="p">}</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">push</span><span class="p">(</span> <span class="nx">theListener</span> <span class="p">);</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Adding listener &quot;</span> <span class="o">+</span> <span class="nx">theListener</span> <span class="o">+</span> <span class="s2">&quot; for notification &quot;</span> <span class="o">+</span>
-          <span class="nx">theNotification</span> <span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Adding listener &quot;</span> <span class="o">+</span> <span class="nx">theListener</span> <span class="o">+</span> <span class="s2">&quot; for notification &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="p">);</span>
       <span class="p">}</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method removeListenerForNotification</span></p>
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">on</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">addListenerForNotification</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method removeListenerForNotification</span></p>
 
 <p>Removes a listener from a notification. If a notification has not been
 registered (via <code>registerNotification</code>), an error is logged on the console
@@ -363,20 +373,29 @@ you aren't watching the console, the function fails nearly silently.</p>
 <ul>
 <li><p><strong>theNotification must be a String.</strong><br/>(the notification)</p></li>
 <li><p><strong>theListener must be a Function.</strong><br/>(The function or reference to remove)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">removeListenerForNotification</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">removeListenerForNotification</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">theListener</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theNotification</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">n</span> <span class="k">in</span> <span class="nx">theNotification</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">n</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">removeListenerForNotification</span><span class="p">(</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">[</span> <span class="nx">n</span> <span class="p">]</span> <span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+      <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span> <span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">theListener</span> <span class="p">);</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Removing listener &quot;</span> <span class="o">+</span> <span class="nx">theListener</span> <span class="o">+</span> <span class="s2">&quot; (index: &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span>
-          <span class="s2">&quot;) from  notification &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Removing listener &quot;</span> <span class="o">+</span> <span class="nx">theListener</span> <span class="o">+</span> <span class="s2">&quot; (index: &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot;) from  notification &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="p">);</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">i</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">splice</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
       <span class="p">}</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method registerNotification</span></p>
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">off</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">removeListenerForNotification</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method registerNotification</span></p>
 
 <p>Registers a notification so that listeners can then be attached. Notifications
 should be registered as soon as possible, otherwise listeners may attempt to
@@ -387,17 +406,82 @@ attach to a notification that isn't registered.</p>
 <ul>
 <li><p><strong>theNotification must be a String.</strong><br/>(the name of the notification.)</p></li>
 <li><p><strong>async must be a Boolean.</strong><br/>(if true, notifications are sent wrapped in setTimeout)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">async</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">async</span> <span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">_useAsyncNotifications</span> <span class="o">=</span> <span class="p">(</span>
-          <span class="k">typeof</span> <span class="nx">async</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="nx">async</span> <span class="o">:</span> <span class="kc">true</span> <span class="p">);</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">_useAsyncNotifications</span> <span class="o">=</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">async</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="nx">async</span> <span class="o">:</span> <span class="kc">true</span> <span class="p">);</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Registering notification &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="p">);</span>
       <span class="p">}</span>
     <span class="p">};</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notify</span></p>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">_doNotification</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">args</span><span class="p">,</span>
+        <span class="nx">lastOnly</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">args</span> <span class="o">=</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">args</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">args</span> <span class="o">:</span> <span class="kc">undefined</span><span class="p">;</span>
+        <span class="nx">lastOnly</span> <span class="o">=</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lastOnly</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lastOnly</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span> <span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Notifying &quot;</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot; listeners for &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="o">+</span>
+          <span class="s2">&quot; ( &quot;</span> <span class="o">+</span> <span class="nx">args</span> <span class="o">+</span> <span class="s2">&quot; ) &quot;</span> <span class="p">);</span>
+      <span class="p">}</span>
+      <span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">_useAsyncNotifications</span><span class="p">,</span>
+        <span class="nx">notifyListener</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theListener</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">try</span> <span class="p">{</span>
+              <span class="nx">theListener</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="p">[</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">].</span><span class="nx">concat</span><span class="p">(</span> <span class="nx">arguments</span> <span class="p">)</span> <span class="p">);</span>
+            <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="s2">&quot;experienced an uncaught error:&quot;</span><span class="p">,</span> <span class="nx">err</span> <span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">};</span>
+        <span class="p">},</span>
+        <span class="nx">handlers</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">slice</span><span class="p">();</span> <span class="c1">// copy!</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">lastOnly</span> <span class="o">&amp;&amp;</span> <span class="nx">handlers</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">handlers</span> <span class="o">=</span> <span class="p">[</span> <span class="nx">handlers</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span> <span class="p">];</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attach * handlers</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">push</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">listener</span> <span class="k">in</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">listener</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">handler</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">listener</span> <span class="p">];</span>
+          <span class="nx">push</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;*&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>candidate listener; see if it matches</p></div></div><div class="code"><div class="wrapper">            <span class="k">if</span> <span class="p">(</span> <span class="nx">listener</span> <span class="o">===</span> <span class="s2">&quot;*&quot;</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">push</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;*&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">===</span> <span class="nx">theNotification</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">push</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;*&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">===</span> <span class="nx">theNotification</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span>
+              <span class="nx">listener</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">push</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">starPos</span> <span class="o">=</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;*&quot;</span> <span class="p">);</span>
+              <span class="k">if</span> <span class="p">(</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">starPos</span> <span class="p">)</span> <span class="o">===</span> <span class="nx">theNotification</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">starPos</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">starPos</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">===</span>
+                <span class="nx">theNotification</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">starPos</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="nx">push</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="nx">push</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">handler</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">handler</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="nx">handlers</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">handler</span> <span class="p">);</span>
+              <span class="p">}</span> <span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">handlers</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">async</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">setTimeout</span><span class="p">(</span> <span class="nx">notifyListener</span><span class="p">(</span> <span class="nx">handlers</span><span class="p">[</span> <span class="nx">i</span> <span class="p">],</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">),</span> <span class="mi">0</span> <span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="p">(</span> <span class="nx">notifyListener</span><span class="p">(</span> <span class="nx">handlers</span><span class="p">[</span> <span class="nx">i</span> <span class="p">],</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">)();</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notify</span></p>
 
 <p>Notifies all listeners of a particular notification that the notification
 has been triggered. If the notification hasn't been registered via
@@ -409,61 +493,26 @@ itself returns silently, so be sure to watch the console for errors.</p>
 <ul>
 <li><p><strong>theNotification must be a String.</strong><br/>(the notification to trigger)</p></li>
 <li><p><strong>args is optional and must be a *.</strong><br/>(Arguments to pass to the listener; usually an array)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span> <span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Notifying &quot;</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">length</span> <span class="o">+</span>
-          <span class="s2">&quot; listeners for &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; ( &quot;</span> <span class="o">+</span> <span class="nx">args</span> <span class="o">+</span> <span class="s2">&quot; ) &quot;</span> <span class="p">);</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">_useAsyncNotifications</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">notifyListener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theListener</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-          <span class="nx">theListener</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">);</span>
-        <span class="p">};</span>
-      <span class="p">};</span>
-      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">async</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">setTimeout</span><span class="p">(</span> <span class="nx">notifyListener</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">][</span>
-            <span class="nx">i</span>
-          <span class="p">],</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">),</span> <span class="mi">0</span> <span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="p">(</span> <span class="nx">notifyListener</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">][</span> <span class="nx">i</span> <span class="p">],</span>
-            <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">)();</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notifyMostRecent</span></p>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">_doNotification</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">args</span><span class="o">:</span> <span class="nx">args</span><span class="p">,</span>
+        <span class="nx">lastOnly</span><span class="o">:</span> <span class="kc">false</span>
+      <span class="p">}</span> <span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">emit</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notifyMostRecent</span></p>
 
 <p>Parameters:</p>
 
 <ul>
 <li><p><strong>theNotification must be a String.</strong><br/>(the specific notification to trigger)</p></li>
 <li><p><strong>args is optional and must be a *.</strong><br/>(Arguments to pass to the listener; usually an array)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">notifyMostRecent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; has not been registered.&quot;</span> <span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_traceNotifications</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Notifying &quot;</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">length</span> <span class="o">+</span>
-          <span class="s2">&quot; listeners for &quot;</span> <span class="o">+</span> <span class="nx">theNotification</span> <span class="o">+</span> <span class="s2">&quot; ( &quot;</span> <span class="o">+</span> <span class="nx">args</span> <span class="o">+</span> <span class="s2">&quot; ) &quot;</span> <span class="p">);</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">async</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">_useAsyncNotifications</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">].</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">async</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">][</span> <span class="nx">i</span> <span class="p">](</span> <span class="nx">self</span><span class="p">,</span>
-              <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">);</span>
-          <span class="p">},</span> <span class="mi">0</span> <span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span><span class="p">[</span> <span class="nx">theNotification</span> <span class="p">][</span> <span class="nx">i</span> <span class="p">](</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">theNotification</span><span class="p">,</span>
-            <span class="nx">args</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method defineProperty</span></p>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">notifyMostRecent</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">_doNotification</span><span class="p">(</span> <span class="nx">theNotification</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">args</span><span class="o">:</span> <span class="nx">args</span><span class="p">,</span>
+        <span class="nx">lastOnly</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">}</span> <span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">emitToLast</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">notifyMostRecent</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method defineProperty</span></p>
 
 <p>Defines a property on the object. Essentially shorthand for <code>Object.defineProperty</code>. An
 internal <code>_propertyName</code> variable is declared which getters and setters can access.</p>
@@ -498,7 +547,7 @@ self.setWidth = function ( newWidth, oldWidth )
     self.element.style.width = newWidth + "px";
 }
 self.defineProperty ( "width" );   // automatically discovers setWidth as the setter.
-</code></pre></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">propertyOptions</span> <span class="p">)</span> <span class="p">{</span>
+</code></pre></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">propertyOptions</span> <span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
         <span class="k">default</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
         <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -528,12 +577,12 @@ self.defineProperty ( "width" );   // automatically discovers setWidth as the se
         <span class="nx">_y_setFnName</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">+</span> <span class="s2">&quot;_y_set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">,</span>
         <span class="nx">_y__getFnName</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">+</span> <span class="s2">&quot;_y__get&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">,</span>
         <span class="nx">_y__setFnName</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">+</span> <span class="s2">&quot;_y__set&quot;</span> <span class="o">+</span> <span class="nx">fnName</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if get/set are not specified, we'll attempt to self-discover them</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getFnName</span> <span class="p">];</span>
         <span class="p">}</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setFnName</span> <span class="p">];</span>
         <span class="p">}</span>
       <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the private variable</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">backingVariable</span> <span class="p">)</span> <span class="p">{</span>
@@ -547,28 +596,31 @@ self.defineProperty ( "width" );   // automatically discovers setWidth as the se
       <span class="p">};</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">read</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">get</span><span class="p">;</span>
-        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_getFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if there is a getter, use it</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_getFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if there is a getter, use it</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">](</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_propertyName</span> <span class="p">]</span> <span class="p">);</span>
           <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>otherwise return the private variable</p></div></div><div class="code"><div class="wrapper">          <span class="k">else</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_propertyName</span> <span class="p">];</span>
           <span class="p">}</span>
         <span class="p">};</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">self</span><span class="p">[</span> <span class="nx">getFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_getFnName</span> <span class="p">];</span>
         <span class="p">}</span>
         <span class="nx">defPropOptions</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_getFnName</span> <span class="p">];</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">write</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">set</span><span class="p">;</span>
-        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_setFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">v</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_setFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">v</span> <span class="p">)</span> <span class="p">{</span>
           <span class="kd">var</span> <span class="nx">oldV</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_propertyName</span> <span class="p">];</span>
-          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">](</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">oldV</span> <span class="p">);</span>
           <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="nx">self</span><span class="p">[</span> <span class="nx">_propertyName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
           <span class="p">}</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="nx">oldV</span> <span class="o">!==</span> <span class="nx">v</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">notifyDataBindingElementsForKeyPath</span><span class="p">(</span> <span class="nx">propertyName</span> <span class="p">);</span>
+          <span class="p">}</span>
         <span class="p">};</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">self</span><span class="p">[</span> <span class="nx">setFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_setFnName</span> <span class="p">];</span>
         <span class="p">}</span>
         <span class="nx">defPropOptions</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_setFnName</span> <span class="p">];</span>
@@ -613,7 +665,7 @@ self.defineObservableProperty ( "width" );
 <ul>
 <li><p><strong>propertyName must be a String.</strong><br/>(The specific property to define)</p></li>
 <li><p><strong>propertyOptions must be an Object.</strong><br/>(the options for this property.)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">propertyOptions</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set the default options and copy the specified options</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">defineObservableProperty</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">propertyOptions</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set the default options and copy the specified options</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">observable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
         <span class="nx">notification</span><span class="o">:</span> <span class="nx">propertyName</span> <span class="o">+</span> <span class="s2">&quot;Changed&quot;</span><span class="p">,</span>
         <span class="k">default</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
@@ -650,17 +702,17 @@ self.defineObservableProperty ( "width" );
           <span class="nx">options</span><span class="p">[</span> <span class="nx">property</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">propertyOptions</span><span class="p">[</span> <span class="nx">property</span> <span class="p">];</span>
         <span class="p">}</span>
       <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if get/set are not specified, we'll attempt to self-discover them</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getObservableFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getObservableFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">options</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">getObservableFnName</span> <span class="p">];</span>
         <span class="p">}</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setObservableFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setObservableFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">options</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">setObservableFnName</span> <span class="p">];</span>
         <span class="p">}</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">validate</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">selfDiscover</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">validateObservableFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">validateObservableFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
           <span class="nx">options</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">validateObservableFnName</span> <span class="p">];</span>
         <span class="p">}</span>
       <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if the property is observable, register its notification</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">observable</span> <span class="p">)</span> <span class="p">{</span>
@@ -674,7 +726,7 @@ self.defineObservableProperty ( "width" );
       <span class="p">};</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">read</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">get</span><span class="p">;</span>
-        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_getFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if there is a getter, use it</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_getFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if there is a getter, use it</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__getFnName</span> <span class="p">](</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_propertyName</span> <span class="p">]</span> <span class="p">);</span>
           <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>otherwise return the private variable</p></div></div><div class="code"><div class="wrapper">          <span class="k">else</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_propertyName</span> <span class="p">];</span>
@@ -685,17 +737,20 @@ self.defineObservableProperty ( "width" );
       <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">write</span> <span class="p">)</span> <span class="p">{</span>
         <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__validateFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">validate</span><span class="p">;</span>
         <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">set</span><span class="p">;</span>
-        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_setFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">v</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">oldV</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_propertyName</span> <span class="p">];</span>
-          <span class="kd">var</span> <span class="nx">valid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__validateFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_setFnName</span> <span class="p">]</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">v</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">oldV</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_propertyName</span> <span class="p">],</span>
+            <span class="nx">valid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__validateFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="nx">valid</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__validateFnName</span> <span class="p">](</span> <span class="nx">v</span> <span class="p">);</span>
           <span class="p">}</span>
           <span class="k">if</span> <span class="p">(</span> <span class="nx">valid</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
               <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_propertyName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y__setFnName</span> <span class="p">](</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">oldV</span> <span class="p">);</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
               <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_propertyName</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="nx">oldV</span> <span class="o">!==</span> <span class="nx">v</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">self</span><span class="p">.</span><span class="nx">notifyDataBindingElementsForKeyPath</span><span class="p">(</span> <span class="nx">propertyName</span> <span class="p">);</span>
             <span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span> <span class="nx">v</span> <span class="o">!==</span> <span class="nx">oldV</span> <span class="o">||</span> <span class="nx">options</span><span class="p">.</span><span class="nx">notifyAlways</span> <span class="p">)</span> <span class="p">{</span>
               <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">observable</span> <span class="p">)</span> <span class="p">{</span>
@@ -710,6 +765,122 @@ self.defineObservableProperty ( "width" );
         <span class="nx">defPropOptions</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">_y_setFnName</span> <span class="p">];</span>
       <span class="p">}</span>
       <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="nx">defPropOptions</span> <span class="p">);</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>data binding</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span> <span class="o">=</span> <span class="p">[];</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>dataBindOn - Configure a data binding to an HTML element (el) for
+a particular property (keyPath). Returns self for chaining.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>el must be a Node.</strong><br/>(the DOM element to bind to; must support the change event)</p></li>
+<li><p><strong>keyPath must be a string.</strong><br/>(the property to observe (shallow only; doesn't follow dots.))</p></li>
+</ul>
+
+<p><strong>Returns a *</strong><br/>(self; chain away!)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">dataBindOn</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">dataBindOn</span><span class="p">(</span> <span class="nx">el</span><span class="p">,</span> <span class="nx">keyPath</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">]</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="p">}</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">].</span><span class="nx">push</span><span class="p">(</span> <span class="nx">el</span> <span class="p">);</span>
+      <span class="nx">el</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span> <span class="s2">&quot;data-y-keyPath&quot;</span><span class="p">,</span> <span class="nx">keyPath</span> <span class="p">);</span>
+      <span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">updatePropertyForKeyPath</span><span class="p">,</span> <span class="kc">false</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>dataBindOff - Turn off data binding for a particular element and
+keypath.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>el must be a Node.</strong><br/>(element to remove data binding from)</p></li>
+<li><p><strong>keyPath must be a string.</strong><br/>(keypath to stop observing)</p></li>
+</ul>
+
+<p><strong>Returns a *</strong><br/>(self; chain away!)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">dataBindOff</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">dataBindOff</span><span class="p">(</span> <span class="nx">el</span><span class="p">,</span> <span class="nx">keyPath</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">keyPathEls</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">],</span>
+        <span class="nx">elPos</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">keyPathEls</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">elPos</span> <span class="o">=</span> <span class="nx">keyPathEls</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">el</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">elPos</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">keyPathEls</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span> <span class="nx">elPos</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+          <span class="nx">el</span><span class="p">.</span><span class="nx">removeAttribute</span><span class="p">(</span> <span class="s2">&quot;data-y-keyPath&quot;</span> <span class="p">);</span>
+          <span class="nx">el</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">updatePropertyForKeyPath</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>dataBindAllOffForKeyPath - Remove all data bindings for a given property</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>keyPath must be a String.</strong><br/>(keypath to stop observing)</li>
+</ul>
+
+<p><strong>Returns a *</strong><br/>(self; chain away)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">dataBindAllOffForKeyPath</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">dataBindAllOffForKeyPath</span><span class="p">(</span> <span class="nx">keyPath</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">keyPathEls</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="nx">keyPathEls</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">keyPathEls</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">el</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">el</span><span class="p">.</span><span class="nx">removeAttribute</span><span class="p">(</span> <span class="s2">&quot;data-y-keyPath&quot;</span> <span class="p">);</span>
+          <span class="nx">el</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">updatePropertyForKeyPath</span> <span class="p">);</span>
+        <span class="p">}</span> <span class="p">);</span>
+        <span class="nx">keyPathEls</span> <span class="o">=</span> <span class="p">[];</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>dataBindAllOff - Remove all data bindings for this object</p>
+
+<p><strong>Returns a *</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">dataBindAllOff</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">dataBindAllOff</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">keyPath</span> <span class="k">in</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">keyPath</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">self</span><span class="p">.</span><span class="nx">dataBindAllOffForKeyPath</span><span class="p">(</span> <span class="nx">keyPath</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>updatePropertyForKeyPath - Update a property on this object based on the
+keyPath and value. If called as an event handler, <code>this</code> refers to the
+triggering element, and keyPath is on <code>data-y-keyPath</code> attribute.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><p><strong>keyPath must be a String.</strong><br/>(property to set)</p></li>
+<li><p><strong>value must be a *.</strong><br/>(value to set)</p></li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">updatePropertyForKeyPath</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">updatePropertyForKeyPath</span><span class="p">(</span> <span class="nx">keyPath</span><span class="p">,</span> <span class="nx">value</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="k">this</span> <span class="o">!==</span> <span class="nx">self</span> <span class="o">&amp;&amp;</span> <span class="k">this</span> <span class="k">instanceof</span> <span class="nx">Node</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we've been called from an event handler</p></div></div><div class="code"><div class="wrapper">          <span class="nx">self</span><span class="p">[</span> <span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span> <span class="s2">&quot;data-y-keyPath&quot;</span> <span class="p">)</span> <span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">self</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Failed to update&quot;</span><span class="p">,</span> <span class="nx">keyPath</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="nx">value</span> <span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>called when a field changes:
+notifyDataBindingElementsForKeyPath - notify all elements attached to a
+key path that the source value has changed. Called by all properties created
+with defineProperty and defineObservableProperty.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>keyPath must be a String.</strong><br/>(keypath of elements to notify)</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">notifyDataBindingElementsForKeyPath</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">notifyDataBindingElementsForKeyPath</span><span class="p">(</span> <span class="nx">keyPath</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">keyPathEls</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_dataBindings</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">],</span>
+          <span class="nx">el</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">keyPathEls</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">keyPathEls</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">el</span> <span class="o">=</span> <span class="nx">keyPathEls</span><span class="p">[</span> <span class="nx">i</span> <span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">el</span><span class="p">.</span><span class="nx">value</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">el</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">];</span>
+            <span class="p">}</span> <span class="k">else</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">el</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">el</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">];</span>
+            <span class="p">}</span> <span class="k">else</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">el</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
+              <span class="nx">el</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span> <span class="nx">keyPath</span> <span class="p">];</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Data bind failure; browser doesn&#39;t understand value, textContent, or innerText.&quot;</span> <span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span> <span class="nx">err</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;Failed to update elements for &quot;</span><span class="p">,</span> <span class="nx">keyPath</span> <span class="p">);</span>
+      <span class="p">}</span>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private</span></p>
 
 <p>Auto initializes the object based on the arguments passed to the object constructor. Any object
@@ -727,9 +898,9 @@ initWithOptions is called if it exists. Otherwise init is called with all the ar
 auto initialization is performed. If one desires an auto-init on an object that requires
 no parameters, pass a dummy parameter to ensure init will be called</p>
 
-<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>chances are this is an initWithOptions, but make sure the incoming parameter is an object</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">arguments</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>chances are this is an initWithOptions, but make sure the incoming parameter is an object</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">arguments</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
               <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">initWithOptions</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">);</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -745,9 +916,36 @@ no parameters, pass a dummy parameter to ensure init will be called</p>
     <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method destroy</span></p>
 
 <p>Readies an object to be destroyed. The base object only clears the notifications and
-the attached listeners.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>clear any listeners.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span> <span class="o">=</span> <span class="p">{};</span>
+the attached listeners.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>clear any listeners.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">_notificationListeners</span> <span class="o">=</span> <span class="p">{};</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_tagListeners</span> <span class="o">=</span> <span class="p">{};</span>
       <span class="nx">self</span><span class="p">.</span><span class="nx">_constructObjectCategories</span><span class="p">(</span> <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">ON_DESTROY_CATEGORY</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>ready to be destroyed</p></div></div><div class="code"><div class="wrapper">    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>self-categorize</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_constructObjectCategories</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>call auto init</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>done</p></div></div><div class="code"><div class="wrapper">    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>promote - Promotes a non-BaseObject into a BaseObject by copying all its methods to
+the new object and copying all its properties as observable properties.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li><strong>nonBaseObject must be a *.</strong><br/>(The non-BaseObject to promote)</li>
+</ul>
+
+<p><strong>Returns a BaseObject</strong><br/>(BaseObject)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">promote</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">promote</span><span class="p">(</span> <span class="nx">nonBaseObject</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">newBaseObject</span><span class="p">,</span> <span class="nx">theProp</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="nx">nonBaseObject</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nx">newBaseObject</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span>
+      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">nonBaseObject</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nx">nonBaseObject</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">prop</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="nx">theProp</span> <span class="o">=</span> <span class="nx">nonBaseObject</span><span class="p">[</span> <span class="nx">prop</span> <span class="p">];</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theProp</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="nx">newBaseObject</span><span class="p">[</span> <span class="nx">prop</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">theProp</span><span class="p">;</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">newBaseObject</span><span class="p">.</span><span class="nx">defineObservableProperty</span><span class="p">(</span> <span class="nx">prop</span><span class="p">,</span> <span class="p">{</span>
+              <span class="k">default</span><span class="o">:</span> <span class="nx">theProp</span>
+            <span class="p">}</span> <span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">newBaseObject</span><span class="p">;</span>
   <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private property <em>objectCategories of type _{}</em></span></p>
 
 <p>Object categories. Of the form:</p>
@@ -775,11 +973,9 @@ not assume the presence of any other category</p>
 
 <ul>
 <li><strong>options must be an Object.</strong></li>
-</ul></div></div><div class="code"><div class="wrapper">  <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">registerCategoryConstructor</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">registerCategoryConstructor</span><span class="p">(</span>
-    <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
+</ul></div></div><div class="code"><div class="wrapper">  <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">registerCategoryConstructor</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">registerCategoryConstructor</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span>
-        <span class="s2">&quot;registerCategoryConstructor requires a class name and a constructor method.&quot;</span> <span class="p">);</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span> <span class="s2">&quot;registerCategoryConstructor requires a class name and a constructor method.&quot;</span> <span class="p">);</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="kr">class</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
       <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span> <span class="s2">&quot;registerCategoryConstructor requires options.class&quot;</span> <span class="p">);</span>
@@ -799,7 +995,7 @@ not assume the presence of any other category</p>
     <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">_objectCategories</span><span class="p">[</span> <span class="nx">priority</span> <span class="p">][</span> <span class="nx">className</span> <span class="p">].</span><span class="nx">push</span><span class="p">(</span> <span class="nx">method</span> <span class="p">);</span>
   <span class="p">};</span>
   <span class="nx">BaseObject</span><span class="p">.</span><span class="nx">meta</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;00.04.900&#39;</span><span class="p">,</span>
+    <span class="nx">version</span><span class="o">:</span> <span class="s2">&quot;00.04.900&quot;</span><span class="p">,</span>
     <span class="kr">class</span><span class="o">:</span> <span class="nx">_className</span><span class="p">,</span>
     <span class="nx">autoInitializable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nx">categorizable</span><span class="o">:</span> <span class="kc">true</span>

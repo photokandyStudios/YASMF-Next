@@ -21,8 +21,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "YASMF-Next v0.4 - Yet Another Simple Mobile Framework",
-            "slug": "yasmf-next-v04-yet-another-simple-mobile-framework",
+            "title": "YASMF-Next v0.5 - Yet Another Simple Mobile Framework",
+            "slug": "yasmf-next-v05-yet-another-simple-mobile-framework",
             "isFileHeader": true
           },
           "depth": 1,
@@ -86,7 +86,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             }
           ]
         },
-        "title": "YASMF-Next v0.4 - Yet Another Simple Mobile Framework"
+        "title": "YASMF-Next v0.5 - Yet Another Simple Mobile Framework"
       },
       "depth": 1,
       "outline": [
@@ -513,6 +513,26 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "targetPath": "util/filename",
             "pageTitle": "util/filename",
             "title": "filename"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/Users/kerrishotts/Documents/Mobile/YASMF/YASMF-Next/lib/yasmf/util/h.js",
+            "projectPath": "lib/yasmf/util/h.js",
+            "targetPath": "util/h",
+            "pageTitle": "util/h",
+            "title": "h"
           },
           "depth": 2,
           "outline": []
