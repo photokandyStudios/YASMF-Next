@@ -1,26 +1,32 @@
-# YASMF-Next v0.4 - Yet Another Simple Mobile Framework
+YASMF-Next v0.5 - Yet Another Simple Mobile Framework
+=====================================================
 
 YASMF-Next, or Yet Another Simple Mobile Framework (Next Generation), provides a simple, lightweight framework for mobile applications, especially those based on webkit browsers.
 
-## Why?
+Why?
+----
 
 Many of the frameworks that support mobile development are large and bulky, and several tend to have poor performance on actual mobile devices. The goal of YASMF-Next is to be simple and limited in scope while also being performant on mobile devices.
 
-YASMF-Next (v0.4) is based loosely on [iSiteMobile](https://github.com/kerrishotts/iSite-Mobile) and the previous version (0.2 and 0.3) of [YASMF](https://github.com/photokandyStudios/YASMF) and also integrates some ideas from the native iOS SDK, especially with regards to view hierarchy and management. YASMF-Next provides a simple localization library, promise-wrapped file management, and simple view management, and base styles to simplify creating HTML-based widgets that look and feel reasonably native.
+YASMF-Next (v0.5) is based loosely on [iSiteMobile](https://github.com/kerrishotts/iSite-Mobile) and the previous version (0.2 and 0.3) of [YASMF](https://github.com/photokandyStudios/YASMF) and also integrates some ideas from the native iOS SDK, especially with regards to view hierarchy and management. YASMF-Next provides a simple localization library, promise-wrapped file management, and simple view management, and base styles to simplify creating HTML-based widgets that look and feel reasonably native.
 
-> **Note:** YASMF is at version 0.4 and is under heavy development. This means that the underlying API is subject to change at any time.
+> **Note:** YASMF is at version 0.5 and is under heavy development. This means that the underlying API is subject to change at any time.
+>
+> YASMF v0.2 has been used in production-level applications, and so is useable in your own application development. v0.5 is more than a little fresh, so take care. There may just be dragons about.
+>
+> Also note: v0.4 (available in the 0.4 branch) is STABLE and will not change.
 
-> YASMF v0.2 has been used in production-level applications, and so is useable in your own application development. v0.4 is more than a little fresh, so take care. There may just be dragons about.
+Platform Support
+----------------
 
-## Platform Support
-
-- **Android:** Android 4.x and higher. Works on phone and tablets. 
+- **Android:** Android 4.x and higher. Works on phone and tablets.
 - **iOS:** iOS 6.x and higher. Works on iPhone, iPod, and iPad.
 - **Webkit:** Chrome, Safari, etc.
 
-> **Note:** Requires Cordova / PhoneGap 3.0 or higher, if the FileManager is used.
+> **Note:** Requires Cordova / PhoneGap 3.0 or higher or Chrome 31+ if the FileManager is used.
 
-## Documentation
+Documentation
+-------------
 
 Documentation can be found in several locations:
 
@@ -28,7 +34,8 @@ Documentation can be found in several locations:
 - [YASMF Documentation](http://photokandystudios.github.io/YASMF-Next/index.html)
 - Local YASMF Documentation is under `./doc` and `./wiki`
 
-## Features
+Features
+--------
 
 - AMD support
 - Relatively small code base (easy to grok)
@@ -38,47 +45,63 @@ Documentation can be found in several locations:
 - KVO-like Observable Properties
 - Notifications and Listeners
 - Useful utility modules:
-    - Date/Time handling
-    - File name handling
-    - HTML5 File API wrapped with Promises (using Q)
-    - Device sniffing / handling
-    - Localization (formatting by jQuery/Globalize)
-    - DOM convenience methods
+	- Date/Time handling
+	- File name handling
+	- HTML5 File API wrapped with Promises (using Q)
+	- Device sniffing / handling
+	- Localization (formatting by jQuery/Globalize)
+	- DOM convenience methods
 - User Interface:
-    - Simple View Containers
-    - Navigation Controllers (push/pop)
-    - Split View Controllers (normal split, off-canvas view, split-overlay)
-    - Navigation bars
-    - Tool Bars
-    - Tinted Glyphs
-    - Bar Buttons
-    - Scroll containers 
+	- Simple View Containers
+	- Navigation Controllers (push/pop)
+	- Split View Controllers (normal split, off-canvas view, split-overlay)
+	- Navigation bars
+	- Tool Bars
+	- Tinted Glyphs
+	- Bar Buttons
+	- Scroll containers
 
-## Plans
+Plans
+-----
 
 - 0.5
-    - Routers
-    - MVC base objects
-    - Object categories
-    - Automatic Notification Handler Hookup
-    - Additional widgets
+	- Routers
+	- MVC base objects
+	- Object categories
+	- Automatic Notification Handler Hookup
+	- Additional widgets
 - Future
-    - Table view w/ infinite scrolling and cell re-use
-    - Data binding
-    - Enhanced templating
+	- Table view w/ infinite scrolling and cell re-use
+	- Data binding
+	- Enhanced templating
 
-## History
+History
+-------
 
+- 0.5 (TBD)
+	- Added `on`, `off` as synonyms for `addListenerForNotification` and `removeListenerForNotification`
+	- `on` and `off` can be chained.
+	- `on` and `off` can be supplied a list of handlers in an object.
+	- Added `emit`, `emitToLast` as synonyms for `notify` and `notifyMostRecent`
+	- Notification handlers are now bound to `self`, and additional arguments are now applied
+	- Wildcard notification handlers are now supported: `*` receives all notifications, `*Changed` receives`valueChanged` but not `changedThat`, `view*` receives `viewWillAppear`, and `ns:*Changed` receives`ns:valueChanged`. The handler is called with `self`, `notification`, and any arguments sent.
+	- Errors are now logged to the console if a notification generates an uncaught exception.
+	- Notifications can now be listed for even if they aren't registered. By default these are synchronous transactions. (Pass `true` to the third parameter if you need async).
+	- Added h, the simple templating engine under `yasmf.h`. h supports data binding objects based on BaseObject.
+	- Added `promote` to BaseObject -- takes normal objects and returns a promoted BaseObject (useful for binding)
+	- Formatting, missing semicolons, that jazz. Added eslint and jscs preference files.
+	- Added `serve.sh` (assumes http-server is installed)
 - 0.4 (May 2014)
-    - First release of YASMF-Next
+	- First release of YASMF-Next
 - 0.3 (Nov 2013)
-    - Refactor attempt of YASMF (aborted in order to start over from scratch)
+	- Refactor attempt of YASMF (aborted in order to start over from scratch)
 - 0.2 (Aug 2012)
-    - Initial release of YASMF
+	- Initial release of YASMF
 - 0.1 (May 2011)
-    - iSiteMobile release
+	- iSiteMobile release
 
-## License
+License
+-------
 
 YASMF-Util is MIT licensed.
 
