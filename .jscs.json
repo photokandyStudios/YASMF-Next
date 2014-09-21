@@ -4,9 +4,6 @@
   "requireSpacesInFunctionExpression": {
     "beforeOpeningCurlyBrace": true
   },
-  "allowSpacesInFunctionExpression": {
-    "beforeOpeningRoundBrace": true
-  },
   "requireMultipleVarDecl": true,
   "disallowLeftStickedOperators": ["?", "-", "/", "*", "=", "==", "===", "!=", "!==", ">",
     ">=",
