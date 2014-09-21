@@ -2013,7 +2013,7 @@ define("cultures/globalize.culture.en-US", function(){});
  *
  * @module core.js
  * @author Kerri Shotts
- * @version 0.4
+ * @version 0.5
  *
  * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
@@ -2033,84 +2033,170 @@ define("cultures/globalize.culture.en-US", function(){});
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-     asi:true,
-     bitwise:true,
-     browser:true,
-     camelcase:true,
-     curly:true,
-     eqeqeq:false,
-     forin:true,
-     noarg:true,
-     noempty:true,
-     plusplus:false,
-     smarttabs:true,
-     sub:true,
-     trailing:false,
-     undef:true,
-     white:false,
-     onevar:false
-*/
-/*global define, Globalize, device, document, window, setTimeout, navigator, console*/
+/*global define, Globalize, device, document, window, setTimeout, navigator, console, Node*/
 define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], function () {
+  /**
+   * @method getComputedStyle
+   * @private
+   * @param {Node} element      the element to request the computed style from
+   * @param {string} property   the property to request (like `width`); optional
+   * @returns {*}               Either the property requested or the entire CSS style declaration
+   */
+  function getComputedStyle( element, property ) {
+    if ( !( element instanceof Node ) && typeof element === "string" ) {
+      property = element;
+      element = this;
+    }
+    var computedStyle = window.getComputedStyle( element );
+    if ( typeof property !== "undefined" ) {
+      return computedStyle.getPropertyValue( property );
+    }
+    return computedStyle;
+  }
+  /**
+   * @method _arrayize
+   * @private
+   * @param {NodeList} list     the list to convert
+   * @returns {Array}           the converted array
+   */
+  function _arrayize( list ) {
+    return Array.prototype.splice.call( list, 0 );
+  }
+  /**
+   * @method getElementById
+   * @private
+   * @param {Node} parent      the parent to execute getElementById on
+   * @param {string} elementId the element ID to search for
+   * @returns {Node}           the element or null if not found
+   */
+  function getElementById( parent, elementId ) {
+    if ( typeof parent === "string" ) {
+      elementId = parent;
+      parent = document;
+    }
+    return ( parent.getElementById( elementId ) );
+  }
+  /**
+   * @method querySelector
+   * @private
+   * @param {Node} parent       the parent to execute querySelector on
+   * @param {string} selector   the CSS selector to use
+   * @returns {Node}            the located element or null if not found
+   */
+  function querySelector( parent, selector ) {
+    if ( typeof parent === "string" ) {
+      selector = parent;
+      parent = document;
+    }
+    return ( parent.querySelector( selector ) );
+  }
+  /**
+   * @method querySelectorAll
+   * @private
+   * @param {Node} parent     the parent to execute querySelectorAll on
+   * @param {string} selector the selector to use
+   * @returns {Array}         the found elements; if none: []
+   */
+  function querySelectorAll( parent, selector ) {
+    if ( typeof parent === "string" ) {
+      selector = parent;
+      parent = document;
+    }
+    return _arrayize( parent.querySelectorAll( selector ) );
+  }
+  /**
+   * @method $
+   * @private
+   * @param {string} selector   the CSS selector to use
+   * @returns {Node}            The located element, relative to `this`
+   */
+  function $( selector ) {
+    return querySelector( this, selector );
+  }
+  /**
+   * @method $$
+   * @private
+   * @param {string} selector   the CSS selector to use
+   * @returns {Array}           the located elements, relative to `this`
+   */
+  function $$( selector ) {
+    return querySelectorAll( this, selector );
+  }
+  /**
+   * @method $id
+   * @private
+   * @param {string} id         the id of the element
+   * @returns {Node}            the located element or null if not found
+   */
+  function $id( id ) {
+    return getElementById( this, id );
+  }
+  // modify Node's prototype to provide useful additional shortcuts
+  var proto = Node.prototype;
+  [
+    [ "$", $ ],
+    [ "$$", $$ ],
+    [ "$1", $ ],
+    [ "$id", $id ],
+    [ "gsc", getComputedStyle ],
+    [ "gcs", getComputedStyle ],
+    [ "getComputedStyle", getComputedStyle ]
+  ].forEach( function ( i ) {
+    if ( typeof proto[ i[ 0 ] ] === "undefined" ) {
+      proto[ i[ 0 ] ] = i[ 1 ];
+    }
+  } );
   var _y = {
-    VERSION: "0.4.100",
+    VERSION: "0.5.142",
     /**
      * Returns an element from the DOM with the specified
      * ID. Similar to (but not like) jQuery's $(), except
      * that this is a pure DOM element.
      * @method ge
-     * @param  {String} elementId
-     * @return {Node}
+     * @alias $id
+     * @param  {String} elementId     id to search for, relative to document
+     * @return {Node}                 null if no node found
      */
-    ge: function ( elementId ) {
-      return document.getElementById( elementId );
-    },
+    ge: $id.bind( document ),
+    $id: $id.bind( document ),
     /**
      * Returns an element from the DOM using `querySelector`.
      * @method qs
-     * @param {String} selector
-     * @returns {Node}
+     * @alias $
+     * @alias $1
+     * @param {String} selector       CSS selector to search, relative to document
+     * @returns {Node}                null if no node found that matches search
      */
-    qs: function ( selector ) {
-      return document.querySelector( selector );
-    },
+    $: $.bind( document ),
+    $1: $.bind( document ),
+    qs: $.bind( document ),
     /**
      * Returns an array of all elements matching a given
      * selector. The array is processed to be a real array,
      * not a nodeList.
      * @method gac
-     * @param  {String} selector
-     * @return {Array} of Nodes
+     * @alias $$
+     * @alias qsa
+     * @param  {String} selector      CSS selector to search, relative to document
+     * @return {Array} of Nodes       Array of nodes; [] if none found
      */
-    gac: function ( selector ) {
-      return Array.prototype.slice.call( document.querySelectorAll( selector ) );
-    },
-    /**
-     * Returns an array of elements matching a given selector.
-     * @method qsa
-     * @param {String} selector
-     * @returns {Array} of Nodes
-     */
-    qsa: function ( selector ) {
-      return Array.prototype.slice.call( document.querySelectorAll( selector ) );
-    },
+    $$: $$.bind( document ),
+    gac: $$.bind( document ),
+    qsa: $$.bind( document ),
     /**
      * Returns a Computed CSS Style ready for interrogation if
      * `property` is not defined, or the actual property value
      * if `property` is defined.
-     * @method gsc
+     * @method gcs
+     * @alias gsc
+     * @alias getComputedStyle
      * @param {Node} element  A specific DOM element
      * @param {String} [property]  A CSS property to query
      * @returns {*}
      */
-    gsc: function ( element, property ) {
-      var computedStyle = window.getComputedStyle( element );
-      if ( typeof property !== "undefined" ) {
-        return computedStyle.getPropertyValue( property );
-      }
-      return computedStyle;
-    },
+    getComputedStyle: getComputedStyle,
+    gcs: getComputedStyle,
+    gsc: getComputedStyle,
     /**
      * Returns a parsed template. The template can be a simple
      * string, in which case the replacement variable are replaced
@@ -2122,18 +2208,51 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
      * can occur anywhere, not just within strings in HTML.
      *
      * The replacements array is of the form
+     * ```
      *     { "VARIABLE": replacement, "VARIABLE2": replacement, ... }
+     * ```
+     *
+     * If `addtlOptions` is specified, it may override the default
+     * options where `%` is used as a substitution marker and `toUpperCase`
+     * is used as a transform. For example:
+     *
+     * ```
+     * template ( "Hello, {{name}}", {"name": "Mary"},
+     *            { brackets: [ "{{", "}}" ],
+     *              transform: "toLowerCase" } );
+     * ```
      *
      * @method template
      * @param  {Node|String} templateElement
      * @param  {Object} replacements
      * @return {String}
      */
-    template: function ( templateElement, replacements ) {
-      var templateHTML = templateElement.innerHTML || templateElement;
-      for ( var theVar in replacements ) {
+    template: function ( templateElement, replacements, addtlOptions ) {
+      var brackets = [ "%", "%" ],
+        transform = "toUpperCase",
+        templateHTML, theVar, thisVar, theReplacement;
+      if ( typeof addtlOptions !== "undefined" ) {
+        if ( typeof addtlOptions.brackets !== "undefined" ) {
+          brackets = addtlOptions.brackets;
+        }
+        if ( typeof addtlOptions.transform === "string" ) {
+          transform = addtlOptions.transform;
+        }
+      }
+      if ( templateElement instanceof Node ) {
+        templateHTML = templateElement.innerHTML;
+      } else {
+        templateHTML = templateElement;
+      }
+      for ( theVar in replacements ) {
         if ( replacements.hasOwnProperty( theVar ) ) {
-          var thisVar = "%" + theVar.toUpperCase() + "%";
+          thisVar = brackets[ 0 ];
+          if ( transform !== "" ) {
+            thisVar += theVar[ transform ]();
+          } else {
+            thisVar += theVar;
+          }
+          thisVar += brackets[ 1 ];
           while ( templateHTML.indexOf( thisVar ) > -1 ) {
             templateHTML = templateHTML.replace( thisVar, replacements[ theVar ] );
           }
@@ -3109,7 +3228,7 @@ define( 'yasmf/util/device',[],function () {
  *
  * @module object.js
  * @author Kerri Shotts
- * @version 0.4
+ * @version 0.5
  * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -3128,1070 +3247,1063 @@ define( 'yasmf/util/device',[],function () {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
- asi:true,
- bitwise:true,
- browser:true,
- camelcase:true,
- curly:true,
- eqeqeq:false,
- forin:true,
- noarg:true,
- noempty:true,
- plusplus:false,
- smarttabs:true,
- sub:true,
- trailing:false,
- undef:true,
- white:false,
- onevar:false,
- camelCase:false
- */
 /*global define, console, setTimeout*/
 define( 'yasmf/util/object',[],function () {
-  var _className = "BaseObject";
-  /**
-   * BaseObject is the base object for all complex objects used by YASMF;
-   * simpler objects that are properties-only do not inherit from this
-   * class.
-   *
-   * BaseObject provides simple inheritance, but not by using the typical
-   * prototypal method. Rather inheritance is formed by object composition
-   * where all objects are instances of BaseObject with methods overridden
-   * instead. As such, you can *not* use any Javascript type checking to
-   * differentiate PKObjects; you should instead use the `class`
-   * property.
-   *
-   * BaseObject provides inheritance to more than just a constructor: any
-   * method can be overridden, but it is critical that the super-chain
-   * be properly initialized. See the `super` and `overrideSuper`
-   * methods for more information.
-   *
-   * @class BaseObject
-   */
-  var BaseObject = function () {
-    var self = this;
+  var _className = "BaseObject",
     /**
+     * BaseObject is the base object for all complex objects used by YASMF;
+     * simpler objects that are properties-only do not inherit from this
+     * class.
      *
-     * We need a way to provide inheritance. Most methods only provide
-     * inheritance across the constructor chain, not across any possible
-     * method. But for our purposes, we need to be able to provide for
-     * overriding any method (such as drawing, touch responses, etc.),
-     * and so we implement inheritance in a different way.
+     * BaseObject provides simple inheritance, but not by using the typical
+     * prototypal method. Rather inheritance is formed by object composition
+     * where all objects are instances of BaseObject with methods overridden
+     * instead. As such, you can *not* use any Javascript type checking to
+     * differentiate PKObjects; you should instead use the `class`
+     * property.
      *
-     * First, the _classHierarchy, a private property, provides the
-     * inheritance tree. All objects inherit from "BaseObject".
+     * BaseObject provides inheritance to more than just a constructor: any
+     * method can be overridden, but it is critical that the super-chain
+     * be properly initialized. See the `super` and `overrideSuper`
+     * methods for more information.
      *
-     * @private
-     * @property _classHierarchy
-     * @type Array
-     * @default ["BaseObject"]
+     * @class BaseObject
      */
-    self._classHierarchy = [ _className ];
-    /**
-     *
-     * Objects are subclassed using this method. The newClass is the
-     * unique class name of the object (and should match the class'
-     * actual name.
-     *
-     * @method subclass
-     * @param {String} newClass - the new unique class of the object
-     */
-    self.subclass = function ( newClass ) {
-      self._classHierarchy.push( newClass );
-    };
-    /**
-     *
-     * getClass returns the current class of the object. The
-     * `class` property can be used as well. Note that there
-     * is no `setter` for this property; an object's class
-     * can *not* be changed.
-     *
-     * @method getClass
-     * @returns {String} the class of the instance
-     *
-     */
-    self.getClass = function () {
-      return self._classHierarchy[ self._classHierarchy.length - 1 ];
-    };
-    /**
-     *
-     * The class of the instance. **Read-only**
-     * @property class
-     * @type String
-     * @readOnly
-     */
-    Object.defineProperty( self, "class", {
-      get: self.getClass,
-      configurable: false
-    } );
-    /**
-     *
-     * Returns the super class for the given class. If the
-     * class is not supplied, the class is assumed to be the
-     * object's own class.
-     *
-     * The property "superClass" uses this to return the
-     * object's direct superclass, but getSuperClassOfClass
-     * can be used to determine superclasses higher up
-     * the hierarchy.
-     *
-     * @method getSuperClassOfClass
-     * @param {String} [aClass=currentClass] the class for which you want the super class. If not specified,
-     *                                        the instance's class is used.
-     * @returns {String} the super-class of the specified class.
-     */
-    self.getSuperClassOfClass = function ( aClass ) {
-      var theClass = aClass || self.class;
-      var i = self._classHierarchy.indexOf( theClass );
-      if ( i > -1 ) {
-        return self._classHierarchy[ i - 1 ];
-      } else {
-        return null;
-      }
-    };
-    /**
-     *
-     * The superclass of the instance.
-     * @property superClass
-     * @type String
-     */
-    Object.defineProperty( self, "superClass", {
-      get: self.getSuperClassOfClass,
-      configurable: false
-    } );
-    /**
-     *
-     * _super is an object that stores overridden functions by class and method
-     * name. This is how we get the ability to arbitrarily override any method
-     * already present in the superclass.
-     *
-     * @private
-     * @property _super
-     * @type Object
-     */
-    self._super = {};
-    /**
-     *
-     * Must be called prior to defining the overridden function as this moves
-     * the original function into the _super object. The functionName must
-     * match the name of the method exactly, since there may be a long tree
-     * of code that depends on it.
-     *
-     * @method overrideSuper
-     * @param {String} theClass  the class for which the function override is desired
-     * @param {String} theFunctionName  the name of the function to override
-     * @param {Function} theActualFunction  the actual function (or pointer to function)
-     *
-     */
-    self.overrideSuper = function ( theClass, theFunctionName, theActualFunction ) {
-      var superClass = self.getSuperClassOfClass( theClass );
-      if ( !self._super[ superClass ] ) {
-        self._super[ superClass ] = {};
-      }
-      self._super[ superClass ][ theFunctionName ] = theActualFunction;
-    };
-    /**
-     * @method override
-     *
-     * Overrides an existing function with the same name as `theNewFunction`. Essentially
-     * a call to `overrideSuper (self.class, theNewFunction.name, self[theNewFunction.name])`
-     * followed by the redefinition of the function.
-     *
-     * @example
-     * ```
-     * obj.override ( function initWithOptions ( options )
-     *                { ... } );
-     * ```
-     *
-     * @param {Function} theNewFunction - The function to override. Must have the name of the overriding function.
-     */
-    self.override = function ( theNewFunction ) {
-      var theFunctionName = theNewFunction.name;
-      if ( theFunctionName !== "" ) {
-        self.overrideSuper( self.class, theFunctionName, self[ theFunctionName ] );
-        self[ theFunctionName ] = theNewFunction;
-      }
-    };
-    /**
-     *
-     * Calls a super function with any number of arguments.
-     *
-     * @method super
-     * @param {String} theClass  the current class instance
-     * @param {String} theFunctionName the name of the function to execute
-     * @param {Array} [args]  Any number of parameters to pass to the super method
-     *
-     */
-    self.super = function ( theClass, theFunctionName, args ) {
-      var superClass = self.getSuperClassOfClass( theClass );
-      if ( self._super[ superClass ] ) {
-        if ( self._super[ superClass ][ theFunctionName ] ) {
-          return self._super[ superClass ][ theFunctionName ].apply( self, args );
-        }
-        return null;
-      }
-      return null;
-    };
-    /**
-     * Category support; for an object to get category support for their class,
-     * they must call this method prior to any auto initialization
-     *
-     * @method _constructObjectCategories
-     *
-     */
-    self._constructObjectCategories = function _constructObjectCategories( pri ) {
-      var priority = BaseObject.ON_CREATE_CATEGORY;
-      if ( typeof pri !== "undefined" ) {
-        priority = pri;
-      }
-      if ( typeof BaseObject._objectCategories[ priority ][ self.class ] !== "undefined" ) {
-        BaseObject._objectCategories[ priority ][ self.class ].forEach( function ( categoryConstructor ) {
-          try {
-            categoryConstructor( self );
-          } catch ( e ) {
-            console.log( "Error during category construction: " + e.message );
-          }
-        } );
-      }
-    };
-    /**
-     *
-     * initializes the object
-     *
-     * @method init
-     *
-     */
-    self.init = function () {
-      self._constructObjectCategories( BaseObject.ON_INIT_CATEGORY );
-      return self;
-    };
-    /*
-     *
-     * Objects have some properties that we want all objects to have...
-     *
-     */
-    /**
-     * Stores the values of all the tags associated with the instance.
-     *
-     * @private
-     * @property _tag
-     * @type Object
-     */
-    self._tags = {};
-    /**
-     *
-     * Stores the *listeners* for all the tags associated with the instance.
-     *
-     * @private
-     * @property _tagListeners
-     * @type Object
-     */
-    self._tagListeners = {};
-    /**
-     *
-     * Sets the value for a specific tag associated with the instance. If the
-     * tag does not exist, it is created.
-     *
-     * Any listeners attached to the tag via `addTagListenerForKey` will be
-     * notified of the change. Listeners are passed three parameters:
-     * `self` (the originating instance),
-     * `theKey` (the tag being changed),
-     * and `theValue` (the value of the tag); the tag is *already* changed
-     *
-     * @method setTagForKey
-     * @param {*} theKey  the name of the tag; "__default" is special and
-     *                     refers to the default tag visible via the `tag`
-     *                     property.
-     * @param {*} theValue  the value to assign to the tag.
-     *
-     */
-    self.setTagForKey = function ( theKey, theValue ) {
-      self._tags[ theKey ] = theValue;
-      var notifyListener = function ( theListener, theKey, theValue ) {
-        return function () {
-          theListener( self, theKey, theValue );
-        };
+    BaseObject = function () {
+      var self = this;
+      /**
+       *
+       * We need a way to provide inheritance. Most methods only provide
+       * inheritance across the constructor chain, not across any possible
+       * method. But for our purposes, we need to be able to provide for
+       * overriding any method (such as drawing, touch responses, etc.),
+       * and so we implement inheritance in a different way.
+       *
+       * First, the _classHierarchy, a private property, provides the
+       * inheritance tree. All objects inherit from "BaseObject".
+       *
+       * @private
+       * @property _classHierarchy
+       * @type Array
+       * @default ["BaseObject"]
+       */
+      self._classHierarchy = [ _className ];
+      /**
+       *
+       * Objects are subclassed using this method. The newClass is the
+       * unique class name of the object (and should match the class'
+       * actual name.
+       *
+       * @method subclass
+       * @param {String} newClass - the new unique class of the object
+       */
+      self.subclass = function ( newClass ) {
+        self._classHierarchy.push( newClass );
       };
-      if ( self._tagListeners[ theKey ] ) {
-        for ( var i = 0; i < self._tagListeners[ theKey ].length; i++ ) {
-          setTimeout( notifyListener( self._tagListeners[ theKey ][ i ], theKey, theValue ), 0 );
-        }
-      }
-    };
-    /**
-     *
-     * Returns the value for a given key. If the key does not exist, the
-     * result is undefined.
-     *
-     * @method getTagForKey
-     * @param {*} theKey  the tag; "__default" is special and refers to
-     *                     the default tag visible via the `tag` property.
-     * @returns {*} the value of the key
-     *
-     */
-    self.getTagForKey = function ( theKey ) {
-      return self._tags[ theKey ];
-    };
-    /**
-     *
-     * Add a listener to a specific tag. The listener will receive three
-     * parameters whenever the tag changes (though they are optional). The tag
-     * itself doesn't need to exist in order to assign a listener to it.
-     *
-     * The first parameter is the object for which the tag has been changed.
-     * The second parameter is the tag being changed, and the third parameter
-     * is the value of the tag. **Note:** the value has already changed by
-     * the time the listener is called.
-     *
-     * @method addListenerForKey
-     * @param {*} theKey The tag for which to add a listener; `__default`
-     *                     is special and refers the default tag visible via
-     *                     the `tag` property.
-     * @param {Function} theListener  the function (or reference) to call
-     *                    when the value changes.
-     */
-    self.addTagListenerForKey = function ( theKey, theListener ) {
-      if ( !self._tagListeners[ theKey ] ) {
-        self._tagListeners[ theKey ] = [];
-      }
-      self._tagListeners[ theKey ].push( theListener );
-    };
-    /**
-     *
-     * Removes a listener from being notified when a tag changes.
-     *
-     * @method removeTagListenerForKey
-     * @param {*} theKey  the tag from which to remove the listener; `__default`
-     *                     is special and refers to the default tag visible via
-     *                     the `tag` property.
-     * @param {Function} theListener  the function (or reference) to remove.
-     *
-     */
-    self.removeTagListenerForKey = function ( theKey, theListener ) {
-      if ( !self._tagListeners[ theKey ] ) {
-        self._tagListeners[ theKey ] = [];
-      }
-      var i = self._tagListeners[ theKey ].indexOf( theListener );
-      if ( i > -1 ) {
-        self._tagListeners[ theKey ].splice( i, 1 );
-      }
-    };
-    /**
-     *
-     * Sets the value for the simple tag (`__default`). Any listeners attached
-     * to `__default` will be notified.
-     *
-     * @method setTag
-     * @param {*} theValue  the value for the tag
-     *
-     */
-    self.setTag = function ( theValue ) {
-      self.setTagForKey( "__default", theValue );
-    };
-    /**
-     *
-     * Returns the value for the given tag (`__default`). If the tag has never been
-     * set, the result is undefined.
-     *
-     * @method getTag
-     * @returns {*} the value of the tag.
-     */
-    self.getTag = function () {
-      return self.getTagForKey( "__default" );
-    };
-    /**
-     *
-     * The default tag for the instance. Changing the tag itself (not any sub-properties of an object)
-     * will notify any listeners attached to `__default`.
-     *
-     * @property tag
-     * @type *
-     *
-     */
-    Object.defineProperty( self, "tag", {
-      get: self.getTag,
-      set: self.setTag,
-      configurable: true
-    } );
-    /**
-     *
-     * All objects subject notifications for events
-     *
-     */
-    /**
-     * Supports notification listeners.
-     * @private
-     * @property _notificationListeners
-     * @type Object
-     */
-    self._notificationListeners = {};
-    /**
-     * Adds a listener for a notification. If a notification has not been
-     * registered (via `registerNotification`), an error is logged on the console
-     * and the function returns without attaching the listener. This means if
-     * you aren't watching the console, the function fails nearly silently.
-     *
-     * > By default, no notifications are registered.
-     *
-     * If the first parameter is an object, multiple listeners can be registered:
-     * { "viewWillAppear": handler, "viewDidAppear": handler2}.
-     *
-     * @method addListenerForNotification
-     * @param {String|*} theNotification  the name of the notification
-     * @param {Function} theListener  the function (or reference) to be called when the
-     *                                notification is triggered.
-     * @returns {*} returns self for chaining
-     */
-    self.addListenerForNotification = function ( theNotification, theListener, async ) {
-      if ( typeof theNotification === "object" ) {
-        for ( var n in theNotification ) {
-          if ( theNotification.hasOwnProperty( n ) ) {
-            self.addListenerForNotification( n, theNotification[ n ], theListener ); // async would shift up
-          }
-        }
-        return self;
-      }
-      if ( !self._notificationListeners[ theNotification ] ) {
-        self.registerNotification( theNotification, ( typeof async !== "undefined" ) ? async : false );
-      }
-      self._notificationListeners[ theNotification ].push( theListener );
-      if ( self._traceNotifications ) {
-        console.log( "Adding listener " + theListener + " for notification " + theNotification );
-      }
-      return self;
-    };
-    self.on = self.addListenerForNotification;
-    /**
-     * Removes a listener from a notification. If a notification has not been
-     * registered (via `registerNotification`), an error is logged on the console
-     * and the function returns without attaching the listener. This means if
-     * you aren't watching the console, the function fails nearly silently.
-     *
-     * > By default, no notifications are registered.
-     *
-     * @method removeListenerForNotification
-     * @param {String} theNotification  the notification
-     * @param {Function} theListener  The function or reference to remove
-     */
-    self.removeListenerForNotification = function ( theNotification, theListener ) {
-      if ( typeof theNotification === "object" ) {
-        for ( var n in theNotification ) {
-          if ( theNotification.hasOwnProperty( n ) ) {
-            self.removeListenerForNotification( n, theNotification[ n ] );
-          }
-        }
-        return self;
-      }
-      if ( !self._notificationListeners[ theNotification ] ) {
-        console.log( theNotification + " has not been registered." );
-        return self;
-      }
-      var i = self._notificationListeners[ theNotification ].indexOf( theListener );
-      if ( self._traceNotifications ) {
-        console.log( "Removing listener " + theListener + " (index: " + i + ") from  notification " + theNotification );
-      }
-      if ( i > -1 ) {
-        self._notificationListeners[ theNotification ].splice( i, 1 );
-      }
-      return self;
-    };
-    self.off = self.removeListenerForNotification;
-    /**
-     * Registers a notification so that listeners can then be attached. Notifications
-     * should be registered as soon as possible, otherwise listeners may attempt to
-     * attach to a notification that isn't registered.
-     *
-     * @method registerNotification
-     * @param {String} theNotification  the name of the notification.
-     * @param {Boolean} async  if true, notifications are sent wrapped in setTimeout
-     */
-    self.registerNotification = function ( theNotification, async ) {
-      if ( typeof self._notificationListeners[ theNotification ] === "undefined" ) {
-        self._notificationListeners[ theNotification ] = [];
-        self._notificationListeners[ theNotification ]._useAsyncNotifications = ( typeof async !== "undefined" ? async : true );
-      }
-      if ( self._traceNotifications ) {
-        console.log( "Registering notification " + theNotification );
-      }
-    };
-    self._traceNotifications = false;
-
-    function _doNotification( theNotification, options ) {
-      var args,
-        lastOnly = false;
-      if ( typeof options !== "undefined" ) {
-        args = ( typeof options.args !== "undefined" ) ? options.args : undefined;
-        lastOnly = ( typeof options.lastOnly !== "undefined" ) ? options.lastOnly : false;
-      }
-      if ( !self._notificationListeners[ theNotification ] ) {
-        console.log( theNotification + " has not been registered." );
-        return;
-      }
-      if ( self._traceNotifications ) {
-        console.log( "Notifying " + self._notificationListeners[ theNotification ].length + " listeners for " + theNotification +
-          " ( " + args + " ) " );
-      }
-      var async = self._notificationListeners[ theNotification ]._useAsyncNotifications,
-        notifyListener = function ( theListener, theNotification, args ) {
-          return function () {
-            try {
-              theListener.apply( self, [ self, theNotification, args ].concat( arguments ) );
-            } catch ( err ) {
-              console.log( "WARNING", theNotification, "experienced an uncaught error:", err );
-            }
-          };
-        },
-        handlers = self._notificationListeners[ theNotification ].slice(); // copy!
-      if ( lastOnly && handlers.length > 1 ) {
-        handlers = [ handlers.pop() ];
-      }
-      // attach * handlers
-      var handler, push = false;
-      for ( var listener in self._notificationListeners ) {
-        if ( self._notificationListeners.hasOwnProperty( listener ) ) {
-          handler = self._notificationListeners[ listener ];
-          push = false;
-          if ( listener.indexOf( "*" ) > -1 ) {
-            // candidate listener; see if it matches
-            if ( listener === "*" ) {
-              push = true;
-            } else
-            if ( listener.substr( 0, 1 ) === "*" && listener.substr( 1 ) === theNotification.substr( -1 * ( listener.length - 1 ) ) ) {
-              push = true;
-            } else
-            if ( listener.substr( -1, 1 ) === "*" && listener.substr( 0, listener.length - 1 ) === theNotification.substr( 0,
-              listener.length - 1 ) ) {
-              push = true;
-            } else {
-              var starPos = listener.indexOf( "*" );
-              if ( listener.substr( 0, starPos ) === theNotification.substr( 0, starPos ) && listener.substr( starPos + 1 ) ===
-                theNotification.substr( -1 * ( listener.length - starPos - 1 ) ) ) {
-                push = true;
-              }
-            }
-            if ( push ) {
-              handler.forEach( function ( handler ) {
-                handlers.push( handler );
-              } );
-            }
-          }
-        }
-      }
-      for ( var i = 0, l = handlers.length; i < l; i++ ) {
-        if ( async ) {
-          setTimeout( notifyListener( handlers[ i ], theNotification, args ), 0 );
+      /**
+       *
+       * getClass returns the current class of the object. The
+       * `class` property can be used as well. Note that there
+       * is no `setter` for this property; an object's class
+       * can *not* be changed.
+       *
+       * @method getClass
+       * @returns {String} the class of the instance
+       *
+       */
+      self.getClass = function () {
+        return self._classHierarchy[ self._classHierarchy.length - 1 ];
+      };
+      /**
+       *
+       * The class of the instance. **Read-only**
+       * @property class
+       * @type String
+       * @readOnly
+       */
+      Object.defineProperty( self, "class", {
+        get: self.getClass,
+        configurable: false
+      } );
+      /**
+       *
+       * Returns the super class for the given class. If the
+       * class is not supplied, the class is assumed to be the
+       * object's own class.
+       *
+       * The property "superClass" uses this to return the
+       * object's direct superclass, but getSuperClassOfClass
+       * can be used to determine superclasses higher up
+       * the hierarchy.
+       *
+       * @method getSuperClassOfClass
+       * @param {String} [aClass=currentClass] the class for which you want the super class. If not specified,
+       *                                        the instance's class is used.
+       * @returns {String} the super-class of the specified class.
+       */
+      self.getSuperClassOfClass = function ( aClass ) {
+        var theClass = aClass || self.class;
+        var i = self._classHierarchy.indexOf( theClass );
+        if ( i > -1 ) {
+          return self._classHierarchy[ i - 1 ];
         } else {
-          ( notifyListener( handlers[ i ], theNotification, args ) )();
+          return null;
         }
-      }
-    }
-    /**
-     * Notifies all listeners of a particular notification that the notification
-     * has been triggered. If the notification hasn't been registered via
-     * `registerNotification`, an error is logged to the console, but the function
-     * itself returns silently, so be sure to watch the console for errors.
-     *
-     * @method notify
-     * @param {String} theNotification  the notification to trigger
-     * @param {*} [args]  Arguments to pass to the listener; usually an array
-     */
-    self.notify = function ( theNotification, args ) {
-      _doNotification( theNotification, {
-        args: args,
-        lastOnly: false
+      };
+      /**
+       *
+       * The superclass of the instance.
+       * @property superClass
+       * @type String
+       */
+      Object.defineProperty( self, "superClass", {
+        get: self.getSuperClassOfClass,
+        configurable: false
       } );
-    };
-    self.emit = self.notify;
-    /**
-     * @method notifyMostRecent
-     *
-     * Notifies only the most recent listener of a particular notification that
-     * the notification has been triggered. If the notification hasn't been registered
-     * via `registerNotification`, an error is logged to the console, but the function
-     * itself returns silently.
-     *
-     * @param {String} theNotification  the specific notification to trigger
-     * @param {*} [args]  Arguments to pass to the listener; usually an array
-     */
-    self.notifyMostRecent = function ( theNotification, args ) {
-      _doNotification( theNotification, {
-        args: args,
-        lastOnly: true
+      /**
+       *
+       * _super is an object that stores overridden functions by class and method
+       * name. This is how we get the ability to arbitrarily override any method
+       * already present in the superclass.
+       *
+       * @private
+       * @property _super
+       * @type Object
+       */
+      self._super = {};
+      /**
+       *
+       * Must be called prior to defining the overridden function as this moves
+       * the original function into the _super object. The functionName must
+       * match the name of the method exactly, since there may be a long tree
+       * of code that depends on it.
+       *
+       * @method overrideSuper
+       * @param {String} theClass  the class for which the function override is desired
+       * @param {String} theFunctionName  the name of the function to override
+       * @param {Function} theActualFunction  the actual function (or pointer to function)
+       *
+       */
+      self.overrideSuper = function ( theClass, theFunctionName, theActualFunction ) {
+        var superClass = self.getSuperClassOfClass( theClass );
+        if ( !self._super[ superClass ] ) {
+          self._super[ superClass ] = {};
+        }
+        self._super[ superClass ][ theFunctionName ] = theActualFunction;
+      };
+      /**
+       * @method override
+       *
+       * Overrides an existing function with the same name as `theNewFunction`. Essentially
+       * a call to `overrideSuper (self.class, theNewFunction.name, self[theNewFunction.name])`
+       * followed by the redefinition of the function.
+       *
+       * @example
+       * ```
+       * obj.override ( function initWithOptions ( options )
+       *                { ... } );
+       * ```
+       *
+       * @param {Function} theNewFunction - The function to override. Must have the name of the overriding function.
+       */
+      self.override = function ( theNewFunction ) {
+        var theFunctionName = theNewFunction.name;
+        if ( theFunctionName !== "" ) {
+          self.overrideSuper( self.class, theFunctionName, self[ theFunctionName ] );
+          self[ theFunctionName ] = theNewFunction;
+        }
+      };
+      /**
+       *
+       * Calls a super function with any number of arguments.
+       *
+       * @method super
+       * @param {String} theClass  the current class instance
+       * @param {String} theFunctionName the name of the function to execute
+       * @param {Array} [args]  Any number of parameters to pass to the super method
+       *
+       */
+      self.super = function ( theClass, theFunctionName, args ) {
+        var superClass = self.getSuperClassOfClass( theClass );
+        if ( self._super[ superClass ] ) {
+          if ( self._super[ superClass ][ theFunctionName ] ) {
+            return self._super[ superClass ][ theFunctionName ].apply( self, args );
+          }
+          return null;
+        }
+        return null;
+      };
+      /**
+       * Category support; for an object to get category support for their class,
+       * they must call this method prior to any auto initialization
+       *
+       * @method _constructObjectCategories
+       *
+       */
+      self._constructObjectCategories = function _constructObjectCategories( pri ) {
+        var priority = BaseObject.ON_CREATE_CATEGORY;
+        if ( typeof pri !== "undefined" ) {
+          priority = pri;
+        }
+        if ( typeof BaseObject._objectCategories[ priority ][ self.class ] !== "undefined" ) {
+          BaseObject._objectCategories[ priority ][ self.class ].forEach( function ( categoryConstructor ) {
+            try {
+              categoryConstructor( self );
+            } catch ( e ) {
+              console.log( "Error during category construction: " + e.message );
+            }
+          } );
+        }
+      };
+      /**
+       *
+       * initializes the object
+       *
+       * @method init
+       *
+       */
+      self.init = function () {
+        self._constructObjectCategories( BaseObject.ON_INIT_CATEGORY );
+        return self;
+      };
+      /*
+       *
+       * Objects have some properties that we want all objects to have...
+       *
+       */
+      /**
+       * Stores the values of all the tags associated with the instance.
+       *
+       * @private
+       * @property _tag
+       * @type Object
+       */
+      self._tags = {};
+      /**
+       *
+       * Stores the *listeners* for all the tags associated with the instance.
+       *
+       * @private
+       * @property _tagListeners
+       * @type Object
+       */
+      self._tagListeners = {};
+      /**
+       *
+       * Sets the value for a specific tag associated with the instance. If the
+       * tag does not exist, it is created.
+       *
+       * Any listeners attached to the tag via `addTagListenerForKey` will be
+       * notified of the change. Listeners are passed three parameters:
+       * `self` (the originating instance),
+       * `theKey` (the tag being changed),
+       * and `theValue` (the value of the tag); the tag is *already* changed
+       *
+       * @method setTagForKey
+       * @param {*} theKey  the name of the tag; "__default" is special and
+       *                     refers to the default tag visible via the `tag`
+       *                     property.
+       * @param {*} theValue  the value to assign to the tag.
+       *
+       */
+      self.setTagForKey = function ( theKey, theValue ) {
+        self._tags[ theKey ] = theValue;
+        var notifyListener = function ( theListener, theKey, theValue ) {
+          return function () {
+            theListener( self, theKey, theValue );
+          };
+        };
+        if ( self._tagListeners[ theKey ] ) {
+          for ( var i = 0; i < self._tagListeners[ theKey ].length; i++ ) {
+            setTimeout( notifyListener( self._tagListeners[ theKey ][ i ], theKey, theValue ), 0 );
+          }
+        }
+      };
+      /**
+       *
+       * Returns the value for a given key. If the key does not exist, the
+       * result is undefined.
+       *
+       * @method getTagForKey
+       * @param {*} theKey  the tag; "__default" is special and refers to
+       *                     the default tag visible via the `tag` property.
+       * @returns {*} the value of the key
+       *
+       */
+      self.getTagForKey = function ( theKey ) {
+        return self._tags[ theKey ];
+      };
+      /**
+       *
+       * Add a listener to a specific tag. The listener will receive three
+       * parameters whenever the tag changes (though they are optional). The tag
+       * itself doesn't need to exist in order to assign a listener to it.
+       *
+       * The first parameter is the object for which the tag has been changed.
+       * The second parameter is the tag being changed, and the third parameter
+       * is the value of the tag. **Note:** the value has already changed by
+       * the time the listener is called.
+       *
+       * @method addListenerForKey
+       * @param {*} theKey The tag for which to add a listener; `__default`
+       *                     is special and refers the default tag visible via
+       *                     the `tag` property.
+       * @param {Function} theListener  the function (or reference) to call
+       *                    when the value changes.
+       */
+      self.addTagListenerForKey = function ( theKey, theListener ) {
+        if ( !self._tagListeners[ theKey ] ) {
+          self._tagListeners[ theKey ] = [];
+        }
+        self._tagListeners[ theKey ].push( theListener );
+      };
+      /**
+       *
+       * Removes a listener from being notified when a tag changes.
+       *
+       * @method removeTagListenerForKey
+       * @param {*} theKey  the tag from which to remove the listener; `__default`
+       *                     is special and refers to the default tag visible via
+       *                     the `tag` property.
+       * @param {Function} theListener  the function (or reference) to remove.
+       *
+       */
+      self.removeTagListenerForKey = function ( theKey, theListener ) {
+        if ( !self._tagListeners[ theKey ] ) {
+          self._tagListeners[ theKey ] = [];
+        }
+        var i = self._tagListeners[ theKey ].indexOf( theListener );
+        if ( i > -1 ) {
+          self._tagListeners[ theKey ].splice( i, 1 );
+        }
+      };
+      /**
+       *
+       * Sets the value for the simple tag (`__default`). Any listeners attached
+       * to `__default` will be notified.
+       *
+       * @method setTag
+       * @param {*} theValue  the value for the tag
+       *
+       */
+      self.setTag = function ( theValue ) {
+        self.setTagForKey( "__default", theValue );
+      };
+      /**
+       *
+       * Returns the value for the given tag (`__default`). If the tag has never been
+       * set, the result is undefined.
+       *
+       * @method getTag
+       * @returns {*} the value of the tag.
+       */
+      self.getTag = function () {
+        return self.getTagForKey( "__default" );
+      };
+      /**
+       *
+       * The default tag for the instance. Changing the tag itself (not any sub-properties of an object)
+       * will notify any listeners attached to `__default`.
+       *
+       * @property tag
+       * @type *
+       *
+       */
+      Object.defineProperty( self, "tag", {
+        get: self.getTag,
+        set: self.setTag,
+        configurable: true
       } );
-    };
-    self.emitToLast = self.notifyMostRecent;
-    /**
-     *
-     * Defines a property on the object. Essentially shorthand for `Object.defineProperty`. An
-     * internal `_propertyName` variable is declared which getters and setters can access.
-     *
-     * The property can be read-write, read-only, or write-only depending on the values in
-     * `propertyOptions.read` and `propertyOptions.write`. The default is read-write.
-     *
-     * Getters and setters can be provided in one of two ways: they can be automatically
-     * discovered by following a specific naming pattern (`getPropertyName`) if
-     * `propertyOptions.selfDiscover` is `true` (the default). They can also be explicitly
-     * defined by setting `propertyOptions.get` and `propertyOptions.set`.
-     *
-     * A property does not necessarily need a getter or setter in order to be readable or
-     * writable. A basic pattern of setting or returning the private variable is implemented
-     * for any property without specific getters and setters but who have indicate that the
-     * property is readable or writable.
-     *
-     * @example
-     * ```
-     * self.defineProperty ( "someProperty" );        // someProperty, read-write
-     * self.defineProperty ( "anotherProperty", { default: 2 } );
-     * self.setWidth = function ( newWidth, oldWidth )
-     * {
-     *    self._width = newWidth;
-     *    self.element.style.width = newWidth + "px";
-     * }
-     * self.defineProperty ( "width" );   // automatically discovers setWidth as the setter.
-     * ```
-     *
-     * @method defineProperty
-     * @param {String} propertyName  the name of the property; use camelCase
-     * @param {Object} propertyOptions  the various options as described above.
-     */
-    self.defineProperty = function ( propertyName, propertyOptions ) {
-      var options = {
-        default: undefined,
-        read: true,
-        write: true,
-        get: null,
-        set: null,
-        selfDiscover: true,
-        prefix: "",
-        configurable: true,
-        backingVariable: true
-      };
-      // private properties are handled differently -- we want to be able to search for
-      // _getPrivateProperty, not get_privateProperty
-      if ( propertyName.substr( 0, 1 ) === "_" ) {
-        options.prefix = "_";
-      }
-      // allow other potential prefixes
-      if ( options.prefix !== "" ) {
-        if ( propertyName.substr( 0, 1 ) === options.prefix ) {
-          propertyName = propertyName.substr( 1 );
-        }
-      }
-      // merge our default options with the user options
-      for ( var property in propertyOptions ) {
-        if ( propertyOptions.hasOwnProperty( property ) ) {
-          options[ property ] = propertyOptions[ property ];
-        }
-      }
-      // Capital Camel Case our function names
-      var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
-      var getFnName = options.prefix + "get" + fnName,
-        setFnName = options.prefix + "set" + fnName,
-        _propertyName = options.prefix + "_" + propertyName,
-        _y_getFnName = options.prefix + "_y_get" + fnName,
-        _y_setFnName = options.prefix + "_y_set" + fnName,
-        _y__getFnName = options.prefix + "_y__get" + fnName,
-        _y__setFnName = options.prefix + "_y__set" + fnName;
-      // if get/set are not specified, we'll attempt to self-discover them
-      if ( options.get === null && options.selfDiscover ) {
-        if ( typeof self[ getFnName ] === "function" ) {
-          options.get = self[ getFnName ];
-        }
-      }
-      if ( options.set === null && options.selfDiscover ) {
-        if ( typeof self[ setFnName ] === "function" ) {
-          options.set = self[ setFnName ];
-        }
-      }
-      // create the private variable
-      if ( options.backingVariable ) {
-        self[ _propertyName ] = options.default;
-      }
-      if ( !options.read && !options.write ) {
-        return; // not read/write, so nothing more.
-      }
-      var defPropOptions = {
-        configurable: options.configurable
-      };
-      if ( options.read ) {
-        self[ _y__getFnName ] = options.get;
-        self[ _y_getFnName ] = function () {
-          // if there is a getter, use it
-          if ( typeof self[ _y__getFnName ] === "function" ) {
-            return self[ _y__getFnName ]( self[ _propertyName ] );
-          }
-          // otherwise return the private variable
-          else {
-            return self[ _propertyName ];
-          }
-        };
-        if ( typeof self[ getFnName ] === "undefined" ) {
-          self[ getFnName ] = self[ _y_getFnName ];
-        }
-        defPropOptions.get = self[ _y_getFnName ];
-      }
-      if ( options.write ) {
-        self[ _y__setFnName ] = options.set;
-        self[ _y_setFnName ] = function ( v ) {
-          var oldV = self[ _propertyName ];
-          if ( typeof self[ _y__setFnName ] === "function" ) {
-            self[ _y__setFnName ]( v, oldV );
-          } else {
-            self[ _propertyName ] = v;
-          }
-          if ( oldV !== v ) {
-            self.notifyDataBindingElementsForKeyPath( propertyName );
-          }
-        };
-        if ( typeof self[ setFnName ] === "undefined" ) {
-          self[ setFnName ] = self[ _y_setFnName ];
-        }
-        defPropOptions.set = self[ _y_setFnName ];
-      }
-      Object.defineProperty( self, propertyName, defPropOptions );
-    };
-    /**
-     * Defines a custom property, which also implements a form of KVO.
-     *
-     * Any options not specified are defaulted in. The default is for a property
-     * to be observable (which fires the default propertyNameChanged notice),
-     * read/write with no custom get/set/validate routines, and no default.
-     *
-     * Observable Properties can have getters, setters, and validators. They can be
-     * automatically discovered, assuming they follow the pattern `getObservablePropertyName`,
-     * `setObservablePropertyName`, and `validateObservablePropertyName`. They can also be
-     * specified explicitly by setting `propertyOptions.get`, `set`, and `validate`.
-     *
-     * Properties can be read-write, read-only, or write-only. This is controlled by
-     * `propertyOptions.read` and `write`. The default is read-write.
-     *
-     * Properties can have a default value provided as well, specified by setting
-     * `propertyOptions.default`.
-     *
-     * Finally, a notification of the form `propertyNameChanged` is fired if
-     * the value changes. If the value does *not* change, the notification is not fired.
-     * The name of the notification is controlled by setting `propertyOptions.notification`.
-     * If you need a notification to fire when a property is simply set (regardless of the
-     * change in value), set `propertyOptions.notifyAlways` to `true`.
-     *
-     * KVO getters, setters, and validators follow very different patterns than normal
-     * property getters and setters.
-     *
-     * ```
-     * self.getObservableWidth = function ( returnValue ) { return returnValue; };
-     * self.setObservableWidth = function ( newValue, oldValue ) { return newValue; };
-     * self.validateObservableWidth = function ( testValue ) { return testValue!==10; };
-     * self.defineObservableProperty ( "width" );
-     * ```
-     *
-     * @method defineObservableProperty
-     * @param {String} propertyName The specific property to define
-     * @param {Object} propertyOptions the options for this property.
-     *
-     */
-    self.defineObservableProperty = function ( propertyName, propertyOptions ) {
-      // set the default options and copy the specified options
-      var options = {
-        observable: true,
-        notification: propertyName + "Changed",
-        default: undefined,
-        read: true,
-        write: true,
-        get: null,
-        validate: null,
-        set: null,
-        selfDiscover: true,
-        notifyAlways: false,
-        prefix: "",
-        configurable: true
-      };
-      // private properties are handled differently -- we want to be able to search for
-      // _getPrivateProperty, not get_privateProperty
-      if ( propertyName.substr( 0, 1 ) === "_" ) {
-        options.prefix = "_";
-      }
-      // allow other potential prefixes
-      if ( options.prefix !== "" ) {
-        if ( propertyName.substr( 0, 1 ) === options.prefix ) {
-          propertyName = propertyName.substr( 1 );
-        }
-      }
-      var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
-      var getObservableFnName = options.prefix + "getObservable" + fnName,
-        setObservableFnName = options.prefix + "setObservable" + fnName,
-        validateObservableFnName = options.prefix + "validateObservable" + fnName,
-        _y_propertyName = options.prefix + "_y_" + propertyName,
-        _y_getFnName = options.prefix + "_y_get" + fnName,
-        _y_setFnName = options.prefix + "_y_set" + fnName,
-        _y_validateFnName = options.prefix + "_y_validate" + fnName,
-        _y__getFnName = options.prefix + "_y__get" + fnName,
-        _y__setFnName = options.prefix + "_y__set" + fnName,
-        _y__validateFnName = options.prefix + "_y__validate" + fnName;
-      for ( var property in propertyOptions ) {
-        if ( propertyOptions.hasOwnProperty( property ) ) {
-          options[ property ] = propertyOptions[ property ];
-        }
-      }
-      // if get/set are not specified, we'll attempt to self-discover them
-      if ( options.get === null && options.selfDiscover ) {
-        if ( typeof self[ getObservableFnName ] === "function" ) {
-          options.get = self[ getObservableFnName ];
-        }
-      }
-      if ( options.set === null && options.selfDiscover ) {
-        if ( typeof self[ setObservableFnName ] === "function" ) {
-          options.set = self[ setObservableFnName ];
-        }
-      }
-      if ( options.validate === null && options.selfDiscover ) {
-        if ( typeof self[ validateObservableFnName ] === "function" ) {
-          options.validate = self[ validateObservableFnName ];
-        }
-      }
-      // if the property is observable, register its notification
-      if ( options.observable ) {
-        self.registerNotification( options.notification );
-      }
-      // create the private variable; __ here to avoid self-defined _
-      self[ _y_propertyName ] = options.default;
-      if ( !options.read && !options.write ) {
-        return; // not read/write, so nothing more.
-      }
-      var defPropOptions = {
-        configurable: true
-      };
-      if ( options.read ) {
-        self[ _y__getFnName ] = options.get;
-        self[ _y_getFnName ] = function () {
-          // if there is a getter, use it
-          if ( typeof self[ _y__getFnName ] === "function" ) {
-            return self[ _y__getFnName ]( self[ _y_propertyName ] );
-          }
-          // otherwise return the private variable
-          else {
-            return self[ _y_propertyName ];
-          }
-        };
-        defPropOptions.get = self[ _y_getFnName ];
-      }
-      if ( options.write ) {
-        self[ _y__validateFnName ] = options.validate;
-        self[ _y__setFnName ] = options.set;
-        self[ _y_setFnName ] = function ( v ) {
-          var oldV = self[ _y_propertyName ],
-            valid = true;
-          if ( typeof self[ _y__validateFnName ] === "function" ) {
-            valid = self[ _y__validateFnName ]( v );
-          }
-          if ( valid ) {
-            if ( typeof self[ _y__setFnName ] === "function" ) {
-              self[ _y_propertyName ] = self[ _y__setFnName ]( v, oldV );
-            } else {
-              self[ _y_propertyName ] = v;
+      /**
+       *
+       * All objects subject notifications for events
+       *
+       */
+      /**
+       * Supports notification listeners.
+       * @private
+       * @property _notificationListeners
+       * @type Object
+       */
+      self._notificationListeners = {};
+      /**
+       * Adds a listener for a notification. If a notification has not been
+       * registered (via `registerNotification`), an error is logged on the console
+       * and the function returns without attaching the listener. This means if
+       * you aren't watching the console, the function fails nearly silently.
+       *
+       * > By default, no notifications are registered.
+       *
+       * If the first parameter is an object, multiple listeners can be registered:
+       * { "viewWillAppear": handler, "viewDidAppear": handler2}.
+       *
+       * @method addListenerForNotification
+       * @alias on
+       * @param {String|*} theNotification  the name of the notification
+       * @param {Function} theListener  the function (or reference) to be called when the
+       *                                notification is triggered.
+       * @returns {*} returns self for chaining
+       */
+      self.addListenerForNotification = function ( theNotification, theListener, async ) {
+        if ( typeof theNotification === "object" ) {
+          for ( var n in theNotification ) {
+            if ( theNotification.hasOwnProperty( n ) ) {
+              self.addListenerForNotification( n, theNotification[ n ], theListener ); // async would shift up
             }
-            if ( oldV !== v ) {
-              self.notifyDataBindingElementsForKeyPath( propertyName );
+          }
+          return self;
+        }
+        if ( !self._notificationListeners[ theNotification ] ) {
+          self.registerNotification( theNotification, ( typeof async !== "undefined" ) ? async : false );
+        }
+        self._notificationListeners[ theNotification ].push( theListener );
+        if ( self._traceNotifications ) {
+          console.log( "Adding listener " + theListener + " for notification " + theNotification );
+        }
+        return self;
+      };
+      self.on = self.addListenerForNotification;
+      /**
+       * Removes a listener from a notification. If a notification has not been
+       * registered (via `registerNotification`), an error is logged on the console
+       * and the function returns without attaching the listener. This means if
+       * you aren't watching the console, the function fails nearly silently.
+       *
+       * > By default, no notifications are registered.
+       *
+       * @method removeListenerForNotification
+       * @alias off
+       * @param {String} theNotification  the notification
+       * @param {Function} theListener  The function or reference to remove
+       */
+      self.removeListenerForNotification = function ( theNotification, theListener ) {
+        if ( typeof theNotification === "object" ) {
+          for ( var n in theNotification ) {
+            if ( theNotification.hasOwnProperty( n ) ) {
+              self.removeListenerForNotification( n, theNotification[ n ] );
             }
-            if ( v !== oldV || options.notifyAlways ) {
-              if ( options.observable ) {
-                self.notify( options.notification, {
-                  "new": v,
-                  "old": oldV
+          }
+          return self;
+        }
+        if ( !self._notificationListeners[ theNotification ] ) {
+          console.log( theNotification + " has not been registered." );
+          return self;
+        }
+        var i = self._notificationListeners[ theNotification ].indexOf( theListener );
+        if ( self._traceNotifications ) {
+          console.log( "Removing listener " + theListener + " (index: " + i + ") from  notification " + theNotification );
+        }
+        if ( i > -1 ) {
+          self._notificationListeners[ theNotification ].splice( i, 1 );
+        }
+        return self;
+      };
+      self.off = self.removeListenerForNotification;
+      /**
+       * Registers a notification so that listeners can then be attached. Notifications
+       * should be registered as soon as possible, otherwise listeners may attempt to
+       * attach to a notification that isn't registered.
+       *
+       * @method registerNotification
+       * @param {String} theNotification  the name of the notification.
+       * @param {Boolean} async  if true, notifications are sent wrapped in setTimeout
+       */
+      self.registerNotification = function ( theNotification, async ) {
+        if ( typeof self._notificationListeners[ theNotification ] === "undefined" ) {
+          self._notificationListeners[ theNotification ] = [];
+          self._notificationListeners[ theNotification ]._useAsyncNotifications = ( typeof async !== "undefined" ? async : true );
+        }
+        if ( self._traceNotifications ) {
+          console.log( "Registering notification " + theNotification );
+        }
+      };
+      self._traceNotifications = false;
+
+      function _doNotification( theNotification, options ) {
+        var args,
+          lastOnly = false;
+        if ( typeof options !== "undefined" ) {
+          args = ( typeof options.args !== "undefined" ) ? options.args : undefined;
+          lastOnly = ( typeof options.lastOnly !== "undefined" ) ? options.lastOnly : false;
+        }
+        if ( !self._notificationListeners[ theNotification ] ) {
+          console.log( theNotification + " has not been registered." );
+          return;
+        }
+        if ( self._traceNotifications ) {
+          console.log( "Notifying " + self._notificationListeners[ theNotification ].length + " listeners for " + theNotification +
+            " ( " + args + " ) " );
+        }
+        var async = self._notificationListeners[ theNotification ]._useAsyncNotifications,
+          notifyListener = function ( theListener, theNotification, args ) {
+            return function () {
+              try {
+                theListener.apply( self, [ self, theNotification, args ].concat( arguments ) );
+              } catch ( err ) {
+                console.log( "WARNING", theNotification, "experienced an uncaught error:", err );
+              }
+            };
+          },
+          handlers = self._notificationListeners[ theNotification ].slice(); // copy!
+        if ( lastOnly && handlers.length > 1 ) {
+          handlers = [ handlers.pop() ];
+        }
+        // attach * handlers
+        var handler, push = false;
+        for ( var listener in self._notificationListeners ) {
+          if ( self._notificationListeners.hasOwnProperty( listener ) ) {
+            handler = self._notificationListeners[ listener ];
+            push = false;
+            if ( listener.indexOf( "*" ) > -1 ) {
+              // candidate listener; see if it matches
+              if ( listener === "*" ) {
+                push = true;
+              } else
+              if ( listener.substr( 0, 1 ) === "*" && listener.substr( 1 ) === theNotification.substr( -1 * ( listener.length - 1 ) ) ) {
+                push = true;
+              } else
+              if ( listener.substr( -1, 1 ) === "*" && listener.substr( 0, listener.length - 1 ) === theNotification.substr( 0,
+                listener.length - 1 ) ) {
+                push = true;
+              } else {
+                var starPos = listener.indexOf( "*" );
+                if ( listener.substr( 0, starPos ) === theNotification.substr( 0, starPos ) && listener.substr( starPos + 1 ) ===
+                  theNotification.substr( -1 * ( listener.length - starPos - 1 ) ) ) {
+                  push = true;
+                }
+              }
+              if ( push ) {
+                handler.forEach( function ( handler ) {
+                  handlers.push( handler );
                 } );
               }
             }
           }
-        };
-        defPropOptions.set = self[ _y_setFnName ];
-      }
-      Object.defineProperty( self, propertyName, defPropOptions );
-    };
-    /*
-     * data binding
-     */
-    self._dataBindings = [];
-    /**
-     * dataBindOn - Configure a data binding to an HTML element (el) for
-     * a particular property (keyPath). Returns self for chaining.
-     *
-     * @param  {Node}   el      the DOM element to bind to; must support the change event
-     * @param  {string} keyPath the property to observe (shallow only; doesn't follow dots.)
-     * @return {*}              self; chain away!
-     */
-    self.dataBindOn = function dataBindOn( el, keyPath ) {
-      if ( self._dataBindings[ keyPath ] === undefined ) {
-        self._dataBindings[ keyPath ] = [];
-      }
-      self._dataBindings[ keyPath ].push( el );
-      el.setAttribute( "data-y-keyPath", keyPath );
-      el.addEventListener( "change", self.updatePropertyForKeyPath, false );
-      return self;
-    };
-    /**
-     * dataBindOff - Turn off data binding for a particular element and
-     * keypath.
-     *
-     * @param  {Node}   el      element to remove data binding from
-     * @param  {string} keyPath keypath to stop observing
-     * @return {*}              self; chain away!
-     */
-    self.dataBindOff = function dataBindOff( el, keyPath ) {
-      var keyPathEls = self._dataBindings[ keyPath ],
-        elPos;
-      if ( keyPathEls !== undefined ) {
-        elPos = keyPathEls.indexOf( el );
-        if ( elPos > -1 ) {
-          keyPathEls.splice( elPos, 1 );
-          el.removeAttribute( "data-y-keyPath" );
-          el.removeEventListener( "change", self.updatePropertyForKeyPath );
         }
-      }
-      return self;
-    };
-    /**
-     * dataBindAllOffForKeyPath - Remove all data bindings for a given property
-     *
-     * @param  {String} keyPath keypath to stop observing
-     * @return {*}              self; chain away
-     */
-    self.dataBindAllOffForKeyPath = function dataBindAllOffForKeyPath( keyPath ) {
-      var keyPathEls = self._dataBindings[ keyPath ];
-      if ( keyPathEls !== undefined ) {
-        keyPathEls.forEach( function ( el ) {
-          el.removeAttribute( "data-y-keyPath" );
-          el.removeEventListener( "change", self.updatePropertyForKeyPath );
-        } );
-        keyPathEls = [];
-      }
-      return self;
-    };
-    /**
-     * dataBindAllOff - Remove all data bindings for this object
-     *
-     * @return {*}  self
-     */
-    self.dataBindAllOff = function dataBindAllOff() {
-      for ( var keyPath in self._dataBindings ) {
-        if ( self._dataBindings.hasOwnProperty( keyPath ) ) {
-          self.dataBindAllOffForKeyPath( keyPath );
-        }
-      }
-    };
-    /**
-     * updatePropertyForKeyPath - Update a property on this object based on the
-     * keyPath and value. If called as an event handler, `this` refers to the
-     * triggering element, and keyPath is on `data-y-keyPath` attribute.
-     *
-     * @param  {String} keyPath property to set
-     * @param  {*} value        value to set
-     */
-    self.updatePropertyForKeyPath = function updatePropertyForKeyPath( keyPath, value ) {
-      try {
-        if ( this !== self && this instanceof Node ) {
-          // we've been called from an event handler
-          self[ this.getAttribute( "data-y-keyPath" ) ] = this.value;
-          return;
-        }
-        self[ keyPath ] = value;
-      } catch ( err ) {
-        console.log( "Failed to update", keyPath, "with", value );
-      }
-    };
-    // called when a field changes:
-    /**
-     * notifyDataBindingElementsForKeyPath - notify all elements attached to a
-     * key path that the source value has changed. Called by all properties created
-     * with defineProperty and defineObservableProperty.
-     *
-     * @param  {String} keyPath keypath of elements to notify
-     */
-    self.notifyDataBindingElementsForKeyPath = function notifyDataBindingElementsForKeyPath( keyPath ) {
-      try {
-        var keyPathEls = self._dataBindings[ keyPath ],
-          el;
-        if ( keyPathEls !== undefined ) {
-          for ( var i = 0, l = keyPathEls.length; i < l; i++ ) {
-            el = keyPathEls[ i ];
-            if ( typeof el.value !== "undefined" ) {
-              el.value = self[ keyPath ];
-            } else
-            if ( typeof el.textContent !== "undefined" ) {
-              el.textContent = self[ keyPath ];
-            } else
-            if ( typeof el.innerText !== "undefined" ) {
-              el.innerText = self[ keyPath ];
-            } else {
-              console.log( "Data bind failure; browser doesn't understand value, textContent, or innerText." );
-            }
+        for ( var i = 0, l = handlers.length; i < l; i++ ) {
+          if ( async ) {
+            setTimeout( notifyListener( handlers[ i ], theNotification, args ), 0 );
+          } else {
+            ( notifyListener( handlers[ i ], theNotification, args ) )();
           }
         }
-      } catch ( err ) {
-        console.log( "Failed to update elements for ", keyPath );
       }
-    };
-    /**
-     * Auto initializes the object based on the arguments passed to the object constructor. Any object
-     * that desires to be auto-initializable must perform the following prior to returning themselves:
-     *
-     * ```
-     * self._autoInit.apply (self, arguments);
-     * ```
-     *
-     * Each init must call the super of init, and each init must return self.
-     *
-     * If the first parameter to _autoInit (and thus to the object constructor) is an object,
-     * initWithOptions is called if it exists. Otherwise init is called with all the arguments.
-     *
-     * If NO arguments are passed to the constructor (and thus to this method), then no
-     * auto initialization is performed. If one desires an auto-init on an object that requires
-     * no parameters, pass a dummy parameter to ensure init will be called
-     *
-     * @returns {*}
-     * @private
-     */
-    self._autoInit = function () {
-      if ( arguments.length > 0 ) {
-        if ( arguments.length === 1 ) {
-          // chances are this is an initWithOptions, but make sure the incoming parameter is an object
-          if ( typeof arguments[ 0 ] === "object" ) {
-            if ( typeof self.initWithOptions !== "undefined" ) {
-              return self.initWithOptions.apply( self, arguments );
+      /**
+       * Notifies all listeners of a particular notification that the notification
+       * has been triggered. If the notification hasn't been registered via
+       * `registerNotification`, an error is logged to the console, but the function
+       * itself returns silently, so be sure to watch the console for errors.
+       *
+       * @method notify
+       * @alias emit
+       * @param {String} theNotification  the notification to trigger
+       * @param {*} [args]  Arguments to pass to the listener; usually an array
+       */
+      self.notify = function ( theNotification, args ) {
+        _doNotification( theNotification, {
+          args: args,
+          lastOnly: false
+        } );
+      };
+      self.emit = self.notify;
+      /**
+       *
+       * Notifies only the most recent listener of a particular notification that
+       * the notification has been triggered. If the notification hasn't been registered
+       * via `registerNotification`, an error is logged to the console, but the function
+       * itself returns silently.
+       *
+       * @method notifyMostRecent
+       * @alias emitToLast
+       * @param {String} theNotification  the specific notification to trigger
+       * @param {*} [args]  Arguments to pass to the listener; usually an array
+       */
+      self.notifyMostRecent = function ( theNotification, args ) {
+        _doNotification( theNotification, {
+          args: args,
+          lastOnly: true
+        } );
+      };
+      self.emitToLast = self.notifyMostRecent;
+      /**
+       *
+       * Defines a property on the object. Essentially shorthand for `Object.defineProperty`. An
+       * internal `_propertyName` variable is declared which getters and setters can access.
+       *
+       * The property can be read-write, read-only, or write-only depending on the values in
+       * `propertyOptions.read` and `propertyOptions.write`. The default is read-write.
+       *
+       * Getters and setters can be provided in one of two ways: they can be automatically
+       * discovered by following a specific naming pattern (`getPropertyName`) if
+       * `propertyOptions.selfDiscover` is `true` (the default). They can also be explicitly
+       * defined by setting `propertyOptions.get` and `propertyOptions.set`.
+       *
+       * A property does not necessarily need a getter or setter in order to be readable or
+       * writable. A basic pattern of setting or returning the private variable is implemented
+       * for any property without specific getters and setters but who have indicate that the
+       * property is readable or writable.
+       *
+       * @example
+       * ```
+       * self.defineProperty ( "someProperty" );        // someProperty, read-write
+       * self.defineProperty ( "anotherProperty", { default: 2 } );
+       * self.setWidth = function ( newWidth, oldWidth )
+       * {
+       *    self._width = newWidth;
+       *    self.element.style.width = newWidth + "px";
+       * }
+       * self.defineProperty ( "width" );   // automatically discovers setWidth as the setter.
+       * ```
+       *
+       * @method defineProperty
+       * @param {String} propertyName  the name of the property; use camelCase
+       * @param {Object} propertyOptions  the various options as described above.
+       */
+      self.defineProperty = function ( propertyName, propertyOptions ) {
+        var options = {
+          default: undefined,
+          read: true,
+          write: true,
+          get: null,
+          set: null,
+          selfDiscover: true,
+          prefix: "",
+          configurable: true,
+          backingVariable: true
+        };
+        // private properties are handled differently -- we want to be able to search for
+        // _getPrivateProperty, not get_privateProperty
+        if ( propertyName.substr( 0, 1 ) === "_" ) {
+          options.prefix = "_";
+        }
+        // allow other potential prefixes
+        if ( options.prefix !== "" ) {
+          if ( propertyName.substr( 0, 1 ) === options.prefix ) {
+            propertyName = propertyName.substr( 1 );
+          }
+        }
+        // merge our default options with the user options
+        for ( var property in propertyOptions ) {
+          if ( propertyOptions.hasOwnProperty( property ) ) {
+            options[ property ] = propertyOptions[ property ];
+          }
+        }
+        // Capital Camel Case our function names
+        var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
+        var getFnName = options.prefix + "get" + fnName,
+          setFnName = options.prefix + "set" + fnName,
+          _propertyName = options.prefix + "_" + propertyName,
+          _y_getFnName = options.prefix + "_y_get" + fnName,
+          _y_setFnName = options.prefix + "_y_set" + fnName,
+          _y__getFnName = options.prefix + "_y__get" + fnName,
+          _y__setFnName = options.prefix + "_y__set" + fnName;
+        // if get/set are not specified, we'll attempt to self-discover them
+        if ( options.get === null && options.selfDiscover ) {
+          if ( typeof self[ getFnName ] === "function" ) {
+            options.get = self[ getFnName ];
+          }
+        }
+        if ( options.set === null && options.selfDiscover ) {
+          if ( typeof self[ setFnName ] === "function" ) {
+            options.set = self[ setFnName ];
+          }
+        }
+        // create the private variable
+        if ( options.backingVariable ) {
+          self[ _propertyName ] = options.default;
+        }
+        if ( !options.read && !options.write ) {
+          return; // not read/write, so nothing more.
+        }
+        var defPropOptions = {
+          configurable: options.configurable
+        };
+        if ( options.read ) {
+          self[ _y__getFnName ] = options.get;
+          self[ _y_getFnName ] = function () {
+            // if there is a getter, use it
+            if ( typeof self[ _y__getFnName ] === "function" ) {
+              return self[ _y__getFnName ]( self[ _propertyName ] );
+            }
+            // otherwise return the private variable
+            else {
+              return self[ _propertyName ];
+            }
+          };
+          if ( typeof self[ getFnName ] === "undefined" ) {
+            self[ getFnName ] = self[ _y_getFnName ];
+          }
+          defPropOptions.get = self[ _y_getFnName ];
+        }
+        if ( options.write ) {
+          self[ _y__setFnName ] = options.set;
+          self[ _y_setFnName ] = function ( v ) {
+            var oldV = self[ _propertyName ];
+            if ( typeof self[ _y__setFnName ] === "function" ) {
+              self[ _y__setFnName ]( v, oldV );
+            } else {
+              self[ _propertyName ] = v;
+            }
+            if ( oldV !== v ) {
+              self.notifyDataBindingElementsForKeyPath( propertyName );
+            }
+          };
+          if ( typeof self[ setFnName ] === "undefined" ) {
+            self[ setFnName ] = self[ _y_setFnName ];
+          }
+          defPropOptions.set = self[ _y_setFnName ];
+        }
+        Object.defineProperty( self, propertyName, defPropOptions );
+      };
+      /**
+       * Defines a custom property, which also implements a form of KVO.
+       *
+       * Any options not specified are defaulted in. The default is for a property
+       * to be observable (which fires the default propertyNameChanged notice),
+       * read/write with no custom get/set/validate routines, and no default.
+       *
+       * Observable Properties can have getters, setters, and validators. They can be
+       * automatically discovered, assuming they follow the pattern `getObservablePropertyName`,
+       * `setObservablePropertyName`, and `validateObservablePropertyName`. They can also be
+       * specified explicitly by setting `propertyOptions.get`, `set`, and `validate`.
+       *
+       * Properties can be read-write, read-only, or write-only. This is controlled by
+       * `propertyOptions.read` and `write`. The default is read-write.
+       *
+       * Properties can have a default value provided as well, specified by setting
+       * `propertyOptions.default`.
+       *
+       * Finally, a notification of the form `propertyNameChanged` is fired if
+       * the value changes. If the value does *not* change, the notification is not fired.
+       * The name of the notification is controlled by setting `propertyOptions.notification`.
+       * If you need a notification to fire when a property is simply set (regardless of the
+       * change in value), set `propertyOptions.notifyAlways` to `true`.
+       *
+       * KVO getters, setters, and validators follow very different patterns than normal
+       * property getters and setters.
+       *
+       * ```
+       * self.getObservableWidth = function ( returnValue ) { return returnValue; };
+       * self.setObservableWidth = function ( newValue, oldValue ) { return newValue; };
+       * self.validateObservableWidth = function ( testValue ) { return testValue!==10; };
+       * self.defineObservableProperty ( "width" );
+       * ```
+       *
+       * @method defineObservableProperty
+       * @param {String} propertyName The specific property to define
+       * @param {Object} propertyOptions the options for this property.
+       *
+       */
+      self.defineObservableProperty = function ( propertyName, propertyOptions ) {
+        // set the default options and copy the specified options
+        var options = {
+          observable: true,
+          notification: propertyName + "Changed",
+          default: undefined,
+          read: true,
+          write: true,
+          get: null,
+          validate: null,
+          set: null,
+          selfDiscover: true,
+          notifyAlways: false,
+          prefix: "",
+          configurable: true
+        };
+        // private properties are handled differently -- we want to be able to search for
+        // _getPrivateProperty, not get_privateProperty
+        if ( propertyName.substr( 0, 1 ) === "_" ) {
+          options.prefix = "_";
+        }
+        // allow other potential prefixes
+        if ( options.prefix !== "" ) {
+          if ( propertyName.substr( 0, 1 ) === options.prefix ) {
+            propertyName = propertyName.substr( 1 );
+          }
+        }
+        var fnName = propertyName.substr( 0, 1 ).toUpperCase() + propertyName.substr( 1 );
+        var getObservableFnName = options.prefix + "getObservable" + fnName,
+          setObservableFnName = options.prefix + "setObservable" + fnName,
+          validateObservableFnName = options.prefix + "validateObservable" + fnName,
+          _y_propertyName = options.prefix + "_y_" + propertyName,
+          _y_getFnName = options.prefix + "_y_get" + fnName,
+          _y_setFnName = options.prefix + "_y_set" + fnName,
+          _y_validateFnName = options.prefix + "_y_validate" + fnName,
+          _y__getFnName = options.prefix + "_y__get" + fnName,
+          _y__setFnName = options.prefix + "_y__set" + fnName,
+          _y__validateFnName = options.prefix + "_y__validate" + fnName;
+        for ( var property in propertyOptions ) {
+          if ( propertyOptions.hasOwnProperty( property ) ) {
+            options[ property ] = propertyOptions[ property ];
+          }
+        }
+        // if get/set are not specified, we'll attempt to self-discover them
+        if ( options.get === null && options.selfDiscover ) {
+          if ( typeof self[ getObservableFnName ] === "function" ) {
+            options.get = self[ getObservableFnName ];
+          }
+        }
+        if ( options.set === null && options.selfDiscover ) {
+          if ( typeof self[ setObservableFnName ] === "function" ) {
+            options.set = self[ setObservableFnName ];
+          }
+        }
+        if ( options.validate === null && options.selfDiscover ) {
+          if ( typeof self[ validateObservableFnName ] === "function" ) {
+            options.validate = self[ validateObservableFnName ];
+          }
+        }
+        // if the property is observable, register its notification
+        if ( options.observable ) {
+          self.registerNotification( options.notification );
+        }
+        // create the private variable; __ here to avoid self-defined _
+        self[ _y_propertyName ] = options.default;
+        if ( !options.read && !options.write ) {
+          return; // not read/write, so nothing more.
+        }
+        var defPropOptions = {
+          configurable: true
+        };
+        if ( options.read ) {
+          self[ _y__getFnName ] = options.get;
+          self[ _y_getFnName ] = function () {
+            // if there is a getter, use it
+            if ( typeof self[ _y__getFnName ] === "function" ) {
+              return self[ _y__getFnName ]( self[ _y_propertyName ] );
+            }
+            // otherwise return the private variable
+            else {
+              return self[ _y_propertyName ];
+            }
+          };
+          defPropOptions.get = self[ _y_getFnName ];
+        }
+        if ( options.write ) {
+          self[ _y__validateFnName ] = options.validate;
+          self[ _y__setFnName ] = options.set;
+          self[ _y_setFnName ] = function ( v ) {
+            var oldV = self[ _y_propertyName ],
+              valid = true;
+            if ( typeof self[ _y__validateFnName ] === "function" ) {
+              valid = self[ _y__validateFnName ]( v );
+            }
+            if ( valid ) {
+              if ( typeof self[ _y__setFnName ] === "function" ) {
+                self[ _y_propertyName ] = self[ _y__setFnName ]( v, oldV );
+              } else {
+                self[ _y_propertyName ] = v;
+              }
+              if ( oldV !== v ) {
+                self.notifyDataBindingElementsForKeyPath( propertyName );
+              }
+              if ( v !== oldV || options.notifyAlways ) {
+                if ( options.observable ) {
+                  self.notify( options.notification, {
+                    "new": v,
+                    "old": oldV
+                  } );
+                }
+              }
+            }
+          };
+          defPropOptions.set = self[ _y_setFnName ];
+        }
+        Object.defineProperty( self, propertyName, defPropOptions );
+      };
+      /*
+       * data binding support
+       */
+      self._dataBindings = [];
+      /**
+       * Configure a data binding to an HTML element (el) for
+       * a particular property (keyPath). Returns self for chaining.
+       *
+       * @method dataBindOn
+       * @param  {Node}   el      the DOM element to bind to; must support the change event
+       * @param  {string} keyPath the property to observe (shallow only; doesn't follow dots.)
+       * @return {*}              self; chain away!
+       */
+      self.dataBindOn = function dataBindOn( el, keyPath ) {
+        if ( self._dataBindings[ keyPath ] === undefined ) {
+          self._dataBindings[ keyPath ] = [];
+        }
+        self._dataBindings[ keyPath ].push( el );
+        el.setAttribute( "data-y-keyPath", keyPath );
+        el.addEventListener( "change", self.updatePropertyForKeyPath, false );
+        return self;
+      };
+      /**
+       * Turn off data binding for a particular element and
+       * keypath.
+       *
+       * @method dataBindOff
+       * @param  {Node}   el      element to remove data binding from
+       * @param  {string} keyPath keypath to stop observing
+       * @return {*}              self; chain away!
+       */
+      self.dataBindOff = function dataBindOff( el, keyPath ) {
+        var keyPathEls = self._dataBindings[ keyPath ],
+          elPos;
+        if ( keyPathEls !== undefined ) {
+          elPos = keyPathEls.indexOf( el );
+          if ( elPos > -1 ) {
+            keyPathEls.splice( elPos, 1 );
+            el.removeAttribute( "data-y-keyPath" );
+            el.removeEventListener( "change", self.updatePropertyForKeyPath );
+          }
+        }
+        return self;
+      };
+      /**
+       * Remove all data bindings for a given property
+       *
+       * @method dataBindAllOffForKeyPath
+       * @param  {String} keyPath keypath to stop observing
+       * @return {*}              self; chain away
+       */
+      self.dataBindAllOffForKeyPath = function dataBindAllOffForKeyPath( keyPath ) {
+        var keyPathEls = self._dataBindings[ keyPath ];
+        if ( keyPathEls !== undefined ) {
+          keyPathEls.forEach( function ( el ) {
+            el.removeAttribute( "data-y-keyPath" );
+            el.removeEventListener( "change", self.updatePropertyForKeyPath );
+          } );
+          keyPathEls = [];
+        }
+        return self;
+      };
+      /**
+       * Remove all data bindings for this object
+       *
+       * @method dataBindAllOff
+       * @return {*}  self
+       */
+      self.dataBindAllOff = function dataBindAllOff() {
+        for ( var keyPath in self._dataBindings ) {
+          if ( self._dataBindings.hasOwnProperty( keyPath ) ) {
+            self.dataBindAllOffForKeyPath( keyPath );
+          }
+        }
+      };
+      /**
+       * Update a property on this object based on the
+       * keyPath and value. If called as an event handler, `this` refers to the
+       * triggering element, and keyPath is on `data-y-keyPath` attribute.
+       *
+       * @method updatePropertyForKeyPath
+       * @param  {String} keyPath property to set
+       * @param  {*} value        value to set
+       */
+      self.updatePropertyForKeyPath = function updatePropertyForKeyPath( keyPath, value ) {
+        try {
+          if ( this !== self && this instanceof Node ) {
+            // we've been called from an event handler
+            self[ this.getAttribute( "data-y-keyPath" ) ] = this.value;
+            return;
+          }
+          self[ keyPath ] = value;
+        } catch ( err ) {
+          console.log( "Failed to update", keyPath, "with", value );
+        }
+      };
+      /**
+       * notify all elements attached to a
+       * key path that the source value has changed. Called by all properties created
+       * with defineProperty and defineObservableProperty.
+       *
+       * @method @notifyDataBindingElementsForKeyPath
+       * @param  {String} keyPath keypath of elements to notify
+       */
+      self.notifyDataBindingElementsForKeyPath = function notifyDataBindingElementsForKeyPath( keyPath ) {
+        try {
+          var keyPathEls = self._dataBindings[ keyPath ],
+            el;
+          if ( keyPathEls !== undefined ) {
+            for ( var i = 0, l = keyPathEls.length; i < l; i++ ) {
+              el = keyPathEls[ i ];
+              if ( typeof el.value !== "undefined" ) {
+                el.value = self[ keyPath ];
+              } else
+              if ( typeof el.textContent !== "undefined" ) {
+                el.textContent = self[ keyPath ];
+              } else
+              if ( typeof el.innerText !== "undefined" ) {
+                el.innerText = self[ keyPath ];
+              } else {
+                console.log( "Data bind failure; browser doesn't understand value, textContent, or innerText." );
+              }
+            }
+          }
+        } catch ( err ) {
+          console.log( "Failed to update elements for ", keyPath );
+        }
+      };
+      /**
+       * Auto initializes the object based on the arguments passed to the object constructor. Any object
+       * that desires to be auto-initializable must perform the following prior to returning themselves:
+       *
+       * ```
+       * self._autoInit.apply (self, arguments);
+       * ```
+       *
+       * Each init must call the super of init, and each init must return self.
+       *
+       * If the first parameter to _autoInit (and thus to the object constructor) is an object,
+       * initWithOptions is called if it exists. Otherwise init is called with all the arguments.
+       *
+       * If NO arguments are passed to the constructor (and thus to this method), then no
+       * auto initialization is performed. If one desires an auto-init on an object that requires
+       * no parameters, pass a dummy parameter to ensure init will be called
+       *
+       * @method _autoInit
+       * @returns {*}
+       */
+      self._autoInit = function () {
+        if ( arguments.length > 0 ) {
+          if ( arguments.length === 1 ) {
+            // chances are this is an initWithOptions, but make sure the incoming parameter is an object
+            if ( typeof arguments[ 0 ] === "object" ) {
+              if ( typeof self.initWithOptions !== "undefined" ) {
+                return self.initWithOptions.apply( self, arguments );
+              } else {
+                return self.init.apply( self, arguments );
+              }
             } else {
               return self.init.apply( self, arguments );
             }
           } else {
             return self.init.apply( self, arguments );
           }
-        } else {
-          return self.init.apply( self, arguments );
         }
-      }
+      };
+      /**
+       *
+       * Readies an object to be destroyed. The base object only clears the notifications and
+       * the attached listeners.
+       * @method destroy
+       */
+      self.destroy = function () {
+        // clear data bindings
+        self.dataBindAllOff();
+        // clear any listeners.
+        self._notificationListeners = {};
+        self._tagListeners = {};
+        self._constructObjectCategories( BaseObject.ON_DESTROY_CATEGORY );
+        // ready to be destroyed
+      };
+      // self-categorize
+      self._constructObjectCategories();
+      // call auto init
+      self._autoInit.apply( self, arguments );
+      // done
+      return self;
     };
-    /**
-     *
-     * Readies an object to be destroyed. The base object only clears the notifications and
-     * the attached listeners.
-     * @method destroy
-     */
-    self.destroy = function () {
-      // clear any listeners.
-      self._notificationListeners = {};
-      self._tagListeners = {};
-      self._constructObjectCategories( BaseObject.ON_DESTROY_CATEGORY );
-      // ready to be destroyed
-    };
-    // self-categorize
-    self._constructObjectCategories();
-    // call auto init
-    self._autoInit.apply( self, arguments );
-    // done
-    return self;
-  };
   /**
-   * promote - Promotes a non-BaseObject into a BaseObject by copying all its methods to
+   * Promotes a non-BaseObject into a BaseObject by copying all its methods to
    * the new object and copying all its properties as observable properties.
    *
+   * @method promote
    * @param  {*} nonBaseObject The non-BaseObject to promote
    * @return {BaseObject}               BaseObject
    */
@@ -4269,7 +4381,7 @@ define( 'yasmf/util/object',[],function () {
     BaseObject._objectCategories[ priority ][ className ].push( method );
   };
   BaseObject.meta = {
-    version: "00.04.900",
+    version: "00.05.101",
     class: _className,
     autoInitializable: true,
     categorizable: true
@@ -5512,7 +5624,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function ( Q, Bas
 
 /**
  *
- * h - simple DOM demplating
+ * # h - simple DOM templating
  *
  * @module h.js
  * @author Kerri Shotts
@@ -5535,37 +5647,119 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function ( Q, Bas
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
+ *
+ * Generates a DOM tree (or just a single node) based on a series of method calls
+ * into **h**. **h** has one root method (`el`) that creates all DOM elements, but also has
+ * helper methods for each HTML tag. This means that a UL can be created simply by
+ * calling `h.ul`.
+ *
+ * Technically there's no such thing as a template using this library, but functions
+ * encapsulating a series of h calls function as an equivalent if properly decoupled
+ * from their surrounds.
+ *
+ * Templates are essentially methods attached to the DOM using `h.renderTo(templateFn(context,...))`
+ * and return DOM node elements or arrays. For example:
+ *
+ * ```
+ * function aTemplate ( context ) {
+ *   return h.div (
+ *     [ h.span ( context.title ), h.span ( context.description ) ]
+ *   );
+ * };
+ * ```
+ *
+ * The resulting DOM tree looks like this (assuming `context` is defined as
+ * `{title: "Title", description: "Description"}`:
+ *
+ * ```
+ * <div>
+ *   <span>Title</span>
+ *   <span>Description</span>
+ * </div>
+ * ```
+ *
+ * Template results are added to the DOM using `h.renderTo`:
+ *
+ * ```
+ * h.renderTo ( aDOMElement, aTemplate ( context ) );
+ * ```
+ *
+ * Technically `appendChild` could be used, but it's possible that an attribute
+ * might just return an array of DOM nodes, in which case `appendChild` fails.
+ *
+ * There are also a variety of utility methods defined in **h**, such as:
+ * - `forEach ( arr, fn )` -- this executes `arr.map(fn)`.
+ * - `forIn ( object, fn )` -- iterates over each property owned by `object` and calls `fn`
+ * - `ifdef ( expr, a, b )` -- determines if `expr` is defined, and if so, returns `a`, otherwise `b`
+ * - `iif ( expr, a, b )` -- returns `a` if `expr` evaluates to true, otherwise `b`
+ *
+ * When constructing Node elements using `h`, it's important to recognize that an underlying
+ * function called `el` is being called (and can be called directly). The order parameters here is
+ * somewhat malleable - only the first parameter must be the tag name (when using `el`). Otherwise,
+ * the options for the tag must be within the first three parameters. The text content or value content
+ * for the tag must be in the same first three parameters. For example:
+ *
+ * ```
+ * return h.el("div", { attrs: { id: "anElement" } }, "Text content");
+ * ```
+ *
+ * is equivalent to:
+ *
+ * ```
+ * return h.el("div", "Text Content", { attrs: { id: "anElement" } } );
+ * ```
+ *
+ * which is also in turn equivalent to:
+ *
+ * ```
+ * return h.div("Text Content", { attrs: { id: "anElement" } } );
+ * ```
+ *
+ * If an object has both text and value content (like buttons), the first string or number is used
+ * as the `value` and the second is used as `textContent`:
+ *
+ * ```
+ * return h.button("This goes into value attribute", "This is in textContent");
+ * ```
+ *
+ * So why `el` and `h.div` equivalents? If you need to specify a custom tag OR want to use shorthand
+ * you'll want to use `el`. If you don't need to specify shorthand properties, use the easier-to-read
+ * `h.tagName`. For example:
+ *
+ * ```
+ * return h.p ( "paragraph content" );
+ * return h.el ( "p", "paragraph content" );
+ *
+ * return h.el ( "input#txtUsername.bigField?type=text&size=20", "starting value" );
+ * return h.input ( { attrs: { type: "text", size: "20", class: "bigField", id: "txtUserName" } },
+ *                  "starting value" );
+ * ```
+ *
+ * When specifying tag options, you have several options that can be specified:
+ * * attributes using `attrs` object
+ * * styles using `styles` object
+ * * event handlers using `on` object
+ * * hammer handlers using `hammer` object
+ * * data binding using `bind` object
+ * * store element references to a container object using `storeTo` object
+ *
+ *
  */
-/*jshint
-     asi:true,
-     bitwise:true,
-     browser:true,
-     camelcase:true,
-     curly:true,
-     eqeqeq:false,
-     forin:true,
-     noarg:true,
-     noempty:true,
-     plusplus:false,
-     smarttabs:true,
-     sub:true,
-     trailing:false,
-     undef:true,
-     white:false,
-     onevar:false
-*/
 /*global define, Node, document*/
 define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
   /**
+   *
    * internal private method to handle parsing children
    * and attaching them to their parents
    *
-   * If the child is a NODE, it is attached directly to the parent as a child
-   * If the child is a FUNCTION, the RESULTS are re-parsed, ultimately to be attached to the parent
+   * If the child is a `Node`, it is attached directly to the parent as a child
+   * If the child is a `function`, the *resuts* are re-parsed, ultimately to be attached to the parent
    *   as children
-   * If the child is an ARRAY, each element within the array is re-parsed, ultimately to be attached
+   * If the child is an `Array`, each element within the array is re-parsed, ultimately to be attached
    *   to the parent as children
    *
+   * @method handleChild
+   * @private
    * @param {Array|Function|Node} child       child to handle and attach
    * @param {Node} parent                     parent
    *
@@ -5586,73 +5780,72 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
     }
   }
   /**
-   * parses an incoming tag into its tag name, id, and class constituents
-   * A tag is of the form "tagName.class#id" or "tagName#id.class". The id and class
+   * parses an incoming tag into its tag `name`, `id`, and `class` constituents
+   * A tag is of the form `tagName.class#id` or `tagName#id.class`. The `id` and `class`
    * are optional.
    *
+   * If attributes need to be supplied, it's possible via the `?` query string. Attributes
+   * are of the form `?attr=value&attr=value...`.
+   *
+   * @method parseTag
+   * @private
    * @param {string} tag      tag to parse
-   * @return {*} Object of the form { tag: tagName, id: id, class: class }
+   * @return {*} Object of the form `{ tag: tagName, id: id, class: class, query: query, queryPars: Array }`
    */
   function parseTag( tag ) {
     var tagParts = {
         tag: "",
         id: undefined,
-        class: undefined
+        class: undefined,
+        query: undefined,
+        queryParts: []
       },
       hashPos = tag.indexOf( "#" ),
-      dotPos = tag.indexOf( "." );
+      dotPos = tag.indexOf( "." ),
+      qmPos = tag.indexOf( "?" );
+    if ( qmPos >= 0 ) {
+      tagParts.query = tag.substr( qmPos + 1 );
+      tagParts.queryParts = tagParts.query.split( "&" );
+      tag = tag.substr( 0, qmPos );
+    }
     if ( hashPos < 0 && dotPos < 0 ) {
       tagParts.tag = tag;
       return tagParts;
     }
-    if ( hashPos > 0 && dotPos < 0 ) {
+    if ( hashPos >= 0 && dotPos < 0 ) {
       tagParts.tag = tag.substr( 0, hashPos );
-      tagParts.id = tag.substr( hashPos + 1, tag.length );
+      tagParts.id = tag.substr( hashPos + 1 );
       return tagParts;
     }
-    if ( dotPos > 0 && hashPos < 0 ) {
+    if ( dotPos >= 0 && hashPos < 0 ) {
       tagParts.tag = tag.substr( 0, dotPos );
-      tagParts.class = tag.substr( dotPos + 1, tag.length );
+      tagParts.class = tag.substr( dotPos + 1 );
       return tagParts;
     }
-    if ( dotPos > 0 && hashPos > 0 && hashPos < dotPos ) {
+    if ( dotPos >= 0 && hashPos >= 0 && hashPos < dotPos ) {
       tagParts.tag = tag.substr( 0, hashPos );
       tagParts.id = tag.substr( hashPos + 1, ( dotPos - hashPos ) - 1 );
-      tagParts.class = tag.substr( dotPos + 1, tag.length );
+      tagParts.class = tag.substr( dotPos + 1 );
       return tagParts;
     }
-    if ( dotPos > 0 && hashPos > 0 && dotPos < hashPos ) {
+    if ( dotPos >= 0 && hashPos >= 0 && dotPos < hashPos ) {
       tagParts.tag = tag.substr( 0, dotPos );
       tagParts.class = tag.substr( dotPos + 1, ( hashPos - dotPos ) - 1 );
-      tagParts.id = tag.substr( hashPos + 1, tag.length );
+      tagParts.id = tag.substr( hashPos + 1 );
       return tagParts;
     }
     return tagParts;
   }
   /**
    * h templating engine
-   *   short for HTML
-   *
-   * Generates a DOM tree (or just a single node) based on a series of method calls
-   * into h. h has one root method (el) that creates all DOM elements, but also has
-   * helper methods for each HTML tag. This means that a UL can be created simply by
-   * calling h.ul.
-   *
-   * Technically there's no such thing as a template using this library, but functions
-   * encapsulating a series of h calls function as an equivalent if properly decoupled
-   * from their surrounds.
    */
   var h = {
+      VERSION: "0.1.100",
       /**
        * Returns a DOM tree containing the requested element and any further child
        * elements (as extra parameters)
        *
-       * @param {string} tag                 tag of the form "tagName.class#id" or "tagName#id.class"
-       * @param {*} tagOptions               options for the tag
-       * @param {Array|Function|String} ...  children that should be attached
-       * @returns {Node}                     DOM tree
-       *
-       * tagOptions should be an object consisting of the following optional segments:
+       * `tagOptions` should be an object consisting of the following optional segments:
        *
        * ```
        * {
@@ -5664,19 +5857,28 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
        * }
        * ```
        *
+       * @method el
+       * @param {string} tag                 tag of the form `tagName.class#id` or `tagName#id.class`
+       *                                     tag can also specify attributes:
+       *                                        `input?type=text&size=20`
+       * @param {*} tagOptions               options for the tag (see above)
+       * @param {Array|Function|String} ...  children that should be attached
+       * @returns {Node}                     DOM tree
+       *
        */
       el: function ( tag ) {
-        var e,
+        var e, i, l, evt,
           options,
-          content,
-          tagParts = parseTag( tag ); // parse tag; it should be of the form tag[#id][.class]
-        // create the element; if @DF is used, a document fragment is used instead
+          content = [],
+          contentTarget = [],
+          tagParts = parseTag( tag ); // parse tag; it should be of the form `tag[#id][.class][?attr=value[&attr=value...]`
+        // create the element; if `@DF` is used, a document fragment is used instead
         if ( tagParts.tag !== "@DF" ) {
           e = document.createElement( tagParts.tag );
         } else {
           e = document.createDocumentFragment();
         }
-        // attach the class and id from the tag name, if available
+        // attach the `class` and `id` from the tag name, if available
         if ( tagParts.class !== undefined ) {
           e.className = tagParts.class;
         }
@@ -5688,10 +5890,10 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
         // determine what we've passed in the second/third parameter
         // if it is an object (but not a node or array), it's a list of
         // options to attach to the element. If it is a string, it's text
-        // content that should be added using .textContent.
-        // note: we could parse the entire argument list, but that would
-        // a bit absurd.
-        for ( var i = 0; i < 2; i++ ) {
+        // content that should be added using `textContent` or `value`
+        // > note: we could parse the entire argument list, but that would
+        // > a bit absurd.
+        for ( i = 0; i < 3; i++ ) {
           if ( typeof args[ 0 ] !== "undefined" ) {
             if ( typeof args[ 0 ] === "object" ) {
               // could be a DOM node, an array, or tag options
@@ -5699,13 +5901,23 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
                 options = args.shift();
               }
             }
-            if ( typeof args[ 0 ] === "string" ) {
+            if ( typeof args[ 0 ] === "string" || typeof args[ 0 ] === "number" ) {
               // this is text content
-              content = args.shift();
+              content.push( args.shift() );
             }
           }
         }
-        // copy over any attributes and styles in options.attrs and options.style
+        // copy over any `queryParts` attributes
+        if ( tagParts.queryParts.length > 0 ) {
+          var arr;
+          for ( i = 0, l = tagParts.queryParts.length; i < l; i++ ) {
+            arr = tagParts.queryParts[ i ].split( "=" );
+            if ( arr.length === 2 ) {
+              e.setAttribute( arr[ 0 ].trim(), arr[ 1 ].trim() );
+            }
+          }
+        }
+        // copy over any attributes and styles in `options.attrs` and `options.style`
         if ( typeof options === "object" ) {
           // add attributes
           if ( typeof options.attrs !== "undefined" ) {
@@ -5724,12 +5936,14 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
             }
           }
           // add event handlers; handler property is expected to be a valid DOM
-          // event, i.e. { "change": function... } or { change: function... }
+          // event, i.e. `{ "change": function... }` or `{ change: function... }`
           // if the handler is an object, it must be of the form
+          // ```
           //   { handler: function ...,
           //     capture: true/false }
+          // ```
           if ( typeof options.on !== "undefined" ) {
-            for ( var evt in options.on ) {
+            for ( evt in options.on ) {
               if ( options.on.hasOwnProperty( evt ) ) {
                 if ( typeof options.on[ evt ] === "function" ) {
                   e.addEventListener( evt, options.on[ evt ].bind( e ), false );
@@ -5740,55 +5954,184 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
               }
             }
           }
-          // Data binding only occurs if using YASMF's BaseObject for now (built-in pubsub)
+          // we support hammer too, assuming we're given a reference
+          // it must be of the form `{ hammer: { gesture: { handler: fn, options: }, hammer: hammer } }`
+          if ( typeof options.hammer !== "undefined" ) {
+            var hammer = options.hammer.hammer;
+            for ( evt in options.hammer ) {
+              if ( options.hammer.hasOwnProperty( evt ) && evt !== "hammer" ) {
+                hammer( e, options.hammer[ evt ].options ).on( evt, options.hammer[ evt ].handler );
+              }
+            }
+          }
+          // Data binding only occurs if using YASMF's BaseObject for now (built-in pubsub/observables)
           // along with observable properties
-          // the binding object is of the form { object: objectRef, keyPath: "keyPath" }
+          // the binding object is of the form `{ object: objectRef, keyPath: "keyPath" }`
           if ( typeof options.bind !== "undefined" ) {
             if ( typeof BaseObject !== "undefined" ) {
               if ( options.bind.object instanceof BaseObject ) {
                 // we have an object that has observable properties
                 options.bind.object.dataBindOn( e, options.bind.keyPath );
                 // get the current value so it can be displayed
-                content = options.bind.object[ options.bind.keyPath ];
+                content.push( options.bind.object[ options.bind.keyPath ] );
               }
             }
           }
           // allow elements to be stored into a context
-          // store must be an object of the form {object:objectRef, keyPath: "keyPath" }
+          // store must be an object of the form `{object:objectRef, keyPath: "keyPath" }`
           if ( typeof options.store !== "undefined" ) {
             options.store.object[ options.store.keyPath ] = e;
           }
         }
-        // if we have content, go ahead and add it
-        // if we're an element that has a value, we attach it to the value
-        // property instead of textContent. If textContent is not available
-        // we use innerText; if that's not available, we complain and do
-        // nothing. Falling back to innerHTML isn't an option, as that's what
+        // if we have content, go ahead and add it;
+        // if we're an element that has a `value`, we attach it to the value
+        // property instead of `textContent`. If `textContent` is not available
+        // we use `innerText`; if that's not available, we complain and do
+        // nothing. Falling back to `innerHTML` isn't an option, as that's what
         // we are explicitly trying to avoid.
-        if ( typeof content === "string" || typeof content === "number" ) {
-          if ( typeof e.value !== "undefined" ) {
-            e.value = content;
-          } else {
-            if ( typeof e.textContent !== "undefined" ) {
-              e.textContent = content;
-            } else {
-              if ( typeof e.innerText !== "undefined" ) {
-                e.innerText = content;
-              } else {
-                console.log( "WARNING! This browser doesn't support textContent or innerText." );
-              }
-            }
+        //
+        // First, determine if we have `value` and `textContent` options or only
+        // `textContent` (buttons have both) If both are present, the first
+        // content item is applied to `value`, and the second is applied to 
+        // `textContent`|`innerText`
+        if ( typeof e.value !== "undefined" ) {
+          contentTarget.push( "value" );
+        }
+        if ( ( typeof e.textContent !== "undefined" ) || ( typeof e.innerText !== "undefined" ) ) {
+          contentTarget.push( typeof e.textContent !== "undefined" ? "textContent" : "innerText" );
+        }
+        for ( i = 0, l = contentTarget.length; i < l; i++ ) {
+          var x = content.shift();
+          if ( typeof x !== "undefined" ) {
+            e[ contentTarget[ i ] ] = x;
           }
         }
-        // Handle children; handleChild appends each one to the parent
-        var child, l;
+        // Handle children; `handleChild` appends each one to the parent
+        var child;
         for ( i = 0, l = args.length; i < l; i++ ) {
-          //console.log(i);
           child = args[ i ];
           handleChild( child, e );
         }
         // return the element (and associated tree)
         return e;
+      },
+      /**
+       * mapTo - Maps a keypath to another keypath based on `map`. `map` should look like this:
+       *
+       * ```
+       * {
+       *   "mapping_key": "target_key", ...
+       * }
+       * ```
+       *
+       * For example, let's assume that some object `o` has the properties `id` and `name`. We
+       * want to map these to consistent values like `value` and `description` for a component.
+       * `map` should look like this: `{ "value": "id", "description": "name" }`. In this case
+       * calling `mapTo("value", map)` would return `id`, which could then be indexed on `o`
+       * like so: `o[mapTo("value",map)]`.
+       *
+       * @method mapTo
+       * @param  {String}    keyPath to map
+       * @param  {*} map     map description
+       * @return {String}    mapped keyPath
+       */
+      mapTo: function mapTo( keyPath, map ) {
+        if ( typeof map === "undefined" ) {
+          return keyPath;
+        }
+        if ( typeof map[ keyPath ] !== "undefined" ) {
+          return map[ keyPath ];
+        } else {
+          return keyPath;
+        }
+      },
+      /**
+       * iif - evaluate `expr` and if it is `true`, return `a`. If it is false,
+       * return `b`. If `a` is not supplied, `true` is the return result if `a`
+       * would have been returned. If `b` is not supplied, `false` is the return
+       * result if `b` would have been returned. Not much difference than the
+       * ternary (`?:`) operator, but might be easier to read for some.
+       *
+       * @method iif
+       * @param  {boolean} expr expression to evaluate
+       * @param  {*} a     value to return if `expr` is true; `true` is the default if not supplied
+       * @param  {*} b     value to return if `expr` is false; `false` is the default if not supplied
+       * @return {*}       `expr ? a : b`
+       */
+      iif: function iif( expr, a, b ) {
+        return expr ? ( ( typeof a !== "undefined" ) ? a : true ) : ( ( typeof b !== "undefined" ) ? b : false );
+      },
+      /**
+       * ifdef - Check if an expression is defined and return `a` if it is and `b`
+       * if it isn't. If `a` is not supplied, `a` evaluates to `true` and if `b`
+       * is not supplied, `b` evaluates to `false`.
+       *
+       * @method ifdef
+       * @param  {boolean} expr expression to check
+       * @param  {*}       a    value to return if expression is defined
+       * @param  {*}       b    value to return if expression is not defined
+       * @return {*}       a or b
+       */
+      ifdef: function ifdef( expr, a, b ) {
+        return ( typeof expr !== "undefined" ) ? ( ( typeof a !== "undefined" ) ? a : true ) : ( ( typeof b !== "undefined" ) ? b :
+          false );
+      },
+      /**
+       * forIn - return an array containing the results of calling `fn` for
+       * each property within `object`. Equivalent to `map` on an array.
+       *
+       * The function should have the signature `( value, object, property )`
+       * and return the result. The results will automatically be collated in
+       * an array.
+       *
+       * @method forIn
+       * @param  {*}        object object to iterate over
+       * @param  {function} fn     function to call
+       * @return {Array}           resuts
+       */
+      forIn: function forIn( object, fn ) {
+        var arr = [];
+        for ( var prop in object ) {
+          if ( object.hasOwnProperty( prop ) ) {
+            arr.push( fn( object[ prop ], object, prop ) );
+          }
+        }
+        return arr;
+      },
+      /**
+       * forEach - Executes `map` on an array, calling `fn`. Named such because
+       * it makes more sense than using `map` in a template, but it means the
+       * same thing.
+       *
+       * @method forEach
+       * @param  {Array}    arr Array to iterate
+       * @param  {function} fn  Function to call
+       * @return {Array}        Array after iteration
+       */
+      forEach: function forEach( arr, fn ) {
+        return arr.map( fn );
+      },
+      /**
+       * renderTo - Renders a node or array of nodes to a given element. If an
+       * array is provided, each is appended in turn.
+       *
+       * Note: technically you can just use `appendChild` or equivalent DOM
+       * methods, but this works only as far as the return result is a single
+       * node. Occasionally your template may return an array of nodes, and
+       * at that point `appendChild` fails.
+       *
+       * @method renderTo
+       * @param  {Array|Node} n  Array or single node to append to the element
+       * @param  {Node} el Element to attach to
+       */
+      renderTo: function renderTo( n, el ) {
+        if ( n instanceof Array ) {
+          for ( var i = 0, l = n.length; i < l; i++ ) {
+            el.appendChild( n[ i ] );
+          }
+        } else {
+          el.appendChild( n );
+        }
       }
     },
     // create bindings for each HTML element (from: https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
@@ -5808,12 +6151,13 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
   } );
   // bind document fragment too
   h.DF = h.el.bind( h, "@DF" );
+  h.dF = h.DF;
   return h;
 } );
 
 /**
  *
- * router -- simple routing
+ * # simple routing
  *
  * @module router.js
  * @author Kerri Shotts
@@ -5850,29 +6194,11 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-     asi:true,
-     bitwise:true,
-     browser:true,
-     camelcase:true,
-     curly:true,
-     eqeqeq:false,
-     forin:true,
-     noarg:true,
-     noempty:true,
-     plusplus:false,
-     smarttabs:true,
-     sub:true,
-     trailing:false,
-     undef:true,
-     white:false,
-     onevar:false
-*/
-/*global define, Node, document, history*/
+/*global define, Node, document, history, window, console*/
 define( 'yasmf/util/router',[],function () {
   var routes = [];
   /**
-   * parseURL - Parses a URL into its constituent parts. The return value
+   * Parses a URL into its constituent parts. The return value
    * is an object containing the path, the query, and the hash components.
    * Each of those is also split up into parts -- path and hash separated
    * by slashes, while query is separated by ampersands. If hash is empty
@@ -5880,6 +6206,7 @@ define( 'yasmf/util/router',[],function () {
    * The `baseURL` is also removed from the path; if not specified it
    * defaults to `/`.
    *
+   * @method parseURL
    * @param  {String}  url        url to parse
    * @param  {String}  baseURL    optional base url, defaults to "/"
    * @param  {Boolean} parseHash  optional, indicates if hash should be parsed with slashes
@@ -5930,10 +6257,11 @@ define( 'yasmf/util/router',[],function () {
     };
   }
   /**
-   * routeMatches - Determines if a route matches, and if it does, copies
+   * Determines if a route matches, and if it does, copies
    * any variables out into `vars`. The routes must have been previously
    * parsed with parseURL.
    *
+   * @method routeMatches
    * @param  {type} candidate candidate URL
    * @param  {type} template  template to check (variables of the form :someId)
    * @param  {type} vars      byref: this object will receive any variables
@@ -5960,10 +6288,12 @@ define( 'yasmf/util/router',[],function () {
     return true;
   }
   var Router = {
+    VERSION: "0.1.100",
     baseURL: "/", // not currently used
     /**
-     * addURL - registers a URL and an associated title
+     * registers a URL and an associated title
      *
+     * @method addURL
      * @param  {string} url   url to register
      * @param  {string} title associated title (not visible anywhere)
      * @return {*}            self
@@ -5976,12 +6306,13 @@ define( 'yasmf/util/router',[],function () {
       return this;
     },
     /**
-     * addHandler - Adds a handler to the associated URL. Handlers
+     * Adds a handler to the associated URL. Handlers
      * should be of the form `function( vars, state, url, title, parsedURL )`
      * where `vars` contains the variables in the URL, `state` contains any
      * state passed to history, `url` is the matched URL, `title` is the
      * title of the URL, and `parsedURL` contains the actual URL components.
      *
+     * @method addHandler
      * @param  {string} url       url to register the handler for
      * @param  {function} handler handler to call
      * @return {*}                self
@@ -5991,8 +6322,9 @@ define( 'yasmf/util/router',[],function () {
       return this;
     },
     /**
-     * removeHandler - Removes a handler from the specified url
+     * Removes a handler from the specified url
      *
+     * @method removeHandler
      * @param  {string}   url     url
      * @param  {function} handler handler to remove
      * @return {*}        self
@@ -6009,7 +6341,7 @@ define( 'yasmf/util/router',[],function () {
       return this;
     },
     /**
-     * parseURL - Parses a URL into its constituent parts. The return value
+     * Parses a URL into its constituent parts. The return value
      * is an object containing the path, the query, and the hash components.
      * Each of those is also split up into parts -- path and hash separated
      * by slashes, while query is separated by ampersands. If hash is empty
@@ -6017,6 +6349,7 @@ define( 'yasmf/util/router',[],function () {
      * The `baseURL` is also removed from the path; if not specified it
      * defaults to `/`.
      *
+     * @method parseURL
      * @param  {String}  url        url to parse
      * @param  {String}  baseURL    optional base url, defaults to "/"
      * @param  {Boolean} parseHash  optional, indicates if hash should be parsed with slashes
@@ -6024,11 +6357,12 @@ define( 'yasmf/util/router',[],function () {
      */
     parseURL: parseURL,
     /**
-     * processRoute - Given a url and state, process the url handlers that
+     * Given a url and state, process the url handlers that
      * are associated with the given url. Does not affect history in any way,
      * so can be used to call handler without actually navigating (most useful
      * during testing).
      *
+     * @method processRoute
      * @param  {string} url   url to process
      * @param  {*} state      state to pass (can be anything or nothing)
      */
@@ -6057,15 +6391,18 @@ define( 'yasmf/util/router',[],function () {
       }
     },
     /**
-     * _routeListener - private route listener; calls `processRoute` with
+     * private route listener; calls `processRoute` with
      * the event state retrieved when the history is popped.
+     * @method _routeListener
+     * @private
      */
     _routeListener: function _routeListener( e ) {
       Router.processRoute( window.location.href, e.state );
     },
     /**
-     * check - Check the current URL and call any associated handlers
+     * Check the current URL and call any associated handlers
      *
+     * @method check
      * @return {*} self
      */
     check: function check() {
@@ -6074,10 +6411,14 @@ define( 'yasmf/util/router',[],function () {
     },
     /**
      * Indicates if the router is listening to history changes.
+     * @property listening
+     * @type boolean
+     * @default false
      */
     listening: false,
     /**
-     * listen - Start listening for history changes
+     * Start listening for history changes
+     * @method listen
      */
     listen: function listen() {
       if ( this.listening ) {
@@ -6087,8 +6428,9 @@ define( 'yasmf/util/router',[],function () {
       window.addEventListener( "popstate", this._routeListener, false );
     },
     /**
-     * stopListening - Stop listening for history changes
+     * Stop listening for history changes
      *
+     * @method stopListening
      * @return {type}  description
      */
     stopListening: function stopListening() {
@@ -6098,8 +6440,9 @@ define( 'yasmf/util/router',[],function () {
       window.removeEventListener( "popstate", this._routeListener );
     },
     /**
-     * go - Navigate to a url with a given state, calling handlers
+     * Navigate to a url with a given state, calling handlers
      *
+     * @method go
      * @param  {string} url   url
      * @param  {*} state      state to store for this URL, can be anything
      * @return {*}            self
@@ -6109,11 +6452,12 @@ define( 'yasmf/util/router',[],function () {
       return this.check();
     },
     /**
-     * replace - Navigate to url with a given state, replacing history
+     * Navigate to url with a given state, replacing history
      * and calling handlers. Should be called initially with "/" and
      * any initial state should you want to receive a state value when
      * navigating back from a future page
      *
+     * @method replace
      * @param  {string} url   url
      * @param  {*} state      state to store for this URL, can be anything
      * @return {*}            self
@@ -6123,8 +6467,9 @@ define( 'yasmf/util/router',[],function () {
       return this.check();
     },
     /**
-     * back - Navigates back in history
+     * Navigates back in history
      *
+     * @method back
      * @param  {number} n number of pages to navigate back, optional (1 is default)
      */
     back: function back( n ) {
@@ -6162,33 +6507,199 @@ define( 'yasmf/util/router',[],function () {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function ( theDevice, BaseObject ) {
+  var prefixes = [ "-webkit-", "-moz-", "-ms-", "-o-", "" ],
+    jsPrefixes = [ "webkit", "moz", "ms", "o", "" ],
+    /**
+     * @method Animation
+     * @constructor
+     * @param {Array} els             elements to animate
+     * @param {number} timing         seconds to animate over (0.3 default)
+     * @param {string} timingFunction timing function (ease-in-out default)
+     * @return {Animation}
+     */
+    Animation = function ( els, timing, timingFunction ) {
+      this._el = document.createElement( "div" );
+      this._els = els;
+      this._animations = [];
+      this._transitions = [];
+      this.timingFunction = "ease-in-out";
+      this.timing = 0.3;
+      this._maxTiming = 0;
+      if ( typeof timing !== "undefined" ) {
+        this.timing = timing;
+      }
+      if ( typeof timingFunction !== "undefined" ) {
+        this.timingFunction = timingFunction;
+      }
+    };
+  /**
+   * @method _pushAnimation
+   * @private
+   * @param {string} property         style property
+   * @param {string} value            value to assign to property
+   * @param {number} timing           seconds for animation (optional)
+   * @param {string} timingFunction   timing function (optional)
+   * @return {Animation}              self, for chaining
+   */
+  function _pushAnimation( property, value, timing, timingFunction ) {
+    var newProp, newValue, prefix, jsPrefix, newJsProp;
+    for ( var i = 0, l = prefixes.length; i < l; i++ ) {
+      prefix = prefixes[ i ];
+      jsPrefix = jsPrefixes[ i ];
+      newProp = prefix + property;
+      if ( jsPrefix !== "" ) {
+        newJsProp = jsPrefix + property.substr( 0, 1 ).toUpperCase() + property.substr( 1 );
+      } else {
+        newJsProp = property;
+      }
+      newValue = value.replace( "{-}", prefix );
+      if ( typeof this._el.style[ newJsProp ] !== "undefined" ) {
+        this._animations.push( [ newProp, newValue ] );
+        this._transitions.push( [ newProp, ( typeof timing !== "undefined" ? timing : this.timing ) + "s", ( typeof timingFunction !==
+          "undefined" ? timingFunction : this.timingFunction ) ] );
+      }
+      this._maxTiming = Math.max( this._maxTiming, ( typeof timing !== "undefined" ? timing : this.timing ) );
+    }
+    return this;
+  }
+  /**
+   * Set the default timing function for following animations
+   * @method setTimingFunction
+   * @param {string} timingFunction      the timing function to assign, like "ease-in-out"
+   * @return {Animation}                 self
+   */
+  Animation.prototype.setTimingFunction = function setTimingFunction( timingFunction ) {
+    this.timingFunction = timingFunction;
+    return this;
+  }
+  /**
+   * Set the timing for the following animations, in seconds
+   * @method setTiming
+   * @param {number} timing              the length of the animation, in seconds
+   * @return {Animation}                 self
+   */
+  Animation.prototype.setTiming = function setTiming( timing ) {
+    this.timing = timing;
+    return this;
+  }
+  /**
+   * Move the element to the specific position (using left, top)
+   *
+   * @method move
+   * @param {string} x           the x position (px or %)
+   * @param {string} y           the y position (px or %)
+   * @return {Animation} self
+   */
+  Animation.prototype.move = function ( x, y ) {
+    _pushAnimation.call( this, "left", x );
+    return _pushAnimation.call( this, "top", y );
+  }
+  /**
+   * Resize the element (using width, height)
+   *
+   * @method resize
+   * @param {string} w           the width (px or %)
+   * @param {string} h           the height (px or %)
+   * @return {Animation} self
+   */
+  Animation.prototype.resize = function ( w, h ) {
+    _pushAnimation.call( this, "width", w );
+    return _pushAnimation.call( this, "height", h );
+  }
+  /**
+   * Change opacity
+   * @method opacity
+   * @param {string} o           opacity
+   * @return {Animation} self
+   */
+  Animation.prototype.opacity = function ( o ) {
+    return _pushAnimation.call( this, "opacity", o );
+  }
+  /**
+   * Transform the element using translate x, y
+   * @method translate
+   * @param {string} x       x position (px or %)
+   * @param {string} y       y position (px or %)
+   * @return {Animation} self
+   */
+  Animation.prototype.translate = function ( x, y ) {
+    return _pushAnimation.call( this, "transform", [ "translate(", [ x, y ].join( ", " ), ")" ].join( "" ) );
+  }
+  /**
+   * Transform the element using translate3d x, y, z
+   * @method translate3d
+   * @param {string} x       x position (px or %)
+   * @param {string} y       y position (px or %)
+   * @param {string} z       z position (px or %)
+   * @return {Animation} self
+   */
+  Animation.prototype.translate3d = function ( x, y, z ) {
+    return _pushAnimation.call( this, "transform", [ "translate3d(", [ x, y, z ].join( ", " ), ")" ].join( "" ) );
+  }
+  /**
+   * Transform the element using scale
+   * @method scale
+   * @param {string} p       percent (0.00-1.00)
+   * @return {Animation} self
+   */
+  Animation.prototype.scale = function ( p ) {
+    return _pushAnimation.call( this, "transform", [ "scale(", p, ")" ].join( "" ) );
+  }
+  /**
+   * Transform the element using scale
+   * @method rotate
+   * @param {string} d       degrees
+   * @return {Animation} self
+   */
+  Animation.prototype.rotate = function ( d ) {
+    return _pushAnimation.call( this, "transform", [ "rotate(", d, "deg)" ].join( "" ) );
+  }
+  /**
+   * end the animation definition and trigger the sequence. If a callback method
+   * is supplied, it is called when the animation is over
+   * @method endAnimation
+   * @alias then
+   * @param {function} fn       function to call when animation is completed;
+   *                            it is bound to the Animation method so that
+   *                            further animations can be triggered.
+   * @return {Animation} self
+   */
+  Animation.prototype.endAnimation = function endAnimation( fn ) {
+    var transition = this._transitions.map( function ( t ) {
+        return t.join( " " );
+      } ).join( ", " ),
+      that = this;
+    this._els.forEach( function animateEl( el ) {
+      var i, l, prefixedTransition, prop, value;
+      for ( i = 0, l = prefixes.length; i < l; i++ ) {
+        prefixedTransition = prefixes[ i ] + "transition";
+        el.style.setProperty( prefixedTransition, transition );
+      }
+      for ( i = 0, l = that._animations.length; i < l; i++ ) {
+        prop = that._animations[ i ][ 0 ];
+        value = that._animations[ i ][ 1 ];
+        el.style.setProperty( prop, value );
+      }
+    } );
+    if ( typeof fn === "function" ) {
+      setTimeout( function afterAnimationCallback() {
+        that._animations = [];
+        that._transitions = [];
+        fn.call( that );
+      }, this._maxTiming * 1000 );
+    }
+    return this;
+  }
+  Animation.prototype.then = Animation.prototype.endAnimation;
   var UI = {};
   /**
    * Version of the UI Namespace
    * @property version
    * @type Object
    **/
-  UI.version = "0.4.100";
+  UI.version = "0.5.100";
   /**
    * Styles the element with the given style and value. Adds in the browser
    * prefixes to make it easier.
@@ -6198,7 +6709,6 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    * @returns {void}
    */
   UI.styleElement = function ( theElement, theStyle, theValue ) {
-    var prefixes = [ "-webkit-", "-moz-", "-ms-", "-o-", "" ];
     for ( var i = 0; i < prefixes.length; i++ ) {
       var thePrefix = prefixes[ i ];
       var theNewStyle = thePrefix + theStyle;
@@ -6214,6 +6724,36 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
       UI.styleElement( theElements[ i ], theStyle, theValue );
     }
   };
+  /**
+   * Begin an animation definition and apply it to the specific
+   * elements defined by selector. If parent is supplied, the selector
+   * is relative to the parent, otherwise it is relative to document
+   * @method beginAnimation
+   * @param {string|Array|Node} selector      If a string, animation applies to all
+   *                                          items that match the selector. If an
+   *                                          Array, animation applies to all nodes
+   *                                          in the array. If a node, the animation
+   *                                          applies only to the node.
+   * @param {Node} parent                     Optional; if provided, selector is
+   *                                          relative to this node
+   * @return {Animation}                      Animation object
+   */
+  UI.beginAnimation = function ( selector, parent ) {
+    var els = [];
+    if ( typeof selector === "string" ) {
+      if ( typeof parent === "undefined" ) {
+        parent = document;
+      }
+      els = els.concat( Array.prototype.splice.call( parent.querySelectorAll( selector ), 0 ) );
+    }
+    if ( typeof selector === "object" && selector instanceof Array ) {
+      els = els.concat( selector );
+    }
+    if ( typeof selector === "object" && selector instanceof Node ) {
+      els = els.concat( [ selector ] );
+    }
+    return new Animation( els );
+  }
   /**
    *
    * Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
@@ -6780,7 +7320,7 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function ( theDevice ) {
  *
  * @module viewContainer.js
  * @author Kerri Shotts
- * @version 0.4
+ * @version 0.5
  *
  * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
@@ -6800,26 +7340,8 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function ( theDevice ) {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
-define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function ( BaseObject ) {
+define( 'yasmf/ui/viewContainer',[ "yasmf/util/object", "yasmf/util/h" ], function ( BaseObject, h ) {
   var _className = "ViewContainer";
   var ViewContainer = function () {
     var self = new BaseObject();
@@ -6981,7 +7503,7 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function ( BaseObject 
         self.element.innerHTML = self.render();
       } else if ( typeof renderOutput === "object" ) {
         self.element.innerHTML = "";
-        self.element.appendChild( renderOutput );
+        h.renderTo( renderOutput, self.element );
       }
     };
     /**
@@ -7098,376 +7620,358 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object" ], function ( BaseObject 
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContainer" ], function ( UI, ViewContainer ) {
-  var _className = "NavigationController";
-  var NavigationController = function () {
-    var self = new ViewContainer();
-    self.subclass( _className );
-    // # Notifications
-    //
-    // * `viewPushed` is fired when a view is pushed onto the view stack. The view pushed is passed as a parameter.
-    // * `viewPopped` is fired when a view is popped off the view stack. The view popped is passed as a parameter.
-    //
-    self.registerNotification( "viewPushed" );
-    self.registerNotification( "viewPopped" );
-    /**
-     * The array of views that this navigation controller manages.
-     * @property subviews
-     * @type {Array}
-     */
-    self.defineProperty( "subviews", {
-      read: true,
-      write: false,
-      default: []
-    } );
-    /**
-     * Indicates the current top view
-     * @property topView
-     * @type {Object}
-     */
-    self.getTopView = function () {
-      if ( self._subviews.length > 0 ) {
-        return self._subviews[ self._subviews.length - 1 ];
-      } else {
-        return null;
-      }
-    };
-    self.defineProperty( "topView", {
-      read: true,
-      write: false,
-      backingVariable: false
-    } );
-    /**
-     * Returns the initial view in the view stack
-     * @property rootView
-     * @type {Object}
-     */
-    self.getRootView = function () {
-      if ( self._subviews.length > 0 ) {
-        return self._subviews[ 0 ];
-      } else {
-        return null;
-      }
-    };
-    self.setRootView = function ( theNewRoot ) {
-      if ( self._subviews.length > 0 ) {
-        // must remove all the subviews from the DOM
-        for ( var i = 0; i < self._subviews.length; i++ ) {
-          var thePoppingView = self._subviews[ i ];
-          thePoppingView.notify( "viewWillDisappear" );
-          if ( i === 0 ) {
-            thePoppingView.element.classList.remove( "ui-root-view" );
+  var _className = "NavigationController",
+    NavigationController = function () {
+      var self = new ViewContainer();
+      self.subclass( _className );
+      // # Notifications
+      //
+      // * `viewPushed` is fired when a view is pushed onto the view stack. The view pushed is passed as a parameter.
+      // * `viewPopped` is fired when a view is popped off the view stack. The view popped is passed as a parameter.
+      //
+      self.registerNotification( "viewPushed" );
+      self.registerNotification( "viewPopped" );
+      /**
+       * The array of views that this navigation controller manages.
+       * @property subviews
+       * @type {Array}
+       */
+      self.defineProperty( "subviews", {
+        read: true,
+        write: false,
+        default: []
+      } );
+      /**
+       * Indicates the current top view
+       * @property topView
+       * @type {Object}
+       */
+      self.getTopView = function () {
+        if ( self._subviews.length > 0 ) {
+          return self._subviews[ self._subviews.length - 1 ];
+        } else {
+          return null;
+        }
+      };
+      self.defineProperty( "topView", {
+        read: true,
+        write: false,
+        backingVariable: false
+      } );
+      /**
+       * Returns the initial view in the view stack
+       * @property rootView
+       * @type {Object}
+       */
+      self.getRootView = function () {
+        if ( self._subviews.length > 0 ) {
+          return self._subviews[ 0 ];
+        } else {
+          return null;
+        }
+      };
+      self.setRootView = function ( theNewRoot ) {
+        if ( self._subviews.length > 0 ) {
+          // must remove all the subviews from the DOM
+          for ( var i = 0; i < self._subviews.length; i++ ) {
+            var thePoppingView = self._subviews[ i ];
+            thePoppingView.notify( "viewWillDisappear" );
+            if ( i === 0 ) {
+              thePoppingView.element.classList.remove( "ui-root-view" );
+            }
+            thePoppingView.parentElement = null;
+            thePoppingView.notify( "viewDidDisappear" );
+            thePoppingView.notify( "viewWasPopped" );
+            delete thePoppingView.navigationController;
           }
-          thePoppingView.parentElement = null;
-          thePoppingView.notify( "viewDidDisappear" );
-          thePoppingView.notify( "viewWasPopped" );
-          delete thePoppingView.navigationController;
+          self._subviews = [];
         }
-        self._subviews = [];
-      }
-      self._subviews.push( theNewRoot ); // add it to our views
-      theNewRoot.navigationController = self;
-      theNewRoot.notify( "viewWasPushed" );
-      theNewRoot.notify( "viewWillAppear" ); // notify the view
-      theNewRoot.parentElement = self.element; // and make us the parent
-      theNewRoot.element.classList.add( "ui-root-view" );
-      theNewRoot.notify( "viewDidAppear" ); // and notify it that it's actually there.
-    };
-    self.defineProperty( "rootView", {
-      read: true,
-      write: true,
-      backingVariable: false
-    } );
-    self._preventClicks = null;
-    /**
-     * Creates a click-prevention element -- essentially a transparent DIV that
-     * fills the screen.
-     * @method _createClickPreventionElement
-     * @private
-     */
-    self._createClickPreventionElement = function () {
-      self.createElementIfNotCreated();
-      self._preventClicks = document.createElement( "div" );
-      self._preventClicks.className = "ui-prevent-clicks";
-      self.element.appendChild( self._preventClicks );
-    };
-    /**
-     * Create a click-prevention element if necessary
-     * @method _createClickPreventionElementIfNotCreated
-     * @private
-     */
-    self._createClickPreventionElementIfNotCreated = function () {
-      if ( self._preventClicks === null ) {
-        self._createClickPreventionElement();
-      }
-    };
-    /**
-     * push a view onto the view stack.
-     *
-     * @method pushView
-     * @param {ViewContainer} aView
-     * @param {Boolean} [withAnimation] Determine if the view should be pushed with an animation, default is `true`
-     * @param {Number} [withDelay] Number of seconds for the animation, default is `0.3`
-     * @param {String} [withType] CSS Animation, default is `ease-in-out`
-     */
-    self.pushView = function ( aView, withAnimation, withDelay, withType ) {
-      var theHidingView = self.topView;
-      var theShowingView = aView;
-      var usingAnimation = true;
-      var animationDelay = 0.3;
-      var animationType = "ease-in-out";
-      if ( typeof withAnimation !== "undefined" ) {
-        usingAnimation = withAnimation;
-      }
-      if ( typeof withDelay !== "undefined" ) {
-        animationDelay = withDelay;
-      }
-      if ( typeof withType !== "undefined" ) {
-        animationType = withType;
-      }
-      if ( !usingAnimation ) {
-        animationDelay = 0;
-      }
-      // add the view to our array, at the end
-      self._subviews.push( theShowingView );
-      theShowingView.navigationController = self;
-      theShowingView.notify( "viewWasPushed" );
-      // get each element's z-index, if specified
-      var theHidingViewZ = parseInt( getComputedStyle( theHidingView.element ).getPropertyValue( "z-index" ) || "0", 10 ),
-        theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue( "z-index" ) || "0", 10 );
-      if ( theHidingViewZ >= theShowingViewZ ) {
-        theShowingViewZ = theHidingViewZ + 10;
-      }
-      // then position the view so as to be off-screen, with the current view on screen
-      UI.styleElement( theHidingView.element, "transform", "translate3d(0,0," + theHidingViewZ + "px)" );
-      UI.styleElement( theShowingView.element, "transform", "translate3d(100%,0," + theShowingViewZ + "px)" );
-      // set up an animation
-      if ( usingAnimation ) {
-        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-webkit-transform " +
-          animationDelay + "s " + animationType );
-        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-moz-transform " + animationDelay +
-          "s " + animationType );
-        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-ms-transform " + animationDelay +
-          "s " + animationType );
-        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "transform " + animationDelay + "s " +
-          animationType );
-        UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
-          animationDelay + "s " + animationType );
-        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
-          animationDelay + "s " + animationType );
-        UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
-        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
-      } else {
-        UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "inherit" );
-        UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
+        self._subviews.push( theNewRoot ); // add it to our views
+        theNewRoot.navigationController = self;
+        theNewRoot.notify( "viewWasPushed" );
+        theNewRoot.notify( "viewWillAppear" ); // notify the view
+        theNewRoot.parentElement = self.element; // and make us the parent
+        theNewRoot.element.classList.add( "ui-root-view" );
+        theNewRoot.notify( "viewDidAppear" ); // and notify it that it's actually there.
+      };
+      self.defineProperty( "rootView", {
+        read: true,
+        write: true,
+        backingVariable: false
+      } );
+      self._preventClicks = null;
+      /**
+       * Creates a click-prevention element -- essentially a transparent DIV that
+       * fills the screen.
+       * @method _createClickPreventionElement
+       * @private
+       */
+      self._createClickPreventionElement = function () {
+        self.createElementIfNotCreated();
+        self._preventClicks = document.createElement( "div" );
+        self._preventClicks.className = "ui-prevent-clicks";
+        self.element.appendChild( self._preventClicks );
+      };
+      /**
+       * Create a click-prevention element if necessary
+       * @method _createClickPreventionElementIfNotCreated
+       * @private
+       */
+      self._createClickPreventionElementIfNotCreated = function () {
+        if ( self._preventClicks === null ) {
+          self._createClickPreventionElement();
+        }
+      };
+      /**
+       * push a view onto the view stack.
+       *
+       * @method pushView
+       * @param {ViewContainer} aView
+       * @param {Boolean} [withAnimation] Determine if the view should be pushed with an animation, default is `true`
+       * @param {Number} [withDelay] Number of seconds for the animation, default is `0.3`
+       * @param {String} [withType] CSS Animation, default is `ease-in-out`
+       */
+      self.pushView = function ( aView, withAnimation, withDelay, withType ) {
+        var theHidingView = self.topView,
+          theShowingView = aView,
+          usingAnimation = true,
+          animationDelay = 0.3,
+          animationType = "ease-in-out";
+        if ( typeof withAnimation !== "undefined" ) {
+          usingAnimation = withAnimation;
+        }
+        if ( typeof withDelay !== "undefined" ) {
+          animationDelay = withDelay;
+        }
+        if ( typeof withType !== "undefined" ) {
+          animationType = withType;
+        }
+        if ( !usingAnimation ) {
+          animationDelay = 0;
+        }
+        // add the view to our array, at the end
+        self._subviews.push( theShowingView );
+        theShowingView.navigationController = self;
+        theShowingView.notify( "viewWasPushed" );
+        // get each element's z-index, if specified
+        var theHidingViewZ = parseInt( getComputedStyle( theHidingView.element ).getPropertyValue( "z-index" ) || "0", 10 ),
+          theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue( "z-index" ) || "0", 10 );
+        if ( theHidingViewZ >= theShowingViewZ ) {
+          theShowingViewZ = theHidingViewZ + 10;
+        }
+        // then position the view so as to be off-screen, with the current view on screen
+        UI.styleElement( theHidingView.element, "transform", "translate3d(0,0," + theHidingViewZ + "px)" );
+        UI.styleElement( theShowingView.element, "transform", "translate3d(100%,0," + theShowingViewZ + "px)" );
+        // set up an animation
+        if ( usingAnimation ) {
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-webkit-transform " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-moz-transform " + animationDelay +
+            "s " + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-ms-transform " + animationDelay +
+            "s " + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "transform " + animationDelay + "s " +
+            animationType );
+          UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+        } else {
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "inherit" );
+          UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
+          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
+        }
+        // and add the element with us as the parent
+        theShowingView.parentElement = self.element;
+        // display the click prevention element
+        self._preventClicks.style.display = "block";
+        setTimeout( function () {
+          // tell the topView to move over to the left
+          UI.styleElement( theHidingView.element, "transform", "translate3d(-50%,0," + theHidingViewZ + "px)" );
+          // and tell our new view to move as well
+          UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," + theShowingViewZ + "px)" );
+          if ( usingAnimation ) {
+            UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+            UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+          }
+          // the the view it's about to show...
+          theHidingView.notify( "viewWillDisappear" );
+          theShowingView.notify( "viewWillAppear" );
+          // tell anyone who is listening who got pushed
+          self.notify( "viewPushed", [ theShowingView ] );
+          // tell the view it's visible after the delay has passed
+          setTimeout( function () {
+            theHidingView.element.style.display = "none";
+            theHidingView.notify( "viewDidDisappear" );
+            theShowingView.notify( "viewDidAppear" );
+            // hide click preventer
+            self._preventClicks.style.display = "none";
+          }, animationDelay * 1000 );
+        }, 50 );
+      };
+      /**
+       * pops the top view from the view stack
+       *
+       * @method popView
+       * @param {Boolean} withAnimation Use animation when popping, default `true`
+       * @param {String} withDelay Duration of animation in seconds, Default `0.3`
+       * @param {String} withType CSS Animation, default is `ease-in-out`
+       */
+      self.popView = function ( withAnimation, withDelay, withType ) {
+        var usingAnimation = true,
+          animationDelay = 0.3,
+          animationType = "ease-in-out";
+        if ( typeof withAnimation !== "undefined" ) {
+          usingAnimation = withAnimation;
+        }
+        if ( typeof withDelay !== "undefined" ) {
+          animationDelay = withDelay;
+        }
+        if ( typeof withType !== "undefined" ) {
+          animationType = withType;
+        }
+        if ( !usingAnimation ) {
+          animationDelay = 0;
+        }
+        // only pop if we have views to pop (Can't pop the first!)
+        if ( self._subviews.length <= 1 ) {
+          return;
+        }
+        // pop the top view off the stack
+        var thePoppingView = self._subviews.pop(),
+          theShowingView = self.topView,
+          thePoppingViewZ = parseInt( getComputedStyle( thePoppingView.element ).getPropertyValue( "z-index" ) || "0", 10 ),
+          theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue( "z-index" ) || "0", 10 );
+        if ( theShowingViewZ >= thePoppingViewZ ) {
+          thePoppingViewZ = theShowingViewZ + 10;
+        }
+        theShowingView.element.style.display = "inherit";
+        // make sure that theShowingView is off screen to the left, and the popping
+        // view is at 0
+        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "inherit" );
+        UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
         UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
-      }
-      // and add the element with us as the parent
-      theShowingView.parentElement = self.element;
-      // display the click prevention element
-      self._preventClicks.style.display = "block";
-      setTimeout( function () {
-        // tell the topView to move over to the left
-        UI.styleElement( theHidingView.element, "transform", "translate3d(-50%,0," + theHidingViewZ + "px)" );
-        // and tell our new view to move as well
-        UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," + theShowingViewZ + "px)" );
+        UI.styleElement( theShowingView.element, "transform", "translate3d(-50%,0," + theShowingViewZ + "px)" );
+        UI.styleElement( thePoppingView.element, "transform", "translate3d(0,0," + thePoppingViewZ + "px" );
         if ( usingAnimation ) {
-          UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+          UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+        } else {
           UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+          UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
         }
-        // the the view it's about to show...
-        theHidingView.notify( "viewWillDisappear" );
-        theShowingView.notify( "viewWillAppear" );
-        // tell anyone who is listening who got pushed
-        self.notify( "viewPushed", [ theShowingView ] );
-        // tell the view it's visible after the delay has passed
-        setTimeout( function () {
-          theHidingView.element.style.display = "none";
-          theHidingView.notify( "viewDidDisappear" );
-          theShowingView.notify( "viewDidAppear" );
-          // hide click preventer
-          self._preventClicks.style.display = "none";
-        }, animationDelay * 1000 );
-      }, 50 );
-    };
-    /**
-     * pops the top view from the view stack
-     *
-     * @method popView
-     * @param {Boolean} withAnimation Use animation when popping, default `true`
-     * @param {String} withDelay Duration of animation in seconds, Default `0.3`
-     * @param {String} withType CSS Animation, default is `ease-in-out`
-     */
-    self.popView = function ( withAnimation, withDelay, withType ) {
-      var usingAnimation = true;
-      var animationDelay = 0.3;
-      var animationType = "ease-in-out";
-      if ( typeof withAnimation !== "undefined" ) {
-        usingAnimation = withAnimation;
-      }
-      if ( typeof withDelay !== "undefined" ) {
-        animationDelay = withDelay;
-      }
-      if ( typeof withType !== "undefined" ) {
-        animationType = withType;
-      }
-      if ( !usingAnimation ) {
-        animationDelay = 0;
-      }
-      // only pop if we have views to pop (Can't pop the first!)
-      if ( self._subviews.length <= 1 ) {
-        return;
-      }
-      // pop the top view off the stack
-      var thePoppingView = self._subviews.pop();
-      var theShowingView = self.topView;
-      var thePoppingViewZ = parseInt( getComputedStyle( thePoppingView.element ).getPropertyValue( "z-index" ) || "0", 10 ),
-        theShowingViewZ = parseInt( getComputedStyle( theShowingView.element ).getPropertyValue( "z-index" ) || "0", 10 );
-      if ( theShowingViewZ >= thePoppingViewZ ) {
-        thePoppingViewZ = theShowingViewZ + 10;
-      }
-      theShowingView.element.style.display = "inherit";
-      // make sure that theShowingView is off screen to the left, and the popping
-      // view is at 0
-      UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "inherit" );
-      UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
-      UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "inherit" );
-      UI.styleElement( theShowingView.element, "transform", "translate3d(-50%,0," + theShowingViewZ + "px)" );
-      UI.styleElement( thePoppingView.element, "transform", "translate3d(0,0," + thePoppingViewZ + "px" );
-      if ( usingAnimation ) {
-        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
-        UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
-      } else {
-        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
-        UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
-      }
-      // set up an animation
-      if ( usingAnimation ) {
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-webkit-transform " +
-          animationDelay + "s " + animationType );
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-moz-transform " + animationDelay +
-          "s " + animationType );
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-ms-transform " + animationDelay +
-          "s " + animationType );
-        UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "transform " + animationDelay +
-          "s " + animationType );
-        UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
-          animationDelay + "s " + animationType );
-        UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
-          animationDelay + "s " + animationType );
-      }
-      // display the click prevention element
-      self._preventClicks.style.display = "block";
-      setTimeout( function () {
-        // and move everyone
-        UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," + theShowingViewZ + "px)" );
-        UI.styleElement( thePoppingView.element, "transform", "translate3d(100%,0," + thePoppingViewZ + "px)" );
+        // set up an animation
         if ( usingAnimation ) {
-          UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
-          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-webkit-transform " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-moz-transform " + animationDelay +
+            "s " + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-ms-transform " + animationDelay +
+            "s " + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "transform " + animationDelay +
+            "s " + animationType );
+          UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
+            animationDelay + "s " + animationType );
         }
-        // the the view it's about to show...
-        thePoppingView.notify( "viewWillDisappear" );
-        theShowingView.notify( "viewWillAppear" );
-        // tell the view it's visible after the delay has passed
+        // display the click prevention element
+        self._preventClicks.style.display = "block";
         setTimeout( function () {
-          thePoppingView.notify( "viewDidDisappear" );
-          thePoppingView.notify( "viewWasPopped" );
-          theShowingView.notify( "viewDidAppear" );
-          // tell anyone who is listening who got popped
-          self.notify( "viewPopped", [ thePoppingView ] );
-          // hide click preventer
-          self._preventClicks.style.display = "none";
-          // and remove the popping view from the hierarchy
-          thePoppingView.parentElement = null;
-          delete thePoppingView.navigationController;
-        }, ( animationDelay * 1000 ) );
-      }, 50 );
-    };
-    /**
-     * @method render
-     * @abstract
-     */
-    self.override( function render() {
-      return ""; // nothing to render!
-    } );
-    /**
-     * Create elements and click prevention elements if necessary; otherwise there's nothing to do
-     * @method renderToElement
-     */
-    self.override( function renderToElement() {
-      self.createElementIfNotCreated();
-      self._createClickPreventionElementIfNotCreated();
-      return; // nothing to do.
-    } );
-    /**
-     * Initialize the navigation controller
-     * @method init
-     * @return {Object}
-     */
-    self.override( function init( theRootView, theElementId, theElementTag, theElementClass, theParentElement ) {
-      if ( typeof theRootView === "undefined" ) {
-        throw new Error( "Can't initialize a navigation controller without a root view." );
-      }
-      // do what a normal view container does
-      self.super( _className, "init", [ theElementId, theElementTag,
-        theElementClass,
-        theParentElement
-      ] );
-      // now add the root view
-      self.rootView = theRootView;
+          // and move everyone
+          UI.styleElement( theShowingView.element, "transform", "translate3d(0,0," + theShowingViewZ + "px)" );
+          UI.styleElement( thePoppingView.element, "transform", "translate3d(100%,0," + thePoppingViewZ + "px)" );
+          if ( usingAnimation ) {
+            UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "0" );
+            UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "opacity", "1" );
+          }
+          // the the view it's about to show...
+          thePoppingView.notify( "viewWillDisappear" );
+          theShowingView.notify( "viewWillAppear" );
+          // tell the view it's visible after the delay has passed
+          setTimeout( function () {
+            thePoppingView.notify( "viewDidDisappear" );
+            thePoppingView.notify( "viewWasPopped" );
+            theShowingView.notify( "viewDidAppear" );
+            // tell anyone who is listening who got popped
+            self.notify( "viewPopped", [ thePoppingView ] );
+            // hide click preventer
+            self._preventClicks.style.display = "none";
+            // and remove the popping view from the hierarchy
+            thePoppingView.parentElement = null;
+            delete thePoppingView.navigationController;
+          }, ( animationDelay * 1000 ) );
+        }, 50 );
+      };
+      /**
+       * @method render
+       * @abstract
+       */
+      self.override( function render() {
+        return ""; // nothing to render!
+      } );
+      /**
+       * Create elements and click prevention elements if necessary; otherwise there's nothing to do
+       * @method renderToElement
+       */
+      self.override( function renderToElement() {
+        self.createElementIfNotCreated();
+        self._createClickPreventionElementIfNotCreated();
+        return; // nothing to do.
+      } );
+      /**
+       * Initialize the navigation controller
+       * @method init
+       * @return {Object}
+       */
+      self.override( function init( theRootView, theElementId, theElementTag, theElementClass, theParentElement ) {
+        if ( typeof theRootView === "undefined" ) {
+          throw new Error( "Can't initialize a navigation controller without a root view." );
+        }
+        // do what a normal view container does
+        self.super( _className, "init", [ theElementId, theElementTag,
+          theElementClass,
+          theParentElement
+        ] );
+        // now add the root view
+        self.rootView = theRootView;
+        return self;
+      } );
+      /**
+       * Initialize the navigation controller
+       * @method initWithOptions
+       * @return {Object}
+       */
+      self.override( function initWithOptions( options ) {
+        var theRootView, theElementId, theElementTag, theElementClass,
+          theParentElement;
+        if ( typeof options !== "undefined" ) {
+          if ( typeof options.id !== "undefined" ) {
+            theElementId = options.id;
+          }
+          if ( typeof options.tag !== "undefined" ) {
+            theElementTag = options.tag;
+          }
+          if ( typeof options.class !== "undefined" ) {
+            theElementClass = options.class;
+          }
+          if ( typeof options.parent !== "undefined" ) {
+            theParentElement = options.parent;
+          }
+          if ( typeof options.rootView !== "undefined" ) {
+            theRootView = options.rootView;
+          }
+        }
+        return self.init( theRootView, theElementId, theElementTag, theElementClass, theParentElement );
+      } );
+      // handle auto initialization
+      self._autoInit.apply( self, arguments );
       return self;
-    } );
-    /**
-     * Initialize the navigation controller
-     * @method initWithOptions
-     * @return {Object}
-     */
-    self.override( function initWithOptions( options ) {
-      var theRootView, theElementId, theElementTag, theElementClass,
-        theParentElement;
-      if ( typeof options !== "undefined" ) {
-        if ( typeof options.id !== "undefined" ) {
-          theElementId = options.id;
-        }
-        if ( typeof options.tag !== "undefined" ) {
-          theElementTag = options.tag;
-        }
-        if ( typeof options.class !== "undefined" ) {
-          theElementClass = options.class;
-        }
-        if ( typeof options.parent !== "undefined" ) {
-          theParentElement = options.parent;
-        }
-        if ( typeof options.rootView !== "undefined" ) {
-          theRootView = options.rootView;
-        }
-      }
-      return self.init( theRootView, theElementId, theElementTag, theElementClass, theParentElement );
-    } );
-    // handle auto initialization
-    self._autoInit.apply( self, arguments );
-    return self;
-  };
+    };
   return NavigationController;
 } );
 

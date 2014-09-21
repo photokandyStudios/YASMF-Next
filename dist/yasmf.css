@@ -67,7 +67,7 @@ body {
   font-size: 18px;
   line-height: 1em;
   color: #333;
-  background-color: #E8E8E8;
+  background-color: #000;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -moz-tap-highlight-color: rgba(0, 0, 0, 0);
   -ms-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -99,10 +99,6 @@ body {
   -o-backface-visibility: hidden;
   backface-visibility: hidden; }
 
-body.ios {
-  background-color: #FFF;
-  color: #333; }
-
 body.android {
   font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-serif;
   -webkit-text-rendering: auto !important;
@@ -110,13 +106,9 @@ body.android {
   -ms-text-rendering: auto !important;
   -o-text-rendering: auto !important;
   text-rendering: auto !important;
-  /* optimizeLegibility is messing up the way words wrap */
-  background-color: #000000;
-  color: #FFFFFF; }
+  /* optimizeLegibility is messing up the way words wrap */ }
 
 body.wince {
-  color: #FFF;
-  background-color: #000;
   font-family: "Segoe WP" !important; }
 
 .hidden {
@@ -166,7 +158,14 @@ div {
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
-  z-index: 2; }
+  z-index: 2;
+  background-color: #E8E8E8;
+  color: #333; }
+
+.android .ui-container,
+.wince .ui-container {
+  background-color: #000000;
+  color: #FFFFFF; }
 
 /*****************************************************************************
  *
