@@ -1,0 +1,21 @@
+{
+  "asi": true,
+  "bitwise": true,
+  "browser": true,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": false,
+  "forin": true,
+  "noarg": true,
+  "noempty": true,
+  "plusplus": false,
+  "smarttabs": true,
+  "sub": true,
+  "trailing": false,
+  "undef": true,
+  "white": false,
+  "onevar": false,
+  "predef": ["define", "require", "window", "document", "navigator", "console", "setTimeout", "requirejs", "module",
+    "getComputedStyle"
+  ]
+}
