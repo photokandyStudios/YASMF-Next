@@ -29,3 +29,6 @@ gzip < ./dist/yasmf.css > ./dist/yasmf.css.gzip
 
 # generate docs
 groc
+docco --layout parallel --output ./docco ./lib/yasmf.js ./lib/yasmf.scss
+docco --layout parallel --output ./docco/ui ./lib/yasmf/ui/*.js
+docco --layout parallel --output ./docco/util ./lib/yasmf/util/*.js
