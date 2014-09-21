@@ -1,174 +1,144 @@
-<!DOCTYPE html><html lang="en"><head><title>util/device</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/device"><meta name="groc-project-path" content="lib/yasmf/util/device.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/device.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module device.js author Kerri Shotts and version 0.4</p>
-
-<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+<!DOCTYPE html><html lang="en"><head><title>util/device</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/device"><meta name="groc-project-path" content="lib/yasmf/util/device.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/device.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module device.js author Kerri Shotts and version 0.4
+<code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
-software and associated documentation files (the "Software"), to deal in the Software
+software and associated documentation files (the &quot;Software&quot;), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
 merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 permit persons to whom the Software is furnished to do so, subject to the following
 conditions:
 The above copyright notice and this permission notice shall be included in all copies
 or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-</code></pre>
-
-<p></span></p>
-
+OTHER DEALINGS IN THE SOFTWARE.</code></span></p>
 <p>Provides basic device-handling convenience functions for determining if the device
-is an iDevice or a Droid Device, and what the orientation is.</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
-<span class="cm">         asi:true,</span>
-<span class="cm">         bitwise:true,</span>
-<span class="cm">         browser:true,</span>
-<span class="cm">         camelcase:true,</span>
-<span class="cm">         curly:true,</span>
-<span class="cm">         eqeqeq:false,</span>
-<span class="cm">         forin:true,</span>
-<span class="cm">         noarg:true,</span>
-<span class="cm">         noempty:true,</span>
-<span class="cm">         plusplus:false,</span>
-<span class="cm">         smarttabs:true,</span>
-<span class="cm">         sub:true,</span>
-<span class="cm">         trailing:false,</span>
-<span class="cm">         undef:true,</span>
-<span class="cm">         white:false,</span>
-<span class="cm">         onevar:false</span>
-<span class="cm"> */</span>
-<span class="cm">/*global define, device, navigator, window */</span>
-<span class="nx">define</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> class PKDEVICE</span></p>
-
+is an iDevice or a Droid Device, and what the orientation is.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint
+         asi:true,
+         bitwise:true,
+         browser:true,
+         camelcase:true,
+         curly:true,
+         eqeqeq:false,
+         forin:true,
+         noarg:true,
+         noempty:true,
+         plusplus:false,
+         smarttabs:true,
+         sub:true,
+         trailing:false,
+         undef:true,
+         white:false,
+         onevar:false
+ */</span>
+<span class="hljs-comment">/*global define, device, navigator, window */</span>
+define( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> class PKDEVICE</span></p>
 <p>PKDEVICE provides simple methods for getting device information, such as platform,
-form factor, and orientation.</p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">PKDEVICE</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property version of type <em>Object</em></span></p>
-
-<p>The version of the class with major, minor, and rev properties.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">version</span><span class="o">:</span> <span class="s2">&quot;0.4.100&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property platformOverride of type <em>boolean</em> and default false</span></p>
-
+form factor, and orientation.</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">var</span> PKDEVICE = {</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property version of type <em>Object</em></span></p>
+<p>The version of the class with major, minor, and rev properties.</p></div></div><div class="code"><div class="wrapper">    version: <span class="hljs-string">"0.4.100"</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property platformOverride of type <em>boolean</em> and default false</span></p>
 <p>Permits overriding the platform for testing. Leave set to <code>false</code> for
-production applications.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">platformOverride</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property formFactorOverride of type <em>boolean</em> and default false</span></p>
-
-<p>Permits overriding the form factor. Usually used for testing.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">formFactorOverride</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method platform</span></p>
-
+production applications.</p></div></div><div class="code"><div class="wrapper">    platformOverride: <span class="hljs-literal">false</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property formFactorOverride of type <em>boolean</em> and default false</span></p>
+<p>Permits overriding the form factor. Usually used for testing.</p></div></div><div class="code"><div class="wrapper">    formFactorOverride: <span class="hljs-literal">false</span>,</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method platform</span></p>
 <p>Returns the device platform, lowercased. If PKDEVICE.platformOverride is
-other than "false", it is returned instead.</p>
-
-<p>See PhoneGap's documentation on the full range of platforms that can be
+other than &quot;false&quot;, it is returned instead.</p>
+<p>See PhoneGap&#39;s documentation on the full range of platforms that can be
 returned; without PG available, the method will attemt to determine the
 platform from <code>navigator.platform</code> and the <code>userAgent</code>, but only supports
 iOS and Android in that capacity.</p>
-
-<p><strong>Returns a String</strong><br/>(the device platform, lowercase.)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">platform</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">platformOverride</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">platformOverride</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">device</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">device</span><span class="p">.</span><span class="nx">platform</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>detect mobile devices first</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPad&quot;</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPad Simulator&quot;</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPhone&quot;</span> <span class="o">||</span>
-          <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPhone Simulator&quot;</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPod&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;ios&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;android&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;android&quot;</span><span class="p">;</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>no reason why we can't return other information</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;Mac&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;mac&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;Win&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;windows&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;Linux&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;linux&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">thePlatform</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">platform</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>turns out that for Cordova > 2.3, deivceplatform now returns iOS, so the
+<p><strong>Returns a String</strong><br/>(the device platform, lowercase.)</p></div></div><div class="code"><div class="wrapper">    platform: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( PKDEVICE.platformOverride ) {
+        <span class="hljs-keyword">return</span> PKDEVICE.platformOverride.toLowerCase();
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> device === <span class="hljs-string">"undefined"</span> || !device.platform ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>detect mobile devices first</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( navigator.platform === <span class="hljs-string">"iPad"</span> || navigator.platform === <span class="hljs-string">"iPad Simulator"</span> || navigator.platform === <span class="hljs-string">"iPhone"</span> ||
+          navigator.platform === <span class="hljs-string">"iPhone Simulator"</span> || navigator.platform === <span class="hljs-string">"iPod"</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"ios"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.toLowerCase().indexOf( <span class="hljs-string">"android"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"android"</span>;
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>no reason why we can&#39;t return other information</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( navigator.platform.indexOf( <span class="hljs-string">"Mac"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"mac"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( navigator.platform.indexOf( <span class="hljs-string">"Win"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"windows"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( navigator.platform.indexOf( <span class="hljs-string">"Linux"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"linux"</span>;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"unknown"</span>;
+      }
+      <span class="hljs-keyword">var</span> thePlatform = device.platform.toLowerCase();</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>turns out that for Cordova &gt; 2.3, deivceplatform now returns iOS, so the
 following is really not necessary on those versions. We leave it here
-for those using Cordova &lt;= 2.2.</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">thePlatform</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;ipad&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">thePlatform</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;iphone&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">thePlatform</span> <span class="o">=</span> <span class="s2">&quot;ios&quot;</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">thePlatform</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method formFactor</span></p>
-
-<p>Returns the device's form factor. Possible values are "tablet" and
-"phone". If PKDEVICE.formFactorOverride is not false, it is returned
+for those using Cordova &lt;= 2.2.</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( thePlatform.indexOf( <span class="hljs-string">"ipad"</span> ) &gt; -<span class="hljs-number">1</span> || thePlatform.indexOf( <span class="hljs-string">"iphone"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+        thePlatform = <span class="hljs-string">"ios"</span>;
+      }
+      <span class="hljs-keyword">return</span> thePlatform;
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method formFactor</span></p>
+<p>Returns the device&#39;s form factor. Possible values are &quot;tablet&quot; and
+&quot;phone&quot;. If PKDEVICE.formFactorOverride is not false, it is returned
 instead.</p>
-
-<p><strong>Returns a String</strong><br/>(<code>tablet</code> or <code>phone</code>, as appropriate)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">formFactor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactorOverride</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactorOverride</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPad&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPhone&quot;</span> <span class="p">)</span> <span class="o">||</span> <span class="p">(</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s2">&quot;iPhone Simulator&quot;</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">ua</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;android&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>android reports if it is a phone or tablet based on user agent</p></div></div><div class="code"><div class="wrapper">        <span class="cm">/*if (ua.indexOf(&quot;mobile safari&quot;) &gt; -1)</span>
-<span class="cm">          {</span>
-<span class="cm">            return &quot;phone&quot;;</span>
-<span class="cm">          }*/</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;mobile safari&quot;</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;safari&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>the following is hacky, and not guaranteed to work all the time,
-especially as phones get bigger screens with higher DPI.</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span> <span class="nb">window</span><span class="p">.</span><span class="nx">screen</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">screen</span><span class="p">.</span><span class="nx">height</span> <span class="p">)</span> <span class="o">/</span> <span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">900</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Determines if the device is a tablet (or tablet-sized, more accurately)</p>
-
-<p><strong>Returns a Boolean</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">isTablet</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactor</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Determines if the device is a tablet (or tablet-sized, more accurately)</p>
-
-<p><strong>Returns a Boolean</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">isPhone</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactor</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method isPortrait</span></p>
-
+<p><strong>Returns a String</strong><br/>(<code>tablet</code> or <code>phone</code>, as appropriate)</p></div></div><div class="code"><div class="wrapper">    formFactor: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( PKDEVICE.formFactorOverride ) {
+        <span class="hljs-keyword">return</span> PKDEVICE.formFactorOverride.toLowerCase();
+      }
+      <span class="hljs-keyword">if</span> ( navigator.platform === <span class="hljs-string">"iPad"</span> ) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
+      }
+      <span class="hljs-keyword">if</span> ( ( navigator.platform === <span class="hljs-string">"iPhone"</span> ) || ( navigator.platform === <span class="hljs-string">"iPhone Simulator"</span> ) ) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;
+      }
+      <span class="hljs-keyword">var</span> ua = navigator.userAgent.toLowerCase();
+      <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"android"</span> ) &gt; -<span class="hljs-number">1</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>android reports if it is a phone or tablet based on user agent</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-comment">/*if (ua.indexOf("mobile safari") &gt; -1)
+          {
+            return "phone";
+          }*/</span>
+        <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"mobile safari"</span> ) &lt; <span class="hljs-number">0</span> &amp;&amp; ua.indexOf( <span class="hljs-string">"safari"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
+        }
+      }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>the following is hacky, and not guaranteed to work all the time,
+especially as phones get bigger screens with higher DPI.</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( ( <span class="hljs-built_in">Math</span>.max( <span class="hljs-built_in">window</span>.screen.width, <span class="hljs-built_in">window</span>.screen.height ) / <span class="hljs-built_in">window</span>.devicePixelRatio ) &gt;= <span class="hljs-number">900</span> ) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
+      }
+      <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Determines if the device is a tablet (or tablet-sized, more accurately)</p>
+<p><strong>Returns a Boolean</strong></p></div></div><div class="code"><div class="wrapper">    isTablet: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> PKDEVICE.formFactor() === <span class="hljs-string">"tablet"</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Determines if the device is a tablet (or tablet-sized, more accurately)</p>
+<p><strong>Returns a Boolean</strong></p></div></div><div class="code"><div class="wrapper">    isPhone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> PKDEVICE.formFactor() === <span class="hljs-string">"phone"</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method isPortrait</span></p>
 <p>Determines if the device is in Portrait orientation.</p>
-
-<p><strong>Returns a boolean</strong><br/>(<code>true</code> if the device is in a Portrait orientation; <code>false</code> otherwise)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">isPortrait</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nb">window</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">orientation</span> <span class="o">===</span> <span class="mi">180</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;?portrait&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method isLandscape</span></p>
-
+<p><strong>Returns a boolean</strong><br/>(<code>true</code> if the device is in a Portrait orientation; <code>false</code> otherwise)</p></div></div><div class="code"><div class="wrapper">    isPortrait: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">window</span>.orientation === <span class="hljs-number">0</span> || <span class="hljs-built_in">window</span>.orientation === <span class="hljs-number">180</span> || <span class="hljs-built_in">window</span>.location.href.indexOf( <span class="hljs-string">"?portrait"</span> ) &gt; -<span class="hljs-number">1</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method isLandscape</span></p>
 <p>Determines if the device is in Landscape orientation.</p>
-
-<p><strong>Returns a boolean</strong><br/>(<code>true</code> if the device is in a landscape orientation; <code>false</code> otherwise)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">isLandscape</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;?landscape&quot;</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="o">!</span><span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">isPortrait</span><span class="p">();</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method isRetina</span></p>
-
+<p><strong>Returns a boolean</strong><br/>(<code>true</code> if the device is in a landscape orientation; <code>false</code> otherwise)</p></div></div><div class="code"><div class="wrapper">    isLandscape: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">window</span>.location.href.indexOf( <span class="hljs-string">"?landscape"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+      }
+      <span class="hljs-keyword">return</span> !PKDEVICE.isPortrait();
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method isRetina</span></p>
 <p>Determines if the device is a hiDPI device (aka retina)</p>
-
-<p><strong>Returns a boolean</strong><br/>(<code>true</code> if the device has a <code>window.devicePixelRatio</code> greater than <code>1.0</code>; <code>false</code> otherwise)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">isRetina</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method iPad</span></p>
-
+<p><strong>Returns a boolean</strong><br/>(<code>true</code> if the device has a <code>window.devicePixelRatio</code> greater than <code>1.0</code>; <code>false</code> otherwise)</p></div></div><div class="code"><div class="wrapper">    isRetina: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">window</span>.devicePixelRatio &gt; <span class="hljs-number">1</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method iPad</span></p>
 <p>Returns <code>true</code> if the device is an iPad.</p>
-
-<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">iPad</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;ios&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactor</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method iPhone</span></p>
-
+<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    iPad: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> PKDEVICE.platform() === <span class="hljs-string">"ios"</span> &amp;&amp; PKDEVICE.formFactor() === <span class="hljs-string">"tablet"</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method iPhone</span></p>
 <p>Returns <code>true</code> if the device is an iPhone (or iPod).</p>
-
-<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">iPhone</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;ios&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactor</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method droidPhone</span></p>
-
+<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    iPhone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> PKDEVICE.platform() === <span class="hljs-string">"ios"</span> &amp;&amp; PKDEVICE.formFactor() === <span class="hljs-string">"phone"</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method droidPhone</span></p>
 <p>Returns <code>true</code> if the device is an Android Phone.</p>
-
-<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">droidPhone</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;android&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactor</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;phone&quot;</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method droidTablet</span></p>
-
+<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    droidPhone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> PKDEVICE.platform() === <span class="hljs-string">"android"</span> &amp;&amp; PKDEVICE.formFactor() === <span class="hljs-string">"phone"</span>;
+    },</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method droidTablet</span></p>
 <p>Returns <code>true</code> if the device is an Android Tablet.</p>
-
-<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">droidTablet</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;android&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">PKDEVICE</span><span class="p">.</span><span class="nx">formFactor</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;tablet&quot;</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-  <span class="k">return</span> <span class="nx">PKDEVICE</span><span class="p">;</span>
-<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>
+<p><strong>Returns a boolean</strong></p></div></div><div class="code"><div class="wrapper">    droidTablet: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> PKDEVICE.platform() === <span class="hljs-string">"android"</span> &amp;&amp; PKDEVICE.formFactor() === <span class="hljs-string">"tablet"</span>;
+    }
+  };
+  <span class="hljs-keyword">return</span> PKDEVICE;
+} );</div></div></div></div></body></html>

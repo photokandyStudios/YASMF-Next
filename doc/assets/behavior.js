@@ -535,7 +535,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "h"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "h - simple DOM templating",
+                "slug": "h-simple-dom-templating"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -605,7 +615,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "router"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "simple routing",
+                "slug": "simple-routing"
+              },
+              "depth": 1
+            }
+          ]
         }
       ]
     }

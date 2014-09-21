@@ -1,363 +1,329 @@
 <!DOCTYPE html><html lang="en"><head><title>ui/alert</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/alert"><meta name="groc-project-path" content="lib/yasmf/ui/alert.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/alert.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module alert.js author Kerri Shotts and version 0.4</p>
-
-<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+<p><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
-software and associated documentation files (the "Software"), to deal in the Software
+software and associated documentation files (the &quot;Software&quot;), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
 merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 permit persons to whom the Software is furnished to do so, subject to the following
 conditions:
 The above copyright notice and this permission notice shall be included in all copies
 or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-</code></pre>
-
-<p></span></p>
-
-<p>Provides native-like alert methods, including prompts and messages.</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
-<span class="cm">         asi:true,</span>
-<span class="cm">         bitwise:true,</span>
-<span class="cm">         browser:true,</span>
-<span class="cm">         camelcase:true,</span>
-<span class="cm">         curly:true,</span>
-<span class="cm">         eqeqeq:false,</span>
-<span class="cm">         forin:true,</span>
-<span class="cm">         noarg:true,</span>
-<span class="cm">         noempty:true,</span>
-<span class="cm">         plusplus:false,</span>
-<span class="cm">         smarttabs:true,</span>
-<span class="cm">         sub:true,</span>
-<span class="cm">         trailing:false,</span>
-<span class="cm">         undef:true,</span>
-<span class="cm">         white:false,</span>
-<span class="cm">         onevar:false</span>
-<span class="cm"> */</span>
-<span class="cm">/*global define*/</span>
-<span class="nx">define</span><span class="p">(</span> <span class="p">[</span> <span class="s2">&quot;yasmf/util/core&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/util/device&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/util/object&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/ui/core&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;yasmf/ui/event&quot;</span> <span class="p">],</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">_y</span><span class="p">,</span>
-  <span class="nx">theDevice</span><span class="p">,</span> <span class="nx">BaseObject</span><span class="p">,</span> <span class="nx">UI</span><span class="p">,</span> <span class="nx">Q</span><span class="p">,</span> <span class="nx">event</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">_className</span> <span class="o">=</span> <span class="s2">&quot;Alert&quot;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">Alert</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseObject</span><span class="p">();</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">subclass</span><span class="p">(</span> <span class="nx">_className</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="notifications">Notifications</h1>
-
+OTHER DEALINGS IN THE SOFTWARE.</code></span></p>
+<p>Provides native-like alert methods, including prompts and messages.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint
+         asi:true,
+         bitwise:true,
+         browser:true,
+         camelcase:true,
+         curly:true,
+         eqeqeq:false,
+         forin:true,
+         noarg:true,
+         noempty:true,
+         plusplus:false,
+         smarttabs:true,
+         sub:true,
+         trailing:false,
+         undef:true,
+         white:false,
+         onevar:false
+ */</span>
+<span class="hljs-comment">/*global define*/</span>
+define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-string">"yasmf/util/device"</span>, <span class="hljs-string">"yasmf/util/object"</span>, <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf/ui/event"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( _y,
+  theDevice, BaseObject, UI, Q, event )</span> </span>{
+  <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"Alert"</span>;
+  <span class="hljs-keyword">var</span> Alert = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
+    self.subclass( _className );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="notifications">Notifications</h1>
 <ul>
 <li><code>buttonTapped</code> indicates which button was tapped when the view is dismissing</li>
 <li><code>dismissed</code> indicates that the alert was dismissed (by user or code)</li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;buttonTapped&quot;</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span> <span class="s2">&quot;dismissed&quot;</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property title of type <em>String</em></span></p>
-
-<p>The title to show in the alert.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// the corresponding DOM element</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setTitle</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theTitle</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">theTitle</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">theTitle</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">};</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="k">default</span><span class="o">:</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;ALERT&quot;</span> <span class="p">)</span>
-    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property text of type <em>String</em></span></p>
-
-<p>The body of the alert. Leave blank if you don't need to show
-anything more than the title.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setText</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theText</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_text</span> <span class="o">=</span> <span class="nx">theText</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">theText</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">};</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span>
-    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property buttons of type <em>Array</em></span></p>
-
-<p>The alert's buttons are specified in this property. The layout
+</ul></div></div><div class="code"><div class="wrapper">    self.registerNotification( <span class="hljs-string">"buttonTapped"</span> );
+    self.registerNotification( <span class="hljs-string">"dismissed"</span> );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property title of type <em>String</em></span></p>
+<p>The title to show in the alert.</p></div></div><div class="code"><div class="wrapper">    self._titleElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// the corresponding DOM element</span>
+    self.setTitle = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theTitle )</span> </span>{
+      self._title = theTitle;
+      <span class="hljs-keyword">if</span> ( self._titleElement !== <span class="hljs-literal">null</span> ) {
+        self._titleElement.innerHTML = theTitle;
+      }
+    };
+    self.defineProperty( <span class="hljs-string">"title"</span>, {
+      read: <span class="hljs-literal">true</span>,
+      write: <span class="hljs-literal">true</span>,
+      <span class="hljs-keyword">default</span>: _y.T( <span class="hljs-string">"ALERT"</span> )
+    } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property text of type <em>String</em></span></p>
+<p>The body of the alert. Leave blank if you don&#39;t need to show
+anything more than the title.</p></div></div><div class="code"><div class="wrapper">    self._textElement = <span class="hljs-literal">null</span>;
+    self.setText = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theText )</span> </span>{
+      self._text = theText;
+      <span class="hljs-keyword">if</span> ( self._textElement !== <span class="hljs-literal">null</span> ) {
+        self._textElement.innerHTML = theText;
+      }
+    };
+    self.defineProperty( <span class="hljs-string">"text"</span>, {
+      read: <span class="hljs-literal">true</span>,
+      write: <span class="hljs-literal">true</span>
+    } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property buttons of type <em>Array</em></span></p>
+<p>The alert&#39;s buttons are specified in this property. The layout
 is expected to be: <code>[ { title: title [, type: type] [, tag: tag] } [, {} ...] ]</code></p>
-
-<p>Each button's type can be "normal", "bold", "destructive". The tag may be
+<p>Each button&#39;s type can be &quot;normal&quot;, &quot;bold&quot;, &quot;destructive&quot;. The tag may be
 null; if it is, it is assigned the button index. If a tag is specifed (common
-for cancel buttons), that is the return value.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">setButtons</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theButtons</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">function</span> <span class="nx">dismissWithIndex</span><span class="p">(</span> <span class="nx">idx</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span><span class="p">(</span> <span class="nx">idx</span> <span class="p">);</span>
-        <span class="p">};</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>clear out any previous buttons in the DOM</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">[</span> <span class="nx">i</span> <span class="p">].</span><span class="nx">element</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span> <span class="o">=</span> <span class="nx">theButtons</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>determine if we need wide buttons or not</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">wideButtons</span> <span class="o">=</span> <span class="o">!</span><span class="p">(</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="p">)</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add the buttons back to the DOM if we can</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-          <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">[</span> <span class="nx">i</span> <span class="p">];</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if the tag is null, give it (i)</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="nx">b</span><span class="p">.</span><span class="nx">tag</span> <span class="o">===</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">b</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
-          <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>class is ui-alert-button normal|bold|destructive [wide]
-wide buttons are for 1 button or 4+ buttons.</p></div></div><div class="code"><div class="wrapper">          <span class="nx">e</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert-button &quot;</span> <span class="o">+</span> <span class="nx">b</span><span class="p">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="p">(</span> <span class="nx">wideButtons</span> <span class="o">?</span> <span class="s2">&quot;wide&quot;</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>title</p></div></div><div class="code"><div class="wrapper">          <span class="nx">e</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">b</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
-          <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">wideButtons</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set the width of each button to fill out the alert equally
-3 buttons gets 33.333%; 2 gets 50%.</p></div></div><div class="code"><div class="wrapper">            <span class="nx">e</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="p">(</span> <span class="mi">100</span> <span class="o">/</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">.</span><span class="nx">length</span> <span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span><span class="p">;</span>
-          <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>listen for a touch</p></div></div><div class="code"><div class="wrapper">          <span class="nx">event</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="s2">&quot;touchend&quot;</span><span class="p">,</span> <span class="nx">dismissWithIndex</span><span class="p">(</span> <span class="nx">i</span> <span class="p">)</span> <span class="p">);</span>
-          <span class="nx">b</span><span class="p">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nx">e</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add the button to the DOM</p></div></div><div class="code"><div class="wrapper">          <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">b</span><span class="p">.</span><span class="nx">element</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">};</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;buttons&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="k">default</span><span class="o">:</span> <span class="p">[]</span>
-    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>other DOM elements we need to construct the alert</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// root element contains the container</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// points to the alert itself</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// points to the DIV used to vertically align us</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// stores a promise</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property usePromise of type <em>boolean</em></span></p>
-
-<p>If true, show() returns a promise.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;usePromise&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="nx">write</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-      <span class="k">default</span><span class="o">:</span> <span class="kc">false</span>
-    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property visible of type <em>Boolean</em></span></p>
-
-<p>Indicates if the alert is veisible.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span> <span class="s2">&quot;visible&quot;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="nx">write</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-      <span class="k">default</span><span class="o">:</span> <span class="kc">false</span>
-    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createElements</span></p>
-
+for cancel buttons), that is the return value.</p></div></div><div class="code"><div class="wrapper">    self._buttons = [];
+    self._buttonContainer = <span class="hljs-literal">null</span>;
+    self.setButtons = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theButtons )</span> </span>{
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dismissWithIndex</span><span class="hljs-params">( idx )</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          self.dismiss( idx );
+        };
+      }
+      <span class="hljs-keyword">var</span> i;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>clear out any previous buttons in the DOM</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( self._buttonContainer !== <span class="hljs-literal">null</span> ) {
+        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; self._buttons.length; i++ ) {
+          self._buttonContainer.removeChild( self._buttons[ i ].element );
+        }
+      }
+      self._buttons = theButtons;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>determine if we need wide buttons or not</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">var</span> wideButtons = !( ( self._buttons.length &gt;= <span class="hljs-number">2</span> ) &amp;&amp; ( self._buttons.length &lt;= <span class="hljs-number">3</span> ) );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add the buttons back to the DOM if we can</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( self._buttonContainer !== <span class="hljs-literal">null</span> ) {
+        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; self._buttons.length; i++ ) {
+          <span class="hljs-keyword">var</span> e = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+          <span class="hljs-keyword">var</span> b = self._buttons[ i ];</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if the tag is null, give it (i)</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( b.tag === <span class="hljs-literal">null</span> ) {
+            b.tag = i;
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>class is ui-alert-button normal|bold|destructive [wide]
+wide buttons are for 1 button or 4+ buttons.</p></div></div><div class="code"><div class="wrapper">          e.className = <span class="hljs-string">"ui-alert-button "</span> + b.type + <span class="hljs-string">" "</span> + ( wideButtons ? <span class="hljs-string">"wide"</span> : <span class="hljs-string">""</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>title</p></div></div><div class="code"><div class="wrapper">          e.innerHTML = b.title;
+          <span class="hljs-keyword">if</span> ( !wideButtons ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set the width of each button to fill out the alert equally
+3 buttons gets 33.333%; 2 gets 50%.</p></div></div><div class="code"><div class="wrapper">            e.style.width = <span class="hljs-string">""</span> + ( <span class="hljs-number">100</span> / self._buttons.length ) + <span class="hljs-string">"%"</span>;
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>listen for a touch</p></div></div><div class="code"><div class="wrapper">          event.addListener( e, <span class="hljs-string">"touchend"</span>, dismissWithIndex( i ) );
+          b.element = e;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add the button to the DOM</p></div></div><div class="code"><div class="wrapper">          self._buttonContainer.appendChild( b.element );
+        }
+      }
+    };
+    self.defineProperty( <span class="hljs-string">"buttons"</span>, {
+      read: <span class="hljs-literal">true</span>,
+      write: <span class="hljs-literal">true</span>,
+      <span class="hljs-keyword">default</span>: []
+    } );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>other DOM elements we need to construct the alert</p></div></div><div class="code"><div class="wrapper">    self._rootElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// root element contains the container</span>
+    self._alertElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// points to the alert itself</span>
+    self._vaElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// points to the DIV used to vertically align us</span>
+    self._deferred = <span class="hljs-literal">null</span>; <span class="hljs-comment">// stores a promise</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property usePromise of type <em>boolean</em></span></p>
+<p>If true, show() returns a promise.</p></div></div><div class="code"><div class="wrapper">    self.defineProperty( <span class="hljs-string">"usePromise"</span>, {
+      read: <span class="hljs-literal">true</span>,
+      write: <span class="hljs-literal">false</span>,
+      <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+    } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property visible of type <em>Boolean</em></span></p>
+<p>Indicates if the alert is veisible.</p></div></div><div class="code"><div class="wrapper">    self.defineProperty( <span class="hljs-string">"visible"</span>, {
+      read: <span class="hljs-literal">true</span>,
+      write: <span class="hljs-literal">false</span>,
+      <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+    } );</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createElements</span></p>
 <p>Creates the DOM elements for an Alert. Assumes the styles are
-already in the style sheet.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert-container&quot;</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert-vertical-align&quot;</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert&quot;</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert-title&quot;</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert-text&quot;</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="s2">&quot;div&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ui-alert-button-container&quot;</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span> <span class="p">);</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method backButtonPressed</span></p>
-
-<p>Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">backButtonPressed</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method hide</span></p>
-
+already in the style sheet.</p></div></div><div class="code"><div class="wrapper">    self._createElements = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      self._rootElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._rootElement.className = <span class="hljs-string">"ui-alert-container"</span>;
+      self._vaElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._vaElement.className = <span class="hljs-string">"ui-alert-vertical-align"</span>;
+      self._alertElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._alertElement.className = <span class="hljs-string">"ui-alert"</span>;
+      self._titleElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._titleElement.className = <span class="hljs-string">"ui-alert-title"</span>;
+      self._textElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._textElement.className = <span class="hljs-string">"ui-alert-text"</span>;
+      self._buttonContainer = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._buttonContainer.className = <span class="hljs-string">"ui-alert-button-container"</span>;
+      self._alertElement.appendChild( self._titleElement );
+      self._alertElement.appendChild( self._textElement );
+      self._alertElement.appendChild( self._buttonContainer );
+      self._vaElement.appendChild( self._alertElement );
+      self._rootElement.appendChild( self._vaElement );
+    };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method backButtonPressed</span></p>
+<p>Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.</p></div></div><div class="code"><div class="wrapper">    self.backButtonPressed = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      self.dismiss( -<span class="hljs-number">1</span> );
+    };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method hide</span></p>
 <p>Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.</p>
-
-<p><strong>Returns a [type]</strong><br/>([description])</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">hide</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span><span class="p">(</span> <span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method show</span></p>
-
+<p><strong>Returns a [type]</strong><br/>([description])</p></div></div><div class="code"><div class="wrapper">    self.hide = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      self.dismiss( -<span class="hljs-number">1</span> );
+    };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method show</span></p>
 <p>Shows an alert.</p>
-
-<p><strong>Returns a Promise</strong><br/>(a promise if usePromise = true)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">show</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">visible</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">usePromise</span> <span class="o">&amp;&amp;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span> <span class="o">!==</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="k">void</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// can&#39;t do anything more.</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>listen for the back button</p></div></div><div class="code"><div class="wrapper">      <span class="nx">UI</span><span class="p">.</span><span class="nx">backButton</span><span class="p">.</span><span class="nx">addListenerForNotification</span><span class="p">(</span> <span class="s2">&quot;backButtonPressed&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">backButtonPressed</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add to the body</p></div></div><div class="code"><div class="wrapper">      <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>animate in</p></div></div><div class="code"><div class="wrapper">      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">opacity</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span>
-      <span class="p">},</span> <span class="mi">50</span> <span class="p">);</span>
-      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">opacity</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span>
-        <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElement</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">,</span> <span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;scale3d(1.05, 1.05,1)&quot;</span> <span class="p">)</span>
-      <span class="p">},</span> <span class="mi">125</span> <span class="p">);</span>
-      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElement</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">,</span> <span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;scale3d(0.95, 0.95,1)&quot;</span> <span class="p">)</span>
-      <span class="p">},</span> <span class="mi">250</span> <span class="p">);</span>
-      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">UI</span><span class="p">.</span><span class="nx">styleElement</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">,</span> <span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;scale3d(1.00, 1.00,1)&quot;</span> <span class="p">)</span>
-      <span class="p">},</span> <span class="mi">375</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_visible</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">usePromise</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method dismiss</span></p>
-
+<p><strong>Returns a Promise</strong><br/>(a promise if usePromise = true)</p></div></div><div class="code"><div class="wrapper">    self.show = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( self.visible ) {
+        <span class="hljs-keyword">if</span> ( self.usePromise &amp;&amp; self._deferred !== <span class="hljs-literal">null</span> ) {
+          <span class="hljs-keyword">return</span> self._deferred;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// can't do anything more.</span>
+      }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>listen for the back button</p></div></div><div class="code"><div class="wrapper">      UI.backButton.addListenerForNotification( <span class="hljs-string">"backButtonPressed"</span>, self.backButtonPressed );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add to the body</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-built_in">document</span>.body.appendChild( self._rootElement );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>animate in</p></div></div><div class="code"><div class="wrapper">      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self._rootElement.style.opacity = <span class="hljs-string">"1"</span>;
+      }, <span class="hljs-number">50</span> );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self._alertElement.style.opacity = <span class="hljs-string">"1"</span>;
+        UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(1.05, 1.05,1)"</span> )
+      }, <span class="hljs-number">125</span> );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(0.95, 0.95,1)"</span> )
+      }, <span class="hljs-number">250</span> );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(1.00, 1.00,1)"</span> )
+      }, <span class="hljs-number">375</span> );
+      self._visible = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">if</span> ( self.usePromise ) {
+        self._deferred = Q.defer();
+        <span class="hljs-keyword">return</span> self._deferred.promise;
+      }
+    };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method dismiss</span></p>
 <p>Dismisses the alert with the sepcified button index</p>
-
 <p>Parameters:</p>
-
 <ul>
 <li><strong>idx must be a Number.</strong></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">dismiss</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">idx</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">visible</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span><span class="p">;</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>drop the listener for the back button</p></div></div><div class="code"><div class="wrapper">      <span class="nx">UI</span><span class="p">.</span><span class="nx">backButton</span><span class="p">.</span><span class="nx">removeListenerForNotification</span><span class="p">(</span> <span class="s2">&quot;backButtonPressed&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">backButtonPressed</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove from the body</p></div></div><div class="code"><div class="wrapper">      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">opacity</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="p">;</span>
-      <span class="p">},</span> <span class="mi">10</span> <span class="p">);</span>
-      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">opacity</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="p">;</span>
-      <span class="p">},</span> <span class="mi">250</span> <span class="p">);</span>
-      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="p">);</span>
-      <span class="p">},</span> <span class="mi">500</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get notification tag</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">tag</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="nx">idx</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="nx">idx</span> <span class="o">&lt;</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">.</span><span class="nx">length</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">tag</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_buttons</span><span class="p">[</span> <span class="nx">idx</span> <span class="p">].</span><span class="nx">tag</span><span class="p">;</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>send our notifications as appropriate</p></div></div><div class="code"><div class="wrapper">      <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;dismissed&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">notify</span><span class="p">(</span> <span class="s2">&quot;buttonTapped&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">tag</span> <span class="p">]</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_visible</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and resolve/reject the promise</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">usePromise</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">tag</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span> <span class="nx">tag</span> <span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">_deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span> <span class="nx">tag</span> <span class="p">)</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>
-
+</ul></div></div><div class="code"><div class="wrapper">    self.dismiss = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( idx )</span> </span>{
+      <span class="hljs-keyword">if</span> ( !self.visible ) {
+        <span class="hljs-keyword">return</span>;
+      }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>drop the listener for the back button</p></div></div><div class="code"><div class="wrapper">      UI.backButton.removeListenerForNotification( <span class="hljs-string">"backButtonPressed"</span>, self.backButtonPressed );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove from the body</p></div></div><div class="code"><div class="wrapper">      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self._alertElement.style.opacity = <span class="hljs-string">"0"</span>;
+      }, <span class="hljs-number">10</span> );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self._rootElement.style.opacity = <span class="hljs-string">"0"</span>;
+      }, <span class="hljs-number">250</span> );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-built_in">document</span>.body.removeChild( self._rootElement );
+      }, <span class="hljs-number">500</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get notification tag</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">var</span> tag = -<span class="hljs-number">1</span>;
+      <span class="hljs-keyword">if</span> ( ( idx &gt; -<span class="hljs-number">1</span> ) &amp;&amp; ( idx &lt; self._buttons.length ) ) {
+        tag = self._buttons[ idx ].tag;
+      }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>send our notifications as appropriate</p></div></div><div class="code"><div class="wrapper">      self.notify( <span class="hljs-string">"dismissed"</span> );
+      self.notify( <span class="hljs-string">"buttonTapped"</span>, [ tag ] );
+      self._visible = <span class="hljs-literal">false</span>;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and resolve/reject the promise</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( self.usePromise ) {
+        <span class="hljs-keyword">if</span> ( tag &gt; -<span class="hljs-number">1</span> ) {
+          self._deferred.resolve( tag );
+        } <span class="hljs-keyword">else</span> {
+          self._deferred.reject( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( tag ) );
+        }
+      }
+    };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>
 <p>Initializes the Alert and calls _createElements.</p>
-
-<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">override</span><span class="p">(</span> <span class="kd">function</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span> <span class="p">);</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_createElements</span><span class="p">();</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method overrideSuper</span></p>
-
+<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">    self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{
+      self.super( _className, <span class="hljs-string">"init"</span> );
+      self._createElements();
+      <span class="hljs-keyword">return</span> self;
+    } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method overrideSuper</span></p>
 <p>Initializes the Alert. Options includes title, text, buttons, and promise.</p>
-
-<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">override</span><span class="p">(</span> <span class="kd">function</span> <span class="nx">initWithOptions</span><span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">buttons</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">promise</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">self</span><span class="p">.</span><span class="nx">_usePromise</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-    <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method destroy</span></p>
-
-<p>Clean up after ourselves.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">overrideSuper</span><span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="kr">class</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="p">);</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">destroy</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">visible</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
-        <span class="nx">setTimeout</span><span class="p">(</span> <span class="nx">destroy</span><span class="p">,</span> <span class="mi">600</span> <span class="p">);</span> <span class="c1">// we won&#39;t destroy immediately.</span>
-        <span class="k">return</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_rootElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_vaElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_alertElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_titleElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_textElement</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">_buttonContainer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="nx">self</span><span class="p">.</span><span class="kr">super</span><span class="p">(</span> <span class="nx">_className</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span> <span class="p">);</span>
-    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>handle auto-init</p></div></div><div class="code"><div class="wrapper">    <span class="nx">self</span><span class="p">.</span><span class="nx">_autoInit</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
-  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method button</span></p>
-
+<p><strong>Returns an Object</strong></p></div></div><div class="code"><div class="wrapper">    self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initWithOptions</span><span class="hljs-params">( options )</span> </span>{
+      self.init();
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
+          self.title = options.title;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
+          self.text = options.text;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.buttons !== <span class="hljs-string">"undefined"</span> ) {
+          self.buttons = options.buttons;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
+          self._usePromise = options.promise;
+        }
+      }
+      <span class="hljs-keyword">return</span> self;
+    } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method destroy</span></p>
+<p>Clean up after ourselves.</p></div></div><div class="code"><div class="wrapper">    self.overrideSuper( self.class, <span class="hljs-string">"destroy"</span>, self.destroy );
+    self.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( self.visible ) {
+        self.hide();
+        setTimeout( destroy, <span class="hljs-number">600</span> ); <span class="hljs-comment">// we won't destroy immediately.</span>
+        <span class="hljs-keyword">return</span>;
+      }
+      self._rootElement = <span class="hljs-literal">null</span>;
+      self._vaElement = <span class="hljs-literal">null</span>;
+      self._alertElement = <span class="hljs-literal">null</span>;
+      self._titleElement = <span class="hljs-literal">null</span>;
+      self._textElement = <span class="hljs-literal">null</span>;
+      self._buttonContainer = <span class="hljs-literal">null</span>;
+      self.super( _className, <span class="hljs-string">"destroy"</span> );
+    };</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>handle auto-init</p></div></div><div class="code"><div class="wrapper">    self._autoInit.apply( self, <span class="hljs-built_in">arguments</span> );
+    <span class="hljs-keyword">return</span> self;
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method button</span></p>
 <p>Creates a button suitable for an Alert</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>title must be a String.</strong><br/>(The title of the button)</p></li>
-<li><p><strong>options must be an Object.</strong><br/>(The additional options: type and tag)</p></li>
+<li><p><strong>title must be a String.</strong><br/>(The title of the button)</p>
+</li>
+<li><p><strong>options must be an Object.</strong><br/>(The additional options: type and tag)</p>
+</li>
 </ul>
-
-<p><strong>Returns an Object</strong><br/>(A button)</p></div></div><div class="code"><div class="wrapper">  <span class="nx">Alert</span><span class="p">.</span><span class="nx">button</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">button</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-    <span class="nx">button</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;normal&quot;</span><span class="p">;</span> <span class="c1">// normal, bold, destructive</span>
-    <span class="nx">button</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// assign for a specific tag</span>
-    <span class="nx">button</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c1">// false = disabled.</span>
-    <span class="nx">button</span><span class="p">.</span><span class="nx">element</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">// attached DOM element</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">type</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">button</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">button</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tag</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">button</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">enabled</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">button</span><span class="p">;</span>
-  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method OK</span></p>
-
+<p><strong>Returns an Object</strong><br/>(A button)</p></div></div><div class="code"><div class="wrapper">  Alert.button = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( title, options )</span> </span>{
+    <span class="hljs-keyword">var</span> button = {};
+    button.title = title;
+    button.type = <span class="hljs-string">"normal"</span>; <span class="hljs-comment">// normal, bold, destructive</span>
+    button.tag = <span class="hljs-literal">null</span>; <span class="hljs-comment">// assign for a specific tag</span>
+    button.enabled = <span class="hljs-literal">true</span>; <span class="hljs-comment">// false = disabled.</span>
+    button.element = <span class="hljs-literal">null</span>; <span class="hljs-comment">// attached DOM element</span>
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.type !== <span class="hljs-string">"undefined"</span> ) {
+        button.type = options.type;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.tag !== <span class="hljs-string">"undefined"</span> ) {
+        button.tag = options.tag;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.enabled !== <span class="hljs-string">"undefined"</span> ) {
+        button.enabled = options.enabled;
+      }
+    }
+    <span class="hljs-keyword">return</span> button;
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method OK</span></p>
 <p>Creates an OK-style Alert. It only has an OK button.</p>
-
 <p>Parameters:</p>
-
 <ul>
 <li><strong>options must be an Object.</strong><br/>(Specify the title, text, and promise options if desired.)</li>
-</ul></div></div><div class="code"><div class="wrapper">  <span class="nx">Alert</span><span class="p">.</span><span class="nx">OK</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">anOK</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Alert</span><span class="p">();</span>
-    <span class="kd">var</span> <span class="nx">anOKOptions</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">title</span><span class="o">:</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;OK&quot;</span> <span class="p">),</span>
-      <span class="nx">text</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-      <span class="nx">buttons</span><span class="o">:</span> <span class="p">[</span> <span class="nx">Alert</span><span class="p">.</span><span class="nx">button</span><span class="p">(</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;OK&quot;</span> <span class="p">),</span> <span class="p">{</span>
-        <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;bold&quot;</span>
-      <span class="p">}</span> <span class="p">)</span> <span class="p">]</span>
-    <span class="p">};</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">anOKOptions</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">anOKOptions</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">promise</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">anOKOptions</span><span class="p">.</span><span class="nx">promise</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nx">anOK</span><span class="p">.</span><span class="nx">initWithOptions</span><span class="p">(</span> <span class="nx">anOKOptions</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="nx">anOK</span><span class="p">;</span>
-  <span class="p">};</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method Confirm</span></p>
-
+</ul></div></div><div class="code"><div class="wrapper">  Alert.OK = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> </span>{
+    <span class="hljs-keyword">var</span> anOK = <span class="hljs-keyword">new</span> Alert();
+    <span class="hljs-keyword">var</span> anOKOptions = {
+      title: _y.T( <span class="hljs-string">"OK"</span> ),
+      text: <span class="hljs-string">""</span>,
+      buttons: [ Alert.button( _y.T( <span class="hljs-string">"OK"</span> ), {
+        type: <span class="hljs-string">"bold"</span>
+      } ) ]
+    };
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
+        anOKOptions.title = options.title;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
+        anOKOptions.text = options.text;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
+        anOKOptions.promise = options.promise;
+      }
+    }
+    anOK.initWithOptions( anOKOptions );
+    <span class="hljs-keyword">return</span> anOK;
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method Confirm</span></p>
 <p>Creates an OK/Cancel-style Alert. It only has an OK and CANCEL button.</p>
-
 <p>Parameters:</p>
-
 <ul>
 <li><strong>options must be an Object.</strong><br/>(Specify the title, text, and promise options if desired.)</li>
-</ul></div></div><div class="code"><div class="wrapper">  <span class="nx">Alert</span><span class="p">.</span><span class="nx">Confirm</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">options</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">aConfirmation</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Alert</span><span class="p">();</span>
-    <span class="kd">var</span> <span class="nx">confirmationOptions</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="nx">title</span><span class="o">:</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;Confirm&quot;</span> <span class="p">),</span>
-      <span class="nx">text</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-      <span class="nx">buttons</span><span class="o">:</span> <span class="p">[</span> <span class="nx">Alert</span><span class="p">.</span><span class="nx">button</span><span class="p">(</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;OK&quot;</span> <span class="p">)</span> <span class="p">),</span>
-        <span class="nx">Alert</span><span class="p">.</span><span class="nx">button</span><span class="p">(</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">T</span><span class="p">(</span> <span class="s2">&quot;Cancel&quot;</span> <span class="p">),</span> <span class="p">{</span>
-          <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span>
-          <span class="nx">tag</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="p">}</span> <span class="p">)</span>
-      <span class="p">]</span>
-    <span class="p">};</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">confirmationOptions</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">confirmationOptions</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">promise</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">confirmationOptions</span><span class="p">.</span><span class="nx">promise</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nx">aConfirmation</span><span class="p">.</span><span class="nx">initWithOptions</span><span class="p">(</span> <span class="nx">confirmationOptions</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="nx">aConfirmation</span><span class="p">;</span>
-  <span class="p">};</span>
-  <span class="k">return</span> <span class="nx">Alert</span><span class="p">;</span>
-<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>
+</ul></div></div><div class="code"><div class="wrapper">  Alert.Confirm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> </span>{
+    <span class="hljs-keyword">var</span> aConfirmation = <span class="hljs-keyword">new</span> Alert();
+    <span class="hljs-keyword">var</span> confirmationOptions = {
+      title: _y.T( <span class="hljs-string">"Confirm"</span> ),
+      text: <span class="hljs-string">""</span>,
+      buttons: [ Alert.button( _y.T( <span class="hljs-string">"OK"</span> ) ),
+        Alert.button( _y.T( <span class="hljs-string">"Cancel"</span> ), {
+          type: <span class="hljs-string">"bold"</span>,
+          tag: -<span class="hljs-number">1</span>
+        } )
+      ]
+    };
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
+        confirmationOptions.title = options.title;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
+        confirmationOptions.text = options.text;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
+        confirmationOptions.promise = options.promise;
+      }
+    }
+    aConfirmation.initWithOptions( confirmationOptions );
+    <span class="hljs-keyword">return</span> aConfirmation;
+  };
+  <span class="hljs-keyword">return</span> Alert;
+} );</div></div></div></div></body></html>

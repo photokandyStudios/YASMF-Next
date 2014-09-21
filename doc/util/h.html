@@ -1,242 +1,424 @@
 <!DOCTYPE html><html lang="en"><head><title>util/h</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/h"><meta name="groc-project-path" content="lib/yasmf/util/h.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/h.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module h.js author Kerri Shotts and version 0.1</p>
-
 <pre><code>Copyright (c) 2014 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
-software and associated documentation files (the "Software"), to deal in the Software
+software and associated documentation files (the &quot;Software&quot;), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
 merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 permit persons to whom the Software is furnished to do so, subject to the following
 conditions:
 The above copyright notice and this permission notice shall be included in all copies
 or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-</code></pre>
-
-<p></span></p>
-
-<p>h - simple DOM demplating</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
-<span class="cm">     asi:true,</span>
-<span class="cm">     bitwise:true,</span>
-<span class="cm">     browser:true,</span>
-<span class="cm">     camelcase:true,</span>
-<span class="cm">     curly:true,</span>
-<span class="cm">     eqeqeq:false,</span>
-<span class="cm">     forin:true,</span>
-<span class="cm">     noarg:true,</span>
-<span class="cm">     noempty:true,</span>
-<span class="cm">     plusplus:false,</span>
-<span class="cm">     smarttabs:true,</span>
-<span class="cm">     sub:true,</span>
-<span class="cm">     trailing:false,</span>
-<span class="cm">     undef:true,</span>
-<span class="cm">     white:false,</span>
-<span class="cm">     onevar:false</span>
-<span class="cm">*/</span>
-<span class="cm">/*global define, Node, document*/</span>
-<span class="nx">define</span><span class="p">(</span> <span class="p">[</span> <span class="s2">&quot;yasmf/util/object&quot;</span> <span class="p">],</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">BaseObject</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>internal private method to handle parsing children
-and attaching them to their parents</p>
-
-<p>If the child is a NODE, it is attached directly to the parent as a child
-If the child is a FUNCTION, the RESULTS are re-parsed, ultimately to be attached to the parent
-  as children
-If the child is an ARRAY, each element within the array is re-parsed, ultimately to be attached
-  to the parent as children</p>
-
-<p>Parameters:</p>
-
+OTHER DEALINGS IN THE SOFTWARE.</code></pre>
+<p>Generates a DOM tree (or just a single node) based on a series of method calls
+into <strong>h</strong>. <strong>h</strong> has one root method (<code>el</code>) that creates all DOM elements, but also has
+helper methods for each HTML tag. This means that a UL can be created simply by
+calling <code>h.ul</code>.</p>
+<p>Technically there&#39;s no such thing as a template using this library, but functions
+encapsulating a series of h calls function as an equivalent if properly decoupled
+from their surrounds.</p>
+<p>Templates are essentially methods attached to the DOM using <code>h.renderTo(templateFn(context,...))</code>
+and return DOM node elements or arrays. For example:</p>
+<pre><code>function aTemplate ( context ) {
+  return h.div (
+    [ h.span ( context.title ), h.span ( context.description ) ]
+  );
+};</code></pre>
+<p>The resulting DOM tree looks like this (assuming <code>context</code> is defined as
+<code>{title: &quot;Title&quot;, description: &quot;Description&quot;}</code>:</p>
+<pre><code>&lt;div&gt;
+  &lt;span&gt;Title&lt;/span&gt;
+  &lt;span&gt;Description&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+<p>Template results are added to the DOM using <code>h.renderTo</code>:</p>
+<pre><code>h.renderTo ( aDOMElement, aTemplate ( context ) );</code></pre>
+<p>Technically <code>appendChild</code> could be used, but it&#39;s possible that an attribute
+might just return an array of DOM nodes, in which case <code>appendChild</code> fails.</p>
+<p>There are also a variety of utility methods defined in <strong>h</strong>, such as:</p>
 <ul>
-<li><p><strong>child can be an Array, a Function, or a Node.</strong><br/>(child to handle and attach)</p></li>
-<li><p><strong>parent must be a Node.</strong><br/>(parent)</p></li>
-</ul></div></div><div class="code"><div class="wrapper">  <span class="kd">function</span> <span class="nx">handleChild</span><span class="p">(</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">parent</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">child</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">child</span> <span class="k">instanceof</span> <span class="nb">Array</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">child</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">handleChild</span><span class="p">(</span> <span class="nx">child</span><span class="p">[</span> <span class="nx">i</span> <span class="p">],</span> <span class="nx">parent</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">child</span> <span class="k">instanceof</span> <span class="nx">Node</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">parent</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">child</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">child</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">handleChild</span><span class="p">(</span> <span class="nx">child</span><span class="p">(),</span> <span class="nx">parent</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>parses an incoming tag into its tag name, id, and class constituents
-A tag is of the form "tagName.class#id" or "tagName#id.class". The id and class
-are optional.</p>
+<li><code>forEach ( arr, fn )</code> -- this executes <code>arr.map(fn)</code>.</li>
+<li><code>forIn ( object, fn )</code> -- iterates over each property owned by <code>object</code> and calls <code>fn</code></li>
+<li><code>ifdef ( expr, a, b )</code> -- determines if <code>expr</code> is defined, and if so, returns <code>a</code>, otherwise <code>b</code></li>
+<li><code>iif ( expr, a, b )</code> -- returns <code>a</code> if <code>expr</code> evaluates to true, otherwise <code>b</code></li>
+</ul>
+<p>When constructing Node elements using <code>h</code>, it&#39;s important to recognize that an underlying
+function called <code>el</code> is being called (and can be called directly). The order parameters here is
+somewhat malleable - only the first parameter must be the tag name (when using <code>el</code>). Otherwise,
+the options for the tag must be within the first three parameters. The text content or value content
+for the tag must be in the same first three parameters. For example:</p>
+<pre><code>return h.el(&quot;div&quot;, { attrs: { id: &quot;anElement&quot; } }, &quot;Text content&quot;);</code></pre>
+<p>is equivalent to:</p>
+<pre><code>return h.el(&quot;div&quot;, &quot;Text Content&quot;, { attrs: { id: &quot;anElement&quot; } } );</code></pre>
+<p>which is also in turn equivalent to:</p>
+<pre><code>return h.div(&quot;Text Content&quot;, { attrs: { id: &quot;anElement&quot; } } );</code></pre>
+<p>If an object has both text and value content (like buttons), the first string or number is used
+as the <code>value</code> and the second is used as <code>textContent</code>:</p>
+<pre><code>return h.button(&quot;This goes into value attribute&quot;, &quot;This is in textContent&quot;);</code></pre>
+<p>So why <code>el</code> and <code>h.div</code> equivalents? If you need to specify a custom tag OR want to use shorthand
+you&#39;ll want to use <code>el</code>. If you don&#39;t need to specify shorthand properties, use the easier-to-read
+<code>h.tagName</code>. For example:</p>
+<pre><code>return h.p ( &quot;paragraph content&quot; );
+return h.el ( &quot;p&quot;, &quot;paragraph content&quot; );
 
+return h.el ( &quot;input#txtUsername.bigField?type=text&amp;size=20&quot;, &quot;starting value&quot; );
+return h.input ( { attrs: { type: &quot;text&quot;, size: &quot;20&quot;, class: &quot;bigField&quot;, id: &quot;txtUserName&quot; } },
+                 &quot;starting value&quot; );</code></pre>
+<p>When specifying tag options, you have several options that can be specified:</p>
+<ul>
+<li>attributes using <code>attrs</code> object</li>
+<li>styles using <code>styles</code> object</li>
+<li>event handlers using <code>on</code> object</li>
+<li>hammer handlers using <code>hammer</code> object</li>
+<li>data binding using <code>bind</code> object</li>
+<li>store element references to a container object using <code>storeTo</code> object
+</span></li>
+</ul>
+<h1 id="h-simple-dom-templating">h - simple DOM templating</h1></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*global define, Node, document*/</span>
+define( [ <span class="hljs-string">"yasmf/util/object"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( BaseObject )</span> </span>{</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method handleChild</span></p>
+<p>internal private method to handle parsing children
+and attaching them to their parents</p>
+<p>If the child is a <code>Node</code>, it is attached directly to the parent as a child
+If the child is a <code>function</code>, the <em>resuts</em> are re-parsed, ultimately to be attached to the parent
+  as children
+If the child is an <code>Array</code>, each element within the array is re-parsed, ultimately to be attached
+  to the parent as children</p>
 <p>Parameters:</p>
-
+<ul>
+<li><p><strong>child can be an Array, a Function, or a Node.</strong><br/>(child to handle and attach)</p>
+</li>
+<li><p><strong>parent must be a Node.</strong><br/>(parent)</p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleChild</span><span class="hljs-params">( child, parent )</span> </span>{
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> child === <span class="hljs-string">"object"</span> ) {
+      <span class="hljs-keyword">if</span> ( child <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+        <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = child.length; i &lt; l; i++ ) {
+          handleChild( child[ i ], parent );
+        }
+      }
+      <span class="hljs-keyword">if</span> ( child <span class="hljs-keyword">instanceof</span> Node ) {
+        parent.appendChild( child );
+      }
+    }
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> child === <span class="hljs-string">"function"</span> ) {
+      handleChild( child(), parent );
+    }
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method parseTag</span></p>
+<p>parses an incoming tag into its tag <code>name</code>, <code>id</code>, and <code>class</code> constituents
+A tag is of the form <code>tagName.class#id</code> or <code>tagName#id.class</code>. The <code>id</code> and <code>class</code>
+are optional.</p>
+<p>If attributes need to be supplied, it&#39;s possible via the <code>?</code> query string. Attributes
+are of the form <code>?attr=value&amp;attr=value...</code>.</p>
+<p>Parameters:</p>
 <ul>
 <li><strong>tag must be a string.</strong><br/>(tag to parse)</li>
 </ul>
-
-<p><strong>Returns a *</strong><br/>(Object of the form { tag: tagName, id: id, class: class })</p></div></div><div class="code"><div class="wrapper">  <span class="kd">function</span> <span class="nx">parseTag</span><span class="p">(</span> <span class="nx">tag</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">tagParts</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">tag</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="nx">id</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
-        <span class="kr">class</span><span class="o">:</span> <span class="kc">undefined</span>
-      <span class="p">},</span>
-      <span class="nx">hashPos</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;#&quot;</span> <span class="p">),</span>
-      <span class="nx">dotPos</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="s2">&quot;.&quot;</span> <span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="nx">hashPos</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">dotPos</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">;</span>
-      <span class="k">return</span> <span class="nx">tagParts</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="nx">hashPos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">dotPos</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">hashPos</span> <span class="p">);</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">hashPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">length</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">tagParts</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="nx">dotPos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">hashPos</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">dotPos</span> <span class="p">);</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="kr">class</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">dotPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">length</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">tagParts</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="nx">dotPos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">hashPos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">hashPos</span> <span class="o">&lt;</span> <span class="nx">dotPos</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">hashPos</span> <span class="p">);</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">hashPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span> <span class="nx">dotPos</span> <span class="o">-</span> <span class="nx">hashPos</span> <span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">);</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="kr">class</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">dotPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">length</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">tagParts</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="nx">dotPos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">hashPos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">dotPos</span> <span class="o">&lt;</span> <span class="nx">hashPos</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">tag</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">dotPos</span> <span class="p">);</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="kr">class</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">dotPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span> <span class="nx">hashPos</span> <span class="o">-</span> <span class="nx">dotPos</span> <span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">);</span>
-      <span class="nx">tagParts</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="nx">hashPos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">length</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">tagParts</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">tagParts</span><span class="p">;</span>
-  <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>h templating engine
-  short for HTML</p>
-
-<p>Generates a DOM tree (or just a single node) based on a series of method calls
-into h. h has one root method (el) that creates all DOM elements, but also has
-helper methods for each HTML tag. This means that a UL can be created simply by
-calling h.ul.</p>
-
-<p>Technically there's no such thing as a template using this library, but functions
-encapsulating a series of h calls function as an equivalent if properly decoupled
-from their surrounds.</p></div></div><div class="code"><div class="wrapper">  <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Returns a DOM tree containing the requested element and any further child
+<p><strong>Returns a *</strong><br/>(Object of the form <code>{ tag: tagName, id: id, class: class, query: query, queryPars: Array }</code>)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseTag</span><span class="hljs-params">( tag )</span> </span>{
+    <span class="hljs-keyword">var</span> tagParts = {
+        tag: <span class="hljs-string">""</span>,
+        id: <span class="hljs-literal">undefined</span>,
+        <span class="hljs-keyword">class</span>: <span class="hljs-literal">undefined</span>,
+        query: <span class="hljs-literal">undefined</span>,
+        queryParts: []
+      },
+      hashPos = tag.indexOf( <span class="hljs-string">"#"</span> ),
+      dotPos = tag.indexOf( <span class="hljs-string">"."</span> ),
+      qmPos = tag.indexOf( <span class="hljs-string">"?"</span> );
+    <span class="hljs-keyword">if</span> ( qmPos &gt;= <span class="hljs-number">0</span> ) {
+      tagParts.query = tag.substr( qmPos + <span class="hljs-number">1</span> );
+      tagParts.queryParts = tagParts.query.split( <span class="hljs-string">"&amp;"</span> );
+      tag = tag.substr( <span class="hljs-number">0</span>, qmPos );
+    }
+    <span class="hljs-keyword">if</span> ( hashPos &lt; <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; <span class="hljs-number">0</span> ) {
+      tagParts.tag = tag;
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">if</span> ( hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; <span class="hljs-number">0</span> ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, hashPos );
+      tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &lt; <span class="hljs-number">0</span> ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, dotPos );
+      tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &lt; dotPos ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, hashPos );
+      tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span>, ( dotPos - hashPos ) - <span class="hljs-number">1</span> );
+      tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; hashPos ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, dotPos );
+      tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span>, ( hashPos - dotPos ) - <span class="hljs-number">1</span> );
+      tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">return</span> tagParts;
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>h templating engine</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">var</span> h = {
+      VERSION: <span class="hljs-string">"0.1.100"</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method el</span></p>
+<p>Returns a DOM tree containing the requested element and any further child
 elements (as extra parameters)</p>
-
+<p><code>tagOptions</code> should be an object consisting of the following optional segments:</p>
+<pre><code>{
+   attrs: {...}                     attributes to add to the element
+   styles: {...}                    style attributes to add to the element
+   on: {...}                        event handlers to attach to the element
+   bind: { object:, keyPath: }      data binding
+   store: { object:, keyPath: }     store element to object.keyPath
+}</code></pre>
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>tag must be a string.</strong><br/>(tag of the form "tagName.class#id" or "tagName#id.class")</p></li>
-<li><p><strong>tagOptions must be a *.</strong><br/>(options for the tag)</p>
-
-<ul><li><strong>... can be an Array, a Function, or a String.</strong><br/>(children that should be attached)</li></ul></li>
+<li><p><strong>tag must be a string.</strong><br/>(tag of the form <code>tagName.class#id</code> or <code>tagName#id.class</code> tag can also specify attributes: <code>input?type=text&amp;size=20</code>)</p>
+</li>
+<li><p><strong>tagOptions must be a *.</strong><br/>(options for the tag (see above))</p>
+<ul>
+<li><strong>... can be an Array, a Function, or a String.</strong><br/>(children that should be attached)</li>
 </ul>
-
-<p><strong>Returns a Node</strong><br/>(DOM tree tagOptions should be an object consisting of the following optional segments: <code>{ attrs: {...} attributes to add to the element styles: {...} style attributes to add to the element on: {...} event handlers to attach to the element bind: { object:, keyPath: } data binding store: { object:, keyPath: } store element to object.keyPath }</code>)</p></div></div><div class="code"><div class="wrapper">      <span class="nx">el</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">tag</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">e</span><span class="p">,</span>
-          <span class="nx">options</span><span class="p">,</span>
-          <span class="nx">content</span><span class="p">,</span>
-          <span class="nx">tagParts</span> <span class="o">=</span> <span class="nx">parseTag</span><span class="p">(</span> <span class="nx">tag</span> <span class="p">);</span> <span class="c1">// parse tag; it should be of the form tag[#id][.class]</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the element; if @DF is used, a document fragment is used instead</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="nx">tagParts</span><span class="p">.</span><span class="nx">tag</span> <span class="o">!==</span> <span class="s2">&quot;@DF&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span> <span class="nx">tagParts</span><span class="p">.</span><span class="nx">tag</span> <span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">();</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attach the class and id from the tag name, if available</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="nx">tagParts</span><span class="p">.</span><span class="kr">class</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">e</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">tagParts</span><span class="p">.</span><span class="kr">class</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">tagParts</span><span class="p">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">e</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="nx">tagParts</span><span class="p">.</span><span class="nx">id</span> <span class="p">);</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get the arguments as an array, ignoring the first parameter</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span> <span class="nx">arguments</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>determine what we've passed in the second/third parameter
-if it is an object (but not a node or array), it's a list of
-options to attach to the element. If it is a string, it's text
-content that should be added using .textContent.
-note: we could parse the entire argument list, but that would
-a bit absurd.</p></div></div><div class="code"><div class="wrapper">        <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>could be a DOM node, an array, or tag options</p></div></div><div class="code"><div class="wrapper">              <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="p">(</span> <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="k">instanceof</span> <span class="nx">Node</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span> <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="k">instanceof</span> <span class="nb">Array</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="nx">options</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this is text content</p></div></div><div class="code"><div class="wrapper">              <span class="nx">content</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
-            <span class="p">}</span>
-          <span class="p">}</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy over any attributes and styles in options.attrs and options.style</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add attributes</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">attrs</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">attrs</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">attr</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="nx">e</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">attrs</span><span class="p">[</span> <span class="nx">attr</span> <span class="p">]</span> <span class="p">);</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-          <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add styles</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">styles</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">style</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">styles</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">styles</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">style</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="nx">e</span><span class="p">.</span><span class="nx">style</span><span class="p">[</span> <span class="nx">style</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">styles</span><span class="p">[</span> <span class="nx">style</span> <span class="p">];</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-          <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add event handlers; handler property is expected to be a valid DOM
-event, i.e. { "change": function... } or { change: function... }
-if the handler is an object, it must be of the form
-  { handler: function ...,
-    capture: true/false }</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">on</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">evt</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">on</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">evt</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">on</span><span class="p">[</span> <span class="nx">evt</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
-                  <span class="nx">e</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span> <span class="nx">evt</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">on</span><span class="p">[</span> <span class="nx">evt</span> <span class="p">].</span><span class="nx">bind</span><span class="p">(</span> <span class="nx">e</span> <span class="p">),</span> <span class="kc">false</span> <span class="p">);</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                  <span class="nx">e</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span> <span class="nx">evt</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">on</span><span class="p">[</span> <span class="nx">evt</span> <span class="p">].</span><span class="nx">handler</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span> <span class="nx">e</span> <span class="p">),</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">on</span><span class="p">[</span> <span class="nx">evt</span> <span class="p">].</span><span class="nx">capture</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span>
-                    <span class="nx">options</span><span class="p">.</span><span class="nx">on</span><span class="p">[</span> <span class="nx">evt</span> <span class="p">].</span><span class="nx">capture</span> <span class="o">:</span> <span class="kc">false</span> <span class="p">);</span>
-                <span class="p">}</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-          <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Data binding only occurs if using YASMF's BaseObject for now (built-in pubsub)
+</li>
+</ul>
+<p><strong>Returns a Node</strong><br/>(DOM tree)</p></div></div><div class="code"><div class="wrapper">      el: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( tag )</span> </span>{
+        <span class="hljs-keyword">var</span> e, i, l, evt,
+          options,
+          content = [],
+          contentTarget = [],
+          tagParts = parseTag( tag ); <span class="hljs-comment">// parse tag; it should be of the form `tag[#id][.class][?attr=value[&amp;attr=value...]`</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the element; if <code>@DF</code> is used, a document fragment is used instead</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( tagParts.tag !== <span class="hljs-string">"@DF"</span> ) {
+          e = <span class="hljs-built_in">document</span>.createElement( tagParts.tag );
+        } <span class="hljs-keyword">else</span> {
+          e = <span class="hljs-built_in">document</span>.createDocumentFragment();
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attach the <code>class</code> and <code>id</code> from the tag name, if available</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( tagParts.class !== <span class="hljs-literal">undefined</span> ) {
+          e.className = tagParts.class;
+        }
+        <span class="hljs-keyword">if</span> ( tagParts.id !== <span class="hljs-literal">undefined</span> ) {
+          e.setAttribute( <span class="hljs-string">"id"</span>, tagParts.id );
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get the arguments as an array, ignoring the first parameter</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> args = <span class="hljs-built_in">Array</span>.prototype.slice.call( <span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>determine what we&#39;ve passed in the second/third parameter
+if it is an object (but not a node or array), it&#39;s a list of
+options to attach to the element. If it is a string, it&#39;s text
+content that should be added using <code>textContent</code> or <code>value</code></p>
+<blockquote>
+<p>note: we could parse the entire argument list, but that would
+a bit absurd.</p>
+</blockquote></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++ ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> args[ <span class="hljs-number">0</span> ] !== <span class="hljs-string">"undefined"</span> ) {
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> args[ <span class="hljs-number">0</span> ] === <span class="hljs-string">"object"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>could be a DOM node, an array, or tag options</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-keyword">if</span> ( !( args[ <span class="hljs-number">0</span> ] <span class="hljs-keyword">instanceof</span> Node ) &amp;&amp; !( args[ <span class="hljs-number">0</span> ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) ) {
+                options = args.shift();
+              }
+            }
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> args[ <span class="hljs-number">0</span> ] === <span class="hljs-string">"string"</span> || <span class="hljs-keyword">typeof</span> args[ <span class="hljs-number">0</span> ] === <span class="hljs-string">"number"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this is text content</p></div></div><div class="code"><div class="wrapper">              content.push( args.shift() );
+            }
+          }
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy over any <code>queryParts</code> attributes</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( tagParts.queryParts.length &gt; <span class="hljs-number">0</span> ) {
+          <span class="hljs-keyword">var</span> arr;
+          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = tagParts.queryParts.length; i &lt; l; i++ ) {
+            arr = tagParts.queryParts[ i ].split( <span class="hljs-string">"="</span> );
+            <span class="hljs-keyword">if</span> ( arr.length === <span class="hljs-number">2</span> ) {
+              e.setAttribute( arr[ <span class="hljs-number">0</span> ].trim(), arr[ <span class="hljs-number">1</span> ].trim() );
+            }
+          }
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy over any attributes and styles in <code>options.attrs</code> and <code>options.style</code></p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"object"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add attributes</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.attrs !== <span class="hljs-string">"undefined"</span> ) {
+            <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> attr <span class="hljs-keyword">in</span> options.attrs ) {
+              <span class="hljs-keyword">if</span> ( options.attrs.hasOwnProperty( attr ) ) {
+                e.setAttribute( attr, options.attrs[ attr ] );
+              }
+            }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add styles</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.styles !== <span class="hljs-string">"undefined"</span> ) {
+            <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> style <span class="hljs-keyword">in</span> options.styles ) {
+              <span class="hljs-keyword">if</span> ( options.styles.hasOwnProperty( style ) ) {
+                e.style[ style ] = options.styles[ style ];
+              }
+            }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add event handlers; handler property is expected to be a valid DOM
+event, i.e. <code>{ &quot;change&quot;: function... }</code> or <code>{ change: function... }</code>
+if the handler is an object, it must be of the form</p>
+<pre><code>  { handler: function ...,
+    capture: true/false }</code></pre></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on !== <span class="hljs-string">"undefined"</span> ) {
+            <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.on ) {
+              <span class="hljs-keyword">if</span> ( options.on.hasOwnProperty( evt ) ) {
+                <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on[ evt ] === <span class="hljs-string">"function"</span> ) {
+                  e.addEventListener( evt, options.on[ evt ].bind( e ), <span class="hljs-literal">false</span> );
+                } <span class="hljs-keyword">else</span> {
+                  e.addEventListener( evt, options.on[ evt ].handler.bind( e ), <span class="hljs-keyword">typeof</span> options.on[ evt ].capture !== <span class="hljs-string">"undefined"</span> ?
+                    options.on[ evt ].capture : <span class="hljs-literal">false</span> );
+                }
+              }
+            }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we support hammer too, assuming we&#39;re given a reference
+it must be of the form <code>{ hammer: { gesture: { handler: fn, options: }, hammer: hammer } }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.hammer !== <span class="hljs-string">"undefined"</span> ) {
+            <span class="hljs-keyword">var</span> hammer = options.hammer.hammer;
+            <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.hammer ) {
+              <span class="hljs-keyword">if</span> ( options.hammer.hasOwnProperty( evt ) &amp;&amp; evt !== <span class="hljs-string">"hammer"</span> ) {
+                hammer( e, options.hammer[ evt ].options ).on( evt, options.hammer[ evt ].handler );
+              }
+            }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Data binding only occurs if using YASMF&#39;s BaseObject for now (built-in pubsub/observables)
 along with observable properties
-the binding object is of the form { object: objectRef, keyPath: "keyPath" }</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">bind</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">BaseObject</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span> <span class="nx">options</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">object</span> <span class="k">instanceof</span> <span class="nx">BaseObject</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we have an object that has observable properties</p></div></div><div class="code"><div class="wrapper">                <span class="nx">options</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">object</span><span class="p">.</span><span class="nx">dataBindOn</span><span class="p">(</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">keyPath</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get the current value so it can be displayed</p></div></div><div class="code"><div class="wrapper">                <span class="nx">content</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">object</span><span class="p">[</span> <span class="nx">options</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">keyPath</span> <span class="p">];</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-          <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>allow elements to be stored into a context
-store must be an object of the form {object:objectRef, keyPath: "keyPath" }</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">store</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">object</span><span class="p">[</span> <span class="nx">options</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">keyPath</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">e</span><span class="p">;</span>
-          <span class="p">}</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if we have content, go ahead and add it
-if we're an element that has a value, we attach it to the value
-property instead of textContent. If textContent is not available
-we use innerText; if that's not available, we complain and do
-nothing. Falling back to innerHTML isn't an option, as that's what
-we are explicitly trying to avoid.</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">content</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">content</span> <span class="o">===</span> <span class="s2">&quot;number&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">e</span><span class="p">.</span><span class="nx">value</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">e</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">content</span><span class="p">;</span>
-          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">e</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="nx">e</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">content</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">e</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-                <span class="nx">e</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">content</span><span class="p">;</span>
-              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;WARNING! This browser doesn&#39;t support textContent or innerText.&quot;</span> <span class="p">);</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-          <span class="p">}</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Handle children; handleChild appends each one to the parent</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">l</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="c1">//console.log(i);</span>
-          <span class="nx">child</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span> <span class="nx">i</span> <span class="p">];</span>
-          <span class="nx">handleChild</span><span class="p">(</span> <span class="nx">child</span><span class="p">,</span> <span class="nx">e</span> <span class="p">);</span>
-        <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the element (and associated tree)</p></div></div><div class="code"><div class="wrapper">        <span class="k">return</span> <span class="nx">e</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create bindings for each HTML element (from: https://developer.mozilla.org/en-US/docs/Web/HTML/Element)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">els</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;abbr&quot;</span><span class="p">,</span> <span class="s2">&quot;acronym&quot;</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="s2">&quot;applet&quot;</span><span class="p">,</span> <span class="s2">&quot;area&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="s2">&quot;aside&quot;</span><span class="p">,</span> <span class="s2">&quot;audio&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="s2">&quot;basefont&quot;</span><span class="p">,</span> <span class="s2">&quot;bdi&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;bdo&quot;</span><span class="p">,</span> <span class="s2">&quot;bgsound&quot;</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">,</span> <span class="s2">&quot;blink&quot;</span><span class="p">,</span> <span class="s2">&quot;blockquote&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="s2">&quot;br&quot;</span><span class="p">,</span> <span class="s2">&quot;button&quot;</span><span class="p">,</span> <span class="s2">&quot;canvas&quot;</span><span class="p">,</span> <span class="s2">&quot;caption&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;cite&quot;</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;col&quot;</span><span class="p">,</span> <span class="s2">&quot;colgroup&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;datalist&quot;</span><span class="p">,</span> <span class="s2">&quot;dd&quot;</span><span class="p">,</span> <span class="s2">&quot;decorator&quot;</span><span class="p">,</span> <span class="s2">&quot;del&quot;</span><span class="p">,</span> <span class="s2">&quot;details&quot;</span><span class="p">,</span> <span class="s2">&quot;dfn&quot;</span><span class="p">,</span> <span class="s2">&quot;dialog&quot;</span><span class="p">,</span> <span class="s2">&quot;dir&quot;</span><span class="p">,</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="s2">&quot;dl&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;dt&quot;</span><span class="p">,</span> <span class="s2">&quot;element&quot;</span><span class="p">,</span> <span class="s2">&quot;em&quot;</span><span class="p">,</span> <span class="s2">&quot;embed&quot;</span><span class="p">,</span> <span class="s2">&quot;fieldset&quot;</span><span class="p">,</span> <span class="s2">&quot;figcaption&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="s2">&quot;footer&quot;</span><span class="p">,</span> <span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;frameset&quot;</span><span class="p">,</span> <span class="s2">&quot;h1&quot;</span><span class="p">,</span> <span class="s2">&quot;h2&quot;</span><span class="p">,</span> <span class="s2">&quot;h3&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;h4&quot;</span><span class="p">,</span> <span class="s2">&quot;h5&quot;</span><span class="p">,</span> <span class="s2">&quot;h6&quot;</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;hgroup&quot;</span><span class="p">,</span> <span class="s2">&quot;hr&quot;</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;iframe&quot;</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;ins&quot;</span><span class="p">,</span> <span class="s2">&quot;isindex&quot;</span><span class="p">,</span> <span class="s2">&quot;kbd&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;keygen&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;legend&quot;</span><span class="p">,</span> <span class="s2">&quot;li&quot;</span><span class="p">,</span> <span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="s2">&quot;listing&quot;</span><span class="p">,</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;map&quot;</span><span class="p">,</span> <span class="s2">&quot;mark&quot;</span><span class="p">,</span> <span class="s2">&quot;marquee&quot;</span><span class="p">,</span> <span class="s2">&quot;menu&quot;</span><span class="p">,</span> <span class="s2">&quot;menuitem&quot;</span><span class="p">,</span> <span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="s2">&quot;meter&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;nav&quot;</span><span class="p">,</span> <span class="s2">&quot;nobr&quot;</span><span class="p">,</span> <span class="s2">&quot;noframes&quot;</span><span class="p">,</span> <span class="s2">&quot;noscript&quot;</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;ol&quot;</span><span class="p">,</span> <span class="s2">&quot;optgroup&quot;</span><span class="p">,</span> <span class="s2">&quot;option&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;param&quot;</span><span class="p">,</span> <span class="s2">&quot;picture&quot;</span><span class="p">,</span> <span class="s2">&quot;plaintext&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;pre&quot;</span><span class="p">,</span> <span class="s2">&quot;progress&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;rp&quot;</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="s2">&quot;ruby&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;samp&quot;</span><span class="p">,</span> <span class="s2">&quot;script&quot;</span><span class="p">,</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span> <span class="s2">&quot;select&quot;</span><span class="p">,</span> <span class="s2">&quot;shadow&quot;</span><span class="p">,</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;spacer&quot;</span><span class="p">,</span> <span class="s2">&quot;span&quot;</span><span class="p">,</span> <span class="s2">&quot;strike&quot;</span><span class="p">,</span> <span class="s2">&quot;strong&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;sub&quot;</span><span class="p">,</span> <span class="s2">&quot;summary&quot;</span><span class="p">,</span> <span class="s2">&quot;sup&quot;</span><span class="p">,</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="s2">&quot;tbody&quot;</span><span class="p">,</span> <span class="s2">&quot;td&quot;</span><span class="p">,</span> <span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="s2">&quot;textarea&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;tfoot&quot;</span><span class="p">,</span> <span class="s2">&quot;th&quot;</span><span class="p">,</span> <span class="s2">&quot;thead&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;tr&quot;</span><span class="p">,</span> <span class="s2">&quot;track&quot;</span><span class="p">,</span> <span class="s2">&quot;tt&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;ul&quot;</span><span class="p">,</span> <span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span> <span class="s2">&quot;wbr&quot;</span><span class="p">,</span> <span class="s2">&quot;xmp&quot;</span>
-    <span class="p">];</span>
-  <span class="nx">els</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">el</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="nx">h</span><span class="p">[</span> <span class="nx">el</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">h</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">el</span> <span class="p">);</span>
-  <span class="p">}</span> <span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>bind document fragment too</p></div></div><div class="code"><div class="wrapper">  <span class="nx">h</span><span class="p">.</span><span class="nx">DF</span> <span class="o">=</span> <span class="nx">h</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span> <span class="nx">h</span><span class="p">,</span> <span class="s2">&quot;@DF&quot;</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="nx">h</span><span class="p">;</span>
-<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>
+the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyPath&quot; }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.bind !== <span class="hljs-string">"undefined"</span> ) {
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> BaseObject !== <span class="hljs-string">"undefined"</span> ) {
+              <span class="hljs-keyword">if</span> ( options.bind.object <span class="hljs-keyword">instanceof</span> BaseObject ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we have an object that has observable properties</p></div></div><div class="code"><div class="wrapper">                options.bind.object.dataBindOn( e, options.bind.keyPath );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get the current value so it can be displayed</p></div></div><div class="code"><div class="wrapper">                content.push( options.bind.object[ options.bind.keyPath ] );
+              }
+            }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>allow elements to be stored into a context
+store must be an object of the form <code>{object:objectRef, keyPath: &quot;keyPath&quot; }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.store !== <span class="hljs-string">"undefined"</span> ) {
+            options.store.object[ options.store.keyPath ] = e;
+          }
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if we have content, go ahead and add it;
+if we&#39;re an element that has a <code>value</code>, we attach it to the value
+property instead of <code>textContent</code>. If <code>textContent</code> is not available
+we use <code>innerText</code>; if that&#39;s not available, we complain and do
+nothing. Falling back to <code>innerHTML</code> isn&#39;t an option, as that&#39;s what
+we are explicitly trying to avoid.
+First, determine if we have <code>value</code> and <code>textContent</code> options or only
+<code>textContent</code> (buttons have both) If both are present, the first
+content item is applied to <code>value</code>, and the second is applied to 
+<code>textContent</code>|<code>innerText</code></p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> e.value !== <span class="hljs-string">"undefined"</span> ) {
+          contentTarget.push( <span class="hljs-string">"value"</span> );
+        }
+        <span class="hljs-keyword">if</span> ( ( <span class="hljs-keyword">typeof</span> e.textContent !== <span class="hljs-string">"undefined"</span> ) || ( <span class="hljs-keyword">typeof</span> e.innerText !== <span class="hljs-string">"undefined"</span> ) ) {
+          contentTarget.push( <span class="hljs-keyword">typeof</span> e.textContent !== <span class="hljs-string">"undefined"</span> ? <span class="hljs-string">"textContent"</span> : <span class="hljs-string">"innerText"</span> );
+        }
+        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = contentTarget.length; i &lt; l; i++ ) {
+          <span class="hljs-keyword">var</span> x = content.shift();
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> x !== <span class="hljs-string">"undefined"</span> ) {
+            e[ contentTarget[ i ] ] = x;
+          }
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Handle children; <code>handleChild</code> appends each one to the parent</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> child;
+        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = args.length; i &lt; l; i++ ) {
+          child = args[ i ];
+          handleChild( child, e );
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the element (and associated tree)</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">return</span> e;
+      },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method mapTo</span></p>
+<p>mapTo - Maps a keypath to another keypath based on <code>map</code>. <code>map</code> should look like this:</p>
+<pre><code>{
+  &quot;mapping_key&quot;: &quot;target_key&quot;, ...
+}</code></pre>
+<p>For example, let&#39;s assume that some object <code>o</code> has the properties <code>id</code> and <code>name</code>. We
+want to map these to consistent values like <code>value</code> and <code>description</code> for a component.
+<code>map</code> should look like this: <code>{ &quot;value&quot;: &quot;id&quot;, &quot;description&quot;: &quot;name&quot; }</code>. In this case
+calling <code>mapTo(&quot;value&quot;, map)</code> would return <code>id</code>, which could then be indexed on <code>o</code>
+like so: <code>o[mapTo(&quot;value&quot;,map)]</code>.</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>keyPath must be a String.</strong><br/>(to map)</p>
+</li>
+<li><p><strong>map must be a *.</strong><br/>(map description)</p>
+</li>
+</ul>
+<p><strong>Returns a String</strong><br/>(mapped keyPath)</p></div></div><div class="code"><div class="wrapper">      mapTo: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mapTo</span><span class="hljs-params">( keyPath, map )</span> </span>{
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> map === <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">return</span> keyPath;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> map[ keyPath ] !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">return</span> map[ keyPath ];
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">return</span> keyPath;
+        }
+      },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method iif</span></p>
+<p>iif - evaluate <code>expr</code> and if it is <code>true</code>, return <code>a</code>. If it is false,
+return <code>b</code>. If <code>a</code> is not supplied, <code>true</code> is the return result if <code>a</code>
+would have been returned. If <code>b</code> is not supplied, <code>false</code> is the return
+result if <code>b</code> would have been returned. Not much difference than the
+ternary (<code>?:</code>) operator, but might be easier to read for some.</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>expr must be a boolean.</strong><br/>(expression to evaluate)</p>
+</li>
+<li><p><strong>a must be a *.</strong><br/>(value to return if <code>expr</code> is true; <code>true</code> is the default if not supplied)</p>
+</li>
+<li><p><strong>b must be a *.</strong><br/>(value to return if <code>expr</code> is false; <code>false</code> is the default if not supplied)</p>
+</li>
+</ul>
+<p><strong>Returns a *</strong><br/>(<code>expr ? a : b</code>)</p></div></div><div class="code"><div class="wrapper">      iif: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">iif</span><span class="hljs-params">( expr, a, b )</span> </span>{
+        <span class="hljs-keyword">return</span> expr ? ( ( <span class="hljs-keyword">typeof</span> a !== <span class="hljs-string">"undefined"</span> ) ? a : <span class="hljs-literal">true</span> ) : ( ( <span class="hljs-keyword">typeof</span> b !== <span class="hljs-string">"undefined"</span> ) ? b : <span class="hljs-literal">false</span> );
+      },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method ifdef</span></p>
+<p>ifdef - Check if an expression is defined and return <code>a</code> if it is and <code>b</code>
+if it isn&#39;t. If <code>a</code> is not supplied, <code>a</code> evaluates to <code>true</code> and if <code>b</code>
+is not supplied, <code>b</code> evaluates to <code>false</code>.</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>expr must be a boolean.</strong><br/>(expression to check)</p>
+</li>
+<li><p><strong>a must be a *.</strong><br/>(value to return if expression is defined)</p>
+</li>
+<li><p><strong>b must be a *.</strong><br/>(value to return if expression is not defined)</p>
+</li>
+</ul>
+<p><strong>Returns a *</strong><br/>(a or b)</p></div></div><div class="code"><div class="wrapper">      ifdef: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ifdef</span><span class="hljs-params">( expr, a, b )</span> </span>{
+        <span class="hljs-keyword">return</span> ( <span class="hljs-keyword">typeof</span> expr !== <span class="hljs-string">"undefined"</span> ) ? ( ( <span class="hljs-keyword">typeof</span> a !== <span class="hljs-string">"undefined"</span> ) ? a : <span class="hljs-literal">true</span> ) : ( ( <span class="hljs-keyword">typeof</span> b !== <span class="hljs-string">"undefined"</span> ) ? b :
+          <span class="hljs-literal">false</span> );
+      },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method forIn</span></p>
+<p>forIn - return an array containing the results of calling <code>fn</code> for
+each property within <code>object</code>. Equivalent to <code>map</code> on an array.</p>
+<p>The function should have the signature <code>( value, object, property )</code>
+and return the result. The results will automatically be collated in
+an array.</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>object must be a *.</strong><br/>(object to iterate over)</p>
+</li>
+<li><p><strong>fn must be a function.</strong><br/>(function to call)</p>
+</li>
+</ul>
+<p><strong>Returns an Array</strong><br/>(resuts)</p></div></div><div class="code"><div class="wrapper">      forIn: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">forIn</span><span class="hljs-params">( object, fn )</span> </span>{
+        <span class="hljs-keyword">var</span> arr = [];
+        <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> prop <span class="hljs-keyword">in</span> object ) {
+          <span class="hljs-keyword">if</span> ( object.hasOwnProperty( prop ) ) {
+            arr.push( fn( object[ prop ], object, prop ) );
+          }
+        }
+        <span class="hljs-keyword">return</span> arr;
+      },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method forEach</span></p>
+<p>forEach - Executes <code>map</code> on an array, calling <code>fn</code>. Named such because
+it makes more sense than using <code>map</code> in a template, but it means the
+same thing.</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>arr must be an Array.</strong><br/>(Array to iterate)</p>
+</li>
+<li><p><strong>fn must be a function.</strong><br/>(Function to call)</p>
+</li>
+</ul>
+<p><strong>Returns an Array</strong><br/>(Array after iteration)</p></div></div><div class="code"><div class="wrapper">      forEach: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">forEach</span><span class="hljs-params">( arr, fn )</span> </span>{
+        <span class="hljs-keyword">return</span> arr.map( fn );
+      },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method renderTo</span></p>
+<p>renderTo - Renders a node or array of nodes to a given element. If an
+array is provided, each is appended in turn.</p>
+<p>Note: technically you can just use <code>appendChild</code> or equivalent DOM
+methods, but this works only as far as the return result is a single
+node. Occasionally your template may return an array of nodes, and
+at that point <code>appendChild</code> fails.</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>n can be an Array or a Node.</strong><br/>(Array or single node to append to the element)</p>
+</li>
+<li><p><strong>el must be a Node.</strong><br/>(Element to attach to)</p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">      renderTo: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderTo</span><span class="hljs-params">( n, el )</span> </span>{
+        <span class="hljs-keyword">if</span> ( n <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+          <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = n.length; i &lt; l; i++ ) {
+            el.appendChild( n[ i ] );
+          }
+        } <span class="hljs-keyword">else</span> {
+          el.appendChild( n );
+        }
+      }
+    },</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create bindings for each HTML element (from: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">https://developer.mozilla.org/en-US/docs/Web/HTML/Element</a>)</p></div></div><div class="code"><div class="wrapper">    els = [ <span class="hljs-string">"a"</span>, <span class="hljs-string">"abbr"</span>, <span class="hljs-string">"acronym"</span>, <span class="hljs-string">"address"</span>, <span class="hljs-string">"applet"</span>, <span class="hljs-string">"area"</span>, <span class="hljs-string">"article"</span>, <span class="hljs-string">"aside"</span>, <span class="hljs-string">"audio"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"base"</span>, <span class="hljs-string">"basefont"</span>, <span class="hljs-string">"bdi"</span>,
+      <span class="hljs-string">"bdo"</span>, <span class="hljs-string">"bgsound"</span>, <span class="hljs-string">"big"</span>, <span class="hljs-string">"blink"</span>, <span class="hljs-string">"blockquote"</span>, <span class="hljs-string">"body"</span>, <span class="hljs-string">"br"</span>, <span class="hljs-string">"button"</span>, <span class="hljs-string">"canvas"</span>, <span class="hljs-string">"caption"</span>, <span class="hljs-string">"center"</span>, <span class="hljs-string">"cite"</span>, <span class="hljs-string">"code"</span>,
+      <span class="hljs-string">"col"</span>, <span class="hljs-string">"colgroup"</span>, <span class="hljs-string">"content"</span>, <span class="hljs-string">"data"</span>, <span class="hljs-string">"datalist"</span>, <span class="hljs-string">"dd"</span>, <span class="hljs-string">"decorator"</span>, <span class="hljs-string">"del"</span>, <span class="hljs-string">"details"</span>, <span class="hljs-string">"dfn"</span>, <span class="hljs-string">"dialog"</span>, <span class="hljs-string">"dir"</span>, <span class="hljs-string">"div"</span>, <span class="hljs-string">"dl"</span>,
+      <span class="hljs-string">"dt"</span>, <span class="hljs-string">"element"</span>, <span class="hljs-string">"em"</span>, <span class="hljs-string">"embed"</span>, <span class="hljs-string">"fieldset"</span>, <span class="hljs-string">"figcaption"</span>, <span class="hljs-string">"figure"</span>, <span class="hljs-string">"font"</span>, <span class="hljs-string">"footer"</span>, <span class="hljs-string">"form"</span>, <span class="hljs-string">"frameset"</span>, <span class="hljs-string">"h1"</span>, <span class="hljs-string">"h2"</span>, <span class="hljs-string">"h3"</span>,
+      <span class="hljs-string">"h4"</span>, <span class="hljs-string">"h5"</span>, <span class="hljs-string">"h6"</span>, <span class="hljs-string">"head"</span>, <span class="hljs-string">"header"</span>, <span class="hljs-string">"hgroup"</span>, <span class="hljs-string">"hr"</span>, <span class="hljs-string">"html"</span>, <span class="hljs-string">"i"</span>, <span class="hljs-string">"iframe"</span>, <span class="hljs-string">"img"</span>, <span class="hljs-string">"input"</span>, <span class="hljs-string">"ins"</span>, <span class="hljs-string">"isindex"</span>, <span class="hljs-string">"kbd"</span>,
+      <span class="hljs-string">"keygen"</span>, <span class="hljs-string">"label"</span>, <span class="hljs-string">"legend"</span>, <span class="hljs-string">"li"</span>, <span class="hljs-string">"link"</span>, <span class="hljs-string">"listing"</span>, <span class="hljs-string">"main"</span>, <span class="hljs-string">"map"</span>, <span class="hljs-string">"mark"</span>, <span class="hljs-string">"marquee"</span>, <span class="hljs-string">"menu"</span>, <span class="hljs-string">"menuitem"</span>, <span class="hljs-string">"meta"</span>, <span class="hljs-string">"meter"</span>,
+      <span class="hljs-string">"nav"</span>, <span class="hljs-string">"nobr"</span>, <span class="hljs-string">"noframes"</span>, <span class="hljs-string">"noscript"</span>, <span class="hljs-string">"object"</span>, <span class="hljs-string">"ol"</span>, <span class="hljs-string">"optgroup"</span>, <span class="hljs-string">"option"</span>, <span class="hljs-string">"output"</span>, <span class="hljs-string">"p"</span>, <span class="hljs-string">"param"</span>, <span class="hljs-string">"picture"</span>, <span class="hljs-string">"plaintext"</span>,
+      <span class="hljs-string">"pre"</span>, <span class="hljs-string">"progress"</span>, <span class="hljs-string">"q"</span>, <span class="hljs-string">"rp"</span>, <span class="hljs-string">"rt"</span>, <span class="hljs-string">"ruby"</span>, <span class="hljs-string">"s"</span>, <span class="hljs-string">"samp"</span>, <span class="hljs-string">"script"</span>, <span class="hljs-string">"section"</span>, <span class="hljs-string">"select"</span>, <span class="hljs-string">"shadow"</span>, <span class="hljs-string">"small"</span>, <span class="hljs-string">"source"</span>,
+      <span class="hljs-string">"spacer"</span>, <span class="hljs-string">"span"</span>, <span class="hljs-string">"strike"</span>, <span class="hljs-string">"strong"</span>, <span class="hljs-string">"style"</span>, <span class="hljs-string">"sub"</span>, <span class="hljs-string">"summary"</span>, <span class="hljs-string">"sup"</span>, <span class="hljs-string">"table"</span>, <span class="hljs-string">"tbody"</span>, <span class="hljs-string">"td"</span>, <span class="hljs-string">"template"</span>, <span class="hljs-string">"textarea"</span>,
+      <span class="hljs-string">"tfoot"</span>, <span class="hljs-string">"th"</span>, <span class="hljs-string">"thead"</span>, <span class="hljs-string">"time"</span>, <span class="hljs-string">"title"</span>, <span class="hljs-string">"tr"</span>, <span class="hljs-string">"track"</span>, <span class="hljs-string">"tt"</span>, <span class="hljs-string">"u"</span>, <span class="hljs-string">"ul"</span>, <span class="hljs-string">"var"</span>, <span class="hljs-string">"video"</span>, <span class="hljs-string">"wbr"</span>, <span class="hljs-string">"xmp"</span>
+    ];
+  els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( el )</span> </span>{
+    h[ el ] = h.el.bind( h, el );
+  } );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>bind document fragment too</p></div></div><div class="code"><div class="wrapper">  h.DF = h.el.bind( h, <span class="hljs-string">"@DF"</span> );
+  h.dF = h.DF;
+  <span class="hljs-keyword">return</span> h;
+} );</div></div></div></div></body></html>

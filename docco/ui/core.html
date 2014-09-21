@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>core.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="alert.html">
+                alert.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="navigationController.html">
+                navigationController.js
+              </a>
+            
+              
+              <a class="source" href="splitViewController.html">
+                splitViewController.js
+              </a>
+            
+              
+              <a class="source" href="tabViewController.html">
+                tabViewController.js
+              </a>
+            
+              
+              <a class="source" href="viewContainer.html">
+                viewContainer.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>core.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ *
+ * Core of YASMF-UI; defines the version and basic UI  convenience methods.
+ *
+ * @module core.js
+ * @author Kerri Shotts
+ * @version 0.4
+ * ```
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */</span>
+<span class="hljs-comment">/*global define*/</span>
+define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hljs-string">"yasmf/util/object"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theDevice, BaseObject )</span> </span>{
+  <span class="hljs-keyword">var</span> prefixes = [ <span class="hljs-string">"-webkit-"</span>, <span class="hljs-string">"-moz-"</span>, <span class="hljs-string">"-ms-"</span>, <span class="hljs-string">"-o-"</span>, <span class="hljs-string">""</span> ],
+    jsPrefixes = [ <span class="hljs-string">"webkit"</span>, <span class="hljs-string">"moz"</span>, <span class="hljs-string">"ms"</span>, <span class="hljs-string">"o"</span>, <span class="hljs-string">""</span> ],
+    <span class="hljs-comment">/**
+     * @method Animation
+     * @constructor
+     * @param {Array} els             elements to animate
+     * @param {number} timing         seconds to animate over (0.3 default)
+     * @param {string} timingFunction timing function (ease-in-out default)
+     * @return {Animation}
+     */</span>
+    Animation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( els, timing, timingFunction )</span> </span>{
+      <span class="hljs-keyword">this</span>._el = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      <span class="hljs-keyword">this</span>._els = els;
+      <span class="hljs-keyword">this</span>._animations = [];
+      <span class="hljs-keyword">this</span>._transitions = [];
+      <span class="hljs-keyword">this</span>.timingFunction = <span class="hljs-string">"ease-in-out"</span>;
+      <span class="hljs-keyword">this</span>.timing = <span class="hljs-number">0.3</span>;
+      <span class="hljs-keyword">this</span>._maxTiming = <span class="hljs-number">0</span>;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> timing !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">this</span>.timing = timing;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> timingFunction !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">this</span>.timingFunction = timingFunction;
+      }
+    };
+  <span class="hljs-comment">/**
+   * @method _pushAnimation
+   * @private
+   * @param {string} property         style property
+   * @param {string} value            value to assign to property
+   * @param {number} timing           seconds for animation (optional)
+   * @param {string} timingFunction   timing function (optional)
+   * @return {Animation}              self, for chaining
+   */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_pushAnimation</span><span class="hljs-params">( property, value, timing, timingFunction )</span> </span>{
+    <span class="hljs-keyword">var</span> newProp, newValue, prefix, jsPrefix, newJsProp;
+    <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
+      prefix = prefixes[ i ];
+      jsPrefix = jsPrefixes[ i ];
+      newProp = prefix + property;
+      <span class="hljs-keyword">if</span> ( jsPrefix !== <span class="hljs-string">""</span> ) {
+        newJsProp = jsPrefix + property.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ).toUpperCase() + property.substr( <span class="hljs-number">1</span> );
+      } <span class="hljs-keyword">else</span> {
+        newJsProp = property;
+      }
+      newValue = value.replace( <span class="hljs-string">"{-}"</span>, prefix );
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._el.style[ newJsProp ] !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">this</span>._animations.push( [ newProp, newValue ] );
+        <span class="hljs-keyword">this</span>._transitions.push( [ newProp, ( <span class="hljs-keyword">typeof</span> timing !== <span class="hljs-string">"undefined"</span> ? timing : <span class="hljs-keyword">this</span>.timing ) + <span class="hljs-string">"s"</span>, ( <span class="hljs-keyword">typeof</span> timingFunction !==
+          <span class="hljs-string">"undefined"</span> ? timingFunction : <span class="hljs-keyword">this</span>.timingFunction ) ] );
+      }
+      <span class="hljs-keyword">this</span>._maxTiming = <span class="hljs-built_in">Math</span>.max( <span class="hljs-keyword">this</span>._maxTiming, ( <span class="hljs-keyword">typeof</span> timing !== <span class="hljs-string">"undefined"</span> ? timing : <span class="hljs-keyword">this</span>.timing ) );
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+  <span class="hljs-comment">/**
+   * Set the default timing function for following animations
+   * @method setTimingFunction
+   * @param {string} timingFunction      the timing function to assign, like "ease-in-out"
+   * @return {Animation}                 self
+   */</span>
+  Animation.prototype.setTimingFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTimingFunction</span><span class="hljs-params">( timingFunction )</span> </span>{
+    <span class="hljs-keyword">this</span>.timingFunction = timingFunction;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+  <span class="hljs-comment">/**
+   * Set the timing for the following animations, in seconds
+   * @method setTiming
+   * @param {number} timing              the length of the animation, in seconds
+   * @return {Animation}                 self
+   */</span>
+  Animation.prototype.setTiming = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTiming</span><span class="hljs-params">( timing )</span> </span>{
+    <span class="hljs-keyword">this</span>.timing = timing;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+  <span class="hljs-comment">/**
+   * Move the element to the specific position (using left, top)
+   *
+   * @method move
+   * @param {string} x           the x position (px or %)
+   * @param {string} y           the y position (px or %)
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.move = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y )</span> </span>{
+    _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"left"</span>, x );
+    <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"top"</span>, y );
+  }
+  <span class="hljs-comment">/**
+   * Resize the element (using width, height)
+   *
+   * @method resize
+   * @param {string} w           the width (px or %)
+   * @param {string} h           the height (px or %)
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.resize = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( w, h )</span> </span>{
+    _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"width"</span>, w );
+    <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"height"</span>, h );
+  }
+  <span class="hljs-comment">/**
+   * Change opacity
+   * @method opacity
+   * @param {string} o           opacity
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.opacity = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( o )</span> </span>{
+    <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"opacity"</span>, o );
+  }
+  <span class="hljs-comment">/**
+   * Transform the element using translate x, y
+   * @method translate
+   * @param {string} x       x position (px or %)
+   * @param {string} y       y position (px or %)
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.translate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y )</span> </span>{
+    <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"translate("</span>, [ x, y ].join( <span class="hljs-string">", "</span> ), <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
+  }
+  <span class="hljs-comment">/**
+   * Transform the element using translate3d x, y, z
+   * @method translate3d
+   * @param {string} x       x position (px or %)
+   * @param {string} y       y position (px or %)
+   * @param {string} z       z position (px or %)
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.translate3d = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y, z )</span> </span>{
+    <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"translate3d("</span>, [ x, y, z ].join( <span class="hljs-string">", "</span> ), <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
+  }
+  <span class="hljs-comment">/**
+   * Transform the element using scale
+   * @method scale
+   * @param {string} p       percent (0.00-1.00)
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.scale = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( p )</span> </span>{
+    <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"scale("</span>, p, <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
+  }
+  <span class="hljs-comment">/**
+   * Transform the element using scale
+   * @method rotate
+   * @param {string} d       degrees
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.rotate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( d )</span> </span>{
+    <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"rotate("</span>, d, <span class="hljs-string">"deg)"</span> ].join( <span class="hljs-string">""</span> ) );
+  }
+  <span class="hljs-comment">/**
+   * end the animation definition and trigger the sequence. If a callback method
+   * is supplied, it is called when the animation is over
+   * @method endAnimation
+   * @alias then
+   * @param {function} fn       function to call when animation is completed;
+   *                            it is bound to the Animation method so that
+   *                            further animations can be triggered.
+   * @return {Animation} self
+   */</span>
+  Animation.prototype.endAnimation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">endAnimation</span><span class="hljs-params">( fn )</span> </span>{
+    <span class="hljs-keyword">var</span> transition = <span class="hljs-keyword">this</span>._transitions.map( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( t )</span> </span>{
+        <span class="hljs-keyword">return</span> t.join( <span class="hljs-string">" "</span> );
+      } ).join( <span class="hljs-string">", "</span> ),
+      that = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">this</span>._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateEl</span><span class="hljs-params">( el )</span> </span>{
+      <span class="hljs-keyword">var</span> i, l, prefixedTransition, prop, value;
+      <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
+        prefixedTransition = prefixes[ i ] + <span class="hljs-string">"transition"</span>;
+        el.style.setProperty( prefixedTransition, transition );
+      }
+      <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = that._animations.length; i &lt; l; i++ ) {
+        prop = that._animations[ i ][ <span class="hljs-number">0</span> ];
+        value = that._animations[ i ][ <span class="hljs-number">1</span> ];
+        el.style.setProperty( prop, value );
+      }
+    } );
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">"function"</span> ) {
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">afterAnimationCallback</span><span class="hljs-params">()</span> </span>{
+        that._animations = [];
+        that._transitions = [];
+        fn.call( that );
+      }, <span class="hljs-keyword">this</span>._maxTiming * <span class="hljs-number">1000</span> );
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+  Animation.prototype.then = Animation.prototype.endAnimation;
+  <span class="hljs-keyword">var</span> UI = {};
+  <span class="hljs-comment">/**
+   * Version of the UI Namespace
+   * @property version
+   * @type Object
+   **/</span>
+  UI.version = <span class="hljs-string">"0.5.100"</span>;
+  <span class="hljs-comment">/**
+   * Styles the element with the given style and value. Adds in the browser
+   * prefixes to make it easier.
+   * @param  {Node} theElement
+   * @param  {CssStyle} theStyle   Don't camelCase these, use dashes as in regular styles
+   * @param  {value} theValue
+   * @returns {void}
+   */</span>
+  UI.styleElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElement, theStyle, theValue )</span> </span>{
+    <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; prefixes.length; i++ ) {
+      <span class="hljs-keyword">var</span> thePrefix = prefixes[ i ];
+      <span class="hljs-keyword">var</span> theNewStyle = thePrefix + theStyle;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>noinspection JSUnresolvedVariable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> theNewValue = theValue.replace( <span class="hljs-string">"%PREFIX%"</span>, thePrefix );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>noinspection JSUnresolvedVariable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      theElement.style.setProperty( theNewStyle, theNewValue );
+    }
+  };
+  UI.styleElements = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElements, theStyle, theValue )</span> </span>{
+    <span class="hljs-keyword">var</span> i;
+    <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; theElements.length; i++ ) {
+      UI.styleElement( theElements[ i ], theStyle, theValue );
+    }
+  };
+  <span class="hljs-comment">/**
+   * Begin an animation definition and apply it to the specific
+   * elements defined by selector. If parent is supplied, the selector
+   * is relative to the parent, otherwise it is relative to document
+   * @method beginAnimation
+   * @param {string|Array|Node} selector      If a string, animation applies to all
+   *                                          items that match the selector. If an
+   *                                          Array, animation applies to all nodes
+   *                                          in the array. If a node, the animation
+   *                                          applies only to the node.
+   * @param {Node} parent                     Optional; if provided, selector is
+   *                                          relative to this node
+   * @return {Animation}                      Animation object
+   */</span>
+  UI.beginAnimation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( selector, parent )</span> </span>{
+    <span class="hljs-keyword">var</span> els = [];
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> selector === <span class="hljs-string">"string"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"undefined"</span> ) {
+        parent = <span class="hljs-built_in">document</span>;
+      }
+      els = els.concat( <span class="hljs-built_in">Array</span>.prototype.splice.call( parent.querySelectorAll( selector ), <span class="hljs-number">0</span> ) );
+    }
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> selector === <span class="hljs-string">"object"</span> &amp;&amp; selector <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+      els = els.concat( selector );
+    }
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> selector === <span class="hljs-string">"object"</span> &amp;&amp; selector <span class="hljs-keyword">instanceof</span> Node ) {
+      els = els.concat( [ selector ] );
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Animation( els );
+  }
+  <span class="hljs-comment">/**
+   *
+   * Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
+   * any number of CSS styles. If the color's alpha is zero, the return value is
+   * "transparent". If the color is null, the return value is "inherit".
+   *
+   * @method colorToRGBA
+   * @static
+   * @param {color} theColor - theColor to convert.
+   * @returns {string} a CSS value suitable for color properties
+   */</span>
+  UI.colorToRGBA = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theColor )</span> </span>{
+    <span class="hljs-keyword">if</span> ( !theColor ) {
+      <span class="hljs-keyword">return</span> <span class="hljs-string">"inherit"</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>noinspection JSUnresolvedVariable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( theColor.alpha !== <span class="hljs-number">0</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>noinspection JSUnresolvedVariable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> <span class="hljs-string">"rgba("</span> + theColor.red + <span class="hljs-string">","</span> + theColor.green + <span class="hljs-string">","</span> + theColor.blue + <span class="hljs-string">","</span> + theColor.alpha + <span class="hljs-string">")"</span>;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-string">"transparent"</span>;
+    }
+  };
+  <span class="hljs-comment">/**
+   * @typedef {{red: Number, green: Number, blue: Number, alpha: Number}} color
+   */</span>
+  <span class="hljs-comment">/**
+   *
+   * Creates a color object of the form `{red:r, green:g, blue:b, alpha:a}`.
+   *
+   * @method makeColor
+   * @static
+   * @param {Number} r - red component (0-255)
+   * @param {Number} g - green component (0-255)
+   * @param {Number} b - blue component (0-255)
+   * @param {Number} a - alpha component (0.0-1.0)
+   * @returns {color}
+   *
+   */</span>
+  UI.makeColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( r, g, b, a )</span> </span>{
+    <span class="hljs-keyword">return</span> {
+      red: r,
+      green: g,
+      blue: b,
+      alpha: a
+    };
+  };
+  <span class="hljs-comment">/**
+   *
+   * Copies a color and returns it suitable for modification. You should copy
+   * colors prior to modification, otherwise you risk modifying the original.
+   *
+   * @method copyColor
+   * @static
+   * @param {color} theColor - the color to be duplicated
+   * @returns {color} a color ready for changes
+   *
+   */</span>
+  UI.copyColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theColor )</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>noinspection JSUnresolvedVariable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> UI.makeColor( theColor.red, theColor.green, theColor.blue, theColor.alpha );
+  };
+  <span class="hljs-comment">/**
+   * UI.COLOR
+   * @namespace UI
+   * @class COLOR
+   */</span>
+  UI.COLOR = UI.COLOR || {};
+  <span class="hljs-comment">/** @static
+   * @method blackColor
+   * @returns {color} a black color.
+   */</span>
+  UI.COLOR.blackColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method darkGrayColor
+   * @returns {color} a dark gray color.
+   */</span>
+  UI.COLOR.darkGrayColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">85</span>, <span class="hljs-number">85</span>, <span class="hljs-number">85</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method GrayColor
+   * @returns {color} a gray color.
+   */</span>
+  UI.COLOR.GrayColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">127</span>, <span class="hljs-number">127</span>, <span class="hljs-number">127</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method lightGrayColor
+   * @returns {color} a light gray color.
+   */</span>
+  UI.COLOR.lightGrayColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">170</span>, <span class="hljs-number">170</span>, <span class="hljs-number">170</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method whiteColor
+   * @returns {color} a white color.
+   */</span>
+  UI.COLOR.whiteColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method blueColor
+   * @returns {color} a blue color.
+   */</span>
+  UI.COLOR.blueColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">255</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method greenColor
+   * @returns {color} a green color.
+   */</span>
+  UI.COLOR.greenColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">0</span>, <span class="hljs-number">255</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method redColor
+   * @returns {color} a red color.
+   */</span>
+  UI.COLOR.redColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">255</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method cyanColor
+   * @returns {color} a cyan color.
+   */</span>
+  UI.COLOR.cyanColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">0</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method yellowColor
+   * @returns {color} a yellow color.
+   */</span>
+  UI.COLOR.yellowColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method magentaColor
+   * @returns {color} a magenta color.
+   */</span>
+  UI.COLOR.magentaColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">255</span>, <span class="hljs-number">0</span>, <span class="hljs-number">255</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method orangeColor
+   * @returns {color} a orange color.
+   */</span>
+  UI.COLOR.orangeColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">255</span>, <span class="hljs-number">127</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method purpleColor
+   * @returns {color} a purple color.
+   */</span>
+  UI.COLOR.purpleColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">127</span>, <span class="hljs-number">0</span>, <span class="hljs-number">127</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method brownColor
+   * @returns {color} a brown color.
+   */</span>
+  UI.COLOR.brownColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">153</span>, <span class="hljs-number">102</span>, <span class="hljs-number">51</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method lightTextColor
+   * @returns {color} a light text color suitable for display on dark backgrounds.
+   */</span>
+  UI.COLOR.lightTextColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">240</span>, <span class="hljs-number">240</span>, <span class="hljs-number">240</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method darkTextColor
+   * @returns {color} a dark text color suitable for display on light backgrounds.
+   */</span>
+  UI.COLOR.darkTextColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">15</span>, <span class="hljs-number">15</span>, <span class="hljs-number">15</span>, <span class="hljs-number">1.0</span> );
+  };
+  <span class="hljs-comment">/** @static
+   * @method clearColor
+   * @returns {color} a transparent color.
+   */</span>
+  UI.COLOR.clearColor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI.makeColor( <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.0</span> );
+  };
+  <span class="hljs-comment">/**
+   * Manages the root element
+   *
+   * @property _rootContainer
+   * @private
+   * @static
+   * @type Node
+   */</span>
+  UI._rootContainer = <span class="hljs-literal">null</span>;
+  <span class="hljs-comment">/**
+   * Creates the root element that contains the view hierarchy
+   *
+   * @method _createRootContainer
+   * @static
+   * @protected
+   */</span>
+  UI._createRootContainer = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    UI._rootContainer = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+    UI._rootContainer.className = <span class="hljs-string">"ui-container"</span>;
+    UI._rootContainer.id = <span class="hljs-string">"rootContainer"</span>;
+    <span class="hljs-built_in">document</span>.body.appendChild( UI._rootContainer );
+  };
+  <span class="hljs-comment">/**
+   * Manages the root view (topmost)
+   *
+   * @property _rootView
+   * @private
+   * @static
+   * @type ViewContainer
+   * @default null
+   */</span>
+  UI._rootView = <span class="hljs-literal">null</span>;
+  <span class="hljs-comment">/**
+   * Assigns a view to be the top view in the hierarchy
+   *
+   * @method setRootView
+   * @static
+   * @param {ViewContainer} theView
+   */</span>
+  UI.setRootView = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theView )</span> </span>{
+    <span class="hljs-keyword">if</span> ( UI._rootContainer === <span class="hljs-literal">null</span> ) {
+      UI._createRootContainer();
+    }
+    <span class="hljs-keyword">if</span> ( UI._rootView !== <span class="hljs-literal">null</span> ) {
+      UI.removeRootView();
+    }
+    UI._rootView = theView;
+    UI._rootView.parentElement = UI._rootContainer;
+  };
+  <span class="hljs-comment">/**
+   * Removes a view from the root view
+   *
+   * @method removeRootView
+   * @static
+   */</span>
+  UI.removeRootView = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> ( UI._rootView !== <span class="hljs-literal">null</span> ) {
+      UI._rootView.parentElement = <span class="hljs-literal">null</span>;
+    }
+    UI._rootView = <span class="hljs-literal">null</span>;
+  };
+  <span class="hljs-comment">/**
+   *
+   * Returns the root view
+   *
+   * @method getRootView
+   * @static
+   * @returns {ViewContainer}
+   */</span>
+  UI.getRootView = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> UI._rootView;
+  };
+  <span class="hljs-built_in">Object</span>.defineProperty( UI, <span class="hljs-string">"rootView"</span>, {
+    get: UI.getRootView,
+    set: UI.setRootView
+  } );
+  UI._BackButtonHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
+    self.subclass( <span class="hljs-string">"BackButtonHandler"</span> );
+    self.registerNotification( <span class="hljs-string">"backButtonPressed"</span> );
+    self._lastBackButtonTime = -<span class="hljs-number">1</span>;
+    self.handleBackButton = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> currentTime = ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() ).getTime();
+      <span class="hljs-keyword">if</span> ( self._lastBackButtonTime &lt; currentTime - <span class="hljs-number">1000</span> ) {
+        self._lastBackButtonTime = ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() ).getTime();
+        self.notifyMostRecent( <span class="hljs-string">"backButtonPressed"</span> );
+      }
+    };
+    <span class="hljs-built_in">document</span>.addEventListener( <span class="hljs-string">"backbutton"</span>, self.handleBackButton, <span class="hljs-literal">false</span> );
+    <span class="hljs-keyword">return</span> self;
+  };
+  <span class="hljs-comment">/**
+   *
+   * Global Back Button Handler Object
+   *
+   * Register a listener for the backButtonPressed notification in order
+   * to be notified when the back button is pressed.
+   *
+   * Applies only to a physical back button, not one on the screen.
+   *
+   * @property backButton
+   * @static
+   * @final
+   * @type _BackButtonHandler
+   */</span>
+  UI.backButton = <span class="hljs-keyword">new</span> UI._BackButtonHandler();
+  UI._OrientationHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
+    self.subclass( <span class="hljs-string">"OrientationHandler"</span> );
+    self.registerNotification( <span class="hljs-string">"orientationChanged"</span> );
+    self.handleOrientationChange = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> curDevice;
+      <span class="hljs-keyword">var</span> curOrientation;
+      <span class="hljs-keyword">var</span> curFormFactor;
+      <span class="hljs-keyword">var</span> curScale;
+      <span class="hljs-keyword">var</span> curConvenience;
+      curDevice = theDevice.platform();
+      <span class="hljs-keyword">if</span> ( curDevice == <span class="hljs-string">"ios"</span> ) {
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 7"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          curDevice += <span class="hljs-string">" ios7"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 6"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          curDevice += <span class="hljs-string">" ios6"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 5"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          curDevice += <span class="hljs-string">" ios5"</span>;
+        }
+      }
+      curFormFactor = theDevice.formFactor();
+      curOrientation = theDevice.isPortrait() ? <span class="hljs-string">"portrait"</span> : <span class="hljs-string">"landscape"</span>;
+      curScale = theDevice.isRetina() ? <span class="hljs-string">"hiDPI"</span> : <span class="hljs-string">"loDPI"</span>;
+      curConvenience = <span class="hljs-string">""</span>;
+      <span class="hljs-keyword">if</span> ( theDevice.iPad() ) {
+        curConvenience = <span class="hljs-string">"ipad"</span>;
+      }
+      <span class="hljs-keyword">if</span> ( theDevice.iPhone() ) {
+        curConvenience = <span class="hljs-string">"iphone"</span>;
+      }
+      <span class="hljs-keyword">if</span> ( theDevice.droidTablet() ) {
+        curConvenience = <span class="hljs-string">"droid-tablet"</span>;
+      }
+      <span class="hljs-keyword">if</span> ( theDevice.droidPhone() ) {
+        curConvenience = <span class="hljs-string">"droid-phone"</span>;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span>.body !== <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-built_in">document</span>.body !== <span class="hljs-literal">null</span> ) {
+        <span class="hljs-built_in">document</span>.body.setAttribute( <span class="hljs-string">"class"</span>, curDevice + <span class="hljs-string">" "</span> + curFormFactor + <span class="hljs-string">" "</span> + curOrientation + <span class="hljs-string">" "</span> + curScale + <span class="hljs-string">" "</span> +
+          curConvenience );
+      }
+      self.notify( <span class="hljs-string">"orientationChanged"</span> );
+    };
+    <span class="hljs-built_in">window</span>.addEventListener( <span class="hljs-string">"orientationchange"</span>, self.handleOrientationChange, <span class="hljs-literal">false</span> );
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span>.body !== <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-built_in">document</span>.body !== <span class="hljs-literal">null</span> ) {
+      self.handleOrientationChange();
+    } <span class="hljs-keyword">else</span> {
+      setTimeout( self.handleOrientationChange, <span class="hljs-number">0</span> );
+    }
+    <span class="hljs-keyword">return</span> self;
+  };
+  <span class="hljs-comment">/**
+   *
+   * Global Orientation Handler Object
+   *
+   * Register a listener for the orientationChanged notification in order
+   * to be notified when the orientation changes.
+   *
+   * @property orientationHandler
+   * @static
+   * @final
+   * @type _OrientationHandler
+   */</span>
+  UI.orientationHandler = <span class="hljs-keyword">new</span> UI._OrientationHandler();
+  <span class="hljs-comment">/**
+   * Global Notification Object
+   */</span>
+  UI.globalNotifications = <span class="hljs-keyword">new</span> BaseObject();
+  <span class="hljs-comment">/**
+   * Create the root container
+   */</span>
+  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span>.body !== <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-built_in">document</span>.body !== <span class="hljs-literal">null</span> ) {
+    UI._createRootContainer();
+  } <span class="hljs-keyword">else</span> {
+    setTimeout( UI._createRootContainer, <span class="hljs-number">0</span> );
+  }
+  <span class="hljs-keyword">return</span> UI;
+} );</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

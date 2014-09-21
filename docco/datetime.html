@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>datetime.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="yasmf.html">
+                yasmf.scss
+              </a>
+            
+              
+              <a class="source" href="alert.html">
+                alert.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="event.html">
+                event.js
+              </a>
+            
+              
+              <a class="source" href="navigationController.html">
+                navigationController.js
+              </a>
+            
+              
+              <a class="source" href="splitViewController.html">
+                splitViewController.js
+              </a>
+            
+              
+              <a class="source" href="tabViewController.html">
+                tabViewController.js
+              </a>
+            
+              
+              <a class="source" href="viewContainer.html">
+                viewContainer.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="datetime.html">
+                datetime.js
+              </a>
+            
+              
+              <a class="source" href="device.html">
+                device.js
+              </a>
+            
+              
+              <a class="source" href="fileManager.html">
+                fileManager.js
+              </a>
+            
+              
+              <a class="source" href="filename.html">
+                filename.js
+              </a>
+            
+              
+              <a class="source" href="h.html">
+                h.js
+              </a>
+            
+              
+              <a class="source" href="misc.html">
+                misc.js
+              </a>
+            
+              
+              <a class="source" href="object.html">
+                object.js
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>datetime.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ *
+ * Provides date/time convenience methods
+ *
+ * @module datetime.js
+ * @author Kerri Shotts
+ * @version 0.4
+ *
+ * ```
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */</span>
+<span class="hljs-comment">/*jshint
+         asi:true,
+         bitwise:true,
+         browser:true,
+         camelcase:true,
+         curly:true,
+         eqeqeq:false,
+         forin:true,
+         noarg:true,
+         noempty:true,
+         plusplus:false,
+         smarttabs:true,
+         sub:true,
+         trailing:false,
+         undef:true,
+         white:false,
+         onevar:false
+ */</span>
+<span class="hljs-comment">/*global define*/</span>
+define( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-comment">/**
+     * Returns the current time in the Unix time format
+     * @method getUnixTime
+     * @return {UnixTime}
+     */</span>
+    getUnixTime: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() ).getTime();
+    },
+    <span class="hljs-comment">/**
+     * # PRECISION_x Constants
+     * These specify the amount of precision required for `getPartsFromSeconds`.
+     * For example, if `PRECISION_DAYS` is specified, the number of parts obtained
+     * consist of days, hours, minutes, and seconds.
+     */</span>
+    PRECISION_SECONDS: <span class="hljs-number">1</span>,
+    PRECISION_MINUTES: <span class="hljs-number">2</span>,
+    PRECISION_HOURS: <span class="hljs-number">3</span>,
+    PRECISION_DAYS: <span class="hljs-number">4</span>,
+    PRECISION_WEEKS: <span class="hljs-number">5</span>,
+    PRECISION_YEARS: <span class="hljs-number">6</span>,
+    <span class="hljs-comment">/**
+     * @typedef {{fractions: number, seconds: number, minutes: number, hours: number, days: number, weeks: number, years: number}} TimeParts
+     */</span>
+    <span class="hljs-comment">/**
+     * Takes a given number of seconds and returns an object consisting of the number of seconds, minutes, hours, etc.
+     * The value is limited by the precision parameter -- which must be specified. Which ever value is specified will
+     * be the maximum limit for the routine; that is `PRECISION_DAYS` will never return a result for weeks or years.
+     * @method getPartsFromSeconds
+     * @param {number} seconds
+     * @param {number} precision
+     * @returns {TimeParts}
+     */</span>
+    getPartsFromSeconds: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( seconds, precision )</span> </span>{
+      <span class="hljs-keyword">var</span> partValues = [ <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span> ],
+        modValues = [ <span class="hljs-number">1</span>, <span class="hljs-number">60</span>, <span class="hljs-number">3600</span>, <span class="hljs-number">86400</span>, <span class="hljs-number">604800</span>, <span class="hljs-number">31557600</span> ];
+      <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = precision; i &gt; <span class="hljs-number">0</span>; i-- ) {
+        <span class="hljs-keyword">if</span> ( i === <span class="hljs-number">1</span> ) {
+          partValues[ i - <span class="hljs-number">1</span> ] = seconds % modValues[ i - <span class="hljs-number">1</span> ];
+        } <span class="hljs-keyword">else</span> {
+          partValues[ i - <span class="hljs-number">1</span> ] = <span class="hljs-built_in">Math</span>.floor( seconds % modValues[ i - <span class="hljs-number">1</span> ] );
+        }
+        partValues[ i ] = <span class="hljs-built_in">Math</span>.floor( seconds / modValues[ i - <span class="hljs-number">1</span> ] );
+        seconds = seconds - partValues[ i ] * modValues[ i - <span class="hljs-number">1</span> ];
+      }
+      <span class="hljs-keyword">return</span> {
+        fractions: partValues[ <span class="hljs-number">0</span> ],
+        seconds: partValues[ <span class="hljs-number">1</span> ],
+        minutes: partValues[ <span class="hljs-number">2</span> ],
+        hours: partValues[ <span class="hljs-number">3</span> ],
+        days: partValues[ <span class="hljs-number">4</span> ],
+        weeks: partValues[ <span class="hljs-number">5</span> ],
+        years: partValues[ <span class="hljs-number">6</span> ]
+      };
+    }
+  };
+} );</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

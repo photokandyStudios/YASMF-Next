@@ -1,480 +1,520 @@
-<!DOCTYPE html><html lang="en"><head><title>util/core</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/core"><meta name="groc-project-path" content="lib/yasmf/util/core.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/core.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module core.js author Kerri Shotts and version 0.4</p>
-
-<pre><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+<!DOCTYPE html><html lang="en"><head><title>util/core</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="util/core"><meta name="groc-project-path" content="lib/yasmf/util/core.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/util/core.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module core.js author Kerri Shotts and version 0.5</p>
+<p><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
-software and associated documentation files (the "Software"), to deal in the Software
+software and associated documentation files (the &quot;Software&quot;), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,
 merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 permit persons to whom the Software is furnished to do so, subject to the following
 conditions:
 The above copyright notice and this permission notice shall be included in all copies
 or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
 PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-</code></pre>
-
-<p></span></p>
-
-<p>Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.</p></div></div><div class="code"><div class="wrapper"><span class="cm">/*jshint</span>
-<span class="cm">     asi:true,</span>
-<span class="cm">     bitwise:true,</span>
-<span class="cm">     browser:true,</span>
-<span class="cm">     camelcase:true,</span>
-<span class="cm">     curly:true,</span>
-<span class="cm">     eqeqeq:false,</span>
-<span class="cm">     forin:true,</span>
-<span class="cm">     noarg:true,</span>
-<span class="cm">     noempty:true,</span>
-<span class="cm">     plusplus:false,</span>
-<span class="cm">     smarttabs:true,</span>
-<span class="cm">     sub:true,</span>
-<span class="cm">     trailing:false,</span>
-<span class="cm">     undef:true,</span>
-<span class="cm">     white:false,</span>
-<span class="cm">     onevar:false</span>
-<span class="cm">*/</span>
-<span class="cm">/*global define, Globalize, device, document, window, setTimeout, navigator, console*/</span>
-<span class="nx">define</span><span class="p">(</span> <span class="p">[</span> <span class="s2">&quot;globalize&quot;</span><span class="p">,</span> <span class="s2">&quot;cultures/globalize.culture.en-US&quot;</span> <span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">_y</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">VERSION</span><span class="o">:</span> <span class="s2">&quot;0.4.100&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method ge</span></p>
-
+OTHER DEALINGS IN THE SOFTWARE.</code></span></p>
+<p>Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*global define, Globalize, device, document, window, setTimeout, navigator, console, Node*/</span>
+define( [ <span class="hljs-string">"globalize"</span>, <span class="hljs-string">"cultures/globalize.culture.en-US"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method getComputedStyle</span></p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>element must be a Node.</strong><br/>(the element to request the computed style from)</p>
+</li>
+<li><p><strong>property must be a string.</strong><br/>(the property to request (like <code>width</code>); optional)</p>
+</li>
+</ul>
+<p><strong>Returns a *</strong><br/>(Either the property requested or the entire CSS style declaration)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getComputedStyle</span><span class="hljs-params">( element, property )</span> </span>{
+    <span class="hljs-keyword">if</span> ( !( element <span class="hljs-keyword">instanceof</span> Node ) &amp;&amp; <span class="hljs-keyword">typeof</span> element === <span class="hljs-string">"string"</span> ) {
+      property = element;
+      element = <span class="hljs-keyword">this</span>;
+    }
+    <span class="hljs-keyword">var</span> computedStyle = <span class="hljs-built_in">window</span>.getComputedStyle( element );
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> property !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">return</span> computedStyle.getPropertyValue( property );
+    }
+    <span class="hljs-keyword">return</span> computedStyle;
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _arrayize</span></p>
+<p>Parameters:</p>
+<ul>
+<li><strong>list must be a NodeList.</strong><br/>(the list to convert)</li>
+</ul>
+<p><strong>Returns an Array</strong><br/>(the converted array)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_arrayize</span><span class="hljs-params">( list )</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.prototype.splice.call( list, <span class="hljs-number">0</span> );
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method getElementById</span></p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>parent must be a Node.</strong><br/>(the parent to execute getElementById on)</p>
+</li>
+<li><p><strong>elementId must be a string.</strong><br/>(the element ID to search for)</p>
+</li>
+</ul>
+<p><strong>Returns a Node</strong><br/>(the element or null if not found)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getElementById</span><span class="hljs-params">( parent, elementId )</span> </span>{
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+      elementId = parent;
+      parent = <span class="hljs-built_in">document</span>;
+    }
+    <span class="hljs-keyword">return</span> ( parent.getElementById( elementId ) );
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method querySelector</span></p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>parent must be a Node.</strong><br/>(the parent to execute querySelector on)</p>
+</li>
+<li><p><strong>selector must be a string.</strong><br/>(the CSS selector to use)</p>
+</li>
+</ul>
+<p><strong>Returns a Node</strong><br/>(the located element or null if not found)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">querySelector</span><span class="hljs-params">( parent, selector )</span> </span>{
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+      selector = parent;
+      parent = <span class="hljs-built_in">document</span>;
+    }
+    <span class="hljs-keyword">return</span> ( parent.querySelector( selector ) );
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method querySelectorAll</span></p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>parent must be a Node.</strong><br/>(the parent to execute querySelectorAll on)</p>
+</li>
+<li><p><strong>selector must be a string.</strong><br/>(the selector to use)</p>
+</li>
+</ul>
+<p><strong>Returns an Array</strong><br/>(the found elements; if none: [])</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">querySelectorAll</span><span class="hljs-params">( parent, selector )</span> </span>{
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+      selector = parent;
+      parent = <span class="hljs-built_in">document</span>;
+    }
+    <span class="hljs-keyword">return</span> _arrayize( parent.querySelectorAll( selector ) );
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method $</span></p>
+<p>Parameters:</p>
+<ul>
+<li><strong>selector must be a string.</strong><br/>(the CSS selector to use)</li>
+</ul>
+<p><strong>Returns a Node</strong><br/>(The located element, relative to <code>this</code>)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$</span><span class="hljs-params">( selector )</span> </span>{
+    <span class="hljs-keyword">return</span> querySelector( <span class="hljs-keyword">this</span>, selector );
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method $$</span></p>
+<p>Parameters:</p>
+<ul>
+<li><strong>selector must be a string.</strong><br/>(the CSS selector to use)</li>
+</ul>
+<p><strong>Returns an Array</strong><br/>(the located elements, relative to <code>this</code>)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$$</span><span class="hljs-params">( selector )</span> </span>{
+    <span class="hljs-keyword">return</span> querySelectorAll( <span class="hljs-keyword">this</span>, selector );
+  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method $id</span></p>
+<p>Parameters:</p>
+<ul>
+<li><strong>id must be a string.</strong><br/>(the id of the element)</li>
+</ul>
+<p><strong>Returns a Node</strong><br/>(the located element or null if not found)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$id</span><span class="hljs-params">( id )</span> </span>{
+    <span class="hljs-keyword">return</span> getElementById( <span class="hljs-keyword">this</span>, id );
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>modify Node&#39;s prototype to provide useful additional shortcuts</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">var</span> proto = Node.prototype;
+  [
+    [ <span class="hljs-string">"$"</span>, $ ],
+    [ <span class="hljs-string">"$$"</span>, $$ ],
+    [ <span class="hljs-string">"$1"</span>, $ ],
+    [ <span class="hljs-string">"$id"</span>, $id ],
+    [ <span class="hljs-string">"gsc"</span>, getComputedStyle ],
+    [ <span class="hljs-string">"gcs"</span>, getComputedStyle ],
+    [ <span class="hljs-string">"getComputedStyle"</span>, getComputedStyle ]
+  ].forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( i )</span> </span>{
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> proto[ i[ <span class="hljs-number">0</span> ] ] === <span class="hljs-string">"undefined"</span> ) {
+      proto[ i[ <span class="hljs-number">0</span> ] ] = i[ <span class="hljs-number">1</span> ];
+    }
+  } );
+  <span class="hljs-keyword">var</span> _y = {
+    VERSION: <span class="hljs-string">"0.5.142"</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method ge is aliased as $id</span></p>
 <p>Returns an element from the DOM with the specified
-ID. Similar to (but not like) jQuery's $(), except
+ID. Similar to (but not like) jQuery&#39;s $(), except
 that this is a pure DOM element.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><strong>elementId must be a String.</strong></li>
+<li><strong>elementId must be a String.</strong><br/>(id to search for, relative to document)</li>
 </ul>
-
-<p><strong>Returns a Node</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">ge</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">elementId</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span> <span class="nx">elementId</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method qs</span></p>
-
+<p><strong>Returns a Node</strong><br/>(null if no node found)</p></div></div><div class="code"><div class="wrapper">    ge: $id.bind( <span class="hljs-built_in">document</span> ),
+    $id: $id.bind( <span class="hljs-built_in">document</span> ),</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method qs is aliased as $ and is aliased as $1</span></p>
 <p>Returns an element from the DOM using <code>querySelector</code>.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><strong>selector must be a String.</strong></li>
+<li><strong>selector must be a String.</strong><br/>(CSS selector to search, relative to document)</li>
 </ul>
-
-<p><strong>Returns a Node</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">qs</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">selector</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span> <span class="nx">selector</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method gac</span></p>
-
+<p><strong>Returns a Node</strong><br/>(null if no node found that matches search)</p></div></div><div class="code"><div class="wrapper">    $: $.bind( <span class="hljs-built_in">document</span> ),
+    $<span class="hljs-number">1</span>: $.bind( <span class="hljs-built_in">document</span> ),
+    qs: $.bind( <span class="hljs-built_in">document</span> ),</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method gac is aliased as $ and is aliased as qsa</span></p>
 <p>Returns an array of all elements matching a given
 selector. The array is processed to be a real array,
 not a nodeList.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><strong>selector must be a String.</strong></li>
+<li><strong>selector must be a String.</strong><br/>(CSS selector to search, relative to document)</li>
 </ul>
-
-<p><strong>Returns an Array</strong><br/>(of Nodes)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">gac</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">selector</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span> <span class="nx">selector</span> <span class="p">)</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method qsa</span></p>
-
-<p>Returns an array of elements matching a given selector.</p>
-
-<p>Parameters:</p>
-
-<ul>
-<li><strong>selector must be a String.</strong></li>
-</ul>
-
-<p><strong>Returns an Array</strong><br/>(of Nodes)</p></div></div><div class="code"><div class="wrapper">    <span class="nx">qsa</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">selector</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span> <span class="nx">selector</span> <span class="p">)</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method gsc</span></p>
-
+<p><strong>Returns an Array</strong><br/>(of Nodes Array of nodes; [] if none found)</p></div></div><div class="code"><div class="wrapper">    $$: $$.bind( <span class="hljs-built_in">document</span> ),
+    gac: $$.bind( <span class="hljs-built_in">document</span> ),
+    qsa: $$.bind( <span class="hljs-built_in">document</span> ),</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method gcs is aliased as gsc and is aliased as getComputedStyle</span></p>
 <p>Returns a Computed CSS Style ready for interrogation if
 <code>property</code> is not defined, or the actual property value
 if <code>property</code> is defined.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>element must be a Node.</strong><br/>(A specific DOM element)</p></li>
-<li><p><strong>property is optional and must be a String.</strong><br/>(A CSS property to query)</p></li>
+<li><p><strong>element must be a Node.</strong><br/>(A specific DOM element)</p>
+</li>
+<li><p><strong>property is optional and must be a String.</strong><br/>(A CSS property to query)</p>
+</li>
 </ul>
-
-<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">gsc</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">property</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">computedStyle</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">getComputedStyle</span><span class="p">(</span> <span class="nx">element</span> <span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">property</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">computedStyle</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span> <span class="nx">property</span> <span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">computedStyle</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method template</span></p>
-
+<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    getComputedStyle: getComputedStyle,
+    gcs: getComputedStyle,
+    gsc: getComputedStyle,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method template</span></p>
 <p>Returns a parsed template. The template can be a simple
 string, in which case the replacement variable are replaced
 and returned simply, or the template can be a DOM element,
-in which case the template is assumed to be the DOM Element's
+in which case the template is assumed to be the DOM Element&#39;s
 <code>innerHTML</code>, and then the replacement variables are parsed.</p>
-
 <p>Replacement variables are of the form <code>%VARIABLE%</code>, and
 can occur anywhere, not just within strings in HTML.</p>
-
-<p>The replacements array is of the form
-    { "VARIABLE": replacement, "VARIABLE2": replacement, ... }</p>
-
+<p>The replacements array is of the form</p>
+<pre><code>    { &quot;VARIABLE&quot;: replacement, &quot;VARIABLE2&quot;: replacement, ... }</code></pre>
+<p>If <code>addtlOptions</code> is specified, it may override the default
+options where <code>%</code> is used as a substitution marker and <code>toUpperCase</code>
+is used as a transform. For example:</p>
+<pre><code>template ( &quot;Hello, {{name}}&quot;, {&quot;name&quot;: &quot;Mary&quot;},
+           { brackets: [ &quot;{{&quot;, &quot;}}&quot; ],
+             transform: &quot;toLowerCase&quot; } );</code></pre>
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>templateElement can be a Node or a String.</strong></p></li>
-<li><p><strong>replacements must be an Object.</strong></p></li>
+<li><p><strong>templateElement can be a Node or a String.</strong></p>
+</li>
+<li><p><strong>replacements must be an Object.</strong></p>
+</li>
 </ul>
-
-<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">template</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">templateElement</span><span class="p">,</span> <span class="nx">replacements</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">templateHTML</span> <span class="o">=</span> <span class="nx">templateElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">||</span> <span class="nx">templateElement</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">theVar</span> <span class="k">in</span> <span class="nx">replacements</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">replacements</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">theVar</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">thisVar</span> <span class="o">=</span> <span class="s2">&quot;%&quot;</span> <span class="o">+</span> <span class="nx">theVar</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span><span class="p">;</span>
-          <span class="k">while</span> <span class="p">(</span> <span class="nx">templateHTML</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span> <span class="nx">thisVar</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">templateHTML</span> <span class="o">=</span> <span class="nx">templateHTML</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span> <span class="nx">thisVar</span><span class="p">,</span> <span class="nx">replacements</span><span class="p">[</span> <span class="nx">theVar</span> <span class="p">]</span> <span class="p">);</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">templateHTML</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property underCordova default false</span></p>
-
+<p><strong>Returns a String</strong></p></div></div><div class="code"><div class="wrapper">    template: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( templateElement, replacements, addtlOptions )</span> </span>{
+      <span class="hljs-keyword">var</span> brackets = [ <span class="hljs-string">"%"</span>, <span class="hljs-string">"%"</span> ],
+        transform = <span class="hljs-string">"toUpperCase"</span>,
+        templateHTML, theVar, thisVar, theReplacement;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> addtlOptions !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> addtlOptions.brackets !== <span class="hljs-string">"undefined"</span> ) {
+          brackets = addtlOptions.brackets;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> addtlOptions.transform === <span class="hljs-string">"string"</span> ) {
+          transform = addtlOptions.transform;
+        }
+      }
+      <span class="hljs-keyword">if</span> ( templateElement <span class="hljs-keyword">instanceof</span> Node ) {
+        templateHTML = templateElement.innerHTML;
+      } <span class="hljs-keyword">else</span> {
+        templateHTML = templateElement;
+      }
+      <span class="hljs-keyword">for</span> ( theVar <span class="hljs-keyword">in</span> replacements ) {
+        <span class="hljs-keyword">if</span> ( replacements.hasOwnProperty( theVar ) ) {
+          thisVar = brackets[ <span class="hljs-number">0</span> ];
+          <span class="hljs-keyword">if</span> ( transform !== <span class="hljs-string">""</span> ) {
+            thisVar += theVar[ transform ]();
+          } <span class="hljs-keyword">else</span> {
+            thisVar += theVar;
+          }
+          thisVar += brackets[ <span class="hljs-number">1</span> ];
+          <span class="hljs-keyword">while</span> ( templateHTML.indexOf( thisVar ) &gt; -<span class="hljs-number">1</span> ) {
+            templateHTML = templateHTML.replace( thisVar, replacements[ theVar ] );
+          }
+        }
+      }
+      <span class="hljs-keyword">return</span> templateHTML;
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property underCordova default false</span></p>
 <p>Indicates if the app is running in a Cordova container.
-Only valid if <code>executeWhenReady</code> is used to start an app.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">underCordova</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method executeWhenReady</span></p>
-
+Only valid if <code>executeWhenReady</code> is used to start an app.</p></div></div><div class="code"><div class="wrapper">    underCordova: <span class="hljs-literal">false</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method executeWhenReady</span></p>
 <p>Handles the conundrum of executing a block of code when
 the mobile device or desktop browser is ready. If running
 under Cordova, the <code>deviceready</code> event will fire, and
 the <code>callback</code> will execute. Otherwise, after 1s, the
-<code>callback</code> will execute <em>if it hasn't already</em>.</p>
-
+<code>callback</code> will execute <em>if it hasn&#39;t already</em>.</p>
 <p>Parameters:</p>
-
 <ul>
 <li><strong>callback must be a Function.</strong></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">executeWhenReady</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">callback</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">executed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-      <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span> <span class="s2">&quot;deviceready&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">executed</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">executed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-          <span class="nx">_y</span><span class="p">.</span><span class="nx">underCordova</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">callback</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">callback</span><span class="p">();</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">},</span> <span class="kc">false</span> <span class="p">);</span>
-      <span class="nx">setTimeout</span><span class="p">(</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">executed</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">executed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-          <span class="nx">_y</span><span class="p">.</span><span class="nx">underCordova</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">callback</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">callback</span><span class="p">();</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">},</span> <span class="mi">1000</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property currentUserLocale typedef {String} Locale
-Indicates the user's locale. It's only valid after
+</ul></div></div><div class="code"><div class="wrapper">    executeWhenReady: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( callback )</span> </span>{
+      <span class="hljs-keyword">var</span> executed = <span class="hljs-literal">false</span>;
+      <span class="hljs-built_in">document</span>.addEventListener( <span class="hljs-string">"deviceready"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> ( !executed ) {
+          executed = <span class="hljs-literal">true</span>;
+          _y.underCordova = <span class="hljs-literal">true</span>;
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+            callback();
+          }
+        }
+      }, <span class="hljs-literal">false</span> );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> ( !executed ) {
+          executed = <span class="hljs-literal">true</span>;
+          _y.underCordova = <span class="hljs-literal">false</span>;
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+            callback();
+          }
+        }
+      }, <span class="hljs-number">1000</span> );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property currentUserLocale typedef {String} Locale
+Indicates the user&#39;s locale. It&#39;s only valid after
 a call to <code>getUserLocale</code>, but it can be written to
-at any time in order to override <code>getUserLocale</code>'s
-calculation of the user's locale., default (empty string), and of type <em>Locale</em></span></p>
-
+at any time in order to override <code>getUserLocale</code>&#39;s
+calculation of the user&#39;s locale., default (empty string), and of type <em>Locale</em></span></p>
 <blockquote>
-  <p>The following functions are related to globalization and localization, which
-  are now considered to be core functions (previously it was broken out in
-  PKLOC)</p>
-</blockquote></div></div><div class="code"><div class="wrapper">    <span class="nx">currentUserLocale</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property localizedText of type <em>Object</em></span></p>
-
-<p>A translation matrix. Used by <code>addTranslation(s)</code> and <code>T</code>.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">localizedText</span><span class="o">:</span> <span class="p">{},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method normalizeLocale</span></p>
-
+<p>The following functions are related to globalization and localization, which
+are now considered to be core functions (previously it was broken out in
+PKLOC)</p>
+</blockquote></div></div><div class="code"><div class="wrapper">    currentUserLocale: <span class="hljs-string">""</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property localizedText of type <em>Object</em></span></p>
+<p>A translation matrix. Used by <code>addTranslation(s)</code> and <code>T</code>.</p></div></div><div class="code"><div class="wrapper">    localizedText: {},</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method normalizeLocale</span></p>
 <p>Given a locale string, normalize it to the form of <code>la-RE</code> or <code>la</code>, depending on the length.</p>
-
-<pre><code>    "enus", "en_us", "en_---__--US", "EN-US" --&gt; "en-US"
-    "en", "en-", "EN!" --&gt; "en"
-</code></pre>
-
+<pre><code>    &quot;enus&quot;, &quot;en_us&quot;, &quot;en_---__--US&quot;, &quot;EN-US&quot; --&gt; &quot;en-US&quot;
+    &quot;en&quot;, &quot;en-&quot;, &quot;EN!&quot; --&gt; &quot;en&quot;</code></pre>
 <p>Parameters:</p>
-
 <ul>
 <li><strong>theLocale must be a Locale.</strong></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">normalizeLocale</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">theNewLocale</span> <span class="o">=</span> <span class="nx">theLocale</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">theNewLocale</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span> <span class="s2">&quot;Fatal: invalid locale; not of the format la-RE.&quot;</span> <span class="p">);</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">theLanguage</span> <span class="o">=</span> <span class="nx">theNewLocale</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="p">).</span><span class="nx">toLowerCase</span><span class="p">(),</span>
-        <span class="nx">theRegion</span> <span class="o">=</span> <span class="nx">theNewLocale</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="o">-</span><span class="mi">2</span> <span class="p">).</span><span class="nx">toUpperCase</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">theNewLocale</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">theRegion</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span> <span class="c1">// there can&#39;t possibly be a valid region on a 3-char string</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">theRegion</span> <span class="o">!==</span> <span class="s2">&quot;&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">theNewLocale</span> <span class="o">=</span> <span class="nx">theLanguage</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nx">theRegion</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">theNewLocale</span> <span class="o">=</span> <span class="nx">theLanguage</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">theNewLocale</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method setGlobalizationLocale</span></p>
-
+</ul></div></div><div class="code"><div class="wrapper">    normalizeLocale: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> theNewLocale = theLocale;
+      <span class="hljs-keyword">if</span> ( theNewLocale.length &lt; <span class="hljs-number">2</span> ) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"Fatal: invalid locale; not of the format la-RE."</span> );
+      }
+      <span class="hljs-keyword">var</span> theLanguage = theNewLocale.substr( <span class="hljs-number">0</span>, <span class="hljs-number">2</span> ).toLowerCase(),
+        theRegion = theNewLocale.substr( -<span class="hljs-number">2</span> ).toUpperCase();
+      <span class="hljs-keyword">if</span> ( theNewLocale.length &lt; <span class="hljs-number">4</span> ) {
+        theRegion = <span class="hljs-string">""</span>; <span class="hljs-comment">// there can't possibly be a valid region on a 3-char string</span>
+      }
+      <span class="hljs-keyword">if</span> ( theRegion !== <span class="hljs-string">""</span> ) {
+        theNewLocale = theLanguage + <span class="hljs-string">"-"</span> + theRegion;
+      } <span class="hljs-keyword">else</span> {
+        theNewLocale = theLanguage;
+      }
+      <span class="hljs-keyword">return</span> theNewLocale;
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method setGlobalizationLocale</span></p>
 <p>Sets the current locale for jQuery/Globalize</p>
-
 <p>Parameters:</p>
-
 <ul>
 <li><strong>theLocale must be a Locale.</strong></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">setGlobalizationLocale</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">theNewLocale</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">.</span><span class="nx">normalizeLocale</span><span class="p">(</span> <span class="nx">theLocale</span> <span class="p">);</span>
-      <span class="nx">Globalize</span><span class="p">.</span><span class="nx">culture</span><span class="p">(</span> <span class="nx">theNewLocale</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method addTranslation</span></p>
-
+</ul></div></div><div class="code"><div class="wrapper">    setGlobalizationLocale: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> theNewLocale = _y.normalizeLocale( theLocale );
+      Globalize.culture( theNewLocale );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method addTranslation</span></p>
 <p>Add a translation to the existing translation matrix</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>locale must be a Locale.</strong></p></li>
-<li><p><strong>key must be a String.</strong></p></li>
-<li><p><strong>value must be a String.</strong></p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">addTranslation</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">locale</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we'll store translations with upper-case locales, so case never matters</p></div></div><div class="code"><div class="wrapper">        <span class="nx">theNewLocale</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">normalizeLocale</span><span class="p">(</span> <span class="nx">locale</span> <span class="p">).</span><span class="nx">toUpperCase</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>store the value</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">.</span><span class="nx">localizedText</span><span class="p">[</span> <span class="nx">theNewLocale</span> <span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">localizedText</span><span class="p">[</span> <span class="nx">theNewLocale</span> <span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
-      <span class="p">}</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">localizedText</span><span class="p">[</span> <span class="nx">theNewLocale</span> <span class="p">][</span> <span class="nx">key</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method addTranslations</span></p>
-
+<li><p><strong>locale must be a Locale.</strong></p>
+</li>
+<li><p><strong>key must be a String.</strong></p>
+</li>
+<li><p><strong>value must be a String.</strong></p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">    addTranslation: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( locale, key, value )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we&#39;ll store translations with upper-case locales, so case never matters</p></div></div><div class="code"><div class="wrapper">        theNewLocale = self.normalizeLocale( locale ).toUpperCase();</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>store the value</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self.localizedText[ theNewLocale ] === <span class="hljs-string">"undefined"</span> ) {
+        self.localizedText[ theNewLocale ] = {};
+      }
+      self.localizedText[ theNewLocale ][ key.toUpperCase() ] = value;
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method addTranslations</span></p>
 <p>Add translations in batch, as follows:</p>
-
 <pre><code>  {
-    "HELLO":
+    &quot;HELLO&quot;:
     {
-      "en-US": "Hello",
-      "es-US": "Hola"
+      &quot;en-US&quot;: &quot;Hello&quot;,
+      &quot;es-US&quot;: &quot;Hola&quot;
     },
-    "GOODBYE":
+    &quot;GOODBYE&quot;:
     {
-      "en-US": "Bye",
-      "es-US": "Adios"
+      &quot;en-US&quot;: &quot;Bye&quot;,
+      &quot;es-US&quot;: &quot;Adios&quot;
     }
-  }
-</code></pre>
-
+  }</code></pre>
 <p>Parameters:</p>
-
 <ul>
 <li><strong>o must be an Object.</strong></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">addTranslations</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">o</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">o</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">o</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">key</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">locale</span> <span class="k">in</span> <span class="nx">o</span><span class="p">[</span> <span class="nx">key</span> <span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="nx">o</span><span class="p">[</span> <span class="nx">key</span> <span class="p">].</span><span class="nx">hasOwnProperty</span><span class="p">(</span> <span class="nx">locale</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="nx">self</span><span class="p">.</span><span class="nx">addTranslation</span><span class="p">(</span> <span class="nx">locale</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">o</span><span class="p">[</span> <span class="nx">key</span> <span class="p">][</span> <span class="nx">locale</span> <span class="p">]</span> <span class="p">);</span>
-            <span class="p">}</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getUserLocale</span></p>
-
-<p>Returns the user's locale (e.g., <code>en-US</code> or <code>fr-FR</code>). If one
-can't be found, <code>en-US</code> is returned. If <code>currentUserLocale</code>
-is already defined, it won't attempt to recalculate it.</p>
-
-<p><strong>Returns a Locale</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">getUserLocale</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="nx">self</span><span class="p">.</span><span class="nx">currentUserLocale</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">currentUserLocale</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">currentPlatform</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">device</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">currentPlatform</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">platform</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">userLocale</span> <span class="o">=</span> <span class="s2">&quot;en-US&quot;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>a suitable default</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="nx">currentPlatform</span> <span class="o">===</span> <span class="s2">&quot;Android&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>parse the navigator.userAgent</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">userAgent</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>inspired by http://stackoverflow.com/a/7728507/741043</p></div></div><div class="code"><div class="wrapper">          <span class="nx">tempLocale</span> <span class="o">=</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span> <span class="sr">/Android.*([a-zA-Z]{2}-[a-zA-Z]{2})/</span> <span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="nx">tempLocale</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">userLocale</span> <span class="o">=</span> <span class="nx">tempLocale</span><span class="p">[</span> <span class="mi">1</span> <span class="p">];</span>
-        <span class="p">}</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">userLocale</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">language</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">browserLanguage</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">systemLanguage</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userLanguage</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">currentUserLocale</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">normalizeLocale</span><span class="p">(</span> <span class="nx">userLocale</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">currentUserLocale</span><span class="p">;</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getDeviceLocale</span></p>
-
+</ul></div></div><div class="code"><div class="wrapper">    addTranslations: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( o )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y;
+      <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> o ) {
+        <span class="hljs-keyword">if</span> ( o.hasOwnProperty( key ) ) {
+          <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> locale <span class="hljs-keyword">in</span> o[ key ] ) {
+            <span class="hljs-keyword">if</span> ( o[ key ].hasOwnProperty( locale ) ) {
+              self.addTranslation( locale, key, o[ key ][ locale ] );
+            }
+          }
+        }
+      }
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getUserLocale</span></p>
+<p>Returns the user&#39;s locale (e.g., <code>en-US</code> or <code>fr-FR</code>). If one
+can&#39;t be found, <code>en-US</code> is returned. If <code>currentUserLocale</code>
+is already defined, it won&#39;t attempt to recalculate it.</p>
+<p><strong>Returns a Locale</strong></p></div></div><div class="code"><div class="wrapper">    getUserLocale: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y;
+      <span class="hljs-keyword">if</span> ( self.currentUserLocale ) {
+        <span class="hljs-keyword">return</span> self.currentUserLocale;
+      }
+      <span class="hljs-keyword">var</span> currentPlatform = <span class="hljs-string">"unknown"</span>;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> device !== <span class="hljs-string">"undefined"</span> ) {
+        currentPlatform = device.platform;
+      }
+      <span class="hljs-keyword">var</span> userLocale = <span class="hljs-string">"en-US"</span>;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>a suitable default</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( currentPlatform === <span class="hljs-string">"Android"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>parse the navigator.userAgent</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> userAgent = navigator.userAgent,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>inspired by <a href="http://stackoverflow.com/a/7728507/741043">http://stackoverflow.com/a/7728507/741043</a></p></div></div><div class="code"><div class="wrapper">          tempLocale = userAgent.match( <span class="hljs-regexp">/Android.*([a-zA-Z]{2}-[a-zA-Z]{2})/</span> );
+        <span class="hljs-keyword">if</span> ( tempLocale ) {
+          userLocale = tempLocale[ <span class="hljs-number">1</span> ];
+        }
+      } <span class="hljs-keyword">else</span> {
+        userLocale = navigator.language || navigator.browserLanguage || navigator.systemLanguage || navigator.userLanguage;
+      }
+      self.currentUserLocale = self.normalizeLocale( userLocale );
+      <span class="hljs-keyword">return</span> self.currentUserLocale;
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method getDeviceLocale</span></p>
 <p>Gets the device locale, if available. It depends on the
 Globalization plugin provided by Cordova, but if the
 plugin is not available, it assumes the device locale
-can't be determined rather than throw an error.</p>
-
+can&#39;t be determined rather than throw an error.</p>
 <p>Once the locale is determined one way or the other, <code>callback</code>
 is called.</p>
-
 <p>Parameters:</p>
-
 <ul>
 <li><strong>callback must be a Function.</strong></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getDeviceLocale</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">callback</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">globalization</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">globalization</span><span class="p">.</span><span class="nx">getLocaleName</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="nx">navigator</span><span class="p">.</span><span class="nx">globalization</span><span class="p">.</span><span class="nx">getLocaleName</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">locale</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">currentUserLocale</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">normalizeLocale</span><span class="p">(</span> <span class="nx">locale</span><span class="p">.</span><span class="nx">value</span> <span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">callback</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="nx">callback</span><span class="p">();</span>
-            <span class="p">}</span>
-          <span class="p">},</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>error; go ahead and call the callback, but don't set the locale</p></div></div><div class="code"><div class="wrapper">            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">&quot;WARN: Couldn&#39;t get user locale from device.&quot;</span> <span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">callback</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
-              <span class="nx">callback</span><span class="p">();</span>
-            <span class="p">}</span>
-          <span class="p">}</span> <span class="p">);</span>
-          <span class="k">return</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">callback</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="nx">callback</span><span class="p">();</span>
-      <span class="p">}</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method lookupTranslation</span></p>
-
+</ul></div></div><div class="code"><div class="wrapper">    getDeviceLocale: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( callback )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> navigator.globalization !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> navigator.globalization.getLocaleName !== <span class="hljs-string">"undefined"</span> ) {
+          navigator.globalization.getLocaleName( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( locale )</span> </span>{
+            self.currentUserLocale = self.normalizeLocale( locale.value );
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+              callback();
+            }
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>error; go ahead and call the callback, but don&#39;t set the locale</p></div></div><div class="code"><div class="wrapper">            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"WARN: Couldn't get user locale from device."</span> );
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+              callback();
+            }
+          } );
+          <span class="hljs-keyword">return</span>;
+        }
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+        callback();
+      }
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method lookupTranslation</span></p>
 <p>Looks up a translation for a given <code>key</code> and locale. If
 the translation does not exist, <code>undefined</code> is returned.</p>
-
 <p>The <code>key</code> is converted to uppercase, and the locale is
 properly normalized and then converted to uppercase before
 any lookup is attempted.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>key must be a String.</strong></p></li>
-<li><p><strong>theLocale is optional and must be a Locale.</strong></p></li>
+<li><p><strong>key must be a String.</strong></p>
+</li>
+<li><p><strong>theLocale is optional and must be a Locale.</strong></p>
+</li>
 </ul>
-
-<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">lookupTranslation</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span>
-        <span class="nx">upperKey</span> <span class="o">=</span> <span class="nx">key</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">(),</span>
-        <span class="nx">userLocale</span> <span class="o">=</span> <span class="nx">theLocale</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUserLocale</span><span class="p">();</span>
-      <span class="nx">userLocale</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">normalizeLocale</span><span class="p">(</span> <span class="nx">userLocale</span> <span class="p">).</span><span class="nx">toUpperCase</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>look it up by checking if userLocale exists, and then if the key (uppercased) exists</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">.</span><span class="nx">localizedText</span><span class="p">[</span> <span class="nx">userLocale</span> <span class="p">]</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">self</span><span class="p">.</span><span class="nx">localizedText</span><span class="p">[</span> <span class="nx">userLocale</span> <span class="p">][</span> <span class="nx">upperKey</span> <span class="p">]</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">localizedText</span><span class="p">[</span> <span class="nx">userLocale</span> <span class="p">][</span> <span class="nx">upperKey</span> <span class="p">];</span>
-        <span class="p">}</span>
-      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if not found, we don't return anything</p></div></div><div class="code"><div class="wrapper">      <span class="k">return</span> <span class="k">void</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property localeOfLastResort default en-US and of type <em>Locale</em></span></p></div></div><div class="code"><div class="wrapper">    <span class="nx">localeOfLastResort</span><span class="o">:</span> <span class="s2">&quot;en-US&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property languageOfLastResort default en and of type <em>Locale</em></span></p></div></div><div class="code"><div class="wrapper">    <span class="nx">languageOfLastResort</span><span class="o">:</span> <span class="s2">&quot;en&quot;</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method T</span></p>
-
+<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    lookupTranslation: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( key, theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,
+        upperKey = key.toUpperCase(),
+        userLocale = theLocale || self.getUserLocale();
+      userLocale = self.normalizeLocale( userLocale ).toUpperCase();</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>look it up by checking if userLocale exists, and then if the key (uppercased) exists</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self.localizedText[ userLocale ] !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self.localizedText[ userLocale ][ upperKey ] !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">return</span> self.localizedText[ userLocale ][ upperKey ];
+        }
+      }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if not found, we don&#39;t return anything</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">return</span> <span class="hljs-keyword">void</span>( <span class="hljs-number">0</span> );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property localeOfLastResort default en-US and of type <em>Locale</em></span></p></div></div><div class="code"><div class="wrapper">    localeOfLastResort: <span class="hljs-string">"en-US"</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property languageOfLastResort default en and of type <em>Locale</em></span></p></div></div><div class="code"><div class="wrapper">    languageOfLastResort: <span class="hljs-string">"en"</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method T</span></p>
 <p>Convenience function for translating text. Key is the only
-required value and case doesn't matter (it's uppercased). Replacement
-variables can be specified using replacement variables of the form <code>{ "VAR":"VALUE" }</code>,
+required value and case doesn&#39;t matter (it&#39;s uppercased). Replacement
+variables can be specified using replacement variables of the form <code>{ &quot;VAR&quot;:&quot;VALUE&quot; }</code>,
 using <code>%VAR%</code> in the key/value returned. If <code>locale</code> is specified, it
-takes precedence over the user's current locale.</p>
-
+takes precedence over the user&#39;s current locale.</p>
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>key must be a String.</strong></p></li>
-<li><p><strong>parms is optional and must be an Object.</strong><br/>(replacement variables)</p></li>
-<li><p><strong>locale is optional and must be a Locale.</strong></p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">T</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">parms</span><span class="p">,</span> <span class="nx">locale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span>
-        <span class="nx">userLocale</span> <span class="o">=</span> <span class="nx">locale</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUserLocale</span><span class="p">(),</span>
-        <span class="nx">currentValue</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="p">(</span> <span class="nx">currentValue</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">lookupTranslation</span><span class="p">(</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">userLocale</span> <span class="p">)</span> <span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we haven't found it under the given locale (of form: xx-XX), try the fallback locale (xx)</p></div></div><div class="code"><div class="wrapper">        <span class="nx">userLocale</span> <span class="o">=</span> <span class="nx">userLocale</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="p">(</span> <span class="nx">currentValue</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">lookupTranslation</span><span class="p">(</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">userLocale</span> <span class="p">)</span> <span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we haven't found it under any of the given locales; try the language of last resort</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="p">(</span> <span class="nx">currentValue</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">lookupTranslation</span><span class="p">(</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">languageOfLastResort</span> <span class="p">)</span> <span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we haven't found it under any of the given locales; try locale of last resort</p></div></div><div class="code"><div class="wrapper">            <span class="k">if</span> <span class="p">(</span> <span class="k">typeof</span> <span class="p">(</span> <span class="nx">currentValue</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">lookupTranslation</span><span class="p">(</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">localeOfLastResort</span> <span class="p">)</span> <span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we didn't find it at all... we'll use the key</p></div></div><div class="code"><div class="wrapper">              <span class="nx">currentValue</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
-            <span class="p">}</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="nx">currentValue</span><span class="p">,</span> <span class="nx">parms</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method N</span></p>
-
+<li><p><strong>key must be a String.</strong></p>
+</li>
+<li><p><strong>parms is optional and must be an Object.</strong><br/>(replacement variables)</p>
+</li>
+<li><p><strong>locale is optional and must be a Locale.</strong></p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">    T: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( key, parms, locale )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,
+        userLocale = locale || self.getUserLocale(),
+        currentValue;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, userLocale ) ) === <span class="hljs-string">"undefined"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we haven&#39;t found it under the given locale (of form: xx-XX), try the fallback locale (xx)</p></div></div><div class="code"><div class="wrapper">        userLocale = userLocale.substr( <span class="hljs-number">0</span>, <span class="hljs-number">2</span> );
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, userLocale ) ) === <span class="hljs-string">"undefined"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we haven&#39;t found it under any of the given locales; try the language of last resort</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, self.languageOfLastResort ) ) === <span class="hljs-string">"undefined"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we haven&#39;t found it under any of the given locales; try locale of last resort</p></div></div><div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, self.localeOfLastResort ) ) === <span class="hljs-string">"undefined"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we didn&#39;t find it at all... we&#39;ll use the key</p></div></div><div class="code"><div class="wrapper">              currentValue = key;
+            }
+          }
+        }
+      }
+      <span class="hljs-keyword">return</span> self.template( currentValue, parms );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method N</span></p>
 <p>Convenience function for localizing numbers according the format (optional) and
-the locale (optional). theFormat is typically the number of places to use; "n" if
+the locale (optional). theFormat is typically the number of places to use; &quot;n&quot; if
 not specified.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>theNumber must be a Number.</strong></p></li>
-<li><p><strong>theFormat can be a Number or a String.</strong></p></li>
-<li><p><strong>theLocale is optional and must be a Locale.</strong></p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">N</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNumber</span><span class="p">,</span> <span class="nx">theFormat</span><span class="p">,</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span>
-        <span class="nx">iFormat</span> <span class="o">=</span> <span class="s2">&quot;n&quot;</span> <span class="o">+</span> <span class="p">(</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theFormat</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;0&quot;</span> <span class="o">:</span> <span class="nx">theFormat</span> <span class="p">),</span>
-        <span class="nx">iLocale</span> <span class="o">=</span> <span class="nx">theLocale</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUserLocale</span><span class="p">();</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">setGlobalizationLocale</span><span class="p">(</span> <span class="nx">iLocale</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">Globalize</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span> <span class="nx">theNumber</span><span class="p">,</span> <span class="nx">iFormat</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method C</span></p>
-
+<li><p><strong>theNumber must be a Number.</strong></p>
+</li>
+<li><p><strong>theFormat can be a Number or a String.</strong></p>
+</li>
+<li><p><strong>theLocale is optional and must be a Locale.</strong></p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">    N: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNumber, theFormat, theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,
+        iFormat = <span class="hljs-string">"n"</span> + ( ( <span class="hljs-keyword">typeof</span> theFormat === <span class="hljs-string">"undefined"</span> ) ? <span class="hljs-string">"0"</span> : theFormat ),
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      <span class="hljs-keyword">return</span> Globalize.format( theNumber, iFormat );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method C</span></p>
 <p>Convenience function for localizing currency. theFormat is the number of decimal places
-or "2" if not specified. If there are more places than digits, padding is added; if there
+or &quot;2&quot; if not specified. If there are more places than digits, padding is added; if there
 are fewer places, rounding is performed.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>theNumber must be a Number.</strong></p></li>
-<li><p><strong>theFormat must be a String.</strong></p></li>
-<li><p><strong>theLocale is optional and must be a Locale.</strong></p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">C</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNumber</span><span class="p">,</span> <span class="nx">theFormat</span><span class="p">,</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span>
-        <span class="nx">iFormat</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span> <span class="o">+</span> <span class="p">(</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theFormat</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;2&quot;</span> <span class="o">:</span> <span class="nx">theFormat</span> <span class="p">),</span>
-        <span class="nx">iLocale</span> <span class="o">=</span> <span class="nx">theLocale</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUserLocale</span><span class="p">();</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">setGlobalizationLocale</span><span class="p">(</span> <span class="nx">iLocale</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">Globalize</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span> <span class="nx">theNumber</span><span class="p">,</span> <span class="nx">iFormat</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method PCT</span></p>
-
+<li><p><strong>theNumber must be a Number.</strong></p>
+</li>
+<li><p><strong>theFormat must be a String.</strong></p>
+</li>
+<li><p><strong>theLocale is optional and must be a Locale.</strong></p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">    C: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNumber, theFormat, theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,
+        iFormat = <span class="hljs-string">"c"</span> + ( ( <span class="hljs-keyword">typeof</span> theFormat === <span class="hljs-string">"undefined"</span> ) ? <span class="hljs-string">"2"</span> : theFormat ),
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      <span class="hljs-keyword">return</span> Globalize.format( theNumber, iFormat );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method PCT</span></p>
 <p>Convenience function for localizing percentages. theFormat specifies the number of
 decimal places; two if not specified.</p>
-
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>theNumber must be a Number.</strong></p></li>
-<li><p><strong>theFormat must be a Number.</strong></p></li>
-<li><p><strong>theLocale is optional and must be a Locale.</strong></p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">PCT</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theNumber</span><span class="p">,</span> <span class="nx">theFormat</span><span class="p">,</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span>
-        <span class="nx">iFormat</span> <span class="o">=</span> <span class="s2">&quot;p&quot;</span> <span class="o">+</span> <span class="p">(</span> <span class="p">(</span> <span class="k">typeof</span> <span class="nx">theFormat</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;2&quot;</span> <span class="o">:</span> <span class="nx">theFormat</span> <span class="p">),</span>
-        <span class="nx">iLocale</span> <span class="o">=</span> <span class="nx">theLocale</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUserLocale</span><span class="p">();</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">setGlobalizationLocale</span><span class="p">(</span> <span class="nx">iLocale</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">Globalize</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span> <span class="nx">theNumber</span><span class="p">,</span> <span class="nx">iFormat</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method D</span></p>
-
+<li><p><strong>theNumber must be a Number.</strong></p>
+</li>
+<li><p><strong>theFormat must be a Number.</strong></p>
+</li>
+<li><p><strong>theLocale is optional and must be a Locale.</strong></p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">    PCT: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNumber, theFormat, theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,
+        iFormat = <span class="hljs-string">"p"</span> + ( ( <span class="hljs-keyword">typeof</span> theFormat === <span class="hljs-string">"undefined"</span> ) ? <span class="hljs-string">"2"</span> : theFormat ),
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      <span class="hljs-keyword">return</span> Globalize.format( theNumber, iFormat );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method D</span></p>
 <p>Convenience function for localizing dates.</p>
-
-<p>theFormat specifies the format; "d" is assumed if not provided.</p>
-
+<p>theFormat specifies the format; &quot;d&quot; is assumed if not provided.</p>
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>theDate must be a Date.</strong></p></li>
-<li><p><strong>theFormat must be a String.</strong></p></li>
-<li><p><strong>theLocale is optional and must be a Locale.</strong></p></li>
-</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">D</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theDate</span><span class="p">,</span> <span class="nx">theFormat</span><span class="p">,</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span>
-        <span class="nx">iFormat</span> <span class="o">=</span> <span class="nx">theFormat</span> <span class="o">||</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span>
-        <span class="nx">iLocale</span> <span class="o">=</span> <span class="nx">theLocale</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUserLocale</span><span class="p">();</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">setGlobalizationLocale</span><span class="p">(</span> <span class="nx">iLocale</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">Globalize</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span> <span class="nx">theDate</span><span class="p">,</span> <span class="nx">iFormat</span> <span class="p">);</span>
-    <span class="p">},</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method format</span></p>
-
-<p>Convenience function for jQuery/Globalize's <code>format</code> method</p>
-
+<li><p><strong>theDate must be a Date.</strong></p>
+</li>
+<li><p><strong>theFormat must be a String.</strong></p>
+</li>
+<li><p><strong>theLocale is optional and must be a Locale.</strong></p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">    D: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theDate, theFormat, theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,
+        iFormat = theFormat || <span class="hljs-string">"d"</span>,
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      <span class="hljs-keyword">return</span> Globalize.format( theDate, iFormat );
+    },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method format</span></p>
+<p>Convenience function for jQuery/Globalize&#39;s <code>format</code> method</p>
 <p>Parameters:</p>
-
 <ul>
-<li><p><strong>theValue must be a *.</strong></p></li>
-<li><p><strong>theFormat must be a String.</strong></p></li>
-<li><p><strong>theLocale is optional and must be a Locale.</strong></p></li>
+<li><p><strong>theValue must be a *.</strong></p>
+</li>
+<li><p><strong>theFormat must be a String.</strong></p>
+</li>
+<li><p><strong>theLocale is optional and must be a Locale.</strong></p>
+</li>
 </ul>
-
-<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    <span class="nx">format</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">theValue</span><span class="p">,</span> <span class="nx">theFormat</span><span class="p">,</span> <span class="nx">theLocale</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">_y</span><span class="p">,</span>
-        <span class="nx">iFormat</span> <span class="o">=</span> <span class="nx">theFormat</span><span class="p">,</span>
-        <span class="nx">iLocale</span> <span class="o">=</span> <span class="nx">theLocale</span> <span class="o">||</span> <span class="nx">self</span><span class="p">.</span><span class="nx">getUserLocale</span><span class="p">();</span>
-      <span class="nx">self</span><span class="p">.</span><span class="nx">setGlobalizationLocale</span><span class="p">(</span> <span class="nx">iLocale</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nx">Globalize</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span> <span class="nx">theValue</span><span class="p">,</span> <span class="nx">iFormat</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-  <span class="k">return</span> <span class="nx">_y</span><span class="p">;</span>
-<span class="p">}</span> <span class="p">);</span></div></div></div></div></body></html>
+<p><strong>Returns a *</strong></p></div></div><div class="code"><div class="wrapper">    format: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theValue, theFormat, theLocale )</span> </span>{
+      <span class="hljs-keyword">var</span> self = _y,
+        iFormat = theFormat,
+        iLocale = theLocale || self.getUserLocale();
+      self.setGlobalizationLocale( iLocale );
+      <span class="hljs-keyword">return</span> Globalize.format( theValue, iFormat );
+    }
+  };
+  <span class="hljs-keyword">return</span> _y;
+} );</div></div></div></div></body></html>
