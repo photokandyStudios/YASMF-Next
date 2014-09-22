@@ -8,12 +8,20 @@ node_modules
 
 .idea/dictionaries/kerrishotts.xml
 
-.idea/YASMF-Next.iml
+.idea/*
 
-.idea/YASMF-Next.iml
+.idea/*.*
 
 *.scssc
 
 .idea/YASMF-Next.iml
 
 *.swp
+
+.idea/misc.xml
+
+.idea/modules.xml
+
+.idea/misc.xml
+
+.idea/modules.xml
