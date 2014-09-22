@@ -330,6 +330,24 @@ div {
   color: #FFFFFF;
 }
 
+// modal classes
+.ui-container.modalWindow,
+.ui-container.modalPage {
+  box-shadow: 0 0 25px rgba(0,0,0,0.25);
+  @include flex-box();
+  max-height: 75%;
+  max-width: 75%;
+  min-width: 320px;
+  margin: auto;
+}
+.ui-container.modalPage {
+  max-height: 100%;
+}
+
+.ui-container.ui-transparent {
+  background-color: transparent;
+}
+
 /*****************************************************************************
  *
  * Split View Containers
@@ -435,7 +453,9 @@ div {
  *****************************************************************************/
 
 $tint-color: #40b0ff;
+$tint-color-disabled: #808080;
 $android-tint-color: #33b5e5;
+$android-tint-color-disabled: #888888;
 
 .ui-tint-color {
   color: $tint-color;
@@ -469,6 +489,22 @@ $android-tint-color: #33b5e5;
 
 .android .ui-background-tint-color:active {
   background-color: rgba($android-tint-color, 0.5);
+}
+
+.ui-disabled .ui-tint-color {
+  color: $tint-color-disabled;
+}
+
+.ui-disabled .ui-background-tint-color {
+  background-color: $tint-color-disabled;
+}
+
+.android .ui-disabled .ui-tint-color {
+  color: $android-tint-color-disabled;
+}
+
+.android .ui-disabled .ui-background-tint-color {
+  background-color: $android-tint-color-disabled;
 }
 
 $destructive-color: #ff6060;
@@ -518,15 +554,24 @@ $android-destructive-color: #cc0000;
    can be different sizes, and yet based on testing with a double-height status
    bar, this seems to work. */
 
-.ios7 .ui-navigation-bar {
+.ios7 .ui-navigation-bar,
+.iosM .ui-navigation-bar {
   height: 64px;
   padding-top: 20px;
+}
+
+// if we're in a modal container that doesn't fill the height of the window
+// reset the navigation bar height
+.iosM .ui-container.modalWindow .ui-navigation-bar {
+  height: 44px;
+  padding-top: 0;
 }
 
 /* However, if we're a navigation bar trying to avoid a tab bar positioned at
    the top, we need to adjust things so we don't introduce an extra 20px */
 
-.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar {
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar,
+.iosM .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar {
   height: 44px;
   padding-top: 0;
 }
@@ -624,7 +669,8 @@ $android-destructive-color: #cc0000;
 /* If a tab bar is positioned at the top of the screen on iOS 7, account for the
    space occupied by the status bar. */
 
-.ios7 .ui-tab-bar.ui-tab-top-position {
+.ios7 .ui-tab-bar.ui-tab-top-position,
+.iosM .ui-tab-bar.ui-tab-top-position {
   padding-top: 20px;
   height: 68px;
 }
@@ -710,7 +756,8 @@ $android-destructive-color: #cc0000;
   @include flex(none);
 }
 
-.ios7 .ui-navigation-bar .ui-bar-button-group {
+.ios7 .ui-navigation-bar .ui-bar-button-group,
+.iosM .ui-navigation-bar .ui-bar-button-group {
   height: 44px;
 }
 
@@ -782,11 +829,17 @@ $android-destructive-color: #cc0000;
   padding-top: 44px !important;
 }
 
-.ios7 .ui-avoid-navigation-bar {
+.ios7 .ui-avoid-navigation-bar,
+.iosM .ui-avoid-navigation-bar {
   padding-top: 64px !important;
 }
 
-.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar {
+.iosM .ui-container.modalWindow .ui-avoid-navigation-bar {
+  padding-top: 44px !important;
+}
+
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar,
+.iosM .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar {
   padding-top: 44px !important;
 }
 
@@ -817,7 +870,8 @@ $android-destructive-color: #cc0000;
   bottom: 48px !important;
 }
 
-.ios7 .ui-avoid-tab-bar.ui-tab-top-position {
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position,
+.iosM .ui-avoid-tab-bar.ui-tab-top-position {
   top: 68px !important;
   bottom: inherit;
 }
