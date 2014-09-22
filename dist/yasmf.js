@@ -2035,6 +2035,7 @@ define("cultures/globalize.culture.en-US", function(){});
  */
 /*global define, Globalize, device, document, window, setTimeout, navigator, console, Node*/
 define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], function () {
+  
   /**
    * @method getComputedStyle
    * @private
@@ -2230,7 +2231,7 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
     template: function ( templateElement, replacements, addtlOptions ) {
       var brackets = [ "%", "%" ],
         transform = "toUpperCase",
-        templateHTML, theVar, thisVar, theReplacement;
+        templateHTML, theVar, thisVar;
       if ( typeof addtlOptions !== "undefined" ) {
         if ( typeof addtlOptions.brackets !== "undefined" ) {
           brackets = addtlOptions.brackets;
@@ -2969,7 +2970,7 @@ define( 'yasmf/util/misc',[],function () {
  *
  * @module device.js
  * @author Kerri Shotts
- * @version 0.4
+ * @version 0.5
  * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -2988,26 +2989,9 @@ define( 'yasmf/util/misc',[],function () {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define, device, navigator, window */
 define( 'yasmf/util/device',[],function () {
+  
   /**
    *
    * PKDEVICE provides simple methods for getting device information, such as platform,
@@ -3023,7 +3007,7 @@ define( 'yasmf/util/device',[],function () {
      * @type Object
      *
      */
-    version: "0.4.100",
+    version: "0.5.100",
     /**
      * Permits overriding the platform for testing. Leave set to `false` for
      * production applications.
@@ -6509,6 +6493,7 @@ define( 'yasmf/util/router',[],function () {
  */
 /*global define*/
 define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function ( theDevice, BaseObject ) {
+  
   var prefixes = [ "-webkit-", "-moz-", "-ms-", "-o-", "" ],
     jsPrefixes = [ "webkit", "moz", "ms", "o", "" ],
     /**
@@ -6573,7 +6558,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   Animation.prototype.setTimingFunction = function setTimingFunction( timingFunction ) {
     this.timingFunction = timingFunction;
     return this;
-  }
+  };
   /**
    * Set the timing for the following animations, in seconds
    * @method setTiming
@@ -6583,7 +6568,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   Animation.prototype.setTiming = function setTiming( timing ) {
     this.timing = timing;
     return this;
-  }
+  };
   /**
    * Move the element to the specific position (using left, top)
    *
@@ -6595,7 +6580,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   Animation.prototype.move = function ( x, y ) {
     _pushAnimation.call( this, "left", x );
     return _pushAnimation.call( this, "top", y );
-  }
+  };
   /**
    * Resize the element (using width, height)
    *
@@ -6607,7 +6592,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   Animation.prototype.resize = function ( w, h ) {
     _pushAnimation.call( this, "width", w );
     return _pushAnimation.call( this, "height", h );
-  }
+  };
   /**
    * Change opacity
    * @method opacity
@@ -6616,7 +6601,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    */
   Animation.prototype.opacity = function ( o ) {
     return _pushAnimation.call( this, "opacity", o );
-  }
+  };
   /**
    * Transform the element using translate x, y
    * @method translate
@@ -6626,7 +6611,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    */
   Animation.prototype.translate = function ( x, y ) {
     return _pushAnimation.call( this, "transform", [ "translate(", [ x, y ].join( ", " ), ")" ].join( "" ) );
-  }
+  };
   /**
    * Transform the element using translate3d x, y, z
    * @method translate3d
@@ -6637,7 +6622,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    */
   Animation.prototype.translate3d = function ( x, y, z ) {
     return _pushAnimation.call( this, "transform", [ "translate3d(", [ x, y, z ].join( ", " ), ")" ].join( "" ) );
-  }
+  };
   /**
    * Transform the element using scale
    * @method scale
@@ -6646,7 +6631,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    */
   Animation.prototype.scale = function ( p ) {
     return _pushAnimation.call( this, "transform", [ "scale(", p, ")" ].join( "" ) );
-  }
+  };
   /**
    * Transform the element using scale
    * @method rotate
@@ -6655,7 +6640,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    */
   Animation.prototype.rotate = function ( d ) {
     return _pushAnimation.call( this, "transform", [ "rotate(", d, "deg)" ].join( "" ) );
-  }
+  };
   /**
    * end the animation definition and trigger the sequence. If a callback method
    * is supplied, it is called when the animation is over
@@ -6667,31 +6652,49 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    * @return {Animation} self
    */
   Animation.prototype.endAnimation = function endAnimation( fn ) {
+    // create the list of transitions we need to put on the elements
     var transition = this._transitions.map( function ( t ) {
         return t.join( " " );
       } ).join( ", " ),
       that = this;
-    this._els.forEach( function animateEl( el ) {
-      var i, l, prefixedTransition, prop, value;
+    // for each element, assign this list of transitions
+    that._els.forEach( function initializeEl( el ) {
+      var i, l, prefixedTransition;
       for ( i = 0, l = prefixes.length; i < l; i++ ) {
         prefixedTransition = prefixes[ i ] + "transition";
         el.style.setProperty( prefixedTransition, transition );
       }
-      for ( i = 0, l = that._animations.length; i < l; i++ ) {
-        prop = that._animations[ i ][ 0 ];
-        value = that._animations[ i ][ 1 ];
-        el.style.setProperty( prop, value );
-      }
     } );
-    if ( typeof fn === "function" ) {
+    // wait a few ms to let the DOM settle, and then start the animations
+    setTimeout( function startAnimations() {
+      var i, l, prop, value;
+      // for each element, assign the desired property and value to the element
+      that._els.forEach( function animateEl( el ) {
+        for ( i = 0, l = that._animations.length; i < l; i++ ) {
+          prop = that._animations[ i ][ 0 ];
+          value = that._animations[ i ][ 1 ];
+          el.style.setProperty( prop, value );
+        }
+      } );
+      // when the animation is complete, remove the transition property from
+      // the elements and call the callback function (if specified)
       setTimeout( function afterAnimationCallback() {
+        var prefixedTransition;
         that._animations = [];
         that._transitions = [];
-        fn.call( that );
-      }, this._maxTiming * 1000 );
-    }
+        that._els.forEach( function animateEl( el ) {
+          for ( var i = 0, l = prefixes.length; i < l; i++ ) {
+            prefixedTransition = prefixes[ i ] + "transition";
+            el.style.setProperty( prefixedTransition, "" );
+          }
+        } );
+        if ( typeof fn === "function" ) {
+          fn.call( that );
+        }
+      }, that._maxTiming * 1000 );
+    }, 50 );
     return this;
-  }
+  };
   Animation.prototype.then = Animation.prototype.endAnimation;
   var UI = {};
   /**
@@ -6702,22 +6705,38 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   UI.version = "0.5.100";
   /**
    * Styles the element with the given style and value. Adds in the browser
-   * prefixes to make it easier.
+   * prefixes to make it easier. Also available as `$s` on nodes.
+   *
+   * @method styleElement
+   * @alias $s
    * @param  {Node} theElement
    * @param  {CssStyle} theStyle   Don't camelCase these, use dashes as in regular styles
    * @param  {value} theValue
    * @returns {void}
    */
   UI.styleElement = function ( theElement, theStyle, theValue ) {
+    if ( typeof theElement !== "object" ) {
+      if ( !( theElement instanceof Node ) ) {
+        theValue = theStyle;
+        theStyle = theElement;
+        theElement = this;
+      }
+    }
     for ( var i = 0; i < prefixes.length; i++ ) {
-      var thePrefix = prefixes[ i ];
-      var theNewStyle = thePrefix + theStyle;
-      //noinspection JSUnresolvedVariable
-      var theNewValue = theValue.replace( "%PREFIX%", thePrefix );
-      //noinspection JSUnresolvedVariable
+      var thePrefix = prefixes[ i ],
+        theNewStyle = thePrefix + theStyle,
+        theNewValue = theValue.replace( "%PREFIX%", thePrefix ).replace( "{-}", thePrefix );
       theElement.style.setProperty( theNewStyle, theNewValue );
     }
   };
+  /**
+   * Style the list of elements with the style and value using `styleElement`
+   * @method styleElements
+   * @param  {Array}  theElements
+   * @param  {CssStyle} theStyle
+   * @param {value} theValue
+   * @returns {void}
+   */
   UI.styleElements = function ( theElements, theStyle, theValue ) {
     var i;
     for ( i = 0; i < theElements.length; i++ ) {
@@ -6753,7 +6772,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
       els = els.concat( [ selector ] );
     }
     return new Animation( els );
-  }
+  };
   /**
    *
    * Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
@@ -7013,10 +7032,23 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   UI.getRootView = function () {
     return UI._rootView;
   };
+  /**
+   * The root view
+   * @property rootView
+   * @static
+   * @type Node
+   */
   Object.defineProperty( UI, "rootView", {
     get: UI.getRootView,
     set: UI.setRootView
   } );
+  /**
+   * Private back button handler class
+   * @private
+   * @class _BackButtonHandler
+   * @returns {BaseObject}
+   * @private
+   */
   UI._BackButtonHandler = function () {
     var self = new BaseObject();
     self.subclass( "BackButtonHandler" );
@@ -7047,31 +7079,43 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    * @type _BackButtonHandler
    */
   UI.backButton = new UI._BackButtonHandler();
+  /**
+   * Private orientation handler class
+   * @class _OrientationHandler
+   * @returns {BaseObject}
+   * @private
+   */
   UI._OrientationHandler = function () {
     var self = new BaseObject();
     self.subclass( "OrientationHandler" );
     self.registerNotification( "orientationChanged" );
     self.handleOrientationChange = function () {
-      var curDevice;
-      var curOrientation;
-      var curFormFactor;
-      var curScale;
-      var curConvenience;
-      curDevice = theDevice.platform();
-      if ( curDevice == "ios" ) {
+      var curOrientation,
+        curFormFactor,
+        curScale,
+        curConvenience,
+        curDevice = theDevice.platform();
+      if ( curDevice === "ios" ) {
+        if ( navigator.userAgent.indexOf( "OS 9" ) > -1 ) {
+          curDevice += " ios9 iosM";
+        }
+        if ( navigator.userAgent.indexOf( "OS 8" ) > -1 ) {
+          curDevice += " ios8 iosM";
+        }
         if ( navigator.userAgent.indexOf( "OS 7" ) > -1 ) {
-          curDevice += " ios7";
+          curDevice += " ios7 iosM";
         }
         if ( navigator.userAgent.indexOf( "OS 6" ) > -1 ) {
-          curDevice += " ios6";
+          curDevice += " ios6 iosC";
         }
         if ( navigator.userAgent.indexOf( "OS 5" ) > -1 ) {
-          curDevice += " ios5";
+          curDevice += " ios5 iosC";
         }
       }
       curFormFactor = theDevice.formFactor();
       curOrientation = theDevice.isPortrait() ? "portrait" : "landscape";
       curScale = theDevice.isRetina() ? "hiDPI" : "loDPI";
+      curScale += " " + window.devicePixelRatio + "x";
       curConvenience = "";
       if ( theDevice.iPad() ) {
         curConvenience = "ipad";
@@ -7113,7 +7157,13 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    */
   UI.orientationHandler = new UI._OrientationHandler();
   /**
-   * Global Notification Object
+   *
+   * Global Notification Object -- used for sending and receiving global notifications
+   *
+   * @property globalNotifications
+   * @static
+   * @final
+   * @type BaseObject
    */
   UI.globalNotifications = new BaseObject();
   /**
@@ -7124,6 +7174,8 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   } else {
     setTimeout( UI._createRootContainer, 0 );
   }
+  // helper methods on Nodes
+  Node.prototype.$s = UI.styleElement;
   return UI;
 } );
 
@@ -7601,7 +7653,7 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object", "yasmf/util/h" ], functi
  *
  * @module navigationController.js
  * @author Kerri Shotts
- * @version 0.4
+ * @version 0.5
  * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -7621,7 +7673,8 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object", "yasmf/util/h" ], functi
  * ```
  */
 /*global define*/
-define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContainer" ], function ( UI, ViewContainer ) {
+define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContainer", "yasmf/util/core" ], function ( UI, ViewContainer, UTIL ) {
+  
   var _className = "NavigationController",
     NavigationController = function () {
       var self = new ViewContainer();
@@ -7701,6 +7754,22 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         write: true,
         backingVariable: false
       } );
+      self.defineProperty( "modal", {
+        read: true,
+        write: false,
+        default: false
+      } );
+      self.defineProperty( "modalView", {
+        read: true,
+        write: false,
+        default: null
+      } );
+      self.defineProperty( "modalViewType", {
+        read: true,
+        write: false,
+        default: ""
+      } );
+      self._modalClickPreventer = null;
       self._preventClicks = null;
       /**
        * Creates a click-prevention element -- essentially a transparent DIV that
@@ -7905,6 +7974,149 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
             thePoppingView.parentElement = null;
             delete thePoppingView.navigationController;
           }, ( animationDelay * 1000 ) );
+        }, 50 );
+      };
+      /**
+       * Presents the navigation controller as a modal navigation controller. It sits
+       * adjacent to `fromView` in the DOM, not within, and as such can prevent it
+       * from receiving any events. The rendering is rougly the same as any other
+       * navigation controller, save that an extra class added to the element's
+       * `ui-container` that ensures that on larger displays the modal doesn't
+       * fill the entire screen. If desired, this class can be controlled by the second
+       * parameter (`options`).
+       *
+       * if `options` are specified, it must be of the form:
+       * ```
+       * { displayType: "modalWindow|modalPage|modalFill",   // modal display type
+       *   withAnimation: true|false,                        // should animation be used?
+       *   withDelay: 0.3,                                   // if animation is used, time in seconds
+       *   withTimingFunction: "ease-in-out|..."             // timing function to use for animation
+       * }
+       * ```
+       *
+       * @method presentModalController
+       * @param {Node} fromView                      the top-level view to cover (typically rootContainer)
+       * @param {*} options                          options to apply
+       */
+      self.presentModalController = function presentModelController( fromView, options ) {
+        var defaultOpts = {
+          displayType: "modalWindow",
+          withAnimation: true,
+          withDelay: 0.3,
+          withTimingFunction: "ease-in-out"
+        };
+        if ( typeof options !== "undefined" ) {
+          if ( typeof options.displayType !== "undefined" ) {
+            defaultOpts.displayType = options.displayType;
+          }
+          if ( typeof options.withAnimation !== "undefined" ) {
+            defaultOpts.withAnimation = options.withAnimation;
+          }
+          if ( typeof options.withDelay !== "undefined" ) {
+            defaultOpts.withDelay = options.withDelay;
+          }
+          if ( typeof options.withTimingFunction !== "undefined" ) {
+            defaultOpts.withTimingFunction = options.withTimingFunction;
+          }
+        }
+        if ( !defaultOpts.withAnimation ) {
+          defaultOpts.withDelay = 0;
+        }
+        // check our form factor class; if we're a phone, only permit modalFill
+        if ( document.body.classList.contains( "phone" ) ) {
+          defaultOpts.displayType = "modalFill";
+        }
+        self._modalView = fromView;
+        self._modal = true;
+        self._modalViewType = defaultOpts.displayType;
+        self._modalClickPreventer = document.createElement( "div" );
+        self._modalClickPreventer.className = "ui-container ui-transparent";
+        // we need to calculate the z indices of the adjacent view and us
+        var theAdjacentViewZ = parseInt( getComputedStyle( fromView ).getPropertyValue( "z-index" ) || "0", 10 ),
+          theModalViewZ = parseInt( getComputedStyle( self.element ).getPropertyValue( "z-index" ) || "0", 10 );
+        if ( theModalViewZ <= theAdjacentViewZ ) {
+          theModalViewZ = theAdjacentViewZ + 10; // the modal should always be above the adjacent view
+        }
+        // make sure our current view is off-screen so that when it is added, it won't flicker
+        self.element.$s( "transform", UTIL.template( "translate3d(%X%,%Y%,%Z%)", {
+          x: "0",
+          y: "150%",
+          z: "" + theModalViewZ + "px"
+        } ) );
+        self.element.classList.add( defaultOpts.displayType );
+        // and attach the element
+        self._modalClickPreventer.appendChild( self.element );
+        fromView.parentNode.appendChild( self._modalClickPreventer );
+        // send any notifications we need
+        self.emit( "viewWasPushed" );
+        self.emit( "viewWillAppear" );
+        setTimeout( function () {
+          fromView.classList.add( "ui-disabled" );
+          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction ).scale(
+            "0.9" ).opacity( "0.9" ).endAnimation();
+          UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .translate3d( "0", "0", "" + theModalViewZ + "px" ).endAnimation( function sendNotifications() {
+              self.emit( "viewDidAppear" );
+            } );
+        }, 50 );
+      };
+      /**
+       * Dismiss a controller presented with `presentModelController`. Options can be
+       *
+       * ```
+       * { withAnimation: true|false,         // if false, no animation occurs
+       *   withDelay: 0.3,                    // time in seconds
+       *   withTimingFunction: "ease-in-out"  // easing function to use
+       * }
+       * ```
+       *
+       * @method dismissModalController
+       * @param {*} options
+       */
+      self.dismissModalController = function dismissModelController( options ) {
+        var defaultOpts = {
+          withAnimation: true,
+          withDelay: 0.3,
+          withTimingFunction: "ease-in-out"
+        };
+        if ( typeof options !== "undefined" ) {
+          if ( typeof options.withAnimation !== "undefined" ) {
+            defaultOpts.withAnimation = options.withAnimation;
+          }
+          if ( typeof options.withDelay !== "undefined" ) {
+            defaultOpts.withDelay = options.withDelay;
+          }
+          if ( typeof options.withTimingFunction !== "undefined" ) {
+            defaultOpts.withTimingFunction = options.withTimingFunction;
+          }
+        }
+        if ( !defaultOpts.withAnimation ) {
+          defaultOpts.withDelay = 0;
+        }
+        // we need to calculate the z indices of the adjacent view and us
+        var theAdjacentViewZ = parseInt( getComputedStyle( self.modalView ).getPropertyValue( "z-index" ) || "0", 10 ),
+          theModalViewZ = parseInt( getComputedStyle( self.element ).getPropertyValue( "z-index" ) || "0", 10 );
+        if ( theModalViewZ <= theAdjacentViewZ ) {
+          theModalViewZ = theAdjacentViewZ + 10; // the modal should always be above the adjacent view
+        }
+        // send any notifications we need
+        self.emit( "viewWillDisappear" );
+        setTimeout( function () {
+          self.modalView.classList.remove( "ui-disabled" );
+          UI.beginAnimation( self.modalView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .scale( "1" ).opacity( "1" ).endAnimation();
+          UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .translate3d( "0", "150%", "" + theModalViewZ + "px" ).endAnimation( function sendNotifications() {
+              self.emit( "viewDidDisappear" );
+              self.emit( "viewWasPopped" );
+              self.element.classList.remove( self.modalViewType );
+              self._modalClickPreventer.parentNode.removeChild( self._modalClickPreventer );
+              self._modalClickPreventer.removeChild( self.element );
+              self.modal = false;
+              self._modalView = null;
+              self._modalViewType = "";
+              self._modalClickPreventer = null;
+            } );
         }, 50 );
       };
       /**

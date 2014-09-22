@@ -68,11 +68,11 @@ body {
   line-height: 1em;
   color: #333;
   background-color: #000;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -moz-tap-highlight-color: rgba(0, 0, 0, 0);
-  -ms-tap-highlight-color: rgba(0, 0, 0, 0);
-  -o-tap-highlight-color: rgba(0, 0, 0, 0);
-  tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  -ms-tap-highlight-color: transparent;
+  -o-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   -ms-tap-highlight-color: transparent;
@@ -166,6 +166,25 @@ div {
 .wince .ui-container {
   background-color: #000000;
   color: #FFFFFF; }
+
+.ui-container.modalWindow,
+.ui-container.modalPage {
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  max-height: 75%;
+  max-width: 75%;
+  min-width: 320px;
+  margin: auto; }
+
+.ui-container.modalPage {
+  max-height: 100%; }
+
+.ui-container.ui-transparent {
+  background-color: transparent; }
 
 /*****************************************************************************
  *
@@ -328,6 +347,18 @@ div {
 .android .ui-background-tint-color:active {
   background-color: rgba(51, 181, 229, 0.5); }
 
+.ui-disabled .ui-tint-color {
+  color: #808080; }
+
+.ui-disabled .ui-background-tint-color {
+  background-color: #808080; }
+
+.android .ui-disabled .ui-tint-color {
+  color: #888888; }
+
+.android .ui-disabled .ui-background-tint-color {
+  background-color: #888888; }
+
 .ui-destructive-color {
   color: #ff6060; }
 
@@ -381,13 +412,19 @@ div {
 /* iOS 7's navbar needs to account for the status bar. Apparently the status bar
    can be different sizes, and yet based on testing with a double-height status
    bar, this seems to work. */
-.ios7 .ui-navigation-bar {
+.ios7 .ui-navigation-bar,
+.iosM .ui-navigation-bar {
   height: 64px;
   padding-top: 20px; }
 
+.iosM .ui-container.modalWindow .ui-navigation-bar {
+  height: 44px;
+  padding-top: 0; }
+
 /* However, if we're a navigation bar trying to avoid a tab bar positioned at
    the top, we need to adjust things so we don't introduce an extra 20px */
-.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar {
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar,
+.iosM .ui-avoid-tab-bar.ui-tab-top-position .ui-navigation-bar {
   height: 44px;
   padding-top: 0; }
 
@@ -499,7 +536,8 @@ div {
 
 /* If a tab bar is positioned at the top of the screen on iOS 7, account for the
    space occupied by the status bar. */
-.ios7 .ui-tab-bar.ui-tab-top-position {
+.ios7 .ui-tab-bar.ui-tab-top-position,
+.iosM .ui-tab-bar.ui-tab-top-position {
   padding-top: 20px;
   height: 68px; }
 
@@ -573,7 +611,8 @@ div {
   -ms-flex: none;
   flex: none; }
 
-.ios7 .ui-navigation-bar .ui-bar-button-group {
+.ios7 .ui-navigation-bar .ui-bar-button-group,
+.iosM .ui-navigation-bar .ui-bar-button-group {
   height: 44px; }
 
 /* Bar button groups can be aligned to the left, center, or right of their
@@ -642,10 +681,15 @@ div {
 .ui-avoid-navigation-bar {
   padding-top: 44px !important; }
 
-.ios7 .ui-avoid-navigation-bar {
+.ios7 .ui-avoid-navigation-bar,
+.iosM .ui-avoid-navigation-bar {
   padding-top: 64px !important; }
 
-.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar {
+.iosM .ui-container.modalWindow .ui-avoid-navigation-bar {
+  padding-top: 44px !important; }
+
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar,
+.iosM .ui-avoid-tab-bar.ui-tab-top-position .ui-avoid-navigation-bar {
   padding-top: 44px !important; }
 
 .android .ui-avoid-navigation-bar {
@@ -668,7 +712,8 @@ div {
   top: inherit;
   bottom: 48px !important; }
 
-.ios7 .ui-avoid-tab-bar.ui-tab-top-position {
+.ios7 .ui-avoid-tab-bar.ui-tab-top-position,
+.iosM .ui-avoid-tab-bar.ui-tab-top-position {
   top: 68px !important;
   bottom: inherit; }
 
@@ -1434,3 +1479,5 @@ div {
   -ms-transform: translateZ(999999px);
   -o-transform: translateZ(999999px);
   transform: translateZ(999999px); }
+
+/*# sourceMappingURL=yasmf.css.map */
