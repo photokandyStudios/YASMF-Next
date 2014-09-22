@@ -103,6 +103,7 @@
  */</span>
 <span class="hljs-comment">/*global define*/</span>
 define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hljs-string">"yasmf/util/object"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theDevice, BaseObject )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-keyword">var</span> prefixes = [ <span class="hljs-string">"-webkit-"</span>, <span class="hljs-string">"-moz-"</span>, <span class="hljs-string">"-ms-"</span>, <span class="hljs-string">"-o-"</span>, <span class="hljs-string">""</span> ],
     jsPrefixes = [ <span class="hljs-string">"webkit"</span>, <span class="hljs-string">"moz"</span>, <span class="hljs-string">"ms"</span>, <span class="hljs-string">"o"</span>, <span class="hljs-string">""</span> ],
     <span class="hljs-comment">/**
@@ -167,7 +168,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
   Animation.prototype.setTimingFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTimingFunction</span><span class="hljs-params">( timingFunction )</span> </span>{
     <span class="hljs-keyword">this</span>.timingFunction = timingFunction;
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  }
+  };
   <span class="hljs-comment">/**
    * Set the timing for the following animations, in seconds
    * @method setTiming
@@ -177,7 +178,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
   Animation.prototype.setTiming = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTiming</span><span class="hljs-params">( timing )</span> </span>{
     <span class="hljs-keyword">this</span>.timing = timing;
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  }
+  };
   <span class="hljs-comment">/**
    * Move the element to the specific position (using left, top)
    *
@@ -189,7 +190,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
   Animation.prototype.move = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y )</span> </span>{
     _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"left"</span>, x );
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"top"</span>, y );
-  }
+  };
   <span class="hljs-comment">/**
    * Resize the element (using width, height)
    *
@@ -201,7 +202,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
   Animation.prototype.resize = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( w, h )</span> </span>{
     _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"width"</span>, w );
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"height"</span>, h );
-  }
+  };
   <span class="hljs-comment">/**
    * Change opacity
    * @method opacity
@@ -210,7 +211,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    */</span>
   Animation.prototype.opacity = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( o )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"opacity"</span>, o );
-  }
+  };
   <span class="hljs-comment">/**
    * Transform the element using translate x, y
    * @method translate
@@ -220,7 +221,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    */</span>
   Animation.prototype.translate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"translate("</span>, [ x, y ].join( <span class="hljs-string">", "</span> ), <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
-  }
+  };
   <span class="hljs-comment">/**
    * Transform the element using translate3d x, y, z
    * @method translate3d
@@ -231,7 +232,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    */</span>
   Animation.prototype.translate3d = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y, z )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"translate3d("</span>, [ x, y, z ].join( <span class="hljs-string">", "</span> ), <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
-  }
+  };
   <span class="hljs-comment">/**
    * Transform the element using scale
    * @method scale
@@ -240,7 +241,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    */</span>
   Animation.prototype.scale = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( p )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"scale("</span>, p, <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
-  }
+  };
   <span class="hljs-comment">/**
    * Transform the element using scale
    * @method rotate
@@ -249,7 +250,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    */</span>
   Animation.prototype.rotate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( d )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"rotate("</span>, d, <span class="hljs-string">"deg)"</span> ].join( <span class="hljs-string">""</span> ) );
-  }
+  };
   <span class="hljs-comment">/**
    * end the animation definition and trigger the sequence. If a callback method
    * is supplied, it is called when the animation is over
@@ -260,52 +261,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    *                            further animations can be triggered.
    * @return {Animation} self
    */</span>
-  Animation.prototype.endAnimation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">endAnimation</span><span class="hljs-params">( fn )</span> </span>{
-    <span class="hljs-keyword">var</span> transition = <span class="hljs-keyword">this</span>._transitions.map( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( t )</span> </span>{
-        <span class="hljs-keyword">return</span> t.join( <span class="hljs-string">" "</span> );
-      } ).join( <span class="hljs-string">", "</span> ),
-      that = <span class="hljs-keyword">this</span>;
-    <span class="hljs-keyword">this</span>._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateEl</span><span class="hljs-params">( el )</span> </span>{
-      <span class="hljs-keyword">var</span> i, l, prefixedTransition, prop, value;
-      <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
-        prefixedTransition = prefixes[ i ] + <span class="hljs-string">"transition"</span>;
-        el.style.setProperty( prefixedTransition, transition );
-      }
-      <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = that._animations.length; i &lt; l; i++ ) {
-        prop = that._animations[ i ][ <span class="hljs-number">0</span> ];
-        value = that._animations[ i ][ <span class="hljs-number">1</span> ];
-        el.style.setProperty( prop, value );
-      }
-    } );
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">"function"</span> ) {
-      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">afterAnimationCallback</span><span class="hljs-params">()</span> </span>{
-        that._animations = [];
-        that._transitions = [];
-        fn.call( that );
-      }, <span class="hljs-keyword">this</span>._maxTiming * <span class="hljs-number">1000</span> );
-    }
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  }
-  Animation.prototype.then = Animation.prototype.endAnimation;
-  <span class="hljs-keyword">var</span> UI = {};
-  <span class="hljs-comment">/**
-   * Version of the UI Namespace
-   * @property version
-   * @type Object
-   **/</span>
-  UI.version = <span class="hljs-string">"0.5.100"</span>;
-  <span class="hljs-comment">/**
-   * Styles the element with the given style and value. Adds in the browser
-   * prefixes to make it easier.
-   * @param  {Node} theElement
-   * @param  {CssStyle} theStyle   Don't camelCase these, use dashes as in regular styles
-   * @param  {value} theValue
-   * @returns {void}
-   */</span>
-  UI.styleElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElement, theStyle, theValue )</span> </span>{
-    <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; prefixes.length; i++ ) {
-      <span class="hljs-keyword">var</span> thePrefix = prefixes[ i ];
-      <span class="hljs-keyword">var</span> theNewStyle = thePrefix + theStyle;</pre></div></div>
+  Animation.prototype.endAnimation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">endAnimation</span><span class="hljs-params">( fn )</span> </span>{</pre></div></div>
             
         </li>
         
@@ -316,11 +272,14 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>noinspection JSUnresolvedVariable</p>
+              <p>create the list of transitions we need to put on the elements</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> theNewValue = theValue.replace( <span class="hljs-string">"%PREFIX%"</span>, thePrefix );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> transition = <span class="hljs-keyword">this</span>._transitions.map( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( t )</span> </span>{
+        <span class="hljs-keyword">return</span> t.join( <span class="hljs-string">" "</span> );
+      } ).join( <span class="hljs-string">", "</span> ),
+      that = <span class="hljs-keyword">this</span>;</pre></div></div>
             
         </li>
         
@@ -331,13 +290,128 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>noinspection JSUnresolvedVariable</p>
+              <p>for each element, assign this list of transitions</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      theElement.style.setProperty( theNewStyle, theNewValue );
+            <div class="content"><div class='highlight'><pre>    that._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initializeEl</span><span class="hljs-params">( el )</span> </span>{
+      <span class="hljs-keyword">var</span> i, l, prefixedTransition;
+      <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
+        prefixedTransition = prefixes[ i ] + <span class="hljs-string">"transition"</span>;
+        el.style.setProperty( prefixedTransition, transition );
+      }
+    } );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>wait a few ms to let the DOM settle, and then start the animations</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">startAnimations</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> i, l, prop, value;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>for each element, assign the desired property and value to the element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      that._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateEl</span><span class="hljs-params">( el )</span> </span>{
+        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = that._animations.length; i &lt; l; i++ ) {
+          prop = that._animations[ i ][ <span class="hljs-number">0</span> ];
+          value = that._animations[ i ][ <span class="hljs-number">1</span> ];
+          el.style.setProperty( prop, value );
+        }
+      } );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>when the animation is complete, remove the transition property from
+the elements and call the callback function (if specified)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">afterAnimationCallback</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> prefixedTransition;
+        that._animations = [];
+        that._transitions = [];
+        that._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateEl</span><span class="hljs-params">( el )</span> </span>{
+          <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
+            prefixedTransition = prefixes[ i ] + <span class="hljs-string">"transition"</span>;
+            el.style.setProperty( prefixedTransition, <span class="hljs-string">""</span> );
+          }
+        } );
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">"function"</span> ) {
+          fn.call( that );
+        }
+      }, that._maxTiming * <span class="hljs-number">1000</span> );
+    }, <span class="hljs-number">50</span> );
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  };
+  Animation.prototype.then = Animation.prototype.endAnimation;
+  <span class="hljs-keyword">var</span> UI = {};
+  <span class="hljs-comment">/**
+   * Version of the UI Namespace
+   * @property version
+   * @type Object
+   **/</span>
+  UI.version = <span class="hljs-string">"0.5.100"</span>;
+  <span class="hljs-comment">/**
+   * Styles the element with the given style and value. Adds in the browser
+   * prefixes to make it easier. Also available as `$s` on nodes.
+   *
+   * @method styleElement
+   * @alias $s
+   * @param  {Node} theElement
+   * @param  {CssStyle} theStyle   Don't camelCase these, use dashes as in regular styles
+   * @param  {value} theValue
+   * @returns {void}
+   */</span>
+  UI.styleElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElement, theStyle, theValue )</span> </span>{
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theElement !== <span class="hljs-string">"object"</span> ) {
+      <span class="hljs-keyword">if</span> ( !( theElement <span class="hljs-keyword">instanceof</span> Node ) ) {
+        theValue = theStyle;
+        theStyle = theElement;
+        theElement = <span class="hljs-keyword">this</span>;
+      }
+    }
+    <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; prefixes.length; i++ ) {
+      <span class="hljs-keyword">var</span> thePrefix = prefixes[ i ],
+        theNewStyle = thePrefix + theStyle,
+        theNewValue = theValue.replace( <span class="hljs-string">"%PREFIX%"</span>, thePrefix ).replace( <span class="hljs-string">"{-}"</span>, thePrefix );
+      theElement.style.setProperty( theNewStyle, theNewValue );
     }
   };
+  <span class="hljs-comment">/**
+   * Style the list of elements with the style and value using `styleElement`
+   * @method styleElements
+   * @param  {Array}  theElements
+   * @param  {CssStyle} theStyle
+   * @param {value} theValue
+   * @returns {void}
+   */</span>
   UI.styleElements = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElements, theStyle, theValue )</span> </span>{
     <span class="hljs-keyword">var</span> i;
     <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; theElements.length; i++ ) {
@@ -373,7 +447,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
       els = els.concat( [ selector ] );
     }
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Animation( els );
-  }
+  };
   <span class="hljs-comment">/**
    *
    * Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
@@ -393,11 +467,11 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
         </li>
         
         
-        <li id="section-4">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>noinspection JSUnresolvedVariable</p>
 
@@ -408,11 +482,11 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
         </li>
         
         
-        <li id="section-5">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>noinspection JSUnresolvedVariable</p>
 
@@ -463,11 +537,11 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
         </li>
         
         
-        <li id="section-6">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>noinspection JSUnresolvedVariable</p>
 
@@ -672,10 +746,23 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
   UI.getRootView = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> UI._rootView;
   };
+  <span class="hljs-comment">/**
+   * The root view
+   * @property rootView
+   * @static
+   * @type Node
+   */</span>
   <span class="hljs-built_in">Object</span>.defineProperty( UI, <span class="hljs-string">"rootView"</span>, {
     get: UI.getRootView,
     set: UI.setRootView
   } );
+  <span class="hljs-comment">/**
+   * Private back button handler class
+   * @private
+   * @class _BackButtonHandler
+   * @returns {BaseObject}
+   * @private
+   */</span>
   UI._BackButtonHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
     self.subclass( <span class="hljs-string">"BackButtonHandler"</span> );
@@ -706,31 +793,43 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    * @type _BackButtonHandler
    */</span>
   UI.backButton = <span class="hljs-keyword">new</span> UI._BackButtonHandler();
+  <span class="hljs-comment">/**
+   * Private orientation handler class
+   * @class _OrientationHandler
+   * @returns {BaseObject}
+   * @private
+   */</span>
   UI._OrientationHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
     self.subclass( <span class="hljs-string">"OrientationHandler"</span> );
     self.registerNotification( <span class="hljs-string">"orientationChanged"</span> );
     self.handleOrientationChange = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">var</span> curDevice;
-      <span class="hljs-keyword">var</span> curOrientation;
-      <span class="hljs-keyword">var</span> curFormFactor;
-      <span class="hljs-keyword">var</span> curScale;
-      <span class="hljs-keyword">var</span> curConvenience;
-      curDevice = theDevice.platform();
-      <span class="hljs-keyword">if</span> ( curDevice == <span class="hljs-string">"ios"</span> ) {
+      <span class="hljs-keyword">var</span> curOrientation,
+        curFormFactor,
+        curScale,
+        curConvenience,
+        curDevice = theDevice.platform();
+      <span class="hljs-keyword">if</span> ( curDevice === <span class="hljs-string">"ios"</span> ) {
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 9"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          curDevice += <span class="hljs-string">" ios9 iosM"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 8"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          curDevice += <span class="hljs-string">" ios8 iosM"</span>;
+        }
         <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 7"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios7"</span>;
+          curDevice += <span class="hljs-string">" ios7 iosM"</span>;
         }
         <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 6"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios6"</span>;
+          curDevice += <span class="hljs-string">" ios6 iosC"</span>;
         }
         <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 5"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios5"</span>;
+          curDevice += <span class="hljs-string">" ios5 iosC"</span>;
         }
       }
       curFormFactor = theDevice.formFactor();
       curOrientation = theDevice.isPortrait() ? <span class="hljs-string">"portrait"</span> : <span class="hljs-string">"landscape"</span>;
       curScale = theDevice.isRetina() ? <span class="hljs-string">"hiDPI"</span> : <span class="hljs-string">"loDPI"</span>;
+      curScale += <span class="hljs-string">" "</span> + <span class="hljs-built_in">window</span>.devicePixelRatio + <span class="hljs-string">"x"</span>;
       curConvenience = <span class="hljs-string">""</span>;
       <span class="hljs-keyword">if</span> ( theDevice.iPad() ) {
         curConvenience = <span class="hljs-string">"ipad"</span>;
@@ -772,7 +871,13 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    */</span>
   UI.orientationHandler = <span class="hljs-keyword">new</span> UI._OrientationHandler();
   <span class="hljs-comment">/**
-   * Global Notification Object
+   *
+   * Global Notification Object -- used for sending and receiving global notifications
+   *
+   * @property globalNotifications
+   * @static
+   * @final
+   * @type BaseObject
    */</span>
   UI.globalNotifications = <span class="hljs-keyword">new</span> BaseObject();
   <span class="hljs-comment">/**
@@ -782,7 +887,22 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
     UI._createRootContainer();
   } <span class="hljs-keyword">else</span> {
     setTimeout( UI._createRootContainer, <span class="hljs-number">0</span> );
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>helper methods on Nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Node.prototype.$s = UI.styleElement;
   <span class="hljs-keyword">return</span> UI;
 } );</pre></div></div>
             

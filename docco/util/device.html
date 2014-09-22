@@ -93,7 +93,7 @@
  *
  * @module device.js
  * @author Kerri Shotts
- * @version 0.4
+ * @version 0.5
  * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -112,26 +112,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */</span>
-<span class="hljs-comment">/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */</span>
 <span class="hljs-comment">/*global define, device, navigator, window */</span>
 define( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-comment">/**
    *
    * PKDEVICE provides simple methods for getting device information, such as platform,
@@ -147,7 +130,7 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
      * @type Object
      *
      */</span>
-    version: <span class="hljs-string">"0.4.100"</span>,
+    version: <span class="hljs-string">"0.5.100"</span>,
     <span class="hljs-comment">/**
      * Permits overriding the platform for testing. Leave set to `false` for
      * production applications.

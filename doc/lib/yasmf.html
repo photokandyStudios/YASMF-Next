@@ -293,6 +293,21 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
 <span class="hljs-class">.wince</span> <span class="hljs-class">.ui-container</span> {
   <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-hexcolor">#000000</span>;</span>
   <span class="hljs-attribute">color</span><span class="hljs-value">: <span class="hljs-hexcolor">#FFFFFF</span>;</span>
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>modal classes</p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ui-container</span><span class="hljs-class">.modalWindow</span>,
+<span class="hljs-class">.ui-container</span><span class="hljs-class">.modalPage</span> {
+  <span class="hljs-attribute">box-shadow</span><span class="hljs-value">: <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">25px</span> <span class="hljs-function">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0.25</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> flex-box</span>();</span>
+  <span class="hljs-attribute">max-height</span><span class="hljs-value">: <span class="hljs-number">75%</span>;</span>
+  <span class="hljs-attribute">max-width</span><span class="hljs-value">: <span class="hljs-number">75%</span>;</span>
+  <span class="hljs-attribute">min-width</span><span class="hljs-value">: <span class="hljs-number">320px</span>;</span>
+  <span class="hljs-attribute">margin</span><span class="hljs-value">: auto;</span>
+}
+<span class="hljs-class">.ui-container</span><span class="hljs-class">.modalPage</span> {
+  <span class="hljs-attribute">max-height</span><span class="hljs-value">: <span class="hljs-number">100%</span>;</span>
+}
+
+<span class="hljs-class">.ui-container</span><span class="hljs-class">.ui-transparent</span> {
+  <span class="hljs-attribute">background-color</span><span class="hljs-value">: transparent;</span>
 }
 
 <span class="hljs-comment">/*****************************************************************************
@@ -396,7 +411,9 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
  *****************************************************************************/</span>
 
 <span class="hljs-variable">$tint-color</span><span class="hljs-value">: <span class="hljs-hexcolor">#40b0ff</span>;</span>
+<span class="hljs-variable">$tint-color-disabled</span><span class="hljs-value">: <span class="hljs-hexcolor">#808080</span>;</span>
 <span class="hljs-variable">$android-tint-color</span><span class="hljs-value">: <span class="hljs-hexcolor">#33b5e5</span>;</span>
+<span class="hljs-variable">$android-tint-color-disabled</span><span class="hljs-value">: <span class="hljs-hexcolor">#888888</span>;</span>
 
 <span class="hljs-class">.ui-tint-color</span> {
   <span class="hljs-attribute">color</span><span class="hljs-value">: <span class="hljs-variable">$tint-color</span>;</span>
@@ -430,6 +447,22 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
 
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-background-tint-color</span><span class="hljs-pseudo">:active</span> {
   <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-function">rgba</span>(<span class="hljs-variable">$android-tint-color</span>, <span class="hljs-number">0.5</span>);</span>
+}
+
+<span class="hljs-class">.ui-disabled</span> <span class="hljs-class">.ui-tint-color</span> {
+  <span class="hljs-attribute">color</span><span class="hljs-value">: <span class="hljs-variable">$tint-color-disabled</span>;</span>
+}
+
+<span class="hljs-class">.ui-disabled</span> <span class="hljs-class">.ui-background-tint-color</span> {
+  <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-variable">$tint-color-disabled</span>;</span>
+}
+
+<span class="hljs-class">.android</span> <span class="hljs-class">.ui-disabled</span> <span class="hljs-class">.ui-tint-color</span> {
+  <span class="hljs-attribute">color</span><span class="hljs-value">: <span class="hljs-variable">$android-tint-color-disabled</span>;</span>
+}
+
+<span class="hljs-class">.android</span> <span class="hljs-class">.ui-disabled</span> <span class="hljs-class">.ui-background-tint-color</span> {
+  <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-variable">$android-tint-color-disabled</span>;</span>
 }
 
 <span class="hljs-variable">$destructive-color</span><span class="hljs-value">: <span class="hljs-hexcolor">#ff6060</span>;</span>
@@ -475,11 +508,17 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> justify-content-space-between</span>;</span>
 }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>iOS 7&#39;s navbar needs to account for the status bar. Apparently the status bar
    can be different sizes, and yet based on testing with a double-height status
-   bar, this seems to work. </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-navigation-bar</span> {
+   bar, this seems to work. </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-navigation-bar</span>,
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-navigation-bar</span> {
   <span class="hljs-attribute">height</span><span class="hljs-value">: <span class="hljs-number">64px</span>;</span>
   <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">20px</span>;</span>
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if we&#39;re in a modal container that doesn&#39;t fill the height of the window
+reset the navigation bar height</p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-container</span><span class="hljs-class">.modalWindow</span> <span class="hljs-class">.ui-navigation-bar</span> {
+  <span class="hljs-attribute">height</span><span class="hljs-value">: <span class="hljs-number">44px</span>;</span>
+  <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">0</span>;</span>
 }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>However, if we&#39;re a navigation bar trying to avoid a tab bar positioned at
-   the top, we need to adjust things so we don&#39;t introduce an extra 20px </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> <span class="hljs-class">.ui-navigation-bar</span> {
+   the top, we need to adjust things so we don&#39;t introduce an extra 20px </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> <span class="hljs-class">.ui-navigation-bar</span>,
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> <span class="hljs-class">.ui-navigation-bar</span> {
   <span class="hljs-attribute">height</span><span class="hljs-value">: <span class="hljs-number">44px</span>;</span>
   <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">0</span>;</span>
 }
@@ -563,7 +602,8 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
   <span class="hljs-attribute">font-weight</span><span class="hljs-value">: <span class="hljs-number">300</span>;</span>
   <span class="hljs-attribute">overflow</span><span class="hljs-value">: hidden;</span>
 }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>If a tab bar is positioned at the top of the screen on iOS 7, account for the
-   space occupied by the status bar. </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> {
+   space occupied by the status bar. </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span>,
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> {
   <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">20px</span>;</span>
   <span class="hljs-attribute">height</span><span class="hljs-value">: <span class="hljs-number">68px</span>;</span>
 }
@@ -639,7 +679,8 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> flex</span>(none);</span>
 }
 
-<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-navigation-bar</span> <span class="hljs-class">.ui-bar-button-group</span> {
+<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-navigation-bar</span> <span class="hljs-class">.ui-bar-button-group</span>,
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-navigation-bar</span> <span class="hljs-class">.ui-bar-button-group</span> {
   <span class="hljs-attribute">height</span><span class="hljs-value">: <span class="hljs-number">44px</span>;</span>
 }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Bar button groups can be aligned to the left, center, or right of their
    container. </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ui-navigation-bar</span> <span class="hljs-class">.ui-bar-button-group</span><span class="hljs-class">.ui-align-right</span>,
@@ -699,11 +740,17 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
   <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">44px</span> <span class="hljs-important">!important</span>;</span>
 }
 
-<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-navigation-bar</span> {
+<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-navigation-bar</span>,
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-avoid-navigation-bar</span> {
   <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">64px</span> <span class="hljs-important">!important</span>;</span>
 }
 
-<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> <span class="hljs-class">.ui-avoid-navigation-bar</span> {
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-container</span><span class="hljs-class">.modalWindow</span> <span class="hljs-class">.ui-avoid-navigation-bar</span> {
+  <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">44px</span> <span class="hljs-important">!important</span>;</span>
+}
+
+<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> <span class="hljs-class">.ui-avoid-navigation-bar</span>,
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> <span class="hljs-class">.ui-avoid-navigation-bar</span> {
   <span class="hljs-attribute">padding-top</span><span class="hljs-value">: <span class="hljs-number">44px</span> <span class="hljs-important">!important</span>;</span>
 }
 
@@ -726,7 +773,8 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
   <span class="hljs-attribute">bottom</span><span class="hljs-value">: <span class="hljs-number">48px</span> <span class="hljs-important">!important</span>;</span>
 }
 
-<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> {
+<span class="hljs-class">.ios7</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span>,
+<span class="hljs-class">.iosM</span> <span class="hljs-class">.ui-avoid-tab-bar</span><span class="hljs-class">.ui-tab-top-position</span> {
   <span class="hljs-attribute">top</span><span class="hljs-value">: <span class="hljs-number">68px</span> <span class="hljs-important">!important</span>;</span>
   <span class="hljs-attribute">bottom</span><span class="hljs-value">: inherit;</span>
 }

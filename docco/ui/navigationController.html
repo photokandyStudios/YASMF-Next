@@ -82,7 +82,7 @@
  *
  * @module navigationController.js
  * @author Kerri Shotts
- * @version 0.4
+ * @version 0.5
  * ```
  * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -102,7 +102,8 @@
  * ```
  */</span>
 <span class="hljs-comment">/*global define*/</span>
-define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"yasmf/ui/viewContainer"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( UI, ViewContainer )</span> </span>{
+define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"yasmf/ui/viewContainer"</span>, <span class="hljs-string">"yasmf/util/core"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( UI, ViewContainer, UTIL )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"NavigationController"</span>,
     NavigationController = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> ViewContainer();
@@ -208,6 +209,22 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
         write: <span class="hljs-literal">true</span>,
         backingVariable: <span class="hljs-literal">false</span>
       } );
+      self.defineProperty( <span class="hljs-string">"modal"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+      } );
+      self.defineProperty( <span class="hljs-string">"modalView"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-literal">null</span>
+      } );
+      self.defineProperty( <span class="hljs-string">"modalViewType"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-string">""</span>
+      } );
+      self._modalClickPreventer = <span class="hljs-literal">null</span>;
       self._preventClicks = <span class="hljs-literal">null</span>;
       <span class="hljs-comment">/**
        * Creates a click-prevention element -- essentially a transparent DIV that
@@ -714,6 +731,240 @@ view is at 0</p>
         }, <span class="hljs-number">50</span> );
       };
       <span class="hljs-comment">/**
+       * Presents the navigation controller as a modal navigation controller. It sits
+       * adjacent to `fromView` in the DOM, not within, and as such can prevent it
+       * from receiving any events. The rendering is rougly the same as any other
+       * navigation controller, save that an extra class added to the element's
+       * `ui-container` that ensures that on larger displays the modal doesn't
+       * fill the entire screen. If desired, this class can be controlled by the second
+       * parameter (`options`).
+       *
+       * if `options` are specified, it must be of the form:
+       * ```
+       * { displayType: "modalWindow|modalPage|modalFill",   // modal display type
+       *   withAnimation: true|false,                        // should animation be used?
+       *   withDelay: 0.3,                                   // if animation is used, time in seconds
+       *   withTimingFunction: "ease-in-out|..."             // timing function to use for animation
+       * }
+       * ```
+       *
+       * @method presentModalController
+       * @param {Node} fromView                      the top-level view to cover (typically rootContainer)
+       * @param {*} options                          options to apply
+       */</span>
+      self.presentModalController = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">presentModelController</span><span class="hljs-params">( fromView, options )</span> </span>{
+        <span class="hljs-keyword">var</span> defaultOpts = {
+          displayType: <span class="hljs-string">"modalWindow"</span>,
+          withAnimation: <span class="hljs-literal">true</span>,
+          withDelay: <span class="hljs-number">0.3</span>,
+          withTimingFunction: <span class="hljs-string">"ease-in-out"</span>
+        };
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.displayType !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.displayType = options.displayType;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withAnimation !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withAnimation = options.withAnimation;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withDelay !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withDelay = options.withDelay;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withTimingFunction !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withTimingFunction = options.withTimingFunction;
+          }
+        }
+        <span class="hljs-keyword">if</span> ( !defaultOpts.withAnimation ) {
+          defaultOpts.withDelay = <span class="hljs-number">0</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>check our form factor class; if we’re a phone, only permit modalFill</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">document</span>.body.classList.contains( <span class="hljs-string">"phone"</span> ) ) {
+          defaultOpts.displayType = <span class="hljs-string">"modalFill"</span>;
+        }
+        self._modalView = fromView;
+        self._modal = <span class="hljs-literal">true</span>;
+        self._modalViewType = defaultOpts.displayType;
+        self._modalClickPreventer = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._modalClickPreventer.className = <span class="hljs-string">"ui-container ui-transparent"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>we need to calculate the z indices of the adjacent view and us</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> theAdjacentViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( fromView ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> ),
+          theModalViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( self.element ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> );
+        <span class="hljs-keyword">if</span> ( theModalViewZ &lt;= theAdjacentViewZ ) {
+          theModalViewZ = theAdjacentViewZ + <span class="hljs-number">10</span>; <span class="hljs-comment">// the modal should always be above the adjacent view</span>
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>make sure our current view is off-screen so that when it is added, it won’t flicker</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        self.element.$s( <span class="hljs-string">"transform"</span>, UTIL.template( <span class="hljs-string">"translate3d(%X%,%Y%,%Z%)"</span>, {
+          x: <span class="hljs-string">"0"</span>,
+          y: <span class="hljs-string">"150%"</span>,
+          z: <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span>
+        } ) );
+        self.element.classList.add( defaultOpts.displayType );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>and attach the element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        self._modalClickPreventer.appendChild( self.element );
+        fromView.parentNode.appendChild( self._modalClickPreventer );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>send any notifications we need</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        self.emit( <span class="hljs-string">"viewWasPushed"</span> );
+        self.emit( <span class="hljs-string">"viewWillAppear"</span> );
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          fromView.classList.add( <span class="hljs-string">"ui-disabled"</span> );
+          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction ).scale(
+            <span class="hljs-string">"0.9"</span> ).opacity( <span class="hljs-string">"0.9"</span> ).endAnimation();
+          UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .translate3d( <span class="hljs-string">"0"</span>, <span class="hljs-string">"0"</span>, <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span> ).endAnimation( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendNotifications</span><span class="hljs-params">()</span> </span>{
+              self.emit( <span class="hljs-string">"viewDidAppear"</span> );
+            } );
+        }, <span class="hljs-number">50</span> );
+      };
+      <span class="hljs-comment">/**
+       * Dismiss a controller presented with `presentModelController`. Options can be
+       *
+       * ```
+       * { withAnimation: true|false,         // if false, no animation occurs
+       *   withDelay: 0.3,                    // time in seconds
+       *   withTimingFunction: "ease-in-out"  // easing function to use
+       * }
+       * ```
+       *
+       * @method dismissModalController
+       * @param {*} options
+       */</span>
+      self.dismissModalController = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dismissModelController</span><span class="hljs-params">( options )</span> </span>{
+        <span class="hljs-keyword">var</span> defaultOpts = {
+          withAnimation: <span class="hljs-literal">true</span>,
+          withDelay: <span class="hljs-number">0.3</span>,
+          withTimingFunction: <span class="hljs-string">"ease-in-out"</span>
+        };
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withAnimation !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withAnimation = options.withAnimation;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withDelay !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withDelay = options.withDelay;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withTimingFunction !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withTimingFunction = options.withTimingFunction;
+          }
+        }
+        <span class="hljs-keyword">if</span> ( !defaultOpts.withAnimation ) {
+          defaultOpts.withDelay = <span class="hljs-number">0</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>we need to calculate the z indices of the adjacent view and us</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> theAdjacentViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( self.modalView ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> ),
+          theModalViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( self.element ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> );
+        <span class="hljs-keyword">if</span> ( theModalViewZ &lt;= theAdjacentViewZ ) {
+          theModalViewZ = theAdjacentViewZ + <span class="hljs-number">10</span>; <span class="hljs-comment">// the modal should always be above the adjacent view</span>
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>send any notifications we need</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        self.emit( <span class="hljs-string">"viewWillDisappear"</span> );
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          self.modalView.classList.remove( <span class="hljs-string">"ui-disabled"</span> );
+          UI.beginAnimation( self.modalView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .scale( <span class="hljs-string">"1"</span> ).opacity( <span class="hljs-string">"1"</span> ).endAnimation();
+          UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .translate3d( <span class="hljs-string">"0"</span>, <span class="hljs-string">"150%"</span>, <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span> ).endAnimation( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendNotifications</span><span class="hljs-params">()</span> </span>{
+              self.emit( <span class="hljs-string">"viewDidDisappear"</span> );
+              self.emit( <span class="hljs-string">"viewWasPopped"</span> );
+              self.element.classList.remove( self.modalViewType );
+              self._modalClickPreventer.parentNode.removeChild( self._modalClickPreventer );
+              self._modalClickPreventer.removeChild( self.element );
+              self.modal = <span class="hljs-literal">false</span>;
+              self._modalView = <span class="hljs-literal">null</span>;
+              self._modalViewType = <span class="hljs-string">""</span>;
+              self._modalClickPreventer = <span class="hljs-literal">null</span>;
+            } );
+        }, <span class="hljs-number">50</span> );
+      };
+      <span class="hljs-comment">/**
        * @method render
        * @abstract
        */</span>
@@ -742,11 +993,11 @@ view is at 0</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>do what a normal view container does</p>
 
@@ -760,11 +1011,11 @@ view is at 0</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>now add the root view</p>
 
@@ -804,11 +1055,11 @@ view is at 0</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>handle auto initialization</p>
 

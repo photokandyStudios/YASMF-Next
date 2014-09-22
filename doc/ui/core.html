@@ -16,6 +16,7 @@ OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 OTHER DEALINGS IN THE SOFTWARE.</code></span></p>
 <p>Core of YASMF-UI; defines the version and basic UI  convenience methods.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*global define*/</span>
 define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hljs-string">"yasmf/util/object"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theDevice, BaseObject )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-keyword">var</span> prefixes = [ <span class="hljs-string">"-webkit-"</span>, <span class="hljs-string">"-moz-"</span>, <span class="hljs-string">"-ms-"</span>, <span class="hljs-string">"-o-"</span>, <span class="hljs-string">""</span> ],
     jsPrefixes = [ <span class="hljs-string">"webkit"</span>, <span class="hljs-string">"moz"</span>, <span class="hljs-string">"ms"</span>, <span class="hljs-string">"o"</span>, <span class="hljs-string">""</span> ],</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Constructor method Animation</span></p>
 <p>Parameters:</p>
@@ -82,7 +83,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.setTimingFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTimingFunction</span><span class="hljs-params">( timingFunction )</span> </span>{
     <span class="hljs-keyword">this</span>.timingFunction = timingFunction;
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method setTiming</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method setTiming</span></p>
 <p>Set the timing for the following animations, in seconds</p>
 <p>Parameters:</p>
 <ul>
@@ -91,7 +92,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.setTiming = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTiming</span><span class="hljs-params">( timing )</span> </span>{
     <span class="hljs-keyword">this</span>.timing = timing;
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method move</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method move</span></p>
 <p>Move the element to the specific position (using left, top)</p>
 <p>Parameters:</p>
 <ul>
@@ -103,7 +104,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.move = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y )</span> </span>{
     _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"left"</span>, x );
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"top"</span>, y );
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method resize</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method resize</span></p>
 <p>Resize the element (using width, height)</p>
 <p>Parameters:</p>
 <ul>
@@ -115,7 +116,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.resize = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( w, h )</span> </span>{
     _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"width"</span>, w );
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"height"</span>, h );
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method opacity</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method opacity</span></p>
 <p>Change opacity</p>
 <p>Parameters:</p>
 <ul>
@@ -123,7 +124,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 </ul>
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.opacity = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( o )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"opacity"</span>, o );
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method translate</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method translate</span></p>
 <p>Transform the element using translate x, y</p>
 <p>Parameters:</p>
 <ul>
@@ -134,7 +135,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 </ul>
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.translate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"translate("</span>, [ x, y ].join( <span class="hljs-string">", "</span> ), <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method translate3d</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method translate3d</span></p>
 <p>Transform the element using translate3d x, y, z</p>
 <p>Parameters:</p>
 <ul>
@@ -147,7 +148,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 </ul>
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.translate3d = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( x, y, z )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"translate3d("</span>, [ x, y, z ].join( <span class="hljs-string">", "</span> ), <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method scale</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method scale</span></p>
 <p>Transform the element using scale</p>
 <p>Parameters:</p>
 <ul>
@@ -155,7 +156,7 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 </ul>
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.scale = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( p )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"scale("</span>, p, <span class="hljs-string">")"</span> ].join( <span class="hljs-string">""</span> ) );
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method rotate</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method rotate</span></p>
 <p>Transform the element using scale</p>
 <p>Parameters:</p>
 <ul>
@@ -163,44 +164,53 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
 </ul>
 <p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.rotate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( d )</span> </span>{
     <span class="hljs-keyword">return</span> _pushAnimation.call( <span class="hljs-keyword">this</span>, <span class="hljs-string">"transform"</span>, [ <span class="hljs-string">"rotate("</span>, d, <span class="hljs-string">"deg)"</span> ].join( <span class="hljs-string">""</span> ) );
-  }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method endAnimation is aliased as then</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method endAnimation is aliased as then</span></p>
 <p>end the animation definition and trigger the sequence. If a callback method
 is supplied, it is called when the animation is over</p>
 <p>Parameters:</p>
 <ul>
 <li><strong>fn must be a function.</strong><br/>(function to call when animation is completed; it is bound to the Animation method so that further animations can be triggered.)</li>
 </ul>
-<p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.endAnimation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">endAnimation</span><span class="hljs-params">( fn )</span> </span>{
-    <span class="hljs-keyword">var</span> transition = <span class="hljs-keyword">this</span>._transitions.map( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( t )</span> </span>{
+<p><strong>Returns an Animation</strong><br/>(self)</p></div></div><div class="code"><div class="wrapper">  Animation.prototype.endAnimation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">endAnimation</span><span class="hljs-params">( fn )</span> </span>{</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the list of transitions we need to put on the elements</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> transition = <span class="hljs-keyword">this</span>._transitions.map( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( t )</span> </span>{
         <span class="hljs-keyword">return</span> t.join( <span class="hljs-string">" "</span> );
       } ).join( <span class="hljs-string">", "</span> ),
-      that = <span class="hljs-keyword">this</span>;
-    <span class="hljs-keyword">this</span>._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateEl</span><span class="hljs-params">( el )</span> </span>{
-      <span class="hljs-keyword">var</span> i, l, prefixedTransition, prop, value;
+      that = <span class="hljs-keyword">this</span>;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>for each element, assign this list of transitions</p></div></div><div class="code"><div class="wrapper">    that._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initializeEl</span><span class="hljs-params">( el )</span> </span>{
+      <span class="hljs-keyword">var</span> i, l, prefixedTransition;
       <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
         prefixedTransition = prefixes[ i ] + <span class="hljs-string">"transition"</span>;
         el.style.setProperty( prefixedTransition, transition );
       }
-      <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = that._animations.length; i &lt; l; i++ ) {
-        prop = that._animations[ i ][ <span class="hljs-number">0</span> ];
-        value = that._animations[ i ][ <span class="hljs-number">1</span> ];
-        el.style.setProperty( prop, value );
-      }
-    } );
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">"function"</span> ) {
-      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">afterAnimationCallback</span><span class="hljs-params">()</span> </span>{
+    } );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>wait a few ms to let the DOM settle, and then start the animations</p></div></div><div class="code"><div class="wrapper">    setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">startAnimations</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> i, l, prop, value;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>for each element, assign the desired property and value to the element</p></div></div><div class="code"><div class="wrapper">      that._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateEl</span><span class="hljs-params">( el )</span> </span>{
+        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = that._animations.length; i &lt; l; i++ ) {
+          prop = that._animations[ i ][ <span class="hljs-number">0</span> ];
+          value = that._animations[ i ][ <span class="hljs-number">1</span> ];
+          el.style.setProperty( prop, value );
+        }
+      } );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>when the animation is complete, remove the transition property from
+the elements and call the callback function (if specified)</p></div></div><div class="code"><div class="wrapper">      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">afterAnimationCallback</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> prefixedTransition;
         that._animations = [];
         that._transitions = [];
-        fn.call( that );
-      }, <span class="hljs-keyword">this</span>._maxTiming * <span class="hljs-number">1000</span> );
-    }
+        that._els.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateEl</span><span class="hljs-params">( el )</span> </span>{
+          <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
+            prefixedTransition = prefixes[ i ] + <span class="hljs-string">"transition"</span>;
+            el.style.setProperty( prefixedTransition, <span class="hljs-string">""</span> );
+          }
+        } );
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">"function"</span> ) {
+          fn.call( that );
+        }
+      }, that._maxTiming * <span class="hljs-number">1000</span> );
+    }, <span class="hljs-number">50</span> );
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  }
+  };
   Animation.prototype.then = Animation.prototype.endAnimation;
   <span class="hljs-keyword">var</span> UI = {};</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property version of type <em>Object
  *</em></span></p>
-<p>Version of the UI Namespace</p></div></div><div class="code"><div class="wrapper">  UI.version = <span class="hljs-string">"0.5.100"</span>;</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p>Styles the element with the given style and value. Adds in the browser
-prefixes to make it easier.</p>
+<p>Version of the UI Namespace</p></div></div><div class="code"><div class="wrapper">  UI.version = <span class="hljs-string">"0.5.100"</span>;</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method styleElement is aliased as $s</span></p>
+<p>Styles the element with the given style and value. Adds in the browser
+prefixes to make it easier. Also available as <code>$s</code> on nodes.</p>
 <p>Parameters:</p>
 <ul>
 <li><p><strong>theElement must be a Node.</strong></p>
@@ -211,16 +221,31 @@ prefixes to make it easier.</p>
 </li>
 </ul>
 <p><strong>Returns a void</strong></p></div></div><div class="code"><div class="wrapper">  UI.styleElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElement, theStyle, theValue )</span> </span>{
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theElement !== <span class="hljs-string">"object"</span> ) {
+      <span class="hljs-keyword">if</span> ( !( theElement <span class="hljs-keyword">instanceof</span> Node ) ) {
+        theValue = theStyle;
+        theStyle = theElement;
+        theElement = <span class="hljs-keyword">this</span>;
+      }
+    }
     <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; prefixes.length; i++ ) {
-      <span class="hljs-keyword">var</span> thePrefix = prefixes[ i ];
-      <span class="hljs-keyword">var</span> theNewStyle = thePrefix + theStyle;
-      <span class="hljs-comment">//noinspection JSUnresolvedVariable</span>
-      <span class="hljs-keyword">var</span> theNewValue = theValue.replace( <span class="hljs-string">"%PREFIX%"</span>, thePrefix );
-      <span class="hljs-comment">//noinspection JSUnresolvedVariable</span>
+      <span class="hljs-keyword">var</span> thePrefix = prefixes[ i ],
+        theNewStyle = thePrefix + theStyle,
+        theNewValue = theValue.replace( <span class="hljs-string">"%PREFIX%"</span>, thePrefix ).replace( <span class="hljs-string">"{-}"</span>, thePrefix );
       theElement.style.setProperty( theNewStyle, theNewValue );
     }
-  };
-  UI.styleElements = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElements, theStyle, theValue )</span> </span>{
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method styleElements</span></p>
+<p>Style the list of elements with the style and value using <code>styleElement</code></p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>theElements must be an Array.</strong></p>
+</li>
+<li><p><strong>theStyle must be a CssStyle.</strong></p>
+</li>
+<li><p><strong>theValue must be a value.</strong></p>
+</li>
+</ul>
+<p><strong>Returns a void</strong></p></div></div><div class="code"><div class="wrapper">  UI.styleElements = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElements, theStyle, theValue )</span> </span>{
     <span class="hljs-keyword">var</span> i;
     <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; theElements.length; i++ ) {
       UI.styleElement( theElements[ i ], theStyle, theValue );
@@ -251,7 +276,7 @@ is relative to the parent, otherwise it is relative to document</p>
       els = els.concat( [ selector ] );
     }
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Animation( els );
-  }</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method colorToRGBA</span></p>
+  };</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static method colorToRGBA</span></p>
 <p>Converts a color object to an rgba(r,g,b,a) string, suitable for applying to
 any number of CSS styles. If the color&#39;s alpha is zero, the return value is
 &quot;transparent&quot;. If the color is null, the return value is &quot;inherit&quot;.</p>
@@ -384,12 +409,13 @@ colors prior to modification, otherwise you risk modifying the original.</p>
 <p>Returns the root view</p>
 <p><strong>Returns a ViewContainer</strong></p></div></div><div class="code"><div class="wrapper">  UI.getRootView = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> UI._rootView;
-  };
-  <span class="hljs-built_in">Object</span>.defineProperty( UI, <span class="hljs-string">"rootView"</span>, {
+  };</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static property rootView of type <em>Node</em></span></p>
+<p>The root view</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-built_in">Object</span>.defineProperty( UI, <span class="hljs-string">"rootView"</span>, {
     get: UI.getRootView,
     set: UI.setRootView
-  } );
-  UI._BackButtonHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+  } );</div></div></div><div class="segment"><div class="comments doc-section doc-section-private doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private private class _BackButtonHandler</span></p>
+<p>Private back button handler class</p>
+<p><strong>Returns a BaseObject</strong></p></div></div><div class="code"><div class="wrapper">  UI._BackButtonHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
     self.subclass( <span class="hljs-string">"BackButtonHandler"</span> );
     self.registerNotification( <span class="hljs-string">"backButtonPressed"</span> );
@@ -407,32 +433,39 @@ colors prior to modification, otherwise you risk modifying the original.</p>
 <p>Global Back Button Handler Object</p>
 <p>Register a listener for the backButtonPressed notification in order
 to be notified when the back button is pressed.</p>
-<p>Applies only to a physical back button, not one on the screen.</p></div></div><div class="code"><div class="wrapper">  UI.backButton = <span class="hljs-keyword">new</span> UI._BackButtonHandler();
-  UI._OrientationHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+<p>Applies only to a physical back button, not one on the screen.</p></div></div><div class="code"><div class="wrapper">  UI.backButton = <span class="hljs-keyword">new</span> UI._BackButtonHandler();</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private class _OrientationHandler</span></p>
+<p>Private orientation handler class</p>
+<p><strong>Returns a BaseObject</strong></p></div></div><div class="code"><div class="wrapper">  UI._OrientationHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
     self.subclass( <span class="hljs-string">"OrientationHandler"</span> );
     self.registerNotification( <span class="hljs-string">"orientationChanged"</span> );
     self.handleOrientationChange = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">var</span> curDevice;
-      <span class="hljs-keyword">var</span> curOrientation;
-      <span class="hljs-keyword">var</span> curFormFactor;
-      <span class="hljs-keyword">var</span> curScale;
-      <span class="hljs-keyword">var</span> curConvenience;
-      curDevice = theDevice.platform();
-      <span class="hljs-keyword">if</span> ( curDevice == <span class="hljs-string">"ios"</span> ) {
+      <span class="hljs-keyword">var</span> curOrientation,
+        curFormFactor,
+        curScale,
+        curConvenience,
+        curDevice = theDevice.platform();
+      <span class="hljs-keyword">if</span> ( curDevice === <span class="hljs-string">"ios"</span> ) {
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 9"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          curDevice += <span class="hljs-string">" ios9 iosM"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 8"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          curDevice += <span class="hljs-string">" ios8 iosM"</span>;
+        }
         <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 7"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios7"</span>;
+          curDevice += <span class="hljs-string">" ios7 iosM"</span>;
         }
         <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 6"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios6"</span>;
+          curDevice += <span class="hljs-string">" ios6 iosC"</span>;
         }
         <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 5"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios5"</span>;
+          curDevice += <span class="hljs-string">" ios5 iosC"</span>;
         }
       }
       curFormFactor = theDevice.formFactor();
       curOrientation = theDevice.isPortrait() ? <span class="hljs-string">"portrait"</span> : <span class="hljs-string">"landscape"</span>;
       curScale = theDevice.isRetina() ? <span class="hljs-string">"hiDPI"</span> : <span class="hljs-string">"loDPI"</span>;
+      curScale += <span class="hljs-string">" "</span> + <span class="hljs-built_in">window</span>.devicePixelRatio + <span class="hljs-string">"x"</span>;
       curConvenience = <span class="hljs-string">""</span>;
       <span class="hljs-keyword">if</span> ( theDevice.iPad() ) {
         curConvenience = <span class="hljs-string">"ipad"</span>;
@@ -462,10 +495,11 @@ to be notified when the back button is pressed.</p>
   };</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static property orientationHandler final and of type <em>_OrientationHandler</em></span></p>
 <p>Global Orientation Handler Object</p>
 <p>Register a listener for the orientationChanged notification in order
-to be notified when the orientation changes.</p></div></div><div class="code"><div class="wrapper">  UI.orientationHandler = <span class="hljs-keyword">new</span> UI._OrientationHandler();</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Global Notification Object</p></div></div><div class="code"><div class="wrapper">  UI.globalNotifications = <span class="hljs-keyword">new</span> BaseObject();</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Create the root container</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span>.body !== <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-built_in">document</span>.body !== <span class="hljs-literal">null</span> ) {
+to be notified when the orientation changes.</p></div></div><div class="code"><div class="wrapper">  UI.orientationHandler = <span class="hljs-keyword">new</span> UI._OrientationHandler();</div></div></div><div class="segment"><div class="comments doc-section doc-section-static"><div class="wrapper"><p><span class='doc-section-header'>Static property globalNotifications final and of type <em>BaseObject</em></span></p>
+<p>Global Notification Object -- used for sending and receiving global notifications</p></div></div><div class="code"><div class="wrapper">  UI.globalNotifications = <span class="hljs-keyword">new</span> BaseObject();</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Create the root container</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span>.body !== <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-built_in">document</span>.body !== <span class="hljs-literal">null</span> ) {
     UI._createRootContainer();
   } <span class="hljs-keyword">else</span> {
     setTimeout( UI._createRootContainer, <span class="hljs-number">0</span> );
-  }
+  }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>helper methods on Nodes</p></div></div><div class="code"><div class="wrapper">  Node.prototype.$s = UI.styleElement;
   <span class="hljs-keyword">return</span> UI;
 } );</div></div></div></div></body></html>

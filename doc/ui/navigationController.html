@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><title>ui/navigationController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/navigationController"><meta name="groc-project-path" content="lib/yasmf/ui/navigationController.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/navigationController.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module navigationController.js author Kerri Shotts and version 0.4
+<!DOCTYPE html><html lang="en"><head><title>ui/navigationController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/navigationController"><meta name="groc-project-path" content="lib/yasmf/ui/navigationController.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/navigationController.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module navigationController.js author Kerri Shotts and version 0.5
 <code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the &quot;Software&quot;), to deal in the Software
@@ -15,7 +15,8 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.</code></span></p>
 <p>Navigation Controllers provide basic support for view stack management (as in push, pop)</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*global define*/</span>
-define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"yasmf/ui/viewContainer"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( UI, ViewContainer )</span> </span>{
+define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"yasmf/ui/viewContainer"</span>, <span class="hljs-string">"yasmf/util/core"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( UI, ViewContainer, UTIL )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"NavigationController"</span>,
     NavigationController = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> ViewContainer();
@@ -76,6 +77,22 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
         write: <span class="hljs-literal">true</span>,
         backingVariable: <span class="hljs-literal">false</span>
       } );
+      self.defineProperty( <span class="hljs-string">"modal"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+      } );
+      self.defineProperty( <span class="hljs-string">"modalView"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-literal">null</span>
+      } );
+      self.defineProperty( <span class="hljs-string">"modalViewType"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-string">""</span>
+      } );
+      self._modalClickPreventer = <span class="hljs-literal">null</span>;
       self._preventClicks = <span class="hljs-literal">null</span>;</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createClickPreventionElement</span></p>
 <p>Creates a click-prevention element -- essentially a transparent DIV that
 fills the screen.</p></div></div><div class="code"><div class="wrapper">      self._createClickPreventionElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
@@ -227,6 +244,127 @@ view is at 0</p></div></div><div class="code"><div class="wrapper">        UI.st
             theShowingView.notify( <span class="hljs-string">"viewDidAppear"</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>tell anyone who is listening who got popped</p></div></div><div class="code"><div class="wrapper">            self.notify( <span class="hljs-string">"viewPopped"</span>, [ thePoppingView ] );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>hide click preventer</p></div></div><div class="code"><div class="wrapper">            self._preventClicks.style.display = <span class="hljs-string">"none"</span>;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and remove the popping view from the hierarchy</p></div></div><div class="code"><div class="wrapper">            thePoppingView.parentElement = <span class="hljs-literal">null</span>;
             <span class="hljs-keyword">delete</span> thePoppingView.navigationController;
           }, ( animationDelay * <span class="hljs-number">1000</span> ) );
+        }, <span class="hljs-number">50</span> );
+      };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method presentModalController</span></p>
+<p>Presents the navigation controller as a modal navigation controller. It sits
+adjacent to <code>fromView</code> in the DOM, not within, and as such can prevent it
+from receiving any events. The rendering is rougly the same as any other
+navigation controller, save that an extra class added to the element&#39;s
+<code>ui-container</code> that ensures that on larger displays the modal doesn&#39;t
+fill the entire screen. If desired, this class can be controlled by the second
+parameter (<code>options</code>).</p>
+<p>if <code>options</code> are specified, it must be of the form:</p>
+<pre><code>{ displayType: &quot;modalWindow|modalPage|modalFill&quot;,   // modal display type
+  withAnimation: true|false,                        // should animation be used?
+  withDelay: 0.3,                                   // if animation is used, time in seconds
+  withTimingFunction: &quot;ease-in-out|...&quot;             // timing function to use for animation
+}</code></pre>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>fromView must be a Node.</strong><br/>(the top-level view to cover (typically rootContainer))</p>
+</li>
+<li><p><strong>options must be a *.</strong><br/>(options to apply)</p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">      self.presentModalController = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">presentModelController</span><span class="hljs-params">( fromView, options )</span> </span>{
+        <span class="hljs-keyword">var</span> defaultOpts = {
+          displayType: <span class="hljs-string">"modalWindow"</span>,
+          withAnimation: <span class="hljs-literal">true</span>,
+          withDelay: <span class="hljs-number">0.3</span>,
+          withTimingFunction: <span class="hljs-string">"ease-in-out"</span>
+        };
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.displayType !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.displayType = options.displayType;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withAnimation !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withAnimation = options.withAnimation;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withDelay !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withDelay = options.withDelay;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withTimingFunction !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withTimingFunction = options.withTimingFunction;
+          }
+        }
+        <span class="hljs-keyword">if</span> ( !defaultOpts.withAnimation ) {
+          defaultOpts.withDelay = <span class="hljs-number">0</span>;
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>check our form factor class; if we&#39;re a phone, only permit modalFill</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">document</span>.body.classList.contains( <span class="hljs-string">"phone"</span> ) ) {
+          defaultOpts.displayType = <span class="hljs-string">"modalFill"</span>;
+        }
+        self._modalView = fromView;
+        self._modal = <span class="hljs-literal">true</span>;
+        self._modalViewType = defaultOpts.displayType;
+        self._modalClickPreventer = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._modalClickPreventer.className = <span class="hljs-string">"ui-container ui-transparent"</span>;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we need to calculate the z indices of the adjacent view and us</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> theAdjacentViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( fromView ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> ),
+          theModalViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( self.element ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> );
+        <span class="hljs-keyword">if</span> ( theModalViewZ &lt;= theAdjacentViewZ ) {
+          theModalViewZ = theAdjacentViewZ + <span class="hljs-number">10</span>; <span class="hljs-comment">// the modal should always be above the adjacent view</span>
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>make sure our current view is off-screen so that when it is added, it won&#39;t flicker</p></div></div><div class="code"><div class="wrapper">        self.element.$s( <span class="hljs-string">"transform"</span>, UTIL.template( <span class="hljs-string">"translate3d(%X%,%Y%,%Z%)"</span>, {
+          x: <span class="hljs-string">"0"</span>,
+          y: <span class="hljs-string">"150%"</span>,
+          z: <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span>
+        } ) );
+        self.element.classList.add( defaultOpts.displayType );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and attach the element</p></div></div><div class="code"><div class="wrapper">        self._modalClickPreventer.appendChild( self.element );
+        fromView.parentNode.appendChild( self._modalClickPreventer );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>send any notifications we need</p></div></div><div class="code"><div class="wrapper">        self.emit( <span class="hljs-string">"viewWasPushed"</span> );
+        self.emit( <span class="hljs-string">"viewWillAppear"</span> );
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          fromView.classList.add( <span class="hljs-string">"ui-disabled"</span> );
+          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction ).scale(
+            <span class="hljs-string">"0.9"</span> ).opacity( <span class="hljs-string">"0.9"</span> ).endAnimation();
+          UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .translate3d( <span class="hljs-string">"0"</span>, <span class="hljs-string">"0"</span>, <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span> ).endAnimation( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendNotifications</span><span class="hljs-params">()</span> </span>{
+              self.emit( <span class="hljs-string">"viewDidAppear"</span> );
+            } );
+        }, <span class="hljs-number">50</span> );
+      };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method dismissModalController</span></p>
+<p>Dismiss a controller presented with <code>presentModelController</code>. Options can be</p>
+<pre><code>{ withAnimation: true|false,         // if false, no animation occurs
+  withDelay: 0.3,                    // time in seconds
+  withTimingFunction: &quot;ease-in-out&quot;  // easing function to use
+}</code></pre>
+<p>Parameters:</p>
+<ul>
+<li><strong>options must be a *.</strong></li>
+</ul></div></div><div class="code"><div class="wrapper">      self.dismissModalController = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dismissModelController</span><span class="hljs-params">( options )</span> </span>{
+        <span class="hljs-keyword">var</span> defaultOpts = {
+          withAnimation: <span class="hljs-literal">true</span>,
+          withDelay: <span class="hljs-number">0.3</span>,
+          withTimingFunction: <span class="hljs-string">"ease-in-out"</span>
+        };
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withAnimation !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withAnimation = options.withAnimation;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withDelay !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withDelay = options.withDelay;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.withTimingFunction !== <span class="hljs-string">"undefined"</span> ) {
+            defaultOpts.withTimingFunction = options.withTimingFunction;
+          }
+        }
+        <span class="hljs-keyword">if</span> ( !defaultOpts.withAnimation ) {
+          defaultOpts.withDelay = <span class="hljs-number">0</span>;
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we need to calculate the z indices of the adjacent view and us</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> theAdjacentViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( self.modalView ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> ),
+          theModalViewZ = <span class="hljs-built_in">parseInt</span>( getComputedStyle( self.element ).getPropertyValue( <span class="hljs-string">"z-index"</span> ) || <span class="hljs-string">"0"</span>, <span class="hljs-number">10</span> );
+        <span class="hljs-keyword">if</span> ( theModalViewZ &lt;= theAdjacentViewZ ) {
+          theModalViewZ = theAdjacentViewZ + <span class="hljs-number">10</span>; <span class="hljs-comment">// the modal should always be above the adjacent view</span>
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>send any notifications we need</p></div></div><div class="code"><div class="wrapper">        self.emit( <span class="hljs-string">"viewWillDisappear"</span> );
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          self.modalView.classList.remove( <span class="hljs-string">"ui-disabled"</span> );
+          UI.beginAnimation( self.modalView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .scale( <span class="hljs-string">"1"</span> ).opacity( <span class="hljs-string">"1"</span> ).endAnimation();
+          UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .translate3d( <span class="hljs-string">"0"</span>, <span class="hljs-string">"150%"</span>, <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span> ).endAnimation( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendNotifications</span><span class="hljs-params">()</span> </span>{
+              self.emit( <span class="hljs-string">"viewDidDisappear"</span> );
+              self.emit( <span class="hljs-string">"viewWasPopped"</span> );
+              self.element.classList.remove( self.modalViewType );
+              self._modalClickPreventer.parentNode.removeChild( self._modalClickPreventer );
+              self._modalClickPreventer.removeChild( self.element );
+              self.modal = <span class="hljs-literal">false</span>;
+              self._modalView = <span class="hljs-literal">null</span>;
+              self._modalViewType = <span class="hljs-string">""</span>;
+              self._modalClickPreventer = <span class="hljs-literal">null</span>;
+            } );
         }, <span class="hljs-number">50</span> );
       };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method render abstract</span></p></div></div><div class="code"><div class="wrapper">      self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">render</span><span class="hljs-params">()</span> </span>{
         <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>; <span class="hljs-comment">// nothing to render!</span>
