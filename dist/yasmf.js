@@ -2657,26 +2657,9 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/util/datetime',[],function () {
+  
   return {
     /**
      * Returns the current time in the Unix time format
@@ -2761,26 +2744,9 @@ define( 'yasmf/util/datetime',[],function () {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/util/filename',[],function () {
+  
   var PKFILE = {
     /**
      * @property Version
@@ -2923,26 +2889,9 @@ define( 'yasmf/util/filename',[],function () {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/util/misc',[],function () {
+  
   return {
     /**
      * Returns a pseudo-UUID. Not guaranteed to be unique (far from it, probably), but
@@ -3233,6 +3182,7 @@ define( 'yasmf/util/device',[],function () {
  */
 /*global define, console, setTimeout*/
 define( 'yasmf/util/object',[],function () {
+  
   var _className = "BaseObject",
     /**
      * BaseObject is the base object for all complex objects used by YASMF;
@@ -4402,27 +4352,9 @@ define( 'Q',[],function () {
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false,
-         loopfunc:true
- */
 /*globals define, Q, LocalFileSystem, console, window, navigator, FileReader*/
 define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function ( Q, BaseObject ) {
+  
   var IN_YASMF = true;
   return ( function ( Q, BaseObject, globalContext ) {
     /**
@@ -5731,6 +5663,7 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function ( Q, Bas
  */
 /*global define, Node, document*/
 define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
+  
   /**
    *
    * internal private method to handle parsing children
@@ -6180,6 +6113,7 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
  */
 /*global define, Node, document, history, window, console*/
 define( 'yasmf/util/router',[],function () {
+  
   var routes = [];
   /**
    * Parses a URL into its constituent parts. The return value
@@ -7204,26 +7138,9 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/ui/event',[ "yasmf/util/device" ], function ( theDevice ) {
+  
   /**
    * Translates touch events to mouse events if the platform doesn't support
    * touch events. Leaves other events unaffected.
@@ -7394,6 +7311,7 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function ( theDevice ) {
  */
 /*global define*/
 define( 'yasmf/ui/viewContainer',[ "yasmf/util/object", "yasmf/util/h" ], function ( BaseObject, h ) {
+  
   var _className = "ViewContainer";
   var ViewContainer = function () {
     var self = new BaseObject();
@@ -8212,26 +8130,9 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer" ], function ( UI, ViewContainer ) {
+  
   var _className = "SplitViewController";
   var SplitViewController = function () {
     var self = new ViewContainer();
@@ -8550,26 +8451,9 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-           asi:true,
-           bitwise:true,
-           browser:true,
-           camelcase:true,
-           curly:true,
-           eqeqeq:false,
-           forin:true,
-           noarg:true,
-           noempty:true,
-           plusplus:false,
-           smarttabs:true,
-           sub:true,
-           trailing:false,
-           undef:true,
-           white:false,
-           onevar:false
-   */
 /*global define*/
 define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer", "yasmf/ui/event" ], function ( UI, ViewContainer, Event ) {
+  
   var _className = "TabViewController";
   var TabViewController = function () {
     var self = new ViewContainer();
@@ -8893,27 +8777,10 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
 define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/object", "yasmf/ui/core", "Q", "yasmf/ui/event" ], function ( _y,
   theDevice, BaseObject, UI, Q, event ) {
+  
   var _className = "Alert";
   var Alert = function () {
     var self = new BaseObject();
@@ -9342,27 +9209,9 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */
 /*global define*/
-/*eslint */
 define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/util/h','yasmf/util/router','yasmf/ui/core','yasmf/ui/event','yasmf/ui/viewContainer','yasmf/ui/navigationController','yasmf/ui/splitViewController','yasmf/ui/tabViewController','yasmf/ui/alert'],function ( require ) {
+  
   var _y = require( "yasmf/util/core" );
   _y.datetime = require( "yasmf/util/datetime" );
   _y.filename = require( "yasmf/util/filename" );

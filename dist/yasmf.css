@@ -164,8 +164,8 @@ div {
 
 .android .ui-container,
 .wince .ui-container {
-  background-color: #000000;
-  color: #FFFFFF; }
+  background-color: #000;
+  color: #FFF; }
 
 .ui-container.modalWindow,
 .ui-container.modalPage {
@@ -314,7 +314,7 @@ div {
  *
  *****************************************************************************/
 .ui-tint-color {
-  color: #40b0ff;
+  color: #40B0FF;
   -webkit-transition: color 0.3s ease-in;
   -moz-transition: color 0.3s ease-in;
   -ms-transition: color 0.3s ease-in;
@@ -325,13 +325,13 @@ div {
   color: rgba(64, 176, 255, 0.5); }
 
 .android .ui-tint-color {
-  color: #33b5e5; }
+  color: #33B5E5; }
 
 .android .ui-tint-color:active {
   color: rgba(51, 181, 229, 0.5); }
 
 .ui-background-tint-color {
-  background-color: #40b0ff;
+  background-color: #40B0FF;
   -webkit-transition: background-color 0.3s ease-in;
   -moz-transition: background-color 0.3s ease-in;
   -ms-transition: background-color 0.3s ease-in;
@@ -342,7 +342,7 @@ div {
   background-color: rgba(64, 176, 255, 0.5); }
 
 .android .ui-background-tint-color {
-  background-color: #33b5e5; }
+  background-color: #33B5E5; }
 
 .android .ui-background-tint-color:active {
   background-color: rgba(51, 181, 229, 0.5); }
@@ -354,22 +354,22 @@ div {
   background-color: #808080; }
 
 .android .ui-disabled .ui-tint-color {
-  color: #888888; }
+  color: #888; }
 
 .android .ui-disabled .ui-background-tint-color {
-  background-color: #888888; }
+  background-color: #888; }
 
 .ui-destructive-color {
-  color: #ff6060; }
+  color: #FF6060; }
 
 .android .ui-destructive-color {
-  color: #cc0000; }
+  color: #C00; }
 
 .ui-background-destructive-color {
-  background-color: #ff6060; }
+  background-color: #FF6060; }
 
 .android .ui-background-destructive-color {
-  background-color: #cc0000; }
+  background-color: #C00; }
 
 /*****************************************************************************
  *
@@ -384,7 +384,7 @@ div {
   -ms-transform: translateZ(9px);
   -o-transform: translateZ(9px);
   transform: translateZ(9px);
-  background-color: #FFFFFF;
+  background-color: #FFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(top, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -moz-linear-gradient(top, white 50%, rgba(255, 255, 255, 0.75) 100%);
@@ -475,7 +475,7 @@ div {
   -ms-transform: translateZ(9px);
   -o-transform: translateZ(9px);
   transform: translateZ(9px);
-  background-color: #FFFFFF;
+  background-color: #FFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -moz-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
@@ -520,7 +520,7 @@ div {
   -ms-transform: translateZ(9px);
   -o-transform: translateZ(9px);
   transform: translateZ(9px);
-  background-color: #FFFFFF;
+  background-color: #FFF;
   background-color: rgba(255, 255, 255, 0.75);
   background-image: -webkit-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
   background-image: -moz-linear-gradient(bottom, white 50%, rgba(255, 255, 255, 0.75) 100%);
@@ -758,22 +758,32 @@ div {
  * List Item
  *
  *****************************************************************************/
-.ui-list-item {
+.ui-list-item,
+.ui-list-heading {
   display: block;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-  margin-left: 10px;
   min-height: 50px;
   overflow: auto;
-  position: relative; }
+  position: relative;
+  background-color: white; }
 
-.android .ui-list-item {
+.ui-list-heading {
+  line-height: 2em;
+  min-height: 2em;
+  background-color: #E8E8E8;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 80%; }
+
+.android .ui-list-item,
+.android .ui-list-heading {
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-  margin-left: 0;
-  padding-left: 10px; }
+  margin-left: 0; }
 
 /* List Items can have indicators attached, which will appear
    on the right of the list item. */
-.ui-list-item .ui-indicator {
+.ui-list-item .ui-indicator,
+.ui-list-heading .ui-indicator {
   position: absolute;
   width: 30px;
   height: 30px;
@@ -783,16 +793,52 @@ div {
   -moz-mask-size: 30px 30px;
   -ms-mask-size: 30px 30px;
   -o-mask-size: 30px 30px;
-  mask-size: 30px 30px; }
+  mask-size: 30px 30px;
+  min-width: 30px; }
 
-.ui-list-item .ui-arrow-direction-right {
+.ui-list-item-flex-contents .ui-indicator {
+  position: static;
+  right: inherit;
+  top: inherit;
+  margin: auto auto;
+  width: 21px;
+  min-width: 21px; }
+
+.ui-list-item-flex-contents .ui-fill {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1; }
+
+.ui-list-heading .ui-list-item-flex-contents .ui-label {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1; }
+
+.ui-list-heading .ui-indicator {
+  top: 2px; }
+
+.ui-list-heading .ui-indicator,
+.ui-list-item .ui-indicator {
+  background-color: #333; }
+
+.android .ui-list-heading .ui-indicator,
+.android .ui-list-item .ui-indicator {
+  background-color: white; }
+
+.ui-list-item .ui-arrow-direction-right,
+.ui-list-heading .ui-arrow-direction-right {
   -webkit-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   -o-mask-image: url("./yasmf-assets/chevron-right-thin@2x.png");
   mask-image: url("./yasmf-assets/chevron-right-thin@2x.png"); }
 
-.ui-list-item .ui-arrow-direction-left {
+.ui-list-item .ui-arrow-direction-left,
+.ui-list-heading .ui-arrow-direction-left {
   -webkit-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -moz-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
   -ms-mask-image: url("./yasmf-assets/chevron-left-thin@2x.png");
@@ -800,24 +846,34 @@ div {
   mask-image: url("./yasmf-assets/chevron-left-thin@2x.png"); }
 
 /* Inside a list, a list-item-contents contains the actual contents of the list item */
-.ui-list-item .ui-list-item-contents {
+.ui-list-item .ui-list-item-contents,
+.ui-list-heading .ui-list-item-contents,
+.ui-list-item .ui-list-item-flex-contents,
+.ui-list-heading .ui-list-item-flex-contents {
   background-color: #FFF;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 0;
+  padding: 10px;
   overflow: auto;
-  z-index: 3;
-  /*  -webkit-transform: translateZ(3px);
-    -moz-transform: translateZ(3px);
-    -ms-transform: translateZ(3px);
-    transform: translateZ(3px);*/ }
+  z-index: 3; }
 
-.android .ui-list-item .ui-list-item-contents {
+.ui-list-heading .ui-list-item-flex-contents {
+  padding: 0 10px; }
+
+.android .ui-list-item .ui-list-item-contents,
+.android .ui-list-heading .ui-list-item-contents {
   background-color: #000; }
 
+.ui-list-item .ui-list-item-flex-contents,
+.ui-list-heading .ui-list-item-flex-contents {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  background-color: transparent; }
+
 /* A list action group can be used to group actions together as in a swipe-to-delete mechanism */
-.ui-list-item .ui-list-action-group {
+.ui-list-item .ui-list-action-group,
+.ui-list-heading .ui-list-action-group {
   background-color: #CCC;
   position: absolute;
   right: 0;
@@ -829,33 +885,40 @@ div {
     -ms-transform: translateZ(2px);
     transform: translateZ(2px); */ }
 
-.android .ui-list-item .ui-list-action-group {
+.android .ui-list-item .ui-list-action-group,
+.android .ui-list-heading .ui-list-action-group {
   background-color: #333; }
 
-.ui-list-item .ui-list-action-group .ui-list-action {
+.ui-list-item .ui-list-action-group .ui-list-action,
+.ui-list-heading .ui-list-action-group .ui-list-action {
   height: 100%;
   min-width: 44px;
   color: #FFF;
   text-align: center;
   display: inline-table; }
 
-.ui-list-item .ui-list-action-group .ui-list-action div {
+.ui-list-item .ui-list-action-group .ui-list-action div,
+.ui-list-heading .ui-list-action-group .ui-list-action div {
   display: table-cell;
   vertical-align: middle;
   padding: 10px; }
 
 /* light enough so that we don't have to override a lot in custom css unless we want to */
 /* List affordances */
-.ui-list-item:active, .ui-list-item-contents:active {
+.ui-list-item:active, .ui-list-item-contents:active,
+.ui-list-heading:active {
   background-color: #30619a;
-  color: white; }
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.66); }
 
-.android .ui-list-item:active, .android .ui-list-item-contents:active {
+.android .ui-list-item:active, .android .ui-list-item-contents:active,
+.android .ui-list-heading:active {
   background-color: #242424;
   color: white; }
 
 .ui-list-item:active .ui-glyph, .ui-list-item-contents:active .ui-glyph,
-.ui-list-item:active .ui-indicator, .ui-list-item-contents:active .ui-indicator {
+.ui-list-item:active .ui-indicator, .ui-list-item-contents:active .ui-indicator,
+.ui-list-heading:active .ui-glyph, .ui-list-heading:active .ui-indicator {
   background-color: white; }
 
 /*****************************************************************************
