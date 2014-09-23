@@ -102,27 +102,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */</span>
-<span class="hljs-comment">/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */</span>
 <span class="hljs-comment">/*global define*/</span>
 define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-string">"yasmf/util/device"</span>, <span class="hljs-string">"yasmf/util/object"</span>, <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf/ui/event"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( _y,
   theDevice, BaseObject, UI, Q, event )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"Alert"</span>;
   <span class="hljs-keyword">var</span> Alert = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();

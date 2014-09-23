@@ -14,27 +14,9 @@ PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
 OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.</code></span></p>
-<p>FileManager implements methods that interact with the HTML5 API</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false,
-         loopfunc:true
- */</span>
-<span class="hljs-comment">/*globals define, Q, LocalFileSystem, console, window, navigator, FileReader*/</span>
+<p>FileManager implements methods that interact with the HTML5 API</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*globals define, Q, LocalFileSystem, console, window, navigator, FileReader*/</span>
 define( [ <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf/util/object"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( Q, BaseObject )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-keyword">var</span> IN_YASMF = <span class="hljs-literal">true</span>;
   <span class="hljs-keyword">return</span> ( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( Q, BaseObject, globalContext )</span> </span>{</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> typedef {{}} Promise</span></p>
 <p>Defined by Q, actually, but defined here to make type handling nicer</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> DEBUG = <span class="hljs-literal">false</span>;</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _requestQuota</span></p>

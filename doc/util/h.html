@@ -78,7 +78,8 @@ return h.input ( { attrs: { type: &quot;text&quot;, size: &quot;20&quot;, class:
 </span></li>
 </ul>
 <h1 id="h-simple-dom-templating">h - simple DOM templating</h1></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*global define, Node, document*/</span>
-define( [ <span class="hljs-string">"yasmf/util/object"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( BaseObject )</span> </span>{</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method handleChild</span></p>
+define( [ <span class="hljs-string">"yasmf/util/object"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( BaseObject )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method handleChild</span></p>
 <p>internal private method to handle parsing children
 and attaching them to their parents</p>
 <p>If the child is a <code>Node</code>, it is attached directly to the parent as a child

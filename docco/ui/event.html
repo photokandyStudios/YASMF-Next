@@ -101,26 +101,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * ```
  */</span>
-<span class="hljs-comment">/*jshint
-         asi:true,
-         bitwise:true,
-         browser:true,
-         camelcase:true,
-         curly:true,
-         eqeqeq:false,
-         forin:true,
-         noarg:true,
-         noempty:true,
-         plusplus:false,
-         smarttabs:true,
-         sub:true,
-         trailing:false,
-         undef:true,
-         white:false,
-         onevar:false
- */</span>
 <span class="hljs-comment">/*global define*/</span>
 define( [ <span class="hljs-string">"yasmf/util/device"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theDevice )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
   <span class="hljs-comment">/**
    * Translates touch events to mouse events if the platform doesn't support
    * touch events. Leaves other events unaffected.
