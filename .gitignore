@@ -4,8 +4,6 @@ node_modules
 
 .idea/workspace.xml
 
-.idea/workspace.xml
-
 .idea/dictionaries/kerrishotts.xml
 
 .idea/*
@@ -22,6 +20,3 @@ node_modules
 
 .idea/modules.xml
 
-.idea/misc.xml
-
-.idea/modules.xml
