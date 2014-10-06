@@ -529,6 +529,24 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
       };
       self.on = self.addListenerForNotification;
       <span class="hljs-comment">/**
+       * Registers a listener valid for one notification only. Immediately after
+       * @method once
+       * @param  {[type]} theNotification [description]
+       * @param  {[type]} theListener     [description]
+       * @param  {[type]} async           [description]
+       * @return {[type]}                 [description]
+       */</span>
+      self.once = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">once</span><span class="hljs-params">( theNotification, theListener, async )</span> </span>{
+        self.addListenerForNotification( theNotification, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onceHandler</span><span class="hljs-params">( sender, notice, args )</span> </span>{
+          <span class="hljs-keyword">try</span> {
+            theListener.apply( self, [ self, theNotification, args ].concat( <span class="hljs-built_in">arguments</span> ) );
+          } <span class="hljs-keyword">catch</span> ( err ) {
+            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"ONCE Handler had an error"</span>, err );
+          }
+          self.removeListenerForNotification( theNotification, onceHandler );
+        }, async );
+      };
+      <span class="hljs-comment">/**
        * Removes a listener from a notification. If a notification has not been
        * registered (via `registerNotification`), an error is logged on the console
        * and the function returns without attaching the listener. This means if

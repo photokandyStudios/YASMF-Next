@@ -285,7 +285,27 @@ you aren&#39;t watching the console, the function fails nearly silently.</p>
         }
         <span class="hljs-keyword">return</span> self;
       };
-      self.on = self.addListenerForNotification;</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method removeListenerForNotification is aliased as off</span></p>
+      self.on = self.addListenerForNotification;</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method once</span></p>
+<p>Registers a listener valid for one notification only. Immediately after</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>theNotification must be a [type].</strong><br/>([description])</p>
+</li>
+<li><p><strong>theListener must be a [type].</strong><br/>([description])</p>
+</li>
+<li><p><strong>async must be a [type].</strong><br/>([description])</p>
+</li>
+</ul>
+<p><strong>Returns a [type]</strong><br/>([description])</p></div></div><div class="code"><div class="wrapper">      self.once = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">once</span><span class="hljs-params">( theNotification, theListener, async )</span> </span>{
+        self.addListenerForNotification( theNotification, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onceHandler</span><span class="hljs-params">( sender, notice, args )</span> </span>{
+          <span class="hljs-keyword">try</span> {
+            theListener.apply( self, [ self, theNotification, args ].concat( <span class="hljs-built_in">arguments</span> ) );
+          } <span class="hljs-keyword">catch</span> ( err ) {
+            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"ONCE Handler had an error"</span>, err );
+          }
+          self.removeListenerForNotification( theNotification, onceHandler );
+        }, async );
+      };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method removeListenerForNotification is aliased as off</span></p>
 <p>Removes a listener from a notification. If a notification has not been
 registered (via <code>registerNotification</code>), an error is logged on the console
 and the function returns without attaching the listener. This means if
