@@ -757,6 +757,10 @@ div {
  *
  * List Item
  *
+ *   > ui-list-items and ui-list-headings can contain ui-list-item-contents
+ *   > or ui-list-item-flex-contents. The latter uses the flex-box model
+ *   > while the former doesn't.
+ *
  *****************************************************************************/
 .ui-list-item,
 .ui-list-heading {
