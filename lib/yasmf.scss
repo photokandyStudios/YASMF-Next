@@ -135,6 +135,14 @@ table {
   transition:         $value;
 }
 
+@mixin animation($value) {
+  -webkit-animation: $value;
+  -moz-transition: $value;
+  -ms-animation: $value;
+  -o-transition: $value;
+  animation: $value;
+}
+
 @mixin transitionWPR($value) {
   -webkit-transition: -webkit-#{$value};
   -moz-transition:    -moz-#{$value};
@@ -962,11 +970,11 @@ $android-destructive-color: #C00;
 .ui-list-item .ui-indicator,
 .ui-list-heading .ui-indicator {
   position:  absolute;
-  @include size(30px, 30px);
+  @include size(32px, 32px);
   right:     0px;
   top:       10px;
-  @include mask-size(30px 30px);
-  min-width: 30px;
+  @include mask-size(32px 32px);
+  min-width: 32px;
 }
 
 .ui-list-item-flex-contents .ui-indicator {
@@ -1105,12 +1113,16 @@ $android-selection-color: rgba(36, 36, 36, 1);
  *
  *****************************************************************************/
 
-.ui-glyph {
+.ui-glyph, .ui-glyph-large {
   @include mask-position(center center);
-  @include mask-size(30px 30px);
+  @include mask-size(32px 32px);
   @include mask-repeat(no-repeat);
   height: 100%;
   @include box-sizing(border-box);
+}
+
+.ui-glyph-large {
+  @include mask-size(64px 64px);
 }
 
 /*****************************************************************************
@@ -1120,24 +1132,28 @@ $android-selection-color: rgba(36, 36, 36, 1);
  *****************************************************************************/
 
 .ui-back-button::before {
-  width:          30px;
-  height:         30px;
+  width:          32px;
+  height:         32px;
   position:       relative;
   top:            -3px;
   display:        inline-block;
   vertical-align: middle;
   @include mask-image(url("./yasmf-assets/chevron-left-thick@2x.png"));
-  @include mask-size(30px 30px);
+  @include mask-size(32px 32px);
   @include mask-repeat(no-repeat);
   margin-left:    -10px;
   margin-right:   -5px;
   content:        "";
 }
 
+.scale1x .ui-back-button::before {
+    @include mask-image(url("./yasmf-assets/chevron-left-thick.png"));
+  }
+
 .android .ui-back-button::before {
-  width:        15px;
+  width:        16px;
   height:       48px;
-  @include mask-size(15px 30px);
+  @include mask-size(16px 32px);
   @include mask-position(left 5px);
   margin-right: -10px;
   margin-left:  -7px;
@@ -1146,8 +1162,8 @@ $android-selection-color: rgba(36, 36, 36, 1);
 .android .ui-back-button {
   color:     transparent;
   font-size: 0;
-  min-width: 15px;
-  width:     15px;
+  min-width: 16px;
+  width:     16px;
   height:    48px;
 }
 
@@ -1163,12 +1179,94 @@ $android-selection-color: rgba(36, 36, 36, 1);
  *
  *****************************************************************************/
 
-$glyphs: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu;
+$glyphs: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu, spinner;
 
 @each $glyph in $glyphs {
   .ui-glyph-#{$glyph} {
     @include mask-image(url("./yasmf-assets/#{$glyph}@2x.png"));
   }
+  .scale1x .ui-glyph-#{$glyph} {
+    @include mask-image(url("./yasmf-assets/#{$glyph}.png"));
+  }
+}
+
+$large-glyphs: spinner;
+@each $large-glyph in $large-glyphs {
+  .ui-glyph-#{$large-glyph}-large {
+    @include mask-image(url("./yasmf-assets/#{$large-glyph}-large@2x.png"));
+  }
+  .scale1x .ui-glyph-#{$large-glyph}-large {
+    @include mask-image(url("./yasmf-assets/#{$large-glyph}-large@2x.png"));
+  }
+}
+
+$keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyframes;
+
+@each $keyframe-prefix in $keyframe-prefixes {
+  @-webkit-keyframes y-infinite-spinning {
+    from {
+      @include transform( rotate(0deg) );
+    }
+    to {
+      @include transform( rotate(360deg) );
+    }
+  }
+}
+
+.ui-glyph-spinner, .ui-glyph-spinner-large {
+  @include animation( y-infinite-spinning 1.5s infinite ease );
+}
+/*****************************************************************************
+ *
+ * Spinner Styles
+ *
+ *****************************************************************************/
+
+.ui-spinner-outer-container {
+  position: absolute;
+  @include rectTLBR(0,0,0,0);
+  opacity: 0;
+  @include transition(opacity 0.25s ease-in-out);
+  z-index: 999999;
+  @include flex-box();
+  @include size(100%, 100%)
+}
+
+.ui-spinner-outer-container.obscure-background {
+  background-color: rgba(0,0,0,0.25);
+}
+
+.ui-spinner-inner-container {
+  background-color: rgba(255,255,255,0.75);
+  margin: auto;
+  border-radius: 16px;
+  color: rgba(0,0,0,0.75);
+  min-width: 96px;
+  min-height: 96px;
+  padding: 16px;
+  text-align: center;
+}
+
+.ui-spinner-inner-spinner {
+  background-color: #333;
+  @include mask-position(center center);
+  @include mask-size(64px 64px);
+  @include mask-repeat(no-repeat);
+  height: 100%;
+  @include box-sizing(border-box);
+  @include mask-image(url("./yasmf-assets/spinner-large@2x.png"));
+  @include animation( y-infinite-spinning 1.5s infinite ease );
+  @include size(64px, 64px);
+  display: inline-block;
+}
+
+.scale1x .ui-spinner-inner-spinner {
+  @include mask-image(url("./yasmf-assets/spinner-large.png"));
+}
+
+.ui-spinner-inner-text {
+  color: #333;
+  font-size: 20px;
 }
 
 /*****************************************************************************
