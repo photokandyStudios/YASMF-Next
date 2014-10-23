@@ -3994,13 +3994,18 @@ define( 'yasmf/util/object',[],function () {
         }
         if ( !self._notificationListeners[ theNotification ] ) {
           console.log( theNotification + " has not been registered." );
-          return;
+          //return;
         }
         if ( self._traceNotifications ) {
-          console.log( "Notifying " + self._notificationListeners[ theNotification ].length + " listeners for " + theNotification +
-            " ( " + args + " ) " );
+          if ( self._notificationListeners[ theNotification ] ) {
+            console.log( "Notifying " + self._notificationListeners[ theNotification ].length + " listeners for " +
+              theNotification + " ( " + args + " ) " );
+          } else {
+            console.log( "Can't notify any explicit listeners for ", theNotification, "but wildcards will fire." );
+          }
         }
-        var async = self._notificationListeners[ theNotification ]._useAsyncNotifications,
+        var async = self._notificationListeners[ theNotification ] !== undefined ? self._notificationListeners[ theNotification ]
+          ._useAsyncNotifications : true,
           notifyListener = function ( theListener, theNotification, args ) {
             return function () {
               try {
@@ -4010,7 +4015,8 @@ define( 'yasmf/util/object',[],function () {
               }
             };
           },
-          handlers = self._notificationListeners[ theNotification ].slice(); // copy!
+          handlers = self._notificationListeners[ theNotification ] !== undefined ? self._notificationListeners[ theNotification ]
+          .slice() : []; // copy!
         if ( lastOnly && handlers.length > 1 ) {
           handlers = [ handlers.pop() ];
         }
@@ -4024,12 +4030,11 @@ define( 'yasmf/util/object',[],function () {
               // candidate listener; see if it matches
               if ( listener === "*" ) {
                 push = true;
-              } else
-              if ( listener.substr( 0, 1 ) === "*" && listener.substr( 1 ) === theNotification.substr( -1 * ( listener.length - 1 ) ) ) {
+              } else if ( listener.substr( 0, 1 ) === "*" && listener.substr( 1 ) === theNotification.substr( -1 * ( listener.length -
+                1 ) ) ) {
                 push = true;
-              } else
-              if ( listener.substr( -1, 1 ) === "*" && listener.substr( 0, listener.length - 1 ) === theNotification.substr( 0,
-                listener.length - 1 ) ) {
+              } else if ( listener.substr( -1, 1 ) === "*" && listener.substr( 0, listener.length - 1 ) === theNotification.substr(
+                0, listener.length - 1 ) ) {
                 push = true;
               } else {
                 var starPos = listener.indexOf( "*" );
@@ -4490,11 +4495,9 @@ define( 'yasmf/util/object',[],function () {
               el = keyPathEls[ i ];
               if ( typeof el.value !== "undefined" ) {
                 el.value = self[ keyPath ];
-              } else
-              if ( typeof el.textContent !== "undefined" ) {
+              } else if ( typeof el.textContent !== "undefined" ) {
                 el.textContent = self[ keyPath ];
-              } else
-              if ( typeof el.innerText !== "undefined" ) {
+              } else if ( typeof el.innerText !== "undefined" ) {
                 el.innerText = self[ keyPath ];
               } else {
                 console.log( "Data bind failure; browser doesn't understand value, textContent, or innerText." );
@@ -4645,6 +4648,27 @@ define( 'yasmf/util/object',[],function () {
       BaseObject._objectCategories[ priority ][ className ] = [];
     }
     BaseObject._objectCategories[ priority ][ className ].push( method );
+  };
+  /**
+   * Extend (subclass) an object. `o` should be of the form:
+   *
+   * {
+   *   className: "NewClass",
+   *   properties: [],
+   *   observableProperties: [],
+   *   methods: [],
+   *   overrides: []
+   * }
+   *
+   * @method   extend
+   *
+   * @param    {[type]}   classObject   [description]
+   * @param    {[type]}   o             [description]
+   *
+   * @return   {[type]}                 [description]
+   */
+  BaseObject.extend = function extend( classObject, o ) {
+    return function () {};
   };
   BaseObject.meta = {
     version: "00.05.101",
@@ -7381,7 +7405,7 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
       curFormFactor = theDevice.formFactor();
       curOrientation = theDevice.isPortrait() ? "portrait" : "landscape";
       curScale = theDevice.isRetina() ? "hiDPI" : "loDPI";
-      curScale += " " + window.devicePixelRatio + "x";
+      curScale += " scale" + window.devicePixelRatio + "x";
       curConvenience = "";
       if ( theDevice.iPad() ) {
         curConvenience = "ipad";
@@ -9134,7 +9158,11 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
     self.setTitle = function ( theTitle ) {
       self._title = theTitle;
       if ( self._titleElement !== null ) {
-        self._titleElement.innerHTML = theTitle;
+        if ( self._titleElement.textContent !== undefined ) {
+          self._titleElement.textContent = theTitle;
+        } else {
+          self._titleElement.innerHTML = theTitle;
+        }
       }
     };
     self.defineProperty( "title", {
@@ -9507,6 +9535,110 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
 
 /**
  *
+ * Provides native-like alert methods, including prompts and messages.
+ *
+ * @module alert.js
+ * @author Kerri Shotts
+ * @version 0.4
+ *
+ * ```
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */
+/*global define*/
+define( 'yasmf/ui/spinner',[ "yasmf/util/core", "yasmf/util/object", "yasmf/ui/core", "yasmf/util/h" ], function ( _y, BaseObject, UI, h ) {
+  
+  var _className = "Spinner";
+
+  function Spinner() {
+    var self = new BaseObject();
+    self.subclass( _className );
+    self._element = null;
+    self.defineObservableProperty( "text" );
+    self.defineProperty( "visible", {
+      default: false
+    } );
+    self.setObservableTintedBackground = function setObservableTintedBackground( v ) {
+      if ( v ) {
+        self._element.classList.add( "obscure-background" );
+      } else {
+        self._element.classList.remove( "obscure-background" );
+      }
+      return v;
+    }
+    self.defineObservableProperty( "tintedBackground", {
+      default: false
+    } );
+    self.show = function show() {
+      if ( !self.visible ) {
+        UI._rootContainer.parentNode.appendChild( self._element );
+        self.visible = true;
+        setTimeout( function () {
+          self._element.style.opacity = "1";
+        }, 0 );
+      }
+    };
+    self.hide = function hide( cb ) {
+      if ( self.visible ) {
+        self._element.style.opacity = "0";
+        self.visible = false;
+        setTimeout( function () {
+          UI._rootContainer.parentNode.removeChild( self._element );
+          if ( typeof cb === "function" ) {
+            setTimeout( cb, 0 );
+          }
+        }, 250 );
+      }
+    };
+    self.override( function init() {
+      self.super( _className, "init" );
+      self._element = h.el( "div.ui-spinner-outer-container", h.el( "div.ui-spinner-inner-container", [ h.el(
+          "div.ui-spinner-inner-spinner" ),
+        h.el( "div.ui-spinner-inner-text", {
+          bind: {
+            object: self,
+            keyPath: "text"
+          }
+        } )
+      ] ) );
+      return self;
+    } );
+    self.initWithOptions = function initWithOptions( options ) {
+      self.init();
+      self.text = options.text;
+      self.tintedBackground = ( options.tintedBackground !== undefined ) ? options.tintedBackground : false;
+      return self;
+    };
+    self.override( function destroy() {
+      if ( self.visible ) {
+        UI._rootContainer.parentNode.removeChild( self._element );
+        self.visible = false;
+      }
+      self._element = null;
+      self.super( _className, "destroy" );
+    } )
+    self._autoInit.apply( self, arguments );
+    return self;
+  };
+  return Spinner;
+} );
+
+/**
+ *
  * # YASMF-Next (Yet Another Simple Mobile Framework Next Gen)
  *
  * YASMF-Next is the successor to the YASMF framework. While that framework was useful
@@ -9542,7 +9674,7 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 /*global define*/
-define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/util/h','yasmf/util/router','yasmf/ui/core','yasmf/ui/event','yasmf/ui/viewContainer','yasmf/ui/navigationController','yasmf/ui/splitViewController','yasmf/ui/tabViewController','yasmf/ui/alert'],function ( require ) {
+define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/filename','yasmf/util/misc','yasmf/util/device','yasmf/util/object','yasmf/util/fileManager','yasmf/util/h','yasmf/util/router','yasmf/ui/core','yasmf/ui/event','yasmf/ui/viewContainer','yasmf/ui/navigationController','yasmf/ui/splitViewController','yasmf/ui/tabViewController','yasmf/ui/alert','yasmf/ui/spinner'],function ( require ) {
   
   var _y = require( "yasmf/util/core" );
   _y.datetime = require( "yasmf/util/datetime" );
@@ -9560,6 +9692,7 @@ define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/f
   _y.UI.SplitViewController = require( "yasmf/ui/splitViewController" );
   _y.UI.TabViewController = require( "yasmf/ui/tabViewController" );
   _y.UI.Alert = require( "yasmf/ui/alert" );
+  _y.UI.Spinner = require( "yasmf/ui/spinner" );
   return _y;
 } );
 
