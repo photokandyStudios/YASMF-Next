@@ -6,6 +6,7 @@
 #
 # Copy assets
 echo "Copying assets..."
+cp -r ./resources/ai-export/images/*.png ./lib/yasmf-assets
 cp -r ./lib/yasmf-assets ./dist
 #
 # beautify
