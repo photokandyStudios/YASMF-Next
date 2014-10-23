@@ -6,6 +6,7 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function ( _
     self.title = "Demo";
     self._listContainer = null;
     self._alertButton = null;
+    self._spinnerButton = null;
     self.testAlerts = function () {
       function logTappedButton( sender, notice, data ) {
         var buttonIndex = data[ 0 ];
@@ -78,6 +79,17 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function ( _
       // change the title of FourAlert after it is shown.
       fourAlert.title = "This is a new title.";
     };
+    self.testSpinner = function () {
+      var s = new _y.UI.Spinner( {
+        text: "This is a test...",
+        tintedBackground: true
+      } );
+      s.show();
+      setTimeout( function () {
+        s.hide( s.destroy );
+        s = null;
+      }, 30000 );
+    }
     //    self.overrideSuper ( self.class, "render", self.render)
     self.override( function render() {
       return _y.template( DemoListViewHTML, {
@@ -88,9 +100,12 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function ( _
       self.super( _className, "renderToElement" );
       // find our DOM elements
       self._listContainer = self.element.querySelector( ".ui-list" );
-      self._alertButton = self.element.querySelector( ".ui-tool-bar .ui-bar-button" );
+      var buttons = self.element.$$( ".ui-tool-bar .ui-bar-button" );
+      self._alertButton = buttons[ 0 ];
+      self._spinnerButton = buttons[ 1 ];
       // attach handlers
       Hammer( self._alertButton ).on( "tap", self.testAlerts );
+      Hammer( self._spinnerButton ).on( "tap", self.testSpinner );
     } );
     self.override( function init() {
       self.super( _className, "init", [ undefined, "div", "DemoListView ui-container", undefined ] );
