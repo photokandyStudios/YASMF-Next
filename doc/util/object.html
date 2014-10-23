@@ -371,13 +371,18 @@ attach to a notification that isn&#39;t registered.</p>
         }
         <span class="hljs-keyword">if</span> ( !self._notificationListeners[ theNotification ] ) {
           <span class="hljs-built_in">console</span>.log( theNotification + <span class="hljs-string">" has not been registered."</span> );
-          <span class="hljs-keyword">return</span>;
+          <span class="hljs-comment">//return;</span>
         }
         <span class="hljs-keyword">if</span> ( self._traceNotifications ) {
-          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Notifying "</span> + self._notificationListeners[ theNotification ].length + <span class="hljs-string">" listeners for "</span> + theNotification +
-            <span class="hljs-string">" ( "</span> + args + <span class="hljs-string">" ) "</span> );
+          <span class="hljs-keyword">if</span> ( self._notificationListeners[ theNotification ] ) {
+            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Notifying "</span> + self._notificationListeners[ theNotification ].length + <span class="hljs-string">" listeners for "</span> +
+              theNotification + <span class="hljs-string">" ( "</span> + args + <span class="hljs-string">" ) "</span> );
+          } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Can't notify any explicit listeners for "</span>, theNotification, <span class="hljs-string">"but wildcards will fire."</span> );
+          }
         }
-        <span class="hljs-keyword">var</span> async = self._notificationListeners[ theNotification ]._useAsyncNotifications,
+        <span class="hljs-keyword">var</span> async = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[ theNotification ]
+          ._useAsyncNotifications : <span class="hljs-literal">true</span>,
           notifyListener = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theListener, theNotification, args )</span> </span>{
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
               <span class="hljs-keyword">try</span> {
@@ -387,7 +392,8 @@ attach to a notification that isn&#39;t registered.</p>
               }
             };
           },
-          handlers = self._notificationListeners[ theNotification ].slice(); <span class="hljs-comment">// copy!</span>
+          handlers = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[ theNotification ]
+          .slice() : []; <span class="hljs-comment">// copy!</span>
         <span class="hljs-keyword">if</span> ( lastOnly &amp;&amp; handlers.length &gt; <span class="hljs-number">1</span> ) {
           handlers = [ handlers.pop() ];
         }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attach * handlers</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> handler, push = <span class="hljs-literal">false</span>;
@@ -397,12 +403,11 @@ attach to a notification that isn&#39;t registered.</p>
             push = <span class="hljs-literal">false</span>;
             <span class="hljs-keyword">if</span> ( listener.indexOf( <span class="hljs-string">"*"</span> ) &gt; -<span class="hljs-number">1</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>candidate listener; see if it matches</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-keyword">if</span> ( listener === <span class="hljs-string">"*"</span> ) {
                 push = <span class="hljs-literal">true</span>;
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">1</span> ) === theNotification.substr( -<span class="hljs-number">1</span> * ( listener.length - <span class="hljs-number">1</span> ) ) ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">1</span> ) === theNotification.substr( -<span class="hljs-number">1</span> * ( listener.length -
+                <span class="hljs-number">1</span> ) ) ) {
                 push = <span class="hljs-literal">true</span>;
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( listener.substr( -<span class="hljs-number">1</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) === theNotification.substr( <span class="hljs-number">0</span>,
-                listener.length - <span class="hljs-number">1</span> ) ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( -<span class="hljs-number">1</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) === theNotification.substr(
+                <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) ) {
                 push = <span class="hljs-literal">true</span>;
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-keyword">var</span> starPos = listener.indexOf( <span class="hljs-string">"*"</span> );
@@ -796,11 +801,9 @@ with defineProperty and defineObservableProperty.</p>
               el = keyPathEls[ i ];
               <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.value !== <span class="hljs-string">"undefined"</span> ) {
                 el.value = self[ keyPath ];
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.textContent !== <span class="hljs-string">"undefined"</span> ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.textContent !== <span class="hljs-string">"undefined"</span> ) {
                 el.textContent = self[ keyPath ];
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.innerText !== <span class="hljs-string">"undefined"</span> ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.innerText !== <span class="hljs-string">"undefined"</span> ) {
                 el.innerText = self[ keyPath ];
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Data bind failure; browser doesn't understand value, textContent, or innerText."</span> );
@@ -902,6 +905,24 @@ not assume the presence of any other category</p>
       BaseObject._objectCategories[ priority ][ className ] = [];
     }
     BaseObject._objectCategories[ priority ][ className ].push( method );
+  };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method extend</span></p>
+<p>Extend (subclass) an object. <code>o</code> should be of the form:</p>
+<p>{
+  className: &quot;NewClass&quot;,
+  properties: [],
+  observableProperties: [],
+  methods: [],
+  overrides: []
+}</p>
+<p>Parameters:</p>
+<ul>
+<li><p><strong>classObject must be a [type].</strong><br/>([description])</p>
+</li>
+<li><p><strong>o must be a [type].</strong><br/>([description])</p>
+</li>
+</ul>
+<p><strong>Returns a [type]</strong><br/>([description])</p></div></div><div class="code"><div class="wrapper">  BaseObject.extend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extend</span><span class="hljs-params">( classObject, o )</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{};
   };
   BaseObject.meta = {
     version: <span class="hljs-string">"00.05.101"</span>,

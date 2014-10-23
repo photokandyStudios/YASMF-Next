@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><title>ui/spinner</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="ui/spinner"><meta name="groc-project-path" content="lib/yasmf/ui/spinner.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">lib/yasmf/ui/spinner.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Module alert.js author Kerri Shotts and version 0.4</p>
+<p><code>Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the &quot;Software&quot;), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the following
+conditions:
+The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.</code></span></p>
+<p>Provides native-like alert methods, including prompts and messages.</p></div></div><div class="code"><div class="wrapper"><span class="hljs-comment">/*global define*/</span>
+define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-string">"yasmf/util/object"</span>, <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"yasmf/util/h"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( _y, BaseObject, UI, h )</span> </span>{
+<span class="hljs-pi">  "use strict"</span>;
+  <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"Spinner"</span>;
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Spinner</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
+    self.subclass( _className );
+    self._element = <span class="hljs-literal">null</span>;
+    self.defineObservableProperty( <span class="hljs-string">"text"</span> );
+    self.defineProperty( <span class="hljs-string">"visible"</span>, {
+      <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+    } );
+    self.setObservableTintedBackground = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setObservableTintedBackground</span><span class="hljs-params">( v )</span> </span>{
+      <span class="hljs-keyword">if</span> ( v ) {
+        self._element.classList.add( <span class="hljs-string">"obscure-background"</span> );
+      } <span class="hljs-keyword">else</span> {
+        self._element.classList.remove( <span class="hljs-string">"obscure-background"</span> );
+      }
+      <span class="hljs-keyword">return</span> v;
+    }
+    self.defineObservableProperty( <span class="hljs-string">"tintedBackground"</span>, {
+      <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+    } );
+    self.show = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">show</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( !self.visible ) {
+        UI._rootContainer.parentNode.appendChild( self._element );
+        self.visible = <span class="hljs-literal">true</span>;
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          self._element.style.opacity = <span class="hljs-string">"1"</span>;
+        }, <span class="hljs-number">0</span> );
+      }
+    };
+    self.hide = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hide</span><span class="hljs-params">( cb )</span> </span>{
+      <span class="hljs-keyword">if</span> ( self.visible ) {
+        self._element.style.opacity = <span class="hljs-string">"0"</span>;
+        self.visible = <span class="hljs-literal">false</span>;
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          UI._rootContainer.parentNode.removeChild( self._element );
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> cb === <span class="hljs-string">"function"</span> ) {
+            setTimeout( cb, <span class="hljs-number">0</span> );
+          }
+        }, <span class="hljs-number">250</span> );
+      }
+    };
+    self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{
+      self.super( _className, <span class="hljs-string">"init"</span> );
+      self._element = h.el( <span class="hljs-string">"div.ui-spinner-outer-container"</span>, h.el( <span class="hljs-string">"div.ui-spinner-inner-container"</span>, [ h.el(
+          <span class="hljs-string">"div.ui-spinner-inner-spinner"</span> ),
+        h.el( <span class="hljs-string">"div.ui-spinner-inner-text"</span>, {
+          bind: {
+            object: self,
+            keyPath: <span class="hljs-string">"text"</span>
+          }
+        } )
+      ] ) );
+      <span class="hljs-keyword">return</span> self;
+    } );
+    self.initWithOptions = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initWithOptions</span><span class="hljs-params">( options )</span> </span>{
+      self.init();
+      self.text = options.text;
+      self.tintedBackground = ( options.tintedBackground !== <span class="hljs-literal">undefined</span> ) ? options.tintedBackground : <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">return</span> self;
+    };
+    self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( self.visible ) {
+        UI._rootContainer.parentNode.removeChild( self._element );
+        self.visible = <span class="hljs-literal">false</span>;
+      }
+      self._element = <span class="hljs-literal">null</span>;
+      self.super( _className, <span class="hljs-string">"destroy"</span> );
+    } )
+    self._autoInit.apply( self, <span class="hljs-built_in">arguments</span> );
+    <span class="hljs-keyword">return</span> self;
+  };
+  <span class="hljs-keyword">return</span> Spinner;
+} );</div></div></div></div></body></html>

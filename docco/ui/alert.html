@@ -39,6 +39,11 @@
               </a>
             
               
+              <a class="source" href="spinner.html">
+                spinner.js
+              </a>
+            
+              
               <a class="source" href="splitViewController.html">
                 splitViewController.js
               </a>
@@ -127,7 +132,11 @@ define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-
     self.setTitle = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theTitle )</span> </span>{
       self._title = theTitle;
       <span class="hljs-keyword">if</span> ( self._titleElement !== <span class="hljs-literal">null</span> ) {
-        self._titleElement.innerHTML = theTitle;
+        <span class="hljs-keyword">if</span> ( self._titleElement.textContent !== <span class="hljs-literal">undefined</span> ) {
+          self._titleElement.textContent = theTitle;
+        } <span class="hljs-keyword">else</span> {
+          self._titleElement.innerHTML = theTitle;
+        }
       }
     };
     self.defineProperty( <span class="hljs-string">"title"</span>, {

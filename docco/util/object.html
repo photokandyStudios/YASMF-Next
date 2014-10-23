@@ -610,27 +610,7 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
           lastOnly = ( <span class="hljs-keyword">typeof</span> options.lastOnly !== <span class="hljs-string">"undefined"</span> ) ? options.lastOnly : <span class="hljs-literal">false</span>;
         }
         <span class="hljs-keyword">if</span> ( !self._notificationListeners[ theNotification ] ) {
-          <span class="hljs-built_in">console</span>.log( theNotification + <span class="hljs-string">" has not been registered."</span> );
-          <span class="hljs-keyword">return</span>;
-        }
-        <span class="hljs-keyword">if</span> ( self._traceNotifications ) {
-          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Notifying "</span> + self._notificationListeners[ theNotification ].length + <span class="hljs-string">" listeners for "</span> + theNotification +
-            <span class="hljs-string">" ( "</span> + args + <span class="hljs-string">" ) "</span> );
-        }
-        <span class="hljs-keyword">var</span> async = self._notificationListeners[ theNotification ]._useAsyncNotifications,
-          notifyListener = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theListener, theNotification, args )</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-              <span class="hljs-keyword">try</span> {
-                theListener.apply( self, [ self, theNotification, args ].concat( <span class="hljs-built_in">arguments</span> ) );
-              } <span class="hljs-keyword">catch</span> ( err ) {
-                <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"WARNING"</span>, theNotification, <span class="hljs-string">"experienced an uncaught error:"</span>, err );
-              }
-            };
-          },
-          handlers = self._notificationListeners[ theNotification ].slice(); <span class="hljs-comment">// copy!</span>
-        <span class="hljs-keyword">if</span> ( lastOnly &amp;&amp; handlers.length &gt; <span class="hljs-number">1</span> ) {
-          handlers = [ handlers.pop() ];
-        }</pre></div></div>
+          <span class="hljs-built_in">console</span>.log( theNotification + <span class="hljs-string">" has not been registered."</span> );</pre></div></div>
             
         </li>
         
@@ -640,6 +620,45 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>return;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        }
+        <span class="hljs-keyword">if</span> ( self._traceNotifications ) {
+          <span class="hljs-keyword">if</span> ( self._notificationListeners[ theNotification ] ) {
+            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Notifying "</span> + self._notificationListeners[ theNotification ].length + <span class="hljs-string">" listeners for "</span> +
+              theNotification + <span class="hljs-string">" ( "</span> + args + <span class="hljs-string">" ) "</span> );
+          } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Can't notify any explicit listeners for "</span>, theNotification, <span class="hljs-string">"but wildcards will fire."</span> );
+          }
+        }
+        <span class="hljs-keyword">var</span> async = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[ theNotification ]
+          ._useAsyncNotifications : <span class="hljs-literal">true</span>,
+          notifyListener = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theListener, theNotification, args )</span> </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+              <span class="hljs-keyword">try</span> {
+                theListener.apply( self, [ self, theNotification, args ].concat( <span class="hljs-built_in">arguments</span> ) );
+              } <span class="hljs-keyword">catch</span> ( err ) {
+                <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"WARNING"</span>, theNotification, <span class="hljs-string">"experienced an uncaught error:"</span>, err );
+              }
+            };
+          },
+          handlers = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[ theNotification ]
+          .slice() : []; <span class="hljs-comment">// copy!</span>
+        <span class="hljs-keyword">if</span> ( lastOnly &amp;&amp; handlers.length &gt; <span class="hljs-number">1</span> ) {
+          handlers = [ handlers.pop() ];
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>attach * handlers</p>
 
@@ -655,11 +674,11 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>candidate listener; see if it matches</p>
 
@@ -667,12 +686,11 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
             
             <div class="content"><div class='highlight'><pre>              <span class="hljs-keyword">if</span> ( listener === <span class="hljs-string">"*"</span> ) {
                 push = <span class="hljs-literal">true</span>;
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">1</span> ) === theNotification.substr( -<span class="hljs-number">1</span> * ( listener.length - <span class="hljs-number">1</span> ) ) ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">1</span> ) === theNotification.substr( -<span class="hljs-number">1</span> * ( listener.length -
+                <span class="hljs-number">1</span> ) ) ) {
                 push = <span class="hljs-literal">true</span>;
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( listener.substr( -<span class="hljs-number">1</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) === theNotification.substr( <span class="hljs-number">0</span>,
-                listener.length - <span class="hljs-number">1</span> ) ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( -<span class="hljs-number">1</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) === theNotification.substr(
+                <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) ) {
                 push = <span class="hljs-literal">true</span>;
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-keyword">var</span> starPos = listener.indexOf( <span class="hljs-string">"*"</span> );
@@ -784,11 +802,11 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>private properties are handled differently — we want to be able to search for
 _getPrivateProperty, not get_privateProperty</p>
@@ -802,11 +820,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>allow other potential prefixes</p>
 
@@ -821,11 +839,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>merge our default options with the user options</p>
 
@@ -840,11 +858,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Capital Camel Case our function names</p>
 
@@ -862,11 +880,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>if get/set are not specified, we’ll attempt to self-discover them</p>
 
@@ -886,11 +904,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>create the private variable</p>
 
@@ -912,11 +930,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>if there is a getter, use it</p>
 
@@ -929,11 +947,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>otherwise return the private variable</p>
 
@@ -1012,11 +1030,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>set the default options and copy the specified options</p>
 
@@ -1040,11 +1058,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>private properties are handled differently — we want to be able to search for
 _getPrivateProperty, not get_privateProperty</p>
@@ -1058,11 +1076,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>allow other potential prefixes</p>
 
@@ -1093,11 +1111,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>if get/set are not specified, we’ll attempt to self-discover them</p>
 
@@ -1122,11 +1140,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>if the property is observable, register its notification</p>
 
@@ -1139,11 +1157,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>create the private variable; <em>_ here to avoid self-defined </em></p>
 
@@ -1163,11 +1181,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>if there is a getter, use it</p>
 
@@ -1180,11 +1198,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>otherwise return the private variable</p>
 
@@ -1319,11 +1337,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>we’ve been called from an event handler</p>
 
@@ -1354,11 +1372,9 @@ _getPrivateProperty, not get_privateProperty</p>
               el = keyPathEls[ i ];
               <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.value !== <span class="hljs-string">"undefined"</span> ) {
                 el.value = self[ keyPath ];
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.textContent !== <span class="hljs-string">"undefined"</span> ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.textContent !== <span class="hljs-string">"undefined"</span> ) {
                 el.textContent = self[ keyPath ];
-              } <span class="hljs-keyword">else</span>
-              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.innerText !== <span class="hljs-string">"undefined"</span> ) {
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.innerText !== <span class="hljs-string">"undefined"</span> ) {
                 el.innerText = self[ keyPath ];
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Data bind failure; browser doesn't understand value, textContent, or innerText."</span> );
@@ -1396,11 +1412,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>chances are this is an initWithOptions, but make sure the incoming parameter is an object</p>
 
@@ -1431,11 +1447,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>clear data bindings</p>
 
@@ -1446,11 +1462,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>clear any listeners.</p>
 
@@ -1463,11 +1479,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>ready to be destroyed</p>
 
@@ -1478,11 +1494,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>self-categorize</p>
 
@@ -1493,11 +1509,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>call auto init</p>
 
@@ -1508,11 +1524,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>done</p>
 
@@ -1600,6 +1616,27 @@ _getPrivateProperty, not get_privateProperty</p>
       BaseObject._objectCategories[ priority ][ className ] = [];
     }
     BaseObject._objectCategories[ priority ][ className ].push( method );
+  };
+  <span class="hljs-comment">/**
+   * Extend (subclass) an object. `o` should be of the form:
+   *
+   * {
+   *   className: "NewClass",
+   *   properties: [],
+   *   observableProperties: [],
+   *   methods: [],
+   *   overrides: []
+   * }
+   *
+   * @method   extend
+   *
+   * @param    {[type]}   classObject   [description]
+   * @param    {[type]}   o             [description]
+   *
+   * @return   {[type]}                 [description]
+   */</span>
+  BaseObject.extend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extend</span><span class="hljs-params">( classObject, o )</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{};
   };
   BaseObject.meta = {
     version: <span class="hljs-string">"00.05.101"</span>,

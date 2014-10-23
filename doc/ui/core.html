@@ -465,7 +465,7 @@ to be notified when the back button is pressed.</p>
       curFormFactor = theDevice.formFactor();
       curOrientation = theDevice.isPortrait() ? <span class="hljs-string">"portrait"</span> : <span class="hljs-string">"landscape"</span>;
       curScale = theDevice.isRetina() ? <span class="hljs-string">"hiDPI"</span> : <span class="hljs-string">"loDPI"</span>;
-      curScale += <span class="hljs-string">" "</span> + <span class="hljs-built_in">window</span>.devicePixelRatio + <span class="hljs-string">"x"</span>;
+      curScale += <span class="hljs-string">" scale"</span> + <span class="hljs-built_in">window</span>.devicePixelRatio + <span class="hljs-string">"x"</span>;
       curConvenience = <span class="hljs-string">""</span>;
       <span class="hljs-keyword">if</span> ( theDevice.iPad() ) {
         curConvenience = <span class="hljs-string">"ipad"</span>;

@@ -198,6 +198,14 @@
   <span class="hljs-attribute">transition</span><span class="hljs-value">:         <span class="hljs-variable">$value</span>;</span>
 }
 
+<span class="hljs-at_rule">@<span class="hljs-keyword">mixin</span><span class="hljs-preprocessor"> animation</span>(<span class="hljs-variable">$value</span>) {</span>
+  -webkit-<span class="hljs-attribute">animation</span><span class="hljs-value">: <span class="hljs-variable">$value</span>;</span>
+  -moz-<span class="hljs-attribute">transition</span><span class="hljs-value">: <span class="hljs-variable">$value</span>;</span>
+  -ms-<span class="hljs-attribute">animation</span><span class="hljs-value">: <span class="hljs-variable">$value</span>;</span>
+  -o-<span class="hljs-attribute">transition</span><span class="hljs-value">: <span class="hljs-variable">$value</span>;</span>
+  <span class="hljs-attribute">animation</span><span class="hljs-value">: <span class="hljs-variable">$value</span>;</span>
+}
+
 <span class="hljs-at_rule">@<span class="hljs-keyword">mixin</span><span class="hljs-preprocessor"> transitionWPR</span>(<span class="hljs-variable">$value</span>) {</span>
   -webkit-<span class="hljs-attribute">transition</span><span class="hljs-value">: -webkit-#{<span class="hljs-variable">$value</span>};</span>
   -moz-<span class="hljs-attribute">transition</span><span class="hljs-value">:    -moz-#{<span class="hljs-variable">$value</span>};</span>
@@ -1214,11 +1222,11 @@ right: 0;</p>
 <span class="hljs-class">.ui-list-item</span> <span class="hljs-class">.ui-indicator</span>,
 <span class="hljs-class">.ui-list-heading</span> <span class="hljs-class">.ui-indicator</span> {
   <span class="hljs-attribute">position</span><span class="hljs-value">:  absolute;</span>
-  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> size</span>(<span class="hljs-number">30px</span>,<span class="hljs-preprocessor"> 30px</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> size</span>(<span class="hljs-number">32px</span>,<span class="hljs-preprocessor"> 32px</span>);</span>
   <span class="hljs-attribute">right</span><span class="hljs-value">:     <span class="hljs-number">0px</span>;</span>
   <span class="hljs-attribute">top</span><span class="hljs-value">:       <span class="hljs-number">10px</span>;</span>
-  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">30px</span><span class="hljs-preprocessor"> 30px</span>);</span>
-  <span class="hljs-attribute">min-width</span><span class="hljs-value">: <span class="hljs-number">30px</span>;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">32px</span><span class="hljs-preprocessor"> 32px</span>);</span>
+  <span class="hljs-attribute">min-width</span><span class="hljs-value">: <span class="hljs-number">32px</span>;</span>
 }
 
 <span class="hljs-class">.ui-list-item-flex-contents</span> <span class="hljs-class">.ui-indicator</span> {
@@ -1357,12 +1365,16 @@ right: 0;</p>
  *
  *****************************************************************************/</span>
 
-<span class="hljs-class">.ui-glyph</span> {
+<span class="hljs-class">.ui-glyph</span>, <span class="hljs-class">.ui-glyph-large</span> {
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-position</span>(center<span class="hljs-preprocessor"> center</span>);</span>
-  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">30px</span><span class="hljs-preprocessor"> 30px</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">32px</span><span class="hljs-preprocessor"> 32px</span>);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-repeat</span>(no-repeat);</span>
   <span class="hljs-attribute">height</span><span class="hljs-value">: <span class="hljs-number">100%</span>;</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> box-sizing</span>(border-box);</span>
+}
+
+<span class="hljs-class">.ui-glyph-large</span> {
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">64px</span><span class="hljs-preprocessor"> 64px</span>);</span>
 }
 
 <span class="hljs-comment">/*****************************************************************************
@@ -1372,24 +1384,28 @@ right: 0;</p>
  *****************************************************************************/</span>
 
 <span class="hljs-class">.ui-back-button</span><span class="hljs-pseudo">::before</span> {
-  <span class="hljs-attribute">width</span><span class="hljs-value">:          <span class="hljs-number">30px</span>;</span>
-  <span class="hljs-attribute">height</span><span class="hljs-value">:         <span class="hljs-number">30px</span>;</span>
+  <span class="hljs-attribute">width</span><span class="hljs-value">:          <span class="hljs-number">32px</span>;</span>
+  <span class="hljs-attribute">height</span><span class="hljs-value">:         <span class="hljs-number">32px</span>;</span>
   <span class="hljs-attribute">position</span><span class="hljs-value">:       relative;</span>
   <span class="hljs-attribute">top</span><span class="hljs-value">:            -<span class="hljs-number">3px</span>;</span>
   <span class="hljs-attribute">display</span><span class="hljs-value">:        inline-block;</span>
   <span class="hljs-attribute">vertical-align</span><span class="hljs-value">: middle;</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/chevron-left-thick@2x.png"</span>));</span>
-  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">30px</span><span class="hljs-preprocessor"> 30px</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">32px</span><span class="hljs-preprocessor"> 32px</span>);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-repeat</span>(no-repeat);</span>
   <span class="hljs-attribute">margin-left</span><span class="hljs-value">:    -<span class="hljs-number">10px</span>;</span>
   <span class="hljs-attribute">margin-right</span><span class="hljs-value">:   -<span class="hljs-number">5px</span>;</span>
   <span class="hljs-attribute">content</span><span class="hljs-value">:        <span class="hljs-string">""</span>;</span>
 }
 
+<span class="hljs-class">.scale1x</span> <span class="hljs-class">.ui-back-button</span><span class="hljs-pseudo">::before</span> {
+    <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/chevron-left-thick.png"</span>));</span>
+  }
+
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-back-button</span><span class="hljs-pseudo">::before</span> {
-  <span class="hljs-attribute">width</span><span class="hljs-value">:        <span class="hljs-number">15px</span>;</span>
+  <span class="hljs-attribute">width</span><span class="hljs-value">:        <span class="hljs-number">16px</span>;</span>
   <span class="hljs-attribute">height</span><span class="hljs-value">:       <span class="hljs-number">48px</span>;</span>
-  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">15px</span><span class="hljs-preprocessor"> 30px</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">16px</span><span class="hljs-preprocessor"> 32px</span>);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-position</span>(left<span class="hljs-preprocessor"> 5px</span>);</span>
   <span class="hljs-attribute">margin-right</span><span class="hljs-value">: -<span class="hljs-number">10px</span>;</span>
   <span class="hljs-attribute">margin-left</span><span class="hljs-value">:  -<span class="hljs-number">7px</span>;</span>
@@ -1398,8 +1414,8 @@ right: 0;</p>
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-back-button</span> {
   <span class="hljs-attribute">color</span><span class="hljs-value">:     transparent;</span>
   <span class="hljs-attribute">font-size</span><span class="hljs-value">: <span class="hljs-number">0</span>;</span>
-  <span class="hljs-attribute">min-width</span><span class="hljs-value">: <span class="hljs-number">15px</span>;</span>
-  <span class="hljs-attribute">width</span><span class="hljs-value">:     <span class="hljs-number">15px</span>;</span>
+  <span class="hljs-attribute">min-width</span><span class="hljs-value">: <span class="hljs-number">16px</span>;</span>
+  <span class="hljs-attribute">width</span><span class="hljs-value">:     <span class="hljs-number">16px</span>;</span>
   <span class="hljs-attribute">height</span><span class="hljs-value">:    <span class="hljs-number">48px</span>;</span>
 }
 
@@ -1415,12 +1431,94 @@ right: 0;</p>
  *
  *****************************************************************************/</span>
 
-<span class="hljs-variable">$glyphs</span><span class="hljs-value">: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu;</span>
+<span class="hljs-variable">$glyphs</span><span class="hljs-value">: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu, spinner;</span>
 
 <span class="hljs-at_rule">@<span class="hljs-keyword">each</span> <span class="hljs-variable">$glyph</span><span class="hljs-preprocessor"> in</span> <span class="hljs-variable">$glyphs</span> {</span>
   <span class="hljs-class">.ui-glyph-</span>#{<span class="hljs-variable">$glyph</span>} {
     <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/#{$glyph}@2x.png"</span>));</span>
   }
+  <span class="hljs-class">.scale1x</span> <span class="hljs-class">.ui-glyph-</span>#{<span class="hljs-variable">$glyph</span>} {
+    <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/#{$glyph}.png"</span>));</span>
+  }
+}
+
+<span class="hljs-variable">$large-glyphs</span><span class="hljs-value">: spinner;</span>
+<span class="hljs-at_rule">@<span class="hljs-keyword">each</span> <span class="hljs-variable">$large-glyph</span><span class="hljs-preprocessor"> in</span> <span class="hljs-variable">$large-glyphs</span> {</span>
+  <span class="hljs-class">.ui-glyph-</span>#{<span class="hljs-variable">$large-glyph</span>}-large {
+    <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/#{$large-glyph}-large@2x.png"</span>));</span>
+  }
+  <span class="hljs-class">.scale1x</span> <span class="hljs-class">.ui-glyph-</span>#{<span class="hljs-variable">$large-glyph</span>}-large {
+    <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/#{$large-glyph}-large@2x.png"</span>));</span>
+  }
+}
+
+<span class="hljs-variable">$keyframe-prefixes</span><span class="hljs-value">: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyframes;</span>
+
+<span class="hljs-at_rule">@<span class="hljs-keyword">each</span> <span class="hljs-variable">$keyframe-prefix</span><span class="hljs-preprocessor"> in</span> <span class="hljs-variable">$keyframe-prefixes</span> {</span>
+  <span class="hljs-at_rule">@-webkit-keyframes<span class="hljs-preprocessor"> y-infinite-spinning</span> {</span>
+    from {
+      <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> transform</span>(<span class="hljs-preprocessor"> rotate</span>(<span class="hljs-number">0deg</span>) );</span>
+    }
+    to {
+      <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> transform</span>(<span class="hljs-preprocessor"> rotate</span>(<span class="hljs-number">360deg</span>) );</span>
+    }
+  }
+}
+
+<span class="hljs-class">.ui-glyph-spinner</span>, <span class="hljs-class">.ui-glyph-spinner-large</span> {
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> animation</span>(<span class="hljs-preprocessor"> y-infinite-spinning</span><span class="hljs-preprocessor"> 1.5s</span><span class="hljs-preprocessor"> infinite</span><span class="hljs-preprocessor"> ease</span> );</span>
+}
+<span class="hljs-comment">/*****************************************************************************
+ *
+ * Spinner Styles
+ *
+ *****************************************************************************/</span>
+
+<span class="hljs-class">.ui-spinner-outer-container</span> {
+  <span class="hljs-attribute">position</span><span class="hljs-value">: absolute;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> rectTLBR</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);</span>
+  <span class="hljs-attribute">opacity</span><span class="hljs-value">: <span class="hljs-number">0</span>;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> transition</span>(opacity<span class="hljs-preprocessor"> 0.25s</span><span class="hljs-preprocessor"> ease-in-out</span>);</span>
+  <span class="hljs-attribute">z-index</span><span class="hljs-value">: <span class="hljs-number">999999</span>;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> flex-box</span>();</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> size</span>(<span class="hljs-number">100%</span>,<span class="hljs-preprocessor"> 100</span>%)
+}
+<span class="hljs-preprocessor">
+.ui-spinner-outer-container.obscure-background</span> {</span>
+  <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-function">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0.25</span>);</span>
+}
+
+<span class="hljs-class">.ui-spinner-inner-container</span> {
+  <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-function">rgba</span>(<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0.75</span>);</span>
+  <span class="hljs-attribute">margin</span><span class="hljs-value">: auto;</span>
+  <span class="hljs-attribute">border-radius</span><span class="hljs-value">: <span class="hljs-number">16px</span>;</span>
+  <span class="hljs-attribute">color</span><span class="hljs-value">: <span class="hljs-function">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0.75</span>);</span>
+  <span class="hljs-attribute">min-width</span><span class="hljs-value">: <span class="hljs-number">96px</span>;</span>
+  <span class="hljs-attribute">min-height</span><span class="hljs-value">: <span class="hljs-number">96px</span>;</span>
+  <span class="hljs-attribute">padding</span><span class="hljs-value">: <span class="hljs-number">16px</span>;</span>
+  <span class="hljs-attribute">text-align</span><span class="hljs-value">: center;</span>
+}
+
+<span class="hljs-class">.ui-spinner-inner-spinner</span> {
+  <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-hexcolor">#333</span>;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-position</span>(center<span class="hljs-preprocessor"> center</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-size</span>(<span class="hljs-number">64px</span><span class="hljs-preprocessor"> 64px</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-repeat</span>(no-repeat);</span>
+  <span class="hljs-attribute">height</span><span class="hljs-value">: <span class="hljs-number">100%</span>;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> box-sizing</span>(border-box);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/spinner-large@2x.png"</span>));</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> animation</span>(<span class="hljs-preprocessor"> y-infinite-spinning</span><span class="hljs-preprocessor"> 1.5s</span><span class="hljs-preprocessor"> infinite</span><span class="hljs-preprocessor"> ease</span> );</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> size</span>(<span class="hljs-number">64px</span>,<span class="hljs-preprocessor"> 64px</span>);</span>
+  <span class="hljs-attribute">display</span><span class="hljs-value">: inline-block;</span>
+}
+
+<span class="hljs-class">.scale1x</span> <span class="hljs-class">.ui-spinner-inner-spinner</span> {
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-image</span>(<span class="hljs-function">url</span>(<span class="hljs-string">"./yasmf-assets/spinner-large.png"</span>));</span>
+}
+
+<span class="hljs-class">.ui-spinner-inner-text</span> {
+  <span class="hljs-attribute">color</span><span class="hljs-value">: <span class="hljs-hexcolor">#333</span>;</span>
+  <span class="hljs-attribute">font-size</span><span class="hljs-value">: <span class="hljs-number">20px</span>;</span>
 }
 
 <span class="hljs-comment">/*****************************************************************************
