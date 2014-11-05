@@ -173,9 +173,38 @@ define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-
      */</span>
     self._buttons = [];
     self._buttonContainer = <span class="hljs-literal">null</span>;
+    self.defineProperty( <span class="hljs-string">"wideButtons"</span>, {
+      <span class="hljs-keyword">default</span>: <span class="hljs-string">"auto"</span>
+    } );
     self.setButtons = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theButtons )</span> </span>{
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">touchStart</span><span class="hljs-params">( e )</span> </span>{
+        <span class="hljs-keyword">if</span> ( e.touches !== <span class="hljs-literal">undefined</span> ) {
+          <span class="hljs-keyword">this</span>.startX = e.touches[ <span class="hljs-number">0</span> ].clientX;
+          <span class="hljs-keyword">this</span>.startY = e.touches[ <span class="hljs-number">0</span> ].clientY;
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">this</span>.startX = e.clientX;
+          <span class="hljs-keyword">this</span>.startY = e.clientY;
+        }
+        <span class="hljs-keyword">this</span>.moved = <span class="hljs-literal">false</span>;
+      }
+
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleScrolling</span><span class="hljs-params">( e )</span> </span>{
+        <span class="hljs-keyword">var</span> newX = ( e.touches !== <span class="hljs-literal">undefined</span> ) ? e.touches[ <span class="hljs-number">0</span> ].clientX : e.clientX,
+          newY = ( e.touches !== <span class="hljs-literal">undefined</span> ) ? e.touches[ <span class="hljs-number">0</span> ].clientY : e.clientY,
+          dX = <span class="hljs-built_in">Math</span>.abs( <span class="hljs-keyword">this</span>.startX - newX ),
+          dY = <span class="hljs-built_in">Math</span>.abs( <span class="hljs-keyword">this</span>.startY - newY );
+        <span class="hljs-built_in">console</span>.log( dX, dY );
+        <span class="hljs-keyword">if</span> ( dX &gt; <span class="hljs-number">20</span> || dY &gt; <span class="hljs-number">20</span> ) {
+          <span class="hljs-keyword">this</span>.moved = <span class="hljs-literal">true</span>;
+        }
+      }
+
       <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dismissWithIndex</span><span class="hljs-params">( idx )</span> </span>{
-        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+          e.preventDefault();
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.moved ) {
+            <span class="hljs-keyword">return</span>;
+          }
           self.dismiss( idx );
         };
       }
@@ -214,7 +243,15 @@ define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> wideButtons = !( ( self._buttons.length &gt;= <span class="hljs-number">2</span> ) &amp;&amp; ( self._buttons.length &lt;= <span class="hljs-number">3</span> ) );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> wideButtons = <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">if</span> ( self.wideButtons === <span class="hljs-string">"auto"</span> ) {
+        wideButtons = !( ( self._buttons.length &gt;= <span class="hljs-number">2</span> ) &amp;&amp; ( self._buttons.length &lt;= <span class="hljs-number">3</span> ) );
+      } <span class="hljs-keyword">else</span> {
+        wideButtons = self.wideButtons;
+      }
+      <span class="hljs-keyword">if</span> ( wideButtons ) {
+        self._buttonContainer.classList.add( <span class="hljs-string">"wide"</span> );
+      }</pre></div></div>
             
         </li>
         
@@ -313,7 +350,13 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          event.addListener( e, <span class="hljs-string">"touchend"</span>, dismissWithIndex( i ) );
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( Hammer ) {
+            Hammer( e ).on( <span class="hljs-string">"tap"</span>, dismissWithIndex( i ) );
+          } <span class="hljs-keyword">else</span> {
+            event.addListener( e, <span class="hljs-string">"touchstart"</span>, touchStart );
+            event.addListener( e, <span class="hljs-string">"touchmove"</span>, handleScrolling );
+            event.addListener( e, <span class="hljs-string">"touchend"</span>, dismissWithIndex( i ) );
+          }
           b.element = e;</pre></div></div>
             
         </li>
@@ -619,6 +662,9 @@ wide buttons are for 1 button or 4+ buttons.</p>
         }
         <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
           self.text = options.text;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.wideButtons !== <span class="hljs-string">"undefined"</span> ) {
+          self.wideButtons = wideButtons
         }
         <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.buttons !== <span class="hljs-string">"undefined"</span> ) {
           self.buttons = options.buttons;

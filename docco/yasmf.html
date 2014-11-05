@@ -1431,7 +1431,7 @@ right: 0;</p>
  *
  *****************************************************************************/</span>
 
-<span class="hljs-variable">$glyphs</span><span class="hljs-value">: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu, spinner;</span>
+<span class="hljs-variable">$glyphs</span><span class="hljs-value">: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu, spinner, chevron-up-thick, chevron-down-thick, chevron-up-thin, chevron-down-thin, calendar;</span>
 
 <span class="hljs-at_rule">@<span class="hljs-keyword">each</span> <span class="hljs-variable">$glyph</span><span class="hljs-preprocessor"> in</span> <span class="hljs-variable">$glyphs</span> {</span>
   <span class="hljs-class">.ui-glyph-</span>#{<span class="hljs-variable">$glyph</span>} {
@@ -1603,6 +1603,7 @@ right: 0;</p>
   <span class="hljs-attribute">padding-left</span><span class="hljs-value">:   <span class="hljs-number">1em</span>;</span>
   <span class="hljs-attribute">padding-right</span><span class="hljs-value">:  <span class="hljs-number">1em</span>;</span>
   <span class="hljs-attribute">padding-bottom</span><span class="hljs-value">: <span class="hljs-number">1em</span>;</span>
+  <span class="hljs-attribute">overflow</span><span class="hljs-value">: auto;</span>
 }
 
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-alert-text</span> {
@@ -1619,8 +1620,16 @@ right: 0;</p>
   <span class="hljs-attribute">color</span><span class="hljs-value">:           <span class="hljs-hexcolor">#333</span>;</span>
   <span class="hljs-attribute">width</span><span class="hljs-value">:           <span class="hljs-number">100%</span>;</span>
   <span class="hljs-attribute">border-collapse</span><span class="hljs-value">: collapse;</span>
-  <span class="hljs-attribute">display</span><span class="hljs-value">:         table;</span>
+  <span class="hljs-attribute">display</span><span class="hljs-value">:         flex;</span>
+
+  &amp;<span class="hljs-class">.wide</span> {
+    <span class="hljs-attribute">display</span><span class="hljs-value">: block;</span>
+    <span class="hljs-attribute">max-height</span><span class="hljs-value">: <span class="hljs-number">10em</span>;</span>
+    <span class="hljs-attribute">overflow</span><span class="hljs-value">: auto;</span>
+    -webkit-<span class="hljs-attribute">overflow</span>-scrolling<span class="hljs-value">: touch;</span>
+  }
 }
+
 
 <span class="hljs-class">.ui-alert-button-container</span> <span class="hljs-class">.ui-alert-button</span> {
   <span class="hljs-attribute">position</span><span class="hljs-value">:        relative;</span>

@@ -317,7 +317,7 @@ define( [ <span class="hljs-string">"yasmf/util/object"</span> ], <span class="h
        *    attrs: {...}                     attributes to add to the element
        *    styles: {...}                    style attributes to add to the element
        *    on: {...}                        event handlers to attach to the element
-       *    bind: { object:, keyPath: }      data binding
+       *    bind: { object:, keyPath:, keyType: }      data binding
        *    store: { object:, keyPath: }     store element to object.keyPath
        * }
        * ```
@@ -336,6 +336,7 @@ define( [ <span class="hljs-string">"yasmf/util/object"</span> ], <span class="h
           options,
           content = [],
           contentTarget = [],
+          bindValue,
           tagParts = parseTag( tag ); <span class="hljs-comment">// parse tag; it should be of the form `tag[#id][.class][?attr=value[&amp;attr=value...]`</span></pre></div></div>
             
         </li>
@@ -489,7 +490,7 @@ a bit absurd.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"object"</span> ) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"object"</span> &amp;&amp; options !== <span class="hljs-literal">null</span> ) {</pre></div></div>
             
         </li>
         
@@ -504,10 +505,12 @@ a bit absurd.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.attrs !== <span class="hljs-string">"undefined"</span> ) {
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( options.attrs ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> attr <span class="hljs-keyword">in</span> options.attrs ) {
               <span class="hljs-keyword">if</span> ( options.attrs.hasOwnProperty( attr ) ) {
-                e.setAttribute( attr, options.attrs[ attr ] );
+                <span class="hljs-keyword">if</span> ( options.attrs[ attr ] !== <span class="hljs-literal">undefined</span> &amp;&amp; options.attrs[ attr ] !== <span class="hljs-literal">null</span> ) {
+                  e.setAttribute( attr, options.attrs[ attr ] );
+                }
               }
             }
           }</pre></div></div>
@@ -525,10 +528,12 @@ a bit absurd.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.styles !== <span class="hljs-string">"undefined"</span> ) {
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( options.styles ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> style <span class="hljs-keyword">in</span> options.styles ) {
               <span class="hljs-keyword">if</span> ( options.styles.hasOwnProperty( style ) ) {
-                e.style[ style ] = options.styles[ style ];
+                <span class="hljs-keyword">if</span> ( options.styles[ style ] !== <span class="hljs-literal">undefined</span> &amp;&amp; options.styles[ style ] !== <span class="hljs-literal">null</span> ) {
+                  e.style[ style ] = options.styles[ style ];
+                }
               }
             }
           }</pre></div></div>
@@ -550,7 +555,7 @@ if the handler is an object, it must be of the form</p>
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on !== <span class="hljs-string">"undefined"</span> ) {
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( options.on ) {
             <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.on ) {
               <span class="hljs-keyword">if</span> ( options.on.hasOwnProperty( evt ) ) {
                 <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on[ evt ] === <span class="hljs-string">"function"</span> ) {
@@ -577,7 +582,7 @@ it must be of the form <code>{ hammer: { gesture: { handler: fn, options: }, ham
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.hammer !== <span class="hljs-string">"undefined"</span> ) {
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( options.hammer ) {
             <span class="hljs-keyword">var</span> hammer = options.hammer.hammer;
             <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.hammer ) {
               <span class="hljs-keyword">if</span> ( options.hammer.hasOwnProperty( evt ) &amp;&amp; evt !== <span class="hljs-string">"hammer"</span> ) {
@@ -595,15 +600,15 @@ it must be of the form <code>{ hammer: { gesture: { handler: fn, options: }, ham
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>Data binding only occurs if using YASMF’s BaseObject for now (built-in pubsub/observables)
-along with observable properties
-the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyPath&quot; }</code></p>
+              <p>allow elements to be stored into a context
+store must be an object of the form <code>{object:objectRef, keyPath: &quot;keyPath&quot; }</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.bind !== <span class="hljs-string">"undefined"</span> ) {
-            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> BaseObject !== <span class="hljs-string">"undefined"</span> ) {
-              <span class="hljs-keyword">if</span> ( options.bind.object <span class="hljs-keyword">instanceof</span> BaseObject ) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( options.store ) {
+            options.store.object[ options.store.keyPath ] = e;
+          }
+        }</pre></div></div>
             
         </li>
         
@@ -614,58 +619,6 @@ the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyP
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>we have an object that has observable properties</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                options.bind.object.dataBindOn( e, options.bind.keyPath );</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <p>get the current value so it can be displayed</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>                content.push( options.bind.object[ options.bind.keyPath ] );
-              }
-            }
-          }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-17">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
-              <p>allow elements to be stored into a context
-store must be an object of the form <code>{object:objectRef, keyPath: &quot;keyPath&quot; }</code></p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.store !== <span class="hljs-string">"undefined"</span> ) {
-            options.store.object[ options.store.keyPath ] = e;
-          }
-        }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
               <p>if we have content, go ahead and add it;
 if we’re an element that has a <code>value</code>, we attach it to the value
 property instead of <code>textContent</code>. If <code>textContent</code> is not available
@@ -674,7 +627,7 @@ nothing. Falling back to <code>innerHTML</code> isn’t an option, as that’s w
 we are explicitly trying to avoid.</p>
 <p>First, determine if we have <code>value</code> and <code>textContent</code> options or only
 <code>textContent</code> (buttons have both) If both are present, the first
-content item is applied to <code>value</code>, and the second is applied to 
+content item is applied to <code>value</code>, and the second is applied to
 <code>textContent</code>|<code>innerText</code></p>
 
             </div>
@@ -695,11 +648,11 @@ content item is applied to <code>value</code>, and the second is applied to
         </li>
         
         
-        <li id="section-19">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Handle children; <code>handleChild</code> appends each one to the parent</p>
 
@@ -709,16 +662,64 @@ content item is applied to <code>value</code>, and the second is applied to
         <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = args.length; i &lt; l; i++ ) {
           child = args[ i ];
           handleChild( child, e );
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"object"</span> &amp;&amp; options !== <span class="hljs-literal">null</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Data binding only occurs if using YASMF’s BaseObject for now (built-in pubsub/observables)
+along with observable properties
+the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyPath&quot;, [keyType:&quot;string&quot;] }</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( options.bind ) {
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> BaseObject !== <span class="hljs-string">"undefined"</span> ) {
+              <span class="hljs-keyword">if</span> ( options.bind.object <span class="hljs-keyword">instanceof</span> BaseObject ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>we have an object that has observable properties</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                options.bind.object.dataBindOn( e, options.bind.keyPath, options.bind.keyType );
+                options.bind.object.notifyDataBindingElementsForKeyPath( options.bind.keyPath );
+                <span class="hljs-comment">/*// get the current value so it can be displayed
+                 if ( options.bind.object[ options.bind.keyPath ] !== undefined ) {
+                 if ( e.value !== undefined ) {
+                 e.value = options.bind.object[ options.bind.keyPath ];
+                 } else {
+                 e.textContent = options.bind.object[ options.bind.keyPath ];
+                 }
+                 }*/</span>
+              }
+            }
+          }
         }</pre></div></div>
             
         </li>
         
         
-        <li id="section-20">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>return the element (and associated tree)</p>
 
@@ -849,11 +850,11 @@ content item is applied to <code>value</code>, and the second is applied to
         </li>
         
         
-        <li id="section-21">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>create bindings for each HTML element (from: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">https://developer.mozilla.org/en-US/docs/Web/HTML/Element</a>)</p>
 
@@ -877,11 +878,11 @@ content item is applied to <code>value</code>, and the second is applied to
         </li>
         
         
-        <li id="section-22">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>bind document fragment too</p>
 

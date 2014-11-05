@@ -1040,20 +1040,21 @@ _getPrivateProperty, not get_privateProperty</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> options = {
-          observable: <span class="hljs-literal">true</span>,
-          notification: propertyName + <span class="hljs-string">"Changed"</span>,
-          <span class="hljs-keyword">default</span>: <span class="hljs-literal">undefined</span>,
-          read: <span class="hljs-literal">true</span>,
-          write: <span class="hljs-literal">true</span>,
-          get: <span class="hljs-literal">null</span>,
-          validate: <span class="hljs-literal">null</span>,
-          set: <span class="hljs-literal">null</span>,
-          selfDiscover: <span class="hljs-literal">true</span>,
-          notifyAlways: <span class="hljs-literal">false</span>,
-          prefix: <span class="hljs-string">""</span>,
-          configurable: <span class="hljs-literal">true</span>
-        };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> origPropertyName = propertyName,
+          options = {
+            observable: <span class="hljs-literal">true</span>,
+            notification: propertyName + <span class="hljs-string">"Changed"</span>,
+            <span class="hljs-keyword">default</span>: <span class="hljs-literal">undefined</span>,
+            read: <span class="hljs-literal">true</span>,
+            write: <span class="hljs-literal">true</span>,
+            get: <span class="hljs-literal">null</span>,
+            validate: <span class="hljs-literal">null</span>,
+            set: <span class="hljs-literal">null</span>,
+            selfDiscover: <span class="hljs-literal">true</span>,
+            notifyAlways: <span class="hljs-literal">false</span>,
+            prefix: <span class="hljs-string">""</span>,
+            configurable: <span class="hljs-literal">true</span>
+          };</pre></div></div>
             
         </li>
         
@@ -1244,12 +1245,14 @@ _getPrivateProperty, not get_privateProperty</p>
           };
           defPropOptions.set = self[ _y_setFnName ];
         }
-        <span class="hljs-built_in">Object</span>.defineProperty( self, propertyName, defPropOptions );
+        <span class="hljs-built_in">Object</span>.defineProperty( self, origPropertyName, defPropOptions );
       };
       <span class="hljs-comment">/*
        * data binding support
        */</span>
-      self._dataBindings = [];
+      self._dataBindings = {};
+      self._dataBindingTypes = {};
+      self._dataBindingEvents = [ <span class="hljs-string">"input"</span>, <span class="hljs-string">"change"</span>, <span class="hljs-string">"keyup"</span>, <span class="hljs-string">"blur"</span> ];
       <span class="hljs-comment">/**
        * Configure a data binding to an HTML element (el) for
        * a particular property (keyPath). Returns self for chaining.
@@ -1259,13 +1262,17 @@ _getPrivateProperty, not get_privateProperty</p>
        * @param  {string} keyPath the property to observe (shallow only; doesn't follow dots.)
        * @return {*}              self; chain away!
        */</span>
-      self.dataBindOn = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dataBindOn</span><span class="hljs-params">( el, keyPath )</span> </span>{
+      self.dataBindOn = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dataBindOn</span><span class="hljs-params">( el, keyPath, keyType )</span> </span>{
         <span class="hljs-keyword">if</span> ( self._dataBindings[ keyPath ] === <span class="hljs-literal">undefined</span> ) {
           self._dataBindings[ keyPath ] = [];
         }
         self._dataBindings[ keyPath ].push( el );
+        self._dataBindingTypes[ keyPath ] = keyType;
         el.setAttribute( <span class="hljs-string">"data-y-keyPath"</span>, keyPath );
-        el.addEventListener( <span class="hljs-string">"change"</span>, self.updatePropertyForKeyPath, <span class="hljs-literal">false</span> );
+        el.setAttribute( <span class="hljs-string">"data-y-keyType"</span>, ( keyType !== <span class="hljs-literal">undefined</span> ? keyType : <span class="hljs-string">"string"</span> ) );
+        self._dataBindingEvents.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( evt )</span> </span>{
+          el.addEventListener( evt, self.updatePropertyForKeyPath, <span class="hljs-literal">false</span> );
+        } );
         <span class="hljs-keyword">return</span> self;
       };
       <span class="hljs-comment">/**
@@ -1285,7 +1292,10 @@ _getPrivateProperty, not get_privateProperty</p>
           <span class="hljs-keyword">if</span> ( elPos &gt; -<span class="hljs-number">1</span> ) {
             keyPathEls.splice( elPos, <span class="hljs-number">1</span> );
             el.removeAttribute( <span class="hljs-string">"data-y-keyPath"</span> );
-            el.removeEventListener( <span class="hljs-string">"change"</span>, self.updatePropertyForKeyPath );
+            el.removeAttribute( <span class="hljs-string">"data-y-keyType"</span> );
+            self._dataBindingEvents.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( evt )</span> </span>{
+              el.removeEventListener( evt, self.updatePropertyForKeyPath );
+            } );
           }
         }
         <span class="hljs-keyword">return</span> self;
@@ -1302,7 +1312,10 @@ _getPrivateProperty, not get_privateProperty</p>
         <span class="hljs-keyword">if</span> ( keyPathEls !== <span class="hljs-literal">undefined</span> ) {
           keyPathEls.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( el )</span> </span>{
             el.removeAttribute( <span class="hljs-string">"data-y-keyPath"</span> );
-            el.removeEventListener( <span class="hljs-string">"change"</span>, self.updatePropertyForKeyPath );
+            el.removeAttribute( <span class="hljs-string">"data-y-keyType"</span> );
+            self._dataBindingEvents.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( evt )</span> </span>{
+              el.removeEventListener( evt, self.updatePropertyForKeyPath );
+            } );
           } );
           keyPathEls = [];
         }
@@ -1330,8 +1343,14 @@ _getPrivateProperty, not get_privateProperty</p>
        * @param  {String} keyPath property to set
        * @param  {*} value        value to set
        */</span>
-      self.updatePropertyForKeyPath = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updatePropertyForKeyPath</span><span class="hljs-params">( keyPath, value )</span> </span>{
+      self.updatePropertyForKeyPath = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updatePropertyForKeyPath</span><span class="hljs-params">( inKeyPath, inValue, inKeyType )</span> </span>{
+        <span class="hljs-keyword">var</span> keyType = inKeyType,
+          keyPath = inKeyPath,
+          dataValue = inValue;
         <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">if</span> ( keyType === <span class="hljs-literal">undefined</span> ) {
+            keyType = self._dataBindingTypes[ keyPath ];
+          }
           <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span> !== self &amp;&amp; <span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> Node ) {</pre></div></div>
             
         </li>
@@ -1347,12 +1366,55 @@ _getPrivateProperty, not get_privateProperty</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            self[ <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyPath"</span> ) ] = <span class="hljs-keyword">this</span>.value;
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyType"</span> ) !== <span class="hljs-literal">undefined</span> ) {
+              keyType = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyType"</span> );
+            }
+            keyPath = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyPath"</span> );
+            dataValue = <span class="hljs-keyword">this</span>.value;
+            <span class="hljs-keyword">switch</span> ( keyType ) {
+            <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
+              self[ keyPath ] = <span class="hljs-built_in">parseInt</span>( dataValue, <span class="hljs-number">10</span> );
+              <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-string">"float"</span>:
+              self[ keyPath ] = <span class="hljs-built_in">parseFloat</span>( dataValue );
+              <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-string">"boolean"</span>:
+              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.checked !== <span class="hljs-literal">undefined</span> ) {
+                self[ keyPath ] = <span class="hljs-keyword">this</span>.checked;
+              } <span class="hljs-keyword">else</span> {
+                self[ keyPath ] = ( <span class="hljs-string">""</span> + dataValue ) === <span class="hljs-string">"1"</span> || dataValue.toLowerCase() === <span class="hljs-string">"true"</span>
+              }
+              <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-string">"date"</span>:
+              self[ keyPath ] = <span class="hljs-keyword">this</span>.valueAsDate;
+              <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">default</span>:
+              self[ keyPath ] = dataValue;
+            }
             <span class="hljs-keyword">return</span>;
           }
-          self[ keyPath ] = value;
+          <span class="hljs-keyword">switch</span> ( keyType ) {
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
+            self[ keyPath ] = <span class="hljs-built_in">parseInt</span>( dataValue, <span class="hljs-number">10</span> );
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"float"</span>:
+            self[ keyPath ] = <span class="hljs-built_in">parseFloat</span>( dataValue );
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"boolean"</span>:
+            <span class="hljs-keyword">if</span> ( dataValue === <span class="hljs-string">"1"</span> || dataValue === <span class="hljs-number">1</span> || dataValue.toLowerCase() === <span class="hljs-string">"true"</span> || dataValue === <span class="hljs-literal">true</span> ) {
+              self[ keyPath ] = <span class="hljs-literal">true</span>;
+            } <span class="hljs-keyword">else</span> {
+              self[ keyPath ] = <span class="hljs-literal">false</span>;
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"date"</span>:
+            self[ keyPath ] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>( dataValue );
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">default</span>:
+            self[ keyPath ] = dataValue;
+          }
         } <span class="hljs-keyword">catch</span> ( err ) {
-          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update"</span>, keyPath, <span class="hljs-string">"with"</span>, value );
+          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update"</span>, keyPath, <span class="hljs-string">"with"</span>, dataValue, <span class="hljs-string">"and"</span>, keyType );
         }
       };
       <span class="hljs-comment">/**
@@ -1366,16 +1428,25 @@ _getPrivateProperty, not get_privateProperty</p>
       self.notifyDataBindingElementsForKeyPath = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">notifyDataBindingElementsForKeyPath</span><span class="hljs-params">( keyPath )</span> </span>{
         <span class="hljs-keyword">try</span> {
           <span class="hljs-keyword">var</span> keyPathEls = self._dataBindings[ keyPath ],
-            el;
+            keyType = self._dataBindingTypes[ keyPath ],
+            el, v;
+          <span class="hljs-keyword">if</span> ( keyType === <span class="hljs-literal">undefined</span> ) {
+            keyType = <span class="hljs-string">"string"</span>;
+          }
+          v = self[ keyPath ];
           <span class="hljs-keyword">if</span> ( keyPathEls !== <span class="hljs-literal">undefined</span> ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = keyPathEls.length; i &lt; l; i++ ) {
               el = keyPathEls[ i ];
-              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.value !== <span class="hljs-string">"undefined"</span> ) {
-                el.value = self[ keyPath ];
+              <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"date"</span> ) {
+                el.valueAsDate = v;
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"checkbox"</span> ) {
+                el.checked = v;
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.value !== <span class="hljs-string">"undefined"</span> ) {
+                el.value = v;
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.textContent !== <span class="hljs-string">"undefined"</span> ) {
-                el.textContent = self[ keyPath ];
+                el.textContent = v;
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.innerText !== <span class="hljs-string">"undefined"</span> ) {
-                el.innerText = self[ keyPath ];
+                el.innerText = v;
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Data bind failure; browser doesn't understand value, textContent, or innerText."</span> );
               }

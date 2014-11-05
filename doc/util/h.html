@@ -169,7 +169,7 @@ elements (as extra parameters)</p>
    attrs: {...}                     attributes to add to the element
    styles: {...}                    style attributes to add to the element
    on: {...}                        event handlers to attach to the element
-   bind: { object:, keyPath: }      data binding
+   bind: { object:, keyPath:, keyType: }      data binding
    store: { object:, keyPath: }     store element to object.keyPath
 }</code></pre>
 <p>Parameters:</p>
@@ -187,6 +187,7 @@ elements (as extra parameters)</p>
           options,
           content = [],
           contentTarget = [],
+          bindValue,
           tagParts = parseTag( tag ); <span class="hljs-comment">// parse tag; it should be of the form `tag[#id][.class][?attr=value[&amp;attr=value...]`</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the element; if <code>@DF</code> is used, a document fragment is used instead</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( tagParts.tag !== <span class="hljs-string">"@DF"</span> ) {
           e = <span class="hljs-built_in">document</span>.createElement( tagParts.tag );
         } <span class="hljs-keyword">else</span> {
@@ -220,23 +221,27 @@ a bit absurd.</p>
               e.setAttribute( arr[ <span class="hljs-number">0</span> ].trim(), arr[ <span class="hljs-number">1</span> ].trim() );
             }
           }
-        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy over any attributes and styles in <code>options.attrs</code> and <code>options.style</code></p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"object"</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add attributes</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.attrs !== <span class="hljs-string">"undefined"</span> ) {
+        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy over any attributes and styles in <code>options.attrs</code> and <code>options.style</code></p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"object"</span> &amp;&amp; options !== <span class="hljs-literal">null</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add attributes</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( options.attrs ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> attr <span class="hljs-keyword">in</span> options.attrs ) {
               <span class="hljs-keyword">if</span> ( options.attrs.hasOwnProperty( attr ) ) {
-                e.setAttribute( attr, options.attrs[ attr ] );
+                <span class="hljs-keyword">if</span> ( options.attrs[ attr ] !== <span class="hljs-literal">undefined</span> &amp;&amp; options.attrs[ attr ] !== <span class="hljs-literal">null</span> ) {
+                  e.setAttribute( attr, options.attrs[ attr ] );
+                }
               }
             }
-          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add styles</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.styles !== <span class="hljs-string">"undefined"</span> ) {
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add styles</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( options.styles ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> style <span class="hljs-keyword">in</span> options.styles ) {
               <span class="hljs-keyword">if</span> ( options.styles.hasOwnProperty( style ) ) {
-                e.style[ style ] = options.styles[ style ];
+                <span class="hljs-keyword">if</span> ( options.styles[ style ] !== <span class="hljs-literal">undefined</span> &amp;&amp; options.styles[ style ] !== <span class="hljs-literal">null</span> ) {
+                  e.style[ style ] = options.styles[ style ];
+                }
               }
             }
           }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add event handlers; handler property is expected to be a valid DOM
 event, i.e. <code>{ &quot;change&quot;: function... }</code> or <code>{ change: function... }</code>
 if the handler is an object, it must be of the form</p>
 <pre><code>  { handler: function ...,
-    capture: true/false }</code></pre></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on !== <span class="hljs-string">"undefined"</span> ) {
+    capture: true/false }</code></pre></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( options.on ) {
             <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.on ) {
               <span class="hljs-keyword">if</span> ( options.on.hasOwnProperty( evt ) ) {
                 <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on[ evt ] === <span class="hljs-string">"function"</span> ) {
@@ -248,22 +253,15 @@ if the handler is an object, it must be of the form</p>
               }
             }
           }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we support hammer too, assuming we&#39;re given a reference
-it must be of the form <code>{ hammer: { gesture: { handler: fn, options: }, hammer: hammer } }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.hammer !== <span class="hljs-string">"undefined"</span> ) {
+it must be of the form <code>{ hammer: { gesture: { handler: fn, options: }, hammer: hammer } }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( options.hammer ) {
             <span class="hljs-keyword">var</span> hammer = options.hammer.hammer;
             <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.hammer ) {
               <span class="hljs-keyword">if</span> ( options.hammer.hasOwnProperty( evt ) &amp;&amp; evt !== <span class="hljs-string">"hammer"</span> ) {
                 hammer( e, options.hammer[ evt ].options ).on( evt, options.hammer[ evt ].handler );
               }
             }
-          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Data binding only occurs if using YASMF&#39;s BaseObject for now (built-in pubsub/observables)
-along with observable properties
-the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyPath&quot; }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.bind !== <span class="hljs-string">"undefined"</span> ) {
-            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> BaseObject !== <span class="hljs-string">"undefined"</span> ) {
-              <span class="hljs-keyword">if</span> ( options.bind.object <span class="hljs-keyword">instanceof</span> BaseObject ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we have an object that has observable properties</p></div></div><div class="code"><div class="wrapper">                options.bind.object.dataBindOn( e, options.bind.keyPath );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get the current value so it can be displayed</p></div></div><div class="code"><div class="wrapper">                content.push( options.bind.object[ options.bind.keyPath ] );
-              }
-            }
           }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>allow elements to be stored into a context
-store must be an object of the form <code>{object:objectRef, keyPath: &quot;keyPath&quot; }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.store !== <span class="hljs-string">"undefined"</span> ) {
+store must be an object of the form <code>{object:objectRef, keyPath: &quot;keyPath&quot; }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( options.store ) {
             options.store.object[ options.store.keyPath ] = e;
           }
         }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if we have content, go ahead and add it;
@@ -274,7 +272,7 @@ nothing. Falling back to <code>innerHTML</code> isn&#39;t an option, as that&#39
 we are explicitly trying to avoid.
 First, determine if we have <code>value</code> and <code>textContent</code> options or only
 <code>textContent</code> (buttons have both) If both are present, the first
-content item is applied to <code>value</code>, and the second is applied to 
+content item is applied to <code>value</code>, and the second is applied to
 <code>textContent</code>|<code>innerText</code></p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> e.value !== <span class="hljs-string">"undefined"</span> ) {
           contentTarget.push( <span class="hljs-string">"value"</span> );
         }
@@ -290,6 +288,24 @@ content item is applied to <code>value</code>, and the second is applied to
         <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = args.length; i &lt; l; i++ ) {
           child = args[ i ];
           handleChild( child, e );
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options === <span class="hljs-string">"object"</span> &amp;&amp; options !== <span class="hljs-literal">null</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Data binding only occurs if using YASMF&#39;s BaseObject for now (built-in pubsub/observables)
+along with observable properties
+the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyPath&quot;, [keyType:&quot;string&quot;] }</code></p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( options.bind ) {
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> BaseObject !== <span class="hljs-string">"undefined"</span> ) {
+              <span class="hljs-keyword">if</span> ( options.bind.object <span class="hljs-keyword">instanceof</span> BaseObject ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we have an object that has observable properties</p></div></div><div class="code"><div class="wrapper">                options.bind.object.dataBindOn( e, options.bind.keyPath, options.bind.keyType );
+                options.bind.object.notifyDataBindingElementsForKeyPath( options.bind.keyPath );
+                <span class="hljs-comment">/*// get the current value so it can be displayed
+                 if ( options.bind.object[ options.bind.keyPath ] !== undefined ) {
+                 if ( e.value !== undefined ) {
+                 e.value = options.bind.object[ options.bind.keyPath ];
+                 } else {
+                 e.textContent = options.bind.object[ options.bind.keyPath ];
+                 }
+                 }*/</span>
+              }
+            }
+          }
         }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the element (and associated tree)</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">return</span> e;
       },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method mapTo</span></p>
 <p>mapTo - Maps a keypath to another keypath based on <code>map</code>. <code>map</code> should look like this:</p>
