@@ -1674,6 +1674,76 @@ div {
   -o-mask-image: url("./yasmf-assets/spinner.png");
   mask-image: url("./yasmf-assets/spinner.png"); }
 
+.ui-glyph-chevron-up-thick {
+  -webkit-mask-image: url("./yasmf-assets/chevron-up-thick@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-up-thick@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-up-thick@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-up-thick@2x.png");
+  mask-image: url("./yasmf-assets/chevron-up-thick@2x.png"); }
+
+.scale1x .ui-glyph-chevron-up-thick {
+  -webkit-mask-image: url("./yasmf-assets/chevron-up-thick.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-up-thick.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-up-thick.png");
+  -o-mask-image: url("./yasmf-assets/chevron-up-thick.png");
+  mask-image: url("./yasmf-assets/chevron-up-thick.png"); }
+
+.ui-glyph-chevron-down-thick {
+  -webkit-mask-image: url("./yasmf-assets/chevron-down-thick@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-down-thick@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-down-thick@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-down-thick@2x.png");
+  mask-image: url("./yasmf-assets/chevron-down-thick@2x.png"); }
+
+.scale1x .ui-glyph-chevron-down-thick {
+  -webkit-mask-image: url("./yasmf-assets/chevron-down-thick.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-down-thick.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-down-thick.png");
+  -o-mask-image: url("./yasmf-assets/chevron-down-thick.png");
+  mask-image: url("./yasmf-assets/chevron-down-thick.png"); }
+
+.ui-glyph-chevron-up-thin {
+  -webkit-mask-image: url("./yasmf-assets/chevron-up-thin@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-up-thin@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-up-thin@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-up-thin@2x.png");
+  mask-image: url("./yasmf-assets/chevron-up-thin@2x.png"); }
+
+.scale1x .ui-glyph-chevron-up-thin {
+  -webkit-mask-image: url("./yasmf-assets/chevron-up-thin.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-up-thin.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-up-thin.png");
+  -o-mask-image: url("./yasmf-assets/chevron-up-thin.png");
+  mask-image: url("./yasmf-assets/chevron-up-thin.png"); }
+
+.ui-glyph-chevron-down-thin {
+  -webkit-mask-image: url("./yasmf-assets/chevron-down-thin@2x.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-down-thin@2x.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-down-thin@2x.png");
+  -o-mask-image: url("./yasmf-assets/chevron-down-thin@2x.png");
+  mask-image: url("./yasmf-assets/chevron-down-thin@2x.png"); }
+
+.scale1x .ui-glyph-chevron-down-thin {
+  -webkit-mask-image: url("./yasmf-assets/chevron-down-thin.png");
+  -moz-mask-image: url("./yasmf-assets/chevron-down-thin.png");
+  -ms-mask-image: url("./yasmf-assets/chevron-down-thin.png");
+  -o-mask-image: url("./yasmf-assets/chevron-down-thin.png");
+  mask-image: url("./yasmf-assets/chevron-down-thin.png"); }
+
+.ui-glyph-calendar {
+  -webkit-mask-image: url("./yasmf-assets/calendar@2x.png");
+  -moz-mask-image: url("./yasmf-assets/calendar@2x.png");
+  -ms-mask-image: url("./yasmf-assets/calendar@2x.png");
+  -o-mask-image: url("./yasmf-assets/calendar@2x.png");
+  mask-image: url("./yasmf-assets/calendar@2x.png"); }
+
+.scale1x .ui-glyph-calendar {
+  -webkit-mask-image: url("./yasmf-assets/calendar.png");
+  -moz-mask-image: url("./yasmf-assets/calendar.png");
+  -ms-mask-image: url("./yasmf-assets/calendar.png");
+  -o-mask-image: url("./yasmf-assets/calendar.png");
+  mask-image: url("./yasmf-assets/calendar.png"); }
+
 .ui-glyph-spinner-large {
   -webkit-mask-image: url("./yasmf-assets/spinner-large@2x.png");
   -moz-mask-image: url("./yasmf-assets/spinner-large@2x.png");
@@ -1915,7 +1985,8 @@ div {
   color: #333;
   padding-left: 1em;
   padding-right: 1em;
-  padding-bottom: 1em; }
+  padding-bottom: 1em;
+  overflow: auto; }
 
 .android .ui-alert-text {
   text-align: left;
@@ -1930,7 +2001,12 @@ div {
   color: #333;
   width: 100%;
   border-collapse: collapse;
-  display: table; }
+  display: flex; }
+  .ui-alert-button-container.wide {
+    display: block;
+    max-height: 10em;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; }
 
 .ui-alert-button-container .ui-alert-button {
   position: relative;

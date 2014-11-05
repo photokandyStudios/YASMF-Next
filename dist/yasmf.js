@@ -4267,20 +4267,21 @@ define( 'yasmf/util/object',[],function () {
        */
       self.defineObservableProperty = function ( propertyName, propertyOptions ) {
         // set the default options and copy the specified options
-        var options = {
-          observable: true,
-          notification: propertyName + "Changed",
-          default: undefined,
-          read: true,
-          write: true,
-          get: null,
-          validate: null,
-          set: null,
-          selfDiscover: true,
-          notifyAlways: false,
-          prefix: "",
-          configurable: true
-        };
+        var origPropertyName = propertyName,
+          options = {
+            observable: true,
+            notification: propertyName + "Changed",
+            default: undefined,
+            read: true,
+            write: true,
+            get: null,
+            validate: null,
+            set: null,
+            selfDiscover: true,
+            notifyAlways: false,
+            prefix: "",
+            configurable: true
+          };
         // private properties are handled differently -- we want to be able to search for
         // _getPrivateProperty, not get_privateProperty
         if ( propertyName.substr( 0, 1 ) === "_" ) {
@@ -4380,12 +4381,14 @@ define( 'yasmf/util/object',[],function () {
           };
           defPropOptions.set = self[ _y_setFnName ];
         }
-        Object.defineProperty( self, propertyName, defPropOptions );
+        Object.defineProperty( self, origPropertyName, defPropOptions );
       };
       /*
        * data binding support
        */
-      self._dataBindings = [];
+      self._dataBindings = {};
+      self._dataBindingTypes = {};
+      self._dataBindingEvents = [ "input", "change", "keyup", "blur" ];
       /**
        * Configure a data binding to an HTML element (el) for
        * a particular property (keyPath). Returns self for chaining.
@@ -4395,13 +4398,17 @@ define( 'yasmf/util/object',[],function () {
        * @param  {string} keyPath the property to observe (shallow only; doesn't follow dots.)
        * @return {*}              self; chain away!
        */
-      self.dataBindOn = function dataBindOn( el, keyPath ) {
+      self.dataBindOn = function dataBindOn( el, keyPath, keyType ) {
         if ( self._dataBindings[ keyPath ] === undefined ) {
           self._dataBindings[ keyPath ] = [];
         }
         self._dataBindings[ keyPath ].push( el );
+        self._dataBindingTypes[ keyPath ] = keyType;
         el.setAttribute( "data-y-keyPath", keyPath );
-        el.addEventListener( "change", self.updatePropertyForKeyPath, false );
+        el.setAttribute( "data-y-keyType", ( keyType !== undefined ? keyType : "string" ) );
+        self._dataBindingEvents.forEach( function ( evt ) {
+          el.addEventListener( evt, self.updatePropertyForKeyPath, false );
+        } );
         return self;
       };
       /**
@@ -4421,7 +4428,10 @@ define( 'yasmf/util/object',[],function () {
           if ( elPos > -1 ) {
             keyPathEls.splice( elPos, 1 );
             el.removeAttribute( "data-y-keyPath" );
-            el.removeEventListener( "change", self.updatePropertyForKeyPath );
+            el.removeAttribute( "data-y-keyType" );
+            self._dataBindingEvents.forEach( function ( evt ) {
+              el.removeEventListener( evt, self.updatePropertyForKeyPath );
+            } );
           }
         }
         return self;
@@ -4438,7 +4448,10 @@ define( 'yasmf/util/object',[],function () {
         if ( keyPathEls !== undefined ) {
           keyPathEls.forEach( function ( el ) {
             el.removeAttribute( "data-y-keyPath" );
-            el.removeEventListener( "change", self.updatePropertyForKeyPath );
+            el.removeAttribute( "data-y-keyType" );
+            self._dataBindingEvents.forEach( function ( evt ) {
+              el.removeEventListener( evt, self.updatePropertyForKeyPath );
+            } );
           } );
           keyPathEls = [];
         }
@@ -4466,16 +4479,65 @@ define( 'yasmf/util/object',[],function () {
        * @param  {String} keyPath property to set
        * @param  {*} value        value to set
        */
-      self.updatePropertyForKeyPath = function updatePropertyForKeyPath( keyPath, value ) {
+      self.updatePropertyForKeyPath = function updatePropertyForKeyPath( inKeyPath, inValue, inKeyType ) {
+        var keyType = inKeyType,
+          keyPath = inKeyPath,
+          dataValue = inValue;
         try {
+          if ( keyType === undefined ) {
+            keyType = self._dataBindingTypes[ keyPath ];
+          }
           if ( this !== self && this instanceof Node ) {
             // we've been called from an event handler
-            self[ this.getAttribute( "data-y-keyPath" ) ] = this.value;
+            if ( this.getAttribute( "data-y-keyType" ) !== undefined ) {
+              keyType = this.getAttribute( "data-y-keyType" );
+            }
+            keyPath = this.getAttribute( "data-y-keyPath" );
+            dataValue = this.value;
+            switch ( keyType ) {
+            case "integer":
+              self[ keyPath ] = parseInt( dataValue, 10 );
+              break;
+            case "float":
+              self[ keyPath ] = parseFloat( dataValue );
+              break;
+            case "boolean":
+              if ( this.checked !== undefined ) {
+                self[ keyPath ] = this.checked;
+              } else {
+                self[ keyPath ] = ( "" + dataValue ) === "1" || dataValue.toLowerCase() === "true"
+              }
+              break;
+            case "date":
+              self[ keyPath ] = this.valueAsDate;
+              break;
+            default:
+              self[ keyPath ] = dataValue;
+            }
             return;
           }
-          self[ keyPath ] = value;
+          switch ( keyType ) {
+          case "integer":
+            self[ keyPath ] = parseInt( dataValue, 10 );
+            break;
+          case "float":
+            self[ keyPath ] = parseFloat( dataValue );
+            break;
+          case "boolean":
+            if ( dataValue === "1" || dataValue === 1 || dataValue.toLowerCase() === "true" || dataValue === true ) {
+              self[ keyPath ] = true;
+            } else {
+              self[ keyPath ] = false;
+            }
+            break;
+          case "date":
+            self[ keyPath ] = new Date( dataValue );
+            break;
+          default:
+            self[ keyPath ] = dataValue;
+          }
         } catch ( err ) {
-          console.log( "Failed to update", keyPath, "with", value );
+          console.log( "Failed to update", keyPath, "with", dataValue, "and", keyType );
         }
       };
       /**
@@ -4489,16 +4551,25 @@ define( 'yasmf/util/object',[],function () {
       self.notifyDataBindingElementsForKeyPath = function notifyDataBindingElementsForKeyPath( keyPath ) {
         try {
           var keyPathEls = self._dataBindings[ keyPath ],
-            el;
+            keyType = self._dataBindingTypes[ keyPath ],
+            el, v;
+          if ( keyType === undefined ) {
+            keyType = "string";
+          }
+          v = self[ keyPath ];
           if ( keyPathEls !== undefined ) {
             for ( var i = 0, l = keyPathEls.length; i < l; i++ ) {
               el = keyPathEls[ i ];
-              if ( typeof el.value !== "undefined" ) {
-                el.value = self[ keyPath ];
+              if ( el.type === "date" ) {
+                el.valueAsDate = v;
+              } else if ( el.type === "checkbox" ) {
+                el.checked = v;
+              } else if ( typeof el.value !== "undefined" ) {
+                el.value = v;
               } else if ( typeof el.textContent !== "undefined" ) {
-                el.textContent = self[ keyPath ];
+                el.textContent = v;
               } else if ( typeof el.innerText !== "undefined" ) {
-                el.innerText = self[ keyPath ];
+                el.innerText = v;
               } else {
                 console.log( "Data bind failure; browser doesn't understand value, textContent, or innerText." );
               }
@@ -6125,7 +6196,7 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
        *    attrs: {...}                     attributes to add to the element
        *    styles: {...}                    style attributes to add to the element
        *    on: {...}                        event handlers to attach to the element
-       *    bind: { object:, keyPath: }      data binding
+       *    bind: { object:, keyPath:, keyType: }      data binding
        *    store: { object:, keyPath: }     store element to object.keyPath
        * }
        * ```
@@ -6144,6 +6215,7 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
           options,
           content = [],
           contentTarget = [],
+          bindValue,
           tagParts = parseTag( tag ); // parse tag; it should be of the form `tag[#id][.class][?attr=value[&attr=value...]`
         // create the element; if `@DF` is used, a document fragment is used instead
         if ( tagParts.tag !== "@DF" ) {
@@ -6191,20 +6263,24 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
           }
         }
         // copy over any attributes and styles in `options.attrs` and `options.style`
-        if ( typeof options === "object" ) {
+        if ( typeof options === "object" && options !== null ) {
           // add attributes
-          if ( typeof options.attrs !== "undefined" ) {
+          if ( options.attrs ) {
             for ( var attr in options.attrs ) {
               if ( options.attrs.hasOwnProperty( attr ) ) {
-                e.setAttribute( attr, options.attrs[ attr ] );
+                if ( options.attrs[ attr ] !== undefined && options.attrs[ attr ] !== null ) {
+                  e.setAttribute( attr, options.attrs[ attr ] );
+                }
               }
             }
           }
           // add styles
-          if ( typeof options.styles !== "undefined" ) {
+          if ( options.styles ) {
             for ( var style in options.styles ) {
               if ( options.styles.hasOwnProperty( style ) ) {
-                e.style[ style ] = options.styles[ style ];
+                if ( options.styles[ style ] !== undefined && options.styles[ style ] !== null ) {
+                  e.style[ style ] = options.styles[ style ];
+                }
               }
             }
           }
@@ -6215,7 +6291,7 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
           //   { handler: function ...,
           //     capture: true/false }
           // ```
-          if ( typeof options.on !== "undefined" ) {
+          if ( options.on ) {
             for ( evt in options.on ) {
               if ( options.on.hasOwnProperty( evt ) ) {
                 if ( typeof options.on[ evt ] === "function" ) {
@@ -6229,7 +6305,7 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
           }
           // we support hammer too, assuming we're given a reference
           // it must be of the form `{ hammer: { gesture: { handler: fn, options: }, hammer: hammer } }`
-          if ( typeof options.hammer !== "undefined" ) {
+          if ( options.hammer ) {
             var hammer = options.hammer.hammer;
             for ( evt in options.hammer ) {
               if ( options.hammer.hasOwnProperty( evt ) && evt !== "hammer" ) {
@@ -6237,22 +6313,9 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
               }
             }
           }
-          // Data binding only occurs if using YASMF's BaseObject for now (built-in pubsub/observables)
-          // along with observable properties
-          // the binding object is of the form `{ object: objectRef, keyPath: "keyPath" }`
-          if ( typeof options.bind !== "undefined" ) {
-            if ( typeof BaseObject !== "undefined" ) {
-              if ( options.bind.object instanceof BaseObject ) {
-                // we have an object that has observable properties
-                options.bind.object.dataBindOn( e, options.bind.keyPath );
-                // get the current value so it can be displayed
-                content.push( options.bind.object[ options.bind.keyPath ] );
-              }
-            }
-          }
           // allow elements to be stored into a context
           // store must be an object of the form `{object:objectRef, keyPath: "keyPath" }`
-          if ( typeof options.store !== "undefined" ) {
+          if ( options.store ) {
             options.store.object[ options.store.keyPath ] = e;
           }
         }
@@ -6265,7 +6328,7 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
         //
         // First, determine if we have `value` and `textContent` options or only
         // `textContent` (buttons have both) If both are present, the first
-        // content item is applied to `value`, and the second is applied to 
+        // content item is applied to `value`, and the second is applied to
         // `textContent`|`innerText`
         if ( typeof e.value !== "undefined" ) {
           contentTarget.push( "value" );
@@ -6284,6 +6347,28 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
         for ( i = 0, l = args.length; i < l; i++ ) {
           child = args[ i ];
           handleChild( child, e );
+        }
+        if ( typeof options === "object" && options !== null ) {
+          // Data binding only occurs if using YASMF's BaseObject for now (built-in pubsub/observables)
+          // along with observable properties
+          // the binding object is of the form `{ object: objectRef, keyPath: "keyPath", [keyType:"string"] }`
+          if ( options.bind ) {
+            if ( typeof BaseObject !== "undefined" ) {
+              if ( options.bind.object instanceof BaseObject ) {
+                // we have an object that has observable properties
+                options.bind.object.dataBindOn( e, options.bind.keyPath, options.bind.keyType );
+                options.bind.object.notifyDataBindingElementsForKeyPath( options.bind.keyPath );
+                /*// get the current value so it can be displayed
+                 if ( options.bind.object[ options.bind.keyPath ] !== undefined ) {
+                 if ( e.value !== undefined ) {
+                 e.value = options.bind.object[ options.bind.keyPath ];
+                 } else {
+                 e.textContent = options.bind.object[ options.bind.keyPath ];
+                 }
+                 }*/
+              }
+            }
+          }
         }
         // return the element (and associated tree)
         return e;
@@ -9199,9 +9284,38 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
      */
     self._buttons = [];
     self._buttonContainer = null;
+    self.defineProperty( "wideButtons", {
+      default: "auto"
+    } );
     self.setButtons = function ( theButtons ) {
+      function touchStart( e ) {
+        if ( e.touches !== undefined ) {
+          this.startX = e.touches[ 0 ].clientX;
+          this.startY = e.touches[ 0 ].clientY;
+        } else {
+          this.startX = e.clientX;
+          this.startY = e.clientY;
+        }
+        this.moved = false;
+      }
+
+      function handleScrolling( e ) {
+        var newX = ( e.touches !== undefined ) ? e.touches[ 0 ].clientX : e.clientX,
+          newY = ( e.touches !== undefined ) ? e.touches[ 0 ].clientY : e.clientY,
+          dX = Math.abs( this.startX - newX ),
+          dY = Math.abs( this.startY - newY );
+        console.log( dX, dY );
+        if ( dX > 20 || dY > 20 ) {
+          this.moved = true;
+        }
+      }
+
       function dismissWithIndex( idx ) {
-        return function () {
+        return function ( e ) {
+          e.preventDefault();
+          if ( this.moved ) {
+            return;
+          }
           self.dismiss( idx );
         };
       }
@@ -9214,7 +9328,15 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
       }
       self._buttons = theButtons;
       // determine if we need wide buttons or not
-      var wideButtons = !( ( self._buttons.length >= 2 ) && ( self._buttons.length <= 3 ) );
+      var wideButtons = false;
+      if ( self.wideButtons === "auto" ) {
+        wideButtons = !( ( self._buttons.length >= 2 ) && ( self._buttons.length <= 3 ) );
+      } else {
+        wideButtons = self.wideButtons;
+      }
+      if ( wideButtons ) {
+        self._buttonContainer.classList.add( "wide" );
+      }
       // add the buttons back to the DOM if we can
       if ( self._buttonContainer !== null ) {
         for ( i = 0; i < self._buttons.length; i++ ) {
@@ -9235,7 +9357,13 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
             e.style.width = "" + ( 100 / self._buttons.length ) + "%";
           }
           // listen for a touch
-          event.addListener( e, "touchend", dismissWithIndex( i ) );
+          if ( Hammer ) {
+            Hammer( e ).on( "tap", dismissWithIndex( i ) );
+          } else {
+            event.addListener( e, "touchstart", touchStart );
+            event.addListener( e, "touchmove", handleScrolling );
+            event.addListener( e, "touchend", dismissWithIndex( i ) );
+          }
           b.element = e;
           // add the button to the DOM
           self._buttonContainer.appendChild( b.element );
@@ -9411,6 +9539,9 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
         }
         if ( typeof options.text !== "undefined" ) {
           self.text = options.text;
+        }
+        if ( typeof options.wideButtons !== "undefined" ) {
+          self.wideButtons = wideButtons
         }
         if ( typeof options.buttons !== "undefined" ) {
           self.buttons = options.buttons;
