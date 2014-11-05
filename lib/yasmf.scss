@@ -1179,7 +1179,7 @@ $android-selection-color: rgba(36, 36, 36, 1);
  *
  *****************************************************************************/
 
-$glyphs: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu, spinner;
+$glyphs: arrow-corners-inward, arrow-corners-outward, bookmark, books, brightness-less, brightness-more, camera-video, camera, checkmark, chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin, circle-filled, circle-hollow, pause-filled, pause-hollow, play-filled, play-hollow, clock, delete, gear, list, magnifying-glass, page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked, photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download, circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow, menu, spinner, chevron-up-thick, chevron-down-thick, chevron-up-thin, chevron-down-thin, calendar;
 
 @each $glyph in $glyphs {
   .ui-glyph-#{$glyph} {
@@ -1351,6 +1351,7 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
   padding-left:   1em;
   padding-right:  1em;
   padding-bottom: 1em;
+  overflow: auto;
 }
 
 .android .ui-alert-text {
@@ -1367,8 +1368,16 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
   color:           #333;
   width:           100%;
   border-collapse: collapse;
-  display:         table;
+  display:         flex;
+
+  &.wide {
+    display: block;
+    max-height: 10em;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
+
 
 .ui-alert-button-container .ui-alert-button {
   position:        relative;
