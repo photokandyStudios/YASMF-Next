@@ -2044,95 +2044,95 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
    * @returns {*}               Either the property requested or the entire CSS style declaration
    */
   function getComputedStyle( element, property ) {
-    if ( !( element instanceof Node ) && typeof element === "string" ) {
-      property = element;
-      element = this;
+      if ( !( element instanceof Node ) && typeof element === "string" ) {
+        property = element;
+        element = this;
+      }
+      var computedStyle = window.getComputedStyle( element );
+      if ( typeof property !== "undefined" ) {
+        return computedStyle.getPropertyValue( property );
+      }
+      return computedStyle;
     }
-    var computedStyle = window.getComputedStyle( element );
-    if ( typeof property !== "undefined" ) {
-      return computedStyle.getPropertyValue( property );
-    }
-    return computedStyle;
-  }
-  /**
-   * @method _arrayize
-   * @private
-   * @param {NodeList} list     the list to convert
-   * @returns {Array}           the converted array
-   */
+    /**
+     * @method _arrayize
+     * @private
+     * @param {NodeList} list     the list to convert
+     * @returns {Array}           the converted array
+     */
   function _arrayize( list ) {
-    return Array.prototype.splice.call( list, 0 );
-  }
-  /**
-   * @method getElementById
-   * @private
-   * @param {Node} parent      the parent to execute getElementById on
-   * @param {string} elementId the element ID to search for
-   * @returns {Node}           the element or null if not found
-   */
+      return Array.prototype.splice.call( list, 0 );
+    }
+    /**
+     * @method getElementById
+     * @private
+     * @param {Node} parent      the parent to execute getElementById on
+     * @param {string} elementId the element ID to search for
+     * @returns {Node}           the element or null if not found
+     */
   function getElementById( parent, elementId ) {
-    if ( typeof parent === "string" ) {
-      elementId = parent;
-      parent = document;
+      if ( typeof parent === "string" ) {
+        elementId = parent;
+        parent = document;
+      }
+      return ( parent.getElementById( elementId ) );
     }
-    return ( parent.getElementById( elementId ) );
-  }
-  /**
-   * @method querySelector
-   * @private
-   * @param {Node} parent       the parent to execute querySelector on
-   * @param {string} selector   the CSS selector to use
-   * @returns {Node}            the located element or null if not found
-   */
+    /**
+     * @method querySelector
+     * @private
+     * @param {Node} parent       the parent to execute querySelector on
+     * @param {string} selector   the CSS selector to use
+     * @returns {Node}            the located element or null if not found
+     */
   function querySelector( parent, selector ) {
-    if ( typeof parent === "string" ) {
-      selector = parent;
-      parent = document;
+      if ( typeof parent === "string" ) {
+        selector = parent;
+        parent = document;
+      }
+      return ( parent.querySelector( selector ) );
     }
-    return ( parent.querySelector( selector ) );
-  }
-  /**
-   * @method querySelectorAll
-   * @private
-   * @param {Node} parent     the parent to execute querySelectorAll on
-   * @param {string} selector the selector to use
-   * @returns {Array}         the found elements; if none: []
-   */
+    /**
+     * @method querySelectorAll
+     * @private
+     * @param {Node} parent     the parent to execute querySelectorAll on
+     * @param {string} selector the selector to use
+     * @returns {Array}         the found elements; if none: []
+     */
   function querySelectorAll( parent, selector ) {
-    if ( typeof parent === "string" ) {
-      selector = parent;
-      parent = document;
+      if ( typeof parent === "string" ) {
+        selector = parent;
+        parent = document;
+      }
+      return _arrayize( parent.querySelectorAll( selector ) );
     }
-    return _arrayize( parent.querySelectorAll( selector ) );
-  }
-  /**
-   * @method $
-   * @private
-   * @param {string} selector   the CSS selector to use
-   * @returns {Node}            The located element, relative to `this`
-   */
+    /**
+     * @method $
+     * @private
+     * @param {string} selector   the CSS selector to use
+     * @returns {Node}            The located element, relative to `this`
+     */
   function $( selector ) {
-    return querySelector( this, selector );
-  }
-  /**
-   * @method $$
-   * @private
-   * @param {string} selector   the CSS selector to use
-   * @returns {Array}           the located elements, relative to `this`
-   */
+      return querySelector( this, selector );
+    }
+    /**
+     * @method $$
+     * @private
+     * @param {string} selector   the CSS selector to use
+     * @returns {Array}           the located elements, relative to `this`
+     */
   function $$( selector ) {
-    return querySelectorAll( this, selector );
-  }
-  /**
-   * @method $id
-   * @private
-   * @param {string} id         the id of the element
-   * @returns {Node}            the located element or null if not found
-   */
+      return querySelectorAll( this, selector );
+    }
+    /**
+     * @method $id
+     * @private
+     * @param {string} id         the id of the element
+     * @returns {Node}            the located element or null if not found
+     */
   function $id( id ) {
-    return getElementById( this, id );
-  }
-  // modify Node's prototype to provide useful additional shortcuts
+      return getElementById( this, id );
+    }
+    // modify Node's prototype to provide useful additional shortcuts
   var proto = Node.prototype;
   [
     [ "$", $ ],
@@ -2173,139 +2173,139 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
    * License MIT: Copyright 2014 Kerri Shotts
    */
   function valueForKeyPath( o, k, d ) {
-    if ( o === undefined || o === null ) {
-      return ( d !== undefined ) ? d : o;
-    }
-    if ( !( o instanceof Object ) ) {
-      d = k;
-      k = o;
-      o = this;
-    }
-    var v = o;
-    // There's a million ways that this regex can go wrong
-    // with respect to JavaScript identifiers. Splits will
-    // technically work with just about every non-A-Za-z\$-
-    // value, so your keypath could be "field/field/field"
-    // and it would work like "field.field.field".
-    v = k.match( /([\w\$\\\-]+)/g ).reduce( function ( v, keyPart ) {
-      if ( v === undefined || v === null ) {
-        return v;
+      if ( o === undefined || o === null ) {
+        return ( d !== undefined ) ? d : o;
       }
-      try {
-        return v[ keyPart ];
-      } catch ( err ) {
-        return undefined;
+      if ( !( o instanceof Object ) ) {
+        d = k;
+        k = o;
+        o = this;
       }
-    }, v );
-    return ( ( v === undefined || v === null ) && ( d !== undefined ) ) ? d : v;
-  }
-  /**
-   * Interpolates values from the context into the string. Placeholders are of the
-   * form {...}. If values within {...} do not exist within context, they are
-   * replaced with undefined.
-   * @param  {string} str     string to interpolate
-   * @param  {*} context      context to use for interpolation
-   * @return {string}}        interpolated string
-   */
+      var v = o;
+      // There's a million ways that this regex can go wrong
+      // with respect to JavaScript identifiers. Splits will
+      // technically work with just about every non-A-Za-z\$-
+      // value, so your keypath could be "field/field/field"
+      // and it would work like "field.field.field".
+      v = k.match( /([\w\$\\\-]+)/g ).reduce( function ( v, keyPart ) {
+        if ( v === undefined || v === null ) {
+          return v;
+        }
+        try {
+          return v[ keyPart ];
+        } catch ( err ) {
+          return undefined;
+        }
+      }, v );
+      return ( ( v === undefined || v === null ) && ( d !== undefined ) ) ? d : v;
+    }
+    /**
+     * Interpolates values from the context into the string. Placeholders are of the
+     * form {...}. If values within {...} do not exist within context, they are
+     * replaced with undefined.
+     * @param  {string} str     string to interpolate
+     * @param  {*} context      context to use for interpolation
+     * @return {string}}        interpolated string
+     */
   function interpolate( str, context ) {
-    var newStr = str;
-    if ( typeof context === "undefined" ) {
+      var newStr = str;
+      if ( typeof context === "undefined" ) {
+        return newStr;
+      }
+      str.match( /\{([^\}]+)\}/g ).forEach( function ( match ) {
+        var prop = match.substr( 1, match.length - 2 ).trim();
+        newStr = newStr.replace( match, valueForKeyPath( context, prop ) );
+      } );
       return newStr;
     }
-    str.match( /\{([^\}]+)\}/g ).forEach( function ( match ) {
-      var prop = match.substr( 1, match.length - 2 ).trim();
-      newStr = newStr.replace( match, valueForKeyPath( context, prop ) );
-    } );
-    return newStr;
-  }
-  /**
-   * Merges the supplied objects together and returns a copy containin the merged objects. The original
-   * objects are untouched, and a new object is returned containing a relatively deep copy of each object.
-   *
-   * Important Notes:
-   *   - Items that exist in any object but not in any other will be added to the target
-   *   - Should more than one item exist in the set of objects with the same key, the following rules occur:
-   *     - If both types are arrays, the result is a.concat(b)
-   *     - If both types are objects, the result is merge(a,b)
-   *     - Otherwise the result is b (b overwrites a)
-   *   - Should more than one item exist in the set of objects with the same key, but differ in type, the
-   *     second value overwrites the first.
-   *   - This is not a true deep copy! Should any property be a reference to another object or array, the
-   *     copied result may also be a reference (unless both the target and the source share the same item
-   *     with the same type). In other words: DON'T USE THIS AS A DEEP COPY METHOD
-   *
-   * It's really meant to make this kind of work easy:
-   *
-   * var x = { a: 1, b: "hi", c: [1,2] },
-   *     y = { a: 3, c: [3, 4], d: 0 },
-   *     z = merge (x,y);
-   *
-   * z is now { a: 3, b: "hi", c: [1,2,3,4], d:0 }.
-   *
-   * License MIT. Copyright Kerri Shotts 2014
-   */
+    /**
+     * Merges the supplied objects together and returns a copy containin the merged objects. The original
+     * objects are untouched, and a new object is returned containing a relatively deep copy of each object.
+     *
+     * Important Notes:
+     *   - Items that exist in any object but not in any other will be added to the target
+     *   - Should more than one item exist in the set of objects with the same key, the following rules occur:
+     *     - If both types are arrays, the result is a.concat(b)
+     *     - If both types are objects, the result is merge(a,b)
+     *     - Otherwise the result is b (b overwrites a)
+     *   - Should more than one item exist in the set of objects with the same key, but differ in type, the
+     *     second value overwrites the first.
+     *   - This is not a true deep copy! Should any property be a reference to another object or array, the
+     *     copied result may also be a reference (unless both the target and the source share the same item
+     *     with the same type). In other words: DON'T USE THIS AS A DEEP COPY METHOD
+     *
+     * It's really meant to make this kind of work easy:
+     *
+     * var x = { a: 1, b: "hi", c: [1,2] },
+     *     y = { a: 3, c: [3, 4], d: 0 },
+     *     z = merge (x,y);
+     *
+     * z is now { a: 3, b: "hi", c: [1,2,3,4], d:0 }.
+     *
+     * License MIT. Copyright Kerri Shotts 2014
+     */
   function merge() {
-    var t = {},
-      args = Array.prototype.slice.call( arguments, 0 );
-    args.forEach( function ( s ) {
-      Object.keys( s ).forEach( function ( prop ) {
-        var e = s[ prop ];
-        if ( e instanceof Array ) {
-          if ( t[ prop ] instanceof Array ) {
-            t[ prop ] = t[ prop ].concat( e );
-          } else if ( !( t[ prop ] instanceof Object ) || !( t[ prop ] instanceof Array ) ) {
+      var t = {},
+        args = Array.prototype.slice.call( arguments, 0 );
+      args.forEach( function ( s ) {
+        Object.keys( s ).forEach( function ( prop ) {
+          var e = s[ prop ];
+          if ( e instanceof Array ) {
+            if ( t[ prop ] instanceof Array ) {
+              t[ prop ] = t[ prop ].concat( e );
+            } else if ( !( t[ prop ] instanceof Object ) || !( t[ prop ] instanceof Array ) ) {
+              t[ prop ] = e;
+            }
+          } else if ( e instanceof Object && t[ prop ] instanceof Object ) {
+            t[ prop ] = merge( t[ prop ], e );
+          } else {
             t[ prop ] = e;
           }
-        } else if ( e instanceof Object && t[ prop ] instanceof Object ) {
-          t[ prop ] = merge( t[ prop ], e );
-        } else {
-          t[ prop ] = e;
-        }
+        } );
       } );
-    } );
-    return t;
-  }
-  /**
-   * Validates a source against the specified rules. `source` can look like this:
-   *
-   *     { aString: "hi", aNumber: { hi: 294.12 }, anInteger: 1944.32 }
-   *
-   * `rules` can look like this:
-   *
-   *     {
-   *       "a-string": {
-   *         title: "A String",     -- optional; if not supplied, key is used
-   *         key: "aString",        -- optional: if not supplied the name of this rule is used as the key
-   *         required: true,        -- optional: if not supplied, value is not required
-   *         type: "string",        -- string, number, integer, array, date, boolean, object, *(any)
-   *         minLength: 1,          -- optional: minimum length (string, array)
-   *         maxLength: 255         -- optional: maximum length (string, array)
-   *       },
-   *       "a-number": {
-   *         title: "A Number",
-   *         key: "aNumber.hi",     -- keys can have . and [] to reference properties within objects
-   *         required: false,
-   *         type: "number",
-   *         min: 0,                -- if specified, number/integer can't be smaller than this number
-   *         max: 100               -- if specified, number/integer can't be larger than this number
-   *       },
-   *       "an-integer": {
-   *         title: "An Integer",
-   *         key: "anInteger",
-   *         required: true,
-   *         type: "integer",
-   *         enum: [1, 2, 4, 8]     -- if specified, the value must be a part of the array
-   *                                -- may also be specified as an array of objects with title/value properties
-   *       }
-   *     }
-   *
-   * @param {*} source       source to validate
-   * @param {*} rules        validation rules
-   * @returns {*}            an object with two fields: `validates: true|false` and `message: validation message`
-   *
-   * LICENSE: MIT
-   * Copyright Kerri Shotts, 2014
-   */
+      return t;
+    }
+    /**
+     * Validates a source against the specified rules. `source` can look like this:
+     *
+     *     { aString: "hi", aNumber: { hi: 294.12 }, anInteger: 1944.32 }
+     *
+     * `rules` can look like this:
+     *
+     *     {
+     *       "a-string": {
+     *         title: "A String",     -- optional; if not supplied, key is used
+     *         key: "aString",        -- optional: if not supplied the name of this rule is used as the key
+     *         required: true,        -- optional: if not supplied, value is not required
+     *         type: "string",        -- string, number, integer, array, date, boolean, object, *(any)
+     *         minLength: 1,          -- optional: minimum length (string, array)
+     *         maxLength: 255         -- optional: maximum length (string, array)
+     *       },
+     *       "a-number": {
+     *         title: "A Number",
+     *         key: "aNumber.hi",     -- keys can have . and [] to reference properties within objects
+     *         required: false,
+     *         type: "number",
+     *         min: 0,                -- if specified, number/integer can't be smaller than this number
+     *         max: 100               -- if specified, number/integer can't be larger than this number
+     *       },
+     *       "an-integer": {
+     *         title: "An Integer",
+     *         key: "anInteger",
+     *         required: true,
+     *         type: "integer",
+     *         enum: [1, 2, 4, 8]     -- if specified, the value must be a part of the array
+     *                                -- may also be specified as an array of objects with title/value properties
+     *       }
+     *     }
+     *
+     * @param {*} source       source to validate
+     * @param {*} rules        validation rules
+     * @returns {*}            an object with two fields: `validates: true|false` and `message: validation message`
+     *
+     * LICENSE: MIT
+     * Copyright Kerri Shotts, 2014
+     */
   function validate( source, rules ) {
     var r = {
       validates: true,
@@ -2344,113 +2344,117 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
           return;
         }
         // is it of the right type?
-        r.message = "Type Mismatch; expected " + rule.type + " not " + ( typeof v ) + " in " + title;
-        switch ( rule.type ) {
-        case "number":
-          if ( v !== undefined ) {
-            if ( isNaN( parseFloat( v ) ) ) {
+        if ( v !== null && v !== undefined ) {
+          r.message = "Type Mismatch; expected " + rule.type + " not " + ( typeof v ) + " in " + title;
+          switch ( rule.type ) {
+          case "float":
+          case "number":
+            if ( v !== undefined ) {
+              if ( isNaN( parseFloat( v ) ) ) {
+                r.validates = false;
+                return;
+              }
+              if ( v != parseFloat( v ) ) {
+                r.validates = false;
+                return;
+              }
+            }
+            break;
+          case "integer":
+            if ( v !== undefined ) {
+              if ( isNaN( parseInt( v, 10 ) ) ) {
+                r.validates = false;
+                return;
+              }
+              if ( v != parseInt( v, 10 ) ) {
+                r.validates = false;
+                return;
+              }
+            }
+            break;
+          case "array":
+            if ( v !== undefined && !( v instanceof Array ) ) {
               r.validates = false;
               return;
             }
-            if ( v != parseFloat( v ) ) {
+            break;
+          case "date":
+            if ( v instanceof Object ) {
+              if ( !( v instanceof Date ) ) {
+                r.validates = false;
+                return;
+              } else if ( v instanceof Date && isNaN( v.getTime() ) ) {
+                r.validates = false;
+                r.message = "Invalid date in " + title;
+                return;
+              }
+            } else if ( typeof v === "string" ) {
+              if ( isNaN( ( new Date( v ) ).getTime() ) ) {
+                r.validates = false;
+                r.message = "Invalid date in " + title;
+                return;
+              }
+            } else if ( !( v instanceof "object" ) && v !== undefined ) {
+              r.validates = false;
+              return;
+            }
+            break;
+          case "object":
+            if ( !( v instanceof Object ) && v !== undefined ) {
+              r.validates = false;
+              return;
+            }
+            break;
+          case "*":
+            break;
+          default:
+            if ( !( typeof v === rule.type || v === undefined || v === null ) ) {
               r.validates = false;
               return;
             }
           }
-          break;
-        case "integer":
-          if ( v !== undefined ) {
-            if ( isNaN( parseInt( v, 10 ) ) ) {
-              r.validates = false;
-              return;
-            }
-            if ( v != parseInt( v, 10 ) ) {
-              r.validates = false;
-              return;
-            }
-          }
-          break;
-        case "array":
-          if ( v !== undefined && !( v instanceof Array ) ) {
+          r.message = "";
+          // if we're still here, types are good. Now check length, range, and enum
+          // check range
+          r.message = "Value out of range " + v + " in " + title;
+          if ( typeof rule.min === "number" && v < rule.min ) {
             r.validates = false;
             return;
           }
-          break;
-        case "date":
-          if ( v instanceof Object ) {
-            if ( !( v instanceof Date ) ) {
+          if ( typeof rule.max === "number" && v > rule.max ) {
+            r.validates = false;
+            return;
+          }
+          r.message = "";
+          // check length
+          if ( ( typeof rule.minLength === "number" && v !== undefined && v.length !== undefined && v.length < rule.minLength ) ||
+            ( typeof rule.maxLength === "number" && v !== undefined && v.length !== undefined && v.length > rule.maxLength )
+          ) {
+            r.message = "" + title + " out of length range";
+            r.validates = false;
+            return;
+          }
+          // check enum
+          if ( rule.enum instanceof Object && v !== undefined ) {
+            if ( rule.enum.filter( function ( e ) {
+                if ( e.value !== undefined ) {
+                  return e.value == v;
+                } else {
+                  return e == v;
+                }
+              } ).length === 0 ) {
+              r.message = "" + title + " contains unexpected value " + v + " in " + title;
               r.validates = false;
               return;
-            } else if ( v instanceof Date && isNaN( v.getTime() ) ) {
+            }
+          }
+          // check pattern
+          if ( rule.pattern instanceof Object && v !== undefined ) {
+            if ( v.match( rule.pattern ) === null ) {
+              r.message = "" + title + " doesn't match pattern in " + title;
               r.validates = false;
-              r.message = "Invalid date in " + title;
               return;
             }
-          } else if ( typeof v === "string" ) {
-            if ( isNaN( ( new Date( v ) ).getTime() ) ) {
-              r.validates = false;
-              r.message = "Invalid date in " + title;
-              return;
-            }
-          } else if ( !( v instanceof "object" ) && v !== undefined ) {
-            r.validates = false;
-            return;
-          }
-          break;
-        case "object":
-          if ( !( v instanceof Object ) && v !== undefined ) {
-            r.validates = false;
-            return;
-          }
-          break;
-        case "*":
-          break;
-        default:
-          if ( !( typeof v === rule.type || v === undefined ) ) {
-            r.validates = false;
-            return;
-          }
-        }
-        r.message = "";
-        // if we're still here, types are good. Now check length, range, and enum
-        // check range
-        r.message = "Value out of range " + v + " in " + title;
-        if ( typeof rule.min === "number" && v < rule.min ) {
-          r.validates = false;
-          return;
-        }
-        if ( typeof rule.max === "number" && v > rule.max ) {
-          r.validates = false;
-          return;
-        }
-        r.message = "";
-        // check length
-        if ( ( typeof rule.minLength === "number" && v !== undefined && v.length !== undefined && v.length < rule.minLength ) ||
-          ( typeof rule.maxLength === "number" && v !== undefined && v.length !== undefined && v.length > rule.maxLength ) ) {
-          r.message = "" + title + " out of length range";
-          r.validates = false;
-          return;
-        }
-        // check enum
-        if ( rule.enum instanceof Object && v !== undefined ) {
-          if ( rule.enum.filter( function ( e ) {
-            if ( e.value !== undefined ) {
-              return e.value == v;
-            } else {
-              return e == v;
-            }
-          } ).length === 0 ) {
-            r.message = "" + title + " contains unexpected value " + v + " in " + title;
-            r.validates = false;
-            return;
-          }
-        }
-        // check pattern
-        if ( rule.pattern instanceof Object && v !== undefined ) {
-          if ( v.match( rule.pattern ) === null ) {
-            r.message = "" + title + " doesn't match pattern in " + title;
-            r.validates = false;
-            return;
           }
         }
       }
@@ -2944,7 +2948,6 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
   };
   return _y;
 } );
-
 /**
  *
  * Provides date/time convenience methods
@@ -3031,7 +3034,6 @@ define( 'yasmf/util/datetime',[],function () {
     }
   };
 } );
-
 /**
  *
  * Provides convenience methods for parsing unix-style path names. If the
@@ -3177,7 +3179,6 @@ define( 'yasmf/util/filename',[],function () {
   };
   return PKFILE;
 } );
-
 /**
  *
  * Provides miscellaneous functions that had no other category.
@@ -3225,7 +3226,6 @@ define( 'yasmf/util/misc',[],function () {
     }
   };
 } );
-
 /**
  *
  * Provides basic device-handling convenience functions for determining if the device
@@ -3360,17 +3360,21 @@ define( 'yasmf/util/device',[],function () {
       var ua = navigator.userAgent.toLowerCase();
       if ( ua.indexOf( "android" ) > -1 ) {
         // android reports if it is a phone or tablet based on user agent
-        /*if (ua.indexOf("mobile safari") > -1)
-          {
-            return "phone";
-          }*/
+        if ( ua.indexOf( "mobile safari" ) > -1 ) {
+          return "phone";
+        }
         if ( ua.indexOf( "mobile safari" ) < 0 && ua.indexOf( "safari" ) > -1 ) {
           return "tablet";
+        }
+        if ( ( Math.max( window.screen.width, window.screen.height ) / window.devicePixelRatio ) >= 900 ) {
+          return "tablet";
+        } else {
+          return "phone";
         }
       }
       // the following is hacky, and not guaranteed to work all the time,
       // especially as phones get bigger screens with higher DPI.
-      if ( ( Math.max( window.screen.width, window.screen.height ) / window.devicePixelRatio ) >= 900 ) {
+      if ( ( Math.max( window.screen.width, window.screen.height ) ) >= 900 ) {
         return "tablet";
       }
       return "phone";
@@ -3468,7 +3472,6 @@ define( 'yasmf/util/device',[],function () {
   };
   return PKDEVICE;
 } );
-
 /**
  *
  * # Base Object
@@ -3977,7 +3980,8 @@ define( 'yasmf/util/object',[],function () {
       self.registerNotification = function ( theNotification, async ) {
         if ( typeof self._notificationListeners[ theNotification ] === "undefined" ) {
           self._notificationListeners[ theNotification ] = [];
-          self._notificationListeners[ theNotification ]._useAsyncNotifications = ( typeof async !== "undefined" ? async : true );
+          self._notificationListeners[ theNotification ]._useAsyncNotifications = ( typeof async !== "undefined" ? async :
+            true );
         }
         if ( self._traceNotifications ) {
           console.log( "Registering notification " + theNotification );
@@ -3986,90 +3990,90 @@ define( 'yasmf/util/object',[],function () {
       self._traceNotifications = false;
 
       function _doNotification( theNotification, options ) {
-        var args,
-          lastOnly = false;
-        if ( typeof options !== "undefined" ) {
-          args = ( typeof options.args !== "undefined" ) ? options.args : undefined;
-          lastOnly = ( typeof options.lastOnly !== "undefined" ) ? options.lastOnly : false;
-        }
-        if ( !self._notificationListeners[ theNotification ] ) {
-          console.log( theNotification + " has not been registered." );
-          //return;
-        }
-        if ( self._traceNotifications ) {
-          if ( self._notificationListeners[ theNotification ] ) {
-            console.log( "Notifying " + self._notificationListeners[ theNotification ].length + " listeners for " +
-              theNotification + " ( " + args + " ) " );
-          } else {
-            console.log( "Can't notify any explicit listeners for ", theNotification, "but wildcards will fire." );
+          var args,
+            lastOnly = false;
+          if ( typeof options !== "undefined" ) {
+            args = ( typeof options.args !== "undefined" ) ? options.args : undefined;
+            lastOnly = ( typeof options.lastOnly !== "undefined" ) ? options.lastOnly : false;
           }
-        }
-        var async = self._notificationListeners[ theNotification ] !== undefined ? self._notificationListeners[ theNotification ]
-          ._useAsyncNotifications : true,
-          notifyListener = function ( theListener, theNotification, args ) {
-            return function () {
-              try {
-                theListener.apply( self, [ self, theNotification, args ].concat( arguments ) );
-              } catch ( err ) {
-                console.log( "WARNING", theNotification, "experienced an uncaught error:", err );
-              }
-            };
-          },
-          handlers = self._notificationListeners[ theNotification ] !== undefined ? self._notificationListeners[ theNotification ]
-          .slice() : []; // copy!
-        if ( lastOnly && handlers.length > 1 ) {
-          handlers = [ handlers.pop() ];
-        }
-        // attach * handlers
-        var handler, push = false;
-        for ( var listener in self._notificationListeners ) {
-          if ( self._notificationListeners.hasOwnProperty( listener ) ) {
-            handler = self._notificationListeners[ listener ];
-            push = false;
-            if ( listener.indexOf( "*" ) > -1 ) {
-              // candidate listener; see if it matches
-              if ( listener === "*" ) {
-                push = true;
-              } else if ( listener.substr( 0, 1 ) === "*" && listener.substr( 1 ) === theNotification.substr( -1 * ( listener.length -
-                1 ) ) ) {
-                push = true;
-              } else if ( listener.substr( -1, 1 ) === "*" && listener.substr( 0, listener.length - 1 ) === theNotification.substr(
-                0, listener.length - 1 ) ) {
-                push = true;
-              } else {
-                var starPos = listener.indexOf( "*" );
-                if ( listener.substr( 0, starPos ) === theNotification.substr( 0, starPos ) && listener.substr( starPos + 1 ) ===
-                  theNotification.substr( -1 * ( listener.length - starPos - 1 ) ) ) {
-                  push = true;
+          if ( !self._notificationListeners[ theNotification ] ) {
+            console.log( theNotification + " has not been registered." );
+            //return;
+          }
+          if ( self._traceNotifications ) {
+            if ( self._notificationListeners[ theNotification ] ) {
+              console.log( "Notifying " + self._notificationListeners[ theNotification ].length + " listeners for " +
+                theNotification + " ( " + args + " ) " );
+            } else {
+              console.log( "Can't notify any explicit listeners for ", theNotification, "but wildcards will fire." );
+            }
+          }
+          var async = self._notificationListeners[ theNotification ] !== undefined ? self._notificationListeners[
+              theNotification ]._useAsyncNotifications : true,
+            notifyListener = function ( theListener, theNotification, args ) {
+              return function () {
+                try {
+                  theListener.apply( self, [ self, theNotification, args ].concat( arguments ) );
+                } catch ( err ) {
+                  console.log( "WARNING", theNotification, "experienced an uncaught error:", err );
                 }
-              }
-              if ( push ) {
-                handler.forEach( function ( handler ) {
-                  handlers.push( handler );
-                } );
+              };
+            },
+            handlers = self._notificationListeners[ theNotification ] !== undefined ? self._notificationListeners[
+              theNotification ].slice() : []; // copy!
+          if ( lastOnly && handlers.length > 1 ) {
+            handlers = [ handlers.pop() ];
+          }
+          // attach * handlers
+          var handler, push = false;
+          for ( var listener in self._notificationListeners ) {
+            if ( self._notificationListeners.hasOwnProperty( listener ) ) {
+              handler = self._notificationListeners[ listener ];
+              push = false;
+              if ( listener.indexOf( "*" ) > -1 ) {
+                // candidate listener; see if it matches
+                if ( listener === "*" ) {
+                  push = true;
+                } else if ( listener.substr( 0, 1 ) === "*" && listener.substr( 1 ) === theNotification.substr( -1 * ( listener
+                    .length - 1 ) ) ) {
+                  push = true;
+                } else if ( listener.substr( -1, 1 ) === "*" && listener.substr( 0, listener.length - 1 ) === theNotification.substr(
+                    0, listener.length - 1 ) ) {
+                  push = true;
+                } else {
+                  var starPos = listener.indexOf( "*" );
+                  if ( listener.substr( 0, starPos ) === theNotification.substr( 0, starPos ) && listener.substr( starPos + 1 ) ===
+                    theNotification.substr( -1 * ( listener.length - starPos - 1 ) ) ) {
+                    push = true;
+                  }
+                }
+                if ( push ) {
+                  handler.forEach( function ( handler ) {
+                    handlers.push( handler );
+                  } );
+                }
               }
             }
           }
-        }
-        for ( var i = 0, l = handlers.length; i < l; i++ ) {
-          if ( async ) {
-            setTimeout( notifyListener( handlers[ i ], theNotification, args ), 0 );
-          } else {
-            ( notifyListener( handlers[ i ], theNotification, args ) )();
+          for ( var i = 0, l = handlers.length; i < l; i++ ) {
+            if ( async ) {
+              setTimeout( notifyListener( handlers[ i ], theNotification, args ), 0 );
+            } else {
+              ( notifyListener( handlers[ i ], theNotification, args ) )();
+            }
           }
         }
-      }
-      /**
-       * Notifies all listeners of a particular notification that the notification
-       * has been triggered. If the notification hasn't been registered via
-       * `registerNotification`, an error is logged to the console, but the function
-       * itself returns silently, so be sure to watch the console for errors.
-       *
-       * @method notify
-       * @alias emit
-       * @param {String} theNotification  the notification to trigger
-       * @param {*} [args]  Arguments to pass to the listener; usually an array
-       */
+        /**
+         * Notifies all listeners of a particular notification that the notification
+         * has been triggered. If the notification hasn't been registered via
+         * `registerNotification`, an error is logged to the console, but the function
+         * itself returns silently, so be sure to watch the console for errors.
+         *
+         * @method notify
+         * @alias emit
+         * @param {String} theNotification  the notification to trigger
+         * @param {*} [args]  Arguments to pass to the listener; usually an array
+         */
       self.notify = function ( theNotification, args ) {
         _doNotification( theNotification, {
           args: args,
@@ -4484,9 +4488,6 @@ define( 'yasmf/util/object',[],function () {
           keyPath = inKeyPath,
           dataValue = inValue;
         try {
-          if ( keyType === undefined ) {
-            keyType = self._dataBindingTypes[ keyPath ];
-          }
           if ( this !== self && this instanceof Node ) {
             // we've been called from an event handler
             if ( this.getAttribute( "data-y-keyType" ) !== undefined ) {
@@ -4515,6 +4516,9 @@ define( 'yasmf/util/object',[],function () {
               self[ keyPath ] = dataValue;
             }
             return;
+          }
+          if ( keyType === undefined ) {
+            keyType = self._dataBindingTypes[ keyPath ];
           }
           switch ( keyType ) {
           case "integer":
@@ -4557,6 +4561,9 @@ define( 'yasmf/util/object',[],function () {
             keyType = "string";
           }
           v = self[ keyPath ];
+          if ( v === undefined || v === null ) {
+            v = "";
+          }
           if ( keyPathEls !== undefined ) {
             for ( var i = 0, l = keyPathEls.length; i < l; i++ ) {
               el = keyPathEls[ i ];
@@ -4749,11 +4756,9 @@ define( 'yasmf/util/object',[],function () {
   };
   return BaseObject;
 } );
-
 define( 'Q',[],function () {
   return window.Q;
 } );
-
 /**
  *
  * FileManager implements methods that interact with the HTML5 API
@@ -4798,531 +4803,531 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function ( Q, Bas
      * @return {Promise}                   The promise
      */
     function _requestQuota( fileSystemType, requestedDataSize ) {
-      var deferred = Q.defer();
-      if ( DEBUG ) {
-        console.log( [ "_requestQuota: ", fileSystemType, requestedDataSize ].join( " " ) );
-      }
-      try {
-        // attempt to ask for a quota
-        var PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.PERSISTENT : window.PERSISTENT,
-          // Chrome has `webkitPersistentStorage` and `navigator.webkitTemporaryStorage`
-          storageInfo = fileSystemType === PERSISTENT ? navigator.webkitPersistentStorage : navigator.webkitTemporaryStorage;
-        if ( storageInfo ) {
-          // now make sure we can request a quota
-          if ( storageInfo.requestQuota ) {
-            // request the quota
-            storageInfo.requestQuota( requestedDataSize, function success( grantedBytes ) {
+        var deferred = Q.defer();
+        if ( DEBUG ) {
+          console.log( [ "_requestQuota: ", fileSystemType, requestedDataSize ].join( " " ) );
+        }
+        try {
+          // attempt to ask for a quota
+          var PERSISTENT = ( typeof LocalFileSystem !== "undefined" ) ? LocalFileSystem.PERSISTENT : window.PERSISTENT,
+            // Chrome has `webkitPersistentStorage` and `navigator.webkitTemporaryStorage`
+            storageInfo = fileSystemType === PERSISTENT ? navigator.webkitPersistentStorage : navigator.webkitTemporaryStorage;
+          if ( storageInfo ) {
+            // now make sure we can request a quota
+            if ( storageInfo.requestQuota ) {
+              // request the quota
+              storageInfo.requestQuota( requestedDataSize, function success( grantedBytes ) {
+                if ( DEBUG ) {
+                  console.log( [ "_requestQuota: quota granted: ", fileSystemType,
+                    grantedBytes
+                  ].join( " " ) );
+                }
+                deferred.resolve( grantedBytes );
+              }, function failure( anError ) {
+                if ( DEBUG ) {
+                  console.log( [ "_requestQuota: quota rejected: ", fileSystemType,
+                    requestedDataSize, anError
+                  ].join( " " ) );
+                }
+                deferred.reject( anError );
+              } );
+            } else {
+              // not everything supports asking for a quota -- like Cordova.
+              // Instead, let's assume we get permission
               if ( DEBUG ) {
-                console.log( [ "_requestQuota: quota granted: ", fileSystemType,
-                  grantedBytes
+                console.log( [ "_requestQuota: couldn't request quota -- no requestQuota: ",
+                  fileSystemType, requestedDataSize
                 ].join( " " ) );
               }
-              deferred.resolve( grantedBytes );
-            }, function failure( anError ) {
-              if ( DEBUG ) {
-                console.log( [ "_requestQuota: quota rejected: ", fileSystemType,
-                  requestedDataSize, anError
-                ].join( " " ) );
-              }
-              deferred.reject( anError );
-            } );
+              deferred.resolve( requestedDataSize );
+            }
           } else {
-            // not everything supports asking for a quota -- like Cordova.
-            // Instead, let's assume we get permission
             if ( DEBUG ) {
-              console.log( [ "_requestQuota: couldn't request quota -- no requestQuota: ",
+              console.log( [ "_requestQuota: couldn't request quota -- no storageInfo: ",
                 fileSystemType, requestedDataSize
               ].join( " " ) );
             }
             deferred.resolve( requestedDataSize );
           }
-        } else {
-          if ( DEBUG ) {
-            console.log( [ "_requestQuota: couldn't request quota -- no storageInfo: ",
-              fileSystemType, requestedDataSize
-            ].join( " " ) );
-          }
-          deferred.resolve( requestedDataSize );
+        } catch ( anError ) {
+          deferred.reject( anError );
         }
-      } catch ( anError ) {
-        deferred.reject( anError );
+        return deferred.promise;
       }
-      return deferred.promise;
-    }
-    /**
-     * Request a file system with the requested size (obtained first by getting a quota)
-     * @method _requestFileSystem
-     * @private
-     * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
-     * @param  {Number} requestedDataSize The quota
-     * @return {Promise}                   The promise
-     */
+      /**
+       * Request a file system with the requested size (obtained first by getting a quota)
+       * @method _requestFileSystem
+       * @private
+       * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
+       * @param  {Number} requestedDataSize The quota
+       * @return {Promise}                   The promise
+       */
     function _requestFileSystem( fileSystemType, requestedDataSize ) {
-      var deferred = Q.defer();
-      if ( DEBUG ) {
-        console.log( [ "_requestFileSystem: ", fileSystemType, requestedDataSize ].join( " " ) );
-      }
-      try {
-        // fix issue #2 by chasen where using `webkitRequestFileSystem` was having problems
-        // on Android 4.2.2
-        var requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-        requestFileSystem( fileSystemType, requestedDataSize, function success( theFileSystem ) {
-          if ( DEBUG ) {
-            console.log( [ "_requestFileSystem: got a file system", theFileSystem ].join( " " ) );
-          }
-          deferred.resolve( theFileSystem );
-        }, function failure( anError ) {
-          if ( DEBUG ) {
-            console.log( [ "_requestFileSystem: couldn't get a file system",
-              fileSystemType
-            ].join( " " ) );
-          }
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Resolves theURI to a fileEntry or directoryEntry, if possible.
-     * If `theURL` contains `private` or `localhost` as its first element, it will be removed. If
-     * `theURL` does not have a URL scheme, `file://` will be assumed.
-     * @method _resolveLocalFileSystemURL
-     * @private
-     * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
-     */
-    function _resolveLocalFileSystemURL( theURL ) {
-      var deferred = Q.defer();
-      if ( DEBUG ) {
-        console.log( [ "_resolveLocalFileSystemURL: ", theURL ].join( " " ) );
-      }
-      try {
-        // split the parts of the URL
-        var parts = theURL.split( ":" ),
-          protocol, path;
-        // can only have two parts
-        if ( parts.length > 2 ) {
-          throw new Error( "The URI is not well-formed; missing protocol: " + theURL );
+        var deferred = Q.defer();
+        if ( DEBUG ) {
+          console.log( [ "_requestFileSystem: ", fileSystemType, requestedDataSize ].join( " " ) );
         }
-        // if only one part, we assume `file` as the protocol
-        if ( parts.length < 2 ) {
-          protocol = "file";
-          path = parts[ 0 ];
-        } else {
-          protocol = parts[ 0 ];
-          path = parts[ 1 ];
-        }
-        // split the path components
-        var pathComponents = path.split( "/" ),
-          newPathComponents = [];
-        // iterate over each component and trim as we go
-        pathComponents.forEach( function ( part ) {
-          part = part.trim();
-          if ( part !== "" ) { // remove /private if it is the first item in the new array, for iOS sake
-            if ( !( ( part === "private" || part === "localhost" ) && newPathComponents.length === 0 ) ) {
-              newPathComponents.push( part );
+        try {
+          // fix issue #2 by chasen where using `webkitRequestFileSystem` was having problems
+          // on Android 4.2.2
+          var requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+          requestFileSystem( fileSystemType, requestedDataSize, function success( theFileSystem ) {
+            if ( DEBUG ) {
+              console.log( [ "_requestFileSystem: got a file system", theFileSystem ].join( " " ) );
             }
+            deferred.resolve( theFileSystem );
+          }, function failure( anError ) {
+            if ( DEBUG ) {
+              console.log( [ "_requestFileSystem: couldn't get a file system",
+                fileSystemType
+              ].join( " " ) );
+            }
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Resolves theURI to a fileEntry or directoryEntry, if possible.
+       * If `theURL` contains `private` or `localhost` as its first element, it will be removed. If
+       * `theURL` does not have a URL scheme, `file://` will be assumed.
+       * @method _resolveLocalFileSystemURL
+       * @private
+       * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
+       */
+    function _resolveLocalFileSystemURL( theURL ) {
+        var deferred = Q.defer();
+        if ( DEBUG ) {
+          console.log( [ "_resolveLocalFileSystemURL: ", theURL ].join( " " ) );
+        }
+        try {
+          // split the parts of the URL
+          var parts = theURL.split( ":" ),
+            protocol, path;
+          // can only have two parts
+          if ( parts.length > 2 ) {
+            throw new Error( "The URI is not well-formed; missing protocol: " + theURL );
           }
-        } );
-        // rejoin the path components
-        var theNewURI = newPathComponents.join( "/" );
-        // add the protocol
-        theNewURI = protocol + ":///" + theNewURI;
-        // and resolve the URL.
-        window.resolveLocalFileSystemURL( theNewURI, function ( theEntry ) {
-          deferred.resolve( theEntry );
-        }, function ( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * @typedef {{}} DirectoryEntry
-     * HTML5 File API Directory Type
-     */
-    /**
-     * Returns a directory entry based on the path from the parent using
-     * the specified options, if specified. `options` takes the form:
-     * ` {create: true/false, exclusive true/false }`
-     * @method _getDirectoryEntry
-     * @private
-     * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
-     * @param  {String} path    The relative or absolute path or a {DirectoryEntry}
-     * @param  {Object} options The options (that is, create the directory if it doesn't exist, etc.)
-     * @return {Promise}         The promise
-     */
-    function _getDirectoryEntry( parent, path, options ) {
-      if ( DEBUG ) {
-        console.log( [ "_getDirectoryEntry:", parent, path, options ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        if ( typeof path === "object" ) {
-          deferred.resolve( path );
-        } else {
-          parent.getDirectory( path, options || {}, function success( theDirectoryEntry ) {
-            deferred.resolve( theDirectoryEntry );
-          }, function failure( anError ) {
-            deferred.reject( anError );
-          } );
-        }
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Returns a file entry based on the path from the parent using
-     * the specified options. `options` takes the form of `{ create: true/false, exclusive: true/false}`
-     * @method getFileEntry
-     * @private
-     * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
-     * @param  {String} path    The relative or absolute path
-     * @param  {Object} options The options (that is, create the file if it doesn't exist, etc.)
-     * @return {Promise}         The promise
-     */
-    function _getFileEntry( parent, path, options ) {
-      if ( DEBUG ) {
-        console.log( [ "_getFileEntry:", parent, path, options ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        if ( typeof path === "object" ) {
-          deferred.resolve( path );
-        } else {
-          parent.getFile( path, options || {}, function success( theFileEntry ) {
-            deferred.resolve( theFileEntry );
-          }, function failure( anError ) {
-            deferred.reject( anError );
-          } );
-        }
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * @typedef {{}} FileEntry
-     * HTML5 File API File Entry
-     */
-    /**
-     * Returns a file object based on the file entry.
-     * @method _getFileObject
-     * @private
-     * @param  {FileEntry} fileEntry The file Entry
-     * @return {Promise}           The Promise
-     */
-    function _getFileObject( fileEntry ) {
-      if ( DEBUG ) {
-        console.log( [ "_getFileObject:", fileEntry ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        fileEntry.file( function success( theFile ) {
-          deferred.resolve( theFile );
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Reads the file contents from a file object. readAsKind indicates how
-     * to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").
-     * @method _readFileContents
-     * @private
-     * @param  {File} fileObject File to read
-     * @param  {String} readAsKind "Text", "DataURL", "BinaryString", "ArrayBuffer"
-     * @return {Promise}            The Promise
-     */
-    function _readFileContents( fileObject, readAsKind ) {
-      if ( DEBUG ) {
-        console.log( [ "_readFileContents:", fileObject, readAsKind ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        var fileReader = new FileReader();
-        fileReader.onloadend = function ( e ) {
-          deferred.resolve( e.target.result );
-        };
-        fileReader.onerror = function ( anError ) {
-          deferred.reject( anError );
-        };
-        fileReader[ "readAs" + readAsKind ]( fileObject );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Creates a file writer for the file entry; `fileEntry` must exist
-     * @method _createFileWriter
-     * @private
-     * @param  {FileEntry} fileEntry The file entry to write to
-     * @return {Promise}           the Promise
-     */
-    function _createFileWriter( fileEntry ) {
-      if ( DEBUG ) {
-        console.log( [ "_createFileWriter:", fileEntry ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        var fileWriter = fileEntry.createWriter( function success( theFileWriter ) {
-          deferred.resolve( theFileWriter );
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * @typedef {{}} FileWriter
-     * HTML5 File API File Writer Type
-     */
-    /**
-     * Write the contents to the fileWriter; `contents` should be a Blob.
-     * @method _writeFileContents
-     * @private
-     * @param  {FileWriter} fileWriter Obtained from _createFileWriter
-     * @param  {*} contents   The contents to write
-     * @return {Promise}            the Promise
-     */
-    function _writeFileContents( fileWriter, contents ) {
-      if ( DEBUG ) {
-        console.log( [ "_writeFileContents:", fileWriter, contents ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        fileWriter.onwrite = function ( e ) {
-          fileWriter.onwrite = function ( e ) {
-            deferred.resolve( e );
-          };
-          fileWriter.write( contents );
-        };
-        fileWriter.onError = function ( anError ) {
-          deferred.reject( anError );
-        };
-        fileWriter.truncate( 0 ); // clear out the contents, first
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Copy the file to the specified parent directory, with an optional new name
-     * @method _copyFile
-     * @private
-     * @param  {FileEntry} theFileEntry            The file to copy
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the file to
-     * @param  {String} theNewName              The new name of the file ( or undefined simply to copy )
-     * @return {Promise}                         The Promise
-     */
-    function _copyFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
-      if ( DEBUG ) {
-        console.log( [ "_copyFile:", theFileEntry, theParentDirectoryEntry,
-          theNewName
-        ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        theFileEntry.copyTo( theParentDirectoryEntry, theNewName, function success( theNewFileEntry ) {
-          deferred.resolve( theNewFileEntry );
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Move the file to the specified parent directory, with an optional new name
-     * @method _moveFile
-     * @private
-     * @param  {FileEntry} theFileEntry            The file to move or rename
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the file to (or the same as the file in order to rename)
-     * @param  {String} theNewName              The new name of the file ( or undefined simply to move )
-     * @return {Promise}                         The Promise
-     */
-    function _moveFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
-      if ( DEBUG ) {
-        console.log( [ "_moveFile:", theFileEntry, theParentDirectoryEntry,
-          theNewName
-        ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        theFileEntry.moveTo( theParentDirectoryEntry, theNewName, function success( theNewFileEntry ) {
-          deferred.resolve( theNewFileEntry );
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Remove the file from the file system
-     * @method _removeFile
-     * @private
-     * @param  {FileEntry} theFileEntry The file to remove
-     * @return {Promise}              The Promise
-     */
-    function _removeFile( theFileEntry ) {
-      if ( DEBUG ) {
-        console.log( [ "_removeFile:", theFileEntry ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        theFileEntry.remove( function success() {
-          deferred.resolve();
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Copies a directory to the specified directory, with an optional new name. The directory
-     * is copied recursively.
-     * @method _copyDirectory
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry       The directory to copy
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the first directory to
-     * @param  {String} theNewName              The optional new name for the directory
-     * @return {Promise}                         A promise
-     */
-    function _copyDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
-      if ( DEBUG ) {
-        console.log( [ "_copyDirectory:", theDirectoryEntry,
-          theParentDirectoryEntry,
-          theNewName
-        ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, function success( theNewDirectoryEntry ) {
-          deferred.resolve( theNewDirectoryEntry );
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Moves a directory to the specified directory, with an optional new name. The directory
-     * is moved recursively.
-     * @method _moveDirectory
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry       The directory to move
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the first directory to
-     * @param  {String} theNewName              The optional new name for the directory
-     * @return {Promise}                         A promise
-     */
-    function _moveDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
-      if ( DEBUG ) {
-        console.log( [ "_moveDirectory:", theDirectoryEntry,
-          theParentDirectoryEntry,
-          theNewName
-        ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, function success( theNewDirectoryEntry ) {
-          deferred.resolve( theNewDirectoryEntry );
-        }, function failure( anError ) {
-          deferred.reject( anError );
-        } );
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Removes a directory from the file system. If recursively is true, the directory is removed
-     * recursively.
-     * @method _removeDirectory
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry The directory to remove
-     * @param  {Boolean} recursively       If true, remove recursively
-     * @return {Promise}                   The Promise
-     */
-    function _removeDirectory( theDirectoryEntry, recursively ) {
-      if ( DEBUG ) {
-        console.log( [ "_removeDirectory:", theDirectoryEntry, "recursively",
-          recursively
-        ].join( " " ) );
-      }
-      var deferred = Q.defer();
-      try {
-        if ( !recursively ) {
-          theDirectoryEntry.remove( function success() {
-            deferred.resolve();
-          }, function failure( anError ) {
-            deferred.reject( anError );
-          } );
-        } else {
-          theDirectoryEntry.removeRecursively( function success() {
-            deferred.resolve();
-          }, function failure( anError ) {
-            deferred.reject( anError );
-          } );
-        }
-      } catch ( anError ) {
-        deferred.reject( anError );
-      }
-      return deferred.promise;
-    }
-    /**
-     * Reads the contents of a directory
-     * @method _readDirectoryContents
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry The directory to list
-     * @return {Promise}                   The promise
-     */
-    function _readDirectoryContents( theDirectoryEntry ) {
-      if ( DEBUG ) {
-        console.log( [ "_readDirectoryContents:", theDirectoryEntry ].join( " " ) );
-      }
-      var directoryReader = theDirectoryEntry.createReader(),
-        entries = [],
-        deferred = Q.defer();
-
-      function readEntries() {
-        directoryReader.readEntries( function success( theEntries ) {
-          if ( !theEntries.length ) {
-            deferred.resolve( entries );
+          // if only one part, we assume `file` as the protocol
+          if ( parts.length < 2 ) {
+            protocol = "file";
+            path = parts[ 0 ];
           } else {
-            entries = entries.concat( Array.prototype.slice.call( theEntries || [], 0 ) );
-            readEntries();
+            protocol = parts[ 0 ];
+            path = parts[ 1 ];
           }
-        }, function failure( anError ) {
+          // split the path components
+          var pathComponents = path.split( "/" ),
+            newPathComponents = [];
+          // iterate over each component and trim as we go
+          pathComponents.forEach( function ( part ) {
+            part = part.trim();
+            if ( part !== "" ) { // remove /private if it is the first item in the new array, for iOS sake
+              if ( !( ( part === "private" || part === "localhost" ) && newPathComponents.length === 0 ) ) {
+                newPathComponents.push( part );
+              }
+            }
+          } );
+          // rejoin the path components
+          var theNewURI = newPathComponents.join( "/" );
+          // add the protocol
+          theNewURI = protocol + ":///" + theNewURI;
+          // and resolve the URL.
+          window.resolveLocalFileSystemURL( theNewURI, function ( theEntry ) {
+            deferred.resolve( theEntry );
+          }, function ( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
           deferred.reject( anError );
-        } );
+        }
+        return deferred.promise;
       }
-      try {
-        readEntries();
-      } catch ( anError ) {
-        deferred.reject( anError );
+      /**
+       * @typedef {{}} DirectoryEntry
+       * HTML5 File API Directory Type
+       */
+      /**
+       * Returns a directory entry based on the path from the parent using
+       * the specified options, if specified. `options` takes the form:
+       * ` {create: true/false, exclusive true/false }`
+       * @method _getDirectoryEntry
+       * @private
+       * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
+       * @param  {String} path    The relative or absolute path or a {DirectoryEntry}
+       * @param  {Object} options The options (that is, create the directory if it doesn't exist, etc.)
+       * @return {Promise}         The promise
+       */
+    function _getDirectoryEntry( parent, path, options ) {
+        if ( DEBUG ) {
+          console.log( [ "_getDirectoryEntry:", parent, path, options ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          if ( typeof path === "object" ) {
+            deferred.resolve( path );
+          } else {
+            parent.getDirectory( path, options || {}, function success( theDirectoryEntry ) {
+              deferred.resolve( theDirectoryEntry );
+            }, function failure( anError ) {
+              deferred.reject( anError );
+            } );
+          }
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
       }
-      return deferred.promise;
-    }
-    /**
-     * @class FileManager
-     */
+      /**
+       * Returns a file entry based on the path from the parent using
+       * the specified options. `options` takes the form of `{ create: true/false, exclusive: true/false}`
+       * @method getFileEntry
+       * @private
+       * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
+       * @param  {String} path    The relative or absolute path
+       * @param  {Object} options The options (that is, create the file if it doesn't exist, etc.)
+       * @return {Promise}         The promise
+       */
+    function _getFileEntry( parent, path, options ) {
+        if ( DEBUG ) {
+          console.log( [ "_getFileEntry:", parent, path, options ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          if ( typeof path === "object" ) {
+            deferred.resolve( path );
+          } else {
+            parent.getFile( path, options || {}, function success( theFileEntry ) {
+              deferred.resolve( theFileEntry );
+            }, function failure( anError ) {
+              deferred.reject( anError );
+            } );
+          }
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * @typedef {{}} FileEntry
+       * HTML5 File API File Entry
+       */
+      /**
+       * Returns a file object based on the file entry.
+       * @method _getFileObject
+       * @private
+       * @param  {FileEntry} fileEntry The file Entry
+       * @return {Promise}           The Promise
+       */
+    function _getFileObject( fileEntry ) {
+        if ( DEBUG ) {
+          console.log( [ "_getFileObject:", fileEntry ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          fileEntry.file( function success( theFile ) {
+            deferred.resolve( theFile );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Reads the file contents from a file object. readAsKind indicates how
+       * to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").
+       * @method _readFileContents
+       * @private
+       * @param  {File} fileObject File to read
+       * @param  {String} readAsKind "Text", "DataURL", "BinaryString", "ArrayBuffer"
+       * @return {Promise}            The Promise
+       */
+    function _readFileContents( fileObject, readAsKind ) {
+        if ( DEBUG ) {
+          console.log( [ "_readFileContents:", fileObject, readAsKind ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          var fileReader = new FileReader();
+          fileReader.onloadend = function ( e ) {
+            deferred.resolve( e.target.result );
+          };
+          fileReader.onerror = function ( anError ) {
+            deferred.reject( anError );
+          };
+          fileReader[ "readAs" + readAsKind ]( fileObject );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Creates a file writer for the file entry; `fileEntry` must exist
+       * @method _createFileWriter
+       * @private
+       * @param  {FileEntry} fileEntry The file entry to write to
+       * @return {Promise}           the Promise
+       */
+    function _createFileWriter( fileEntry ) {
+        if ( DEBUG ) {
+          console.log( [ "_createFileWriter:", fileEntry ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          var fileWriter = fileEntry.createWriter( function success( theFileWriter ) {
+            deferred.resolve( theFileWriter );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * @typedef {{}} FileWriter
+       * HTML5 File API File Writer Type
+       */
+      /**
+       * Write the contents to the fileWriter; `contents` should be a Blob.
+       * @method _writeFileContents
+       * @private
+       * @param  {FileWriter} fileWriter Obtained from _createFileWriter
+       * @param  {*} contents   The contents to write
+       * @return {Promise}            the Promise
+       */
+    function _writeFileContents( fileWriter, contents ) {
+        if ( DEBUG ) {
+          console.log( [ "_writeFileContents:", fileWriter, contents ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          fileWriter.onwrite = function ( e ) {
+            fileWriter.onwrite = function ( e ) {
+              deferred.resolve( e );
+            };
+            fileWriter.write( contents );
+          };
+          fileWriter.onError = function ( anError ) {
+            deferred.reject( anError );
+          };
+          fileWriter.truncate( 0 ); // clear out the contents, first
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Copy the file to the specified parent directory, with an optional new name
+       * @method _copyFile
+       * @private
+       * @param  {FileEntry} theFileEntry            The file to copy
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the file to
+       * @param  {String} theNewName              The new name of the file ( or undefined simply to copy )
+       * @return {Promise}                         The Promise
+       */
+    function _copyFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
+        if ( DEBUG ) {
+          console.log( [ "_copyFile:", theFileEntry, theParentDirectoryEntry,
+            theNewName
+          ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          theFileEntry.copyTo( theParentDirectoryEntry, theNewName, function success( theNewFileEntry ) {
+            deferred.resolve( theNewFileEntry );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Move the file to the specified parent directory, with an optional new name
+       * @method _moveFile
+       * @private
+       * @param  {FileEntry} theFileEntry            The file to move or rename
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the file to (or the same as the file in order to rename)
+       * @param  {String} theNewName              The new name of the file ( or undefined simply to move )
+       * @return {Promise}                         The Promise
+       */
+    function _moveFile( theFileEntry, theParentDirectoryEntry, theNewName ) {
+        if ( DEBUG ) {
+          console.log( [ "_moveFile:", theFileEntry, theParentDirectoryEntry,
+            theNewName
+          ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          theFileEntry.moveTo( theParentDirectoryEntry, theNewName, function success( theNewFileEntry ) {
+            deferred.resolve( theNewFileEntry );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Remove the file from the file system
+       * @method _removeFile
+       * @private
+       * @param  {FileEntry} theFileEntry The file to remove
+       * @return {Promise}              The Promise
+       */
+    function _removeFile( theFileEntry ) {
+        if ( DEBUG ) {
+          console.log( [ "_removeFile:", theFileEntry ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          theFileEntry.remove( function success() {
+            deferred.resolve();
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Copies a directory to the specified directory, with an optional new name. The directory
+       * is copied recursively.
+       * @method _copyDirectory
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry       The directory to copy
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the first directory to
+       * @param  {String} theNewName              The optional new name for the directory
+       * @return {Promise}                         A promise
+       */
+    function _copyDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
+        if ( DEBUG ) {
+          console.log( [ "_copyDirectory:", theDirectoryEntry,
+            theParentDirectoryEntry,
+            theNewName
+          ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, function success( theNewDirectoryEntry ) {
+            deferred.resolve( theNewDirectoryEntry );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Moves a directory to the specified directory, with an optional new name. The directory
+       * is moved recursively.
+       * @method _moveDirectory
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry       The directory to move
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the first directory to
+       * @param  {String} theNewName              The optional new name for the directory
+       * @return {Promise}                         A promise
+       */
+    function _moveDirectory( theDirectoryEntry, theParentDirectoryEntry, theNewName ) {
+        if ( DEBUG ) {
+          console.log( [ "_moveDirectory:", theDirectoryEntry,
+            theParentDirectoryEntry,
+            theNewName
+          ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, function success( theNewDirectoryEntry ) {
+            deferred.resolve( theNewDirectoryEntry );
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Removes a directory from the file system. If recursively is true, the directory is removed
+       * recursively.
+       * @method _removeDirectory
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry The directory to remove
+       * @param  {Boolean} recursively       If true, remove recursively
+       * @return {Promise}                   The Promise
+       */
+    function _removeDirectory( theDirectoryEntry, recursively ) {
+        if ( DEBUG ) {
+          console.log( [ "_removeDirectory:", theDirectoryEntry, "recursively",
+            recursively
+          ].join( " " ) );
+        }
+        var deferred = Q.defer();
+        try {
+          if ( !recursively ) {
+            theDirectoryEntry.remove( function success() {
+              deferred.resolve();
+            }, function failure( anError ) {
+              deferred.reject( anError );
+            } );
+          } else {
+            theDirectoryEntry.removeRecursively( function success() {
+              deferred.resolve();
+            }, function failure( anError ) {
+              deferred.reject( anError );
+            } );
+          }
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * Reads the contents of a directory
+       * @method _readDirectoryContents
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry The directory to list
+       * @return {Promise}                   The promise
+       */
+    function _readDirectoryContents( theDirectoryEntry ) {
+        if ( DEBUG ) {
+          console.log( [ "_readDirectoryContents:", theDirectoryEntry ].join( " " ) );
+        }
+        var directoryReader = theDirectoryEntry.createReader(),
+          entries = [],
+          deferred = Q.defer();
+
+        function readEntries() {
+          directoryReader.readEntries( function success( theEntries ) {
+            if ( !theEntries.length ) {
+              deferred.resolve( entries );
+            } else {
+              entries = entries.concat( Array.prototype.slice.call( theEntries || [], 0 ) );
+              readEntries();
+            }
+          }, function failure( anError ) {
+            deferred.reject( anError );
+          } );
+        }
+        try {
+          readEntries();
+        } catch ( anError ) {
+          deferred.reject( anError );
+        }
+        return deferred.promise;
+      }
+      /**
+       * @class FileManager
+       */
     var _className = "UTIL.FileManager",
       FileManager = function () {
         var self,
@@ -5964,7 +5969,6 @@ define( 'yasmf/util/fileManager',[ "Q", "yasmf/util/object" ], function ( Q, Bas
     return FileManager;
   } )( Q, BaseObject, ( typeof IN_YASMF !== "undefined" ) ? undefined : window );
 } );
-
 /**
  *
  * # h - simple DOM templating
@@ -6109,80 +6113,80 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
    *
    */
   function handleChild( child, parent ) {
-    if ( typeof child === "object" ) {
-      if ( child instanceof Array ) {
-        for ( var i = 0, l = child.length; i < l; i++ ) {
-          handleChild( child[ i ], parent );
+      if ( typeof child === "object" ) {
+        if ( child instanceof Array ) {
+          for ( var i = 0, l = child.length; i < l; i++ ) {
+            handleChild( child[ i ], parent );
+          }
+        }
+        if ( child instanceof Node ) {
+          parent.appendChild( child );
         }
       }
-      if ( child instanceof Node ) {
-        parent.appendChild( child );
+      if ( typeof child === "function" ) {
+        handleChild( child(), parent );
       }
     }
-    if ( typeof child === "function" ) {
-      handleChild( child(), parent );
-    }
-  }
-  /**
-   * parses an incoming tag into its tag `name`, `id`, and `class` constituents
-   * A tag is of the form `tagName.class#id` or `tagName#id.class`. The `id` and `class`
-   * are optional.
-   *
-   * If attributes need to be supplied, it's possible via the `?` query string. Attributes
-   * are of the form `?attr=value&attr=value...`.
-   *
-   * @method parseTag
-   * @private
-   * @param {string} tag      tag to parse
-   * @return {*} Object of the form `{ tag: tagName, id: id, class: class, query: query, queryPars: Array }`
-   */
+    /**
+     * parses an incoming tag into its tag `name`, `id`, and `class` constituents
+     * A tag is of the form `tagName.class#id` or `tagName#id.class`. The `id` and `class`
+     * are optional.
+     *
+     * If attributes need to be supplied, it's possible via the `?` query string. Attributes
+     * are of the form `?attr=value&attr=value...`.
+     *
+     * @method parseTag
+     * @private
+     * @param {string} tag      tag to parse
+     * @return {*} Object of the form `{ tag: tagName, id: id, class: class, query: query, queryPars: Array }`
+     */
   function parseTag( tag ) {
-    var tagParts = {
-        tag: "",
-        id: undefined,
-        class: undefined,
-        query: undefined,
-        queryParts: []
-      },
-      hashPos = tag.indexOf( "#" ),
-      dotPos = tag.indexOf( "." ),
-      qmPos = tag.indexOf( "?" );
-    if ( qmPos >= 0 ) {
-      tagParts.query = tag.substr( qmPos + 1 );
-      tagParts.queryParts = tagParts.query.split( "&" );
-      tag = tag.substr( 0, qmPos );
-    }
-    if ( hashPos < 0 && dotPos < 0 ) {
-      tagParts.tag = tag;
+      var tagParts = {
+          tag: "",
+          id: undefined,
+          class: undefined,
+          query: undefined,
+          queryParts: []
+        },
+        hashPos = tag.indexOf( "#" ),
+        dotPos = tag.indexOf( "." ),
+        qmPos = tag.indexOf( "?" );
+      if ( qmPos >= 0 ) {
+        tagParts.query = tag.substr( qmPos + 1 );
+        tagParts.queryParts = tagParts.query.split( "&" );
+        tag = tag.substr( 0, qmPos );
+      }
+      if ( hashPos < 0 && dotPos < 0 ) {
+        tagParts.tag = tag;
+        return tagParts;
+      }
+      if ( hashPos >= 0 && dotPos < 0 ) {
+        tagParts.tag = tag.substr( 0, hashPos );
+        tagParts.id = tag.substr( hashPos + 1 );
+        return tagParts;
+      }
+      if ( dotPos >= 0 && hashPos < 0 ) {
+        tagParts.tag = tag.substr( 0, dotPos );
+        tagParts.class = tag.substr( dotPos + 1 );
+        return tagParts;
+      }
+      if ( dotPos >= 0 && hashPos >= 0 && hashPos < dotPos ) {
+        tagParts.tag = tag.substr( 0, hashPos );
+        tagParts.id = tag.substr( hashPos + 1, ( dotPos - hashPos ) - 1 );
+        tagParts.class = tag.substr( dotPos + 1 );
+        return tagParts;
+      }
+      if ( dotPos >= 0 && hashPos >= 0 && dotPos < hashPos ) {
+        tagParts.tag = tag.substr( 0, dotPos );
+        tagParts.class = tag.substr( dotPos + 1, ( hashPos - dotPos ) - 1 );
+        tagParts.id = tag.substr( hashPos + 1 );
+        return tagParts;
+      }
       return tagParts;
     }
-    if ( hashPos >= 0 && dotPos < 0 ) {
-      tagParts.tag = tag.substr( 0, hashPos );
-      tagParts.id = tag.substr( hashPos + 1 );
-      return tagParts;
-    }
-    if ( dotPos >= 0 && hashPos < 0 ) {
-      tagParts.tag = tag.substr( 0, dotPos );
-      tagParts.class = tag.substr( dotPos + 1 );
-      return tagParts;
-    }
-    if ( dotPos >= 0 && hashPos >= 0 && hashPos < dotPos ) {
-      tagParts.tag = tag.substr( 0, hashPos );
-      tagParts.id = tag.substr( hashPos + 1, ( dotPos - hashPos ) - 1 );
-      tagParts.class = tag.substr( dotPos + 1 );
-      return tagParts;
-    }
-    if ( dotPos >= 0 && hashPos >= 0 && dotPos < hashPos ) {
-      tagParts.tag = tag.substr( 0, dotPos );
-      tagParts.class = tag.substr( dotPos + 1, ( hashPos - dotPos ) - 1 );
-      tagParts.id = tag.substr( hashPos + 1 );
-      return tagParts;
-    }
-    return tagParts;
-  }
-  /**
-   * h templating engine
-   */
+    /**
+     * h templating engine
+     */
   var h = {
       VERSION: "0.1.100",
       /**
@@ -6297,8 +6301,8 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
                 if ( typeof options.on[ evt ] === "function" ) {
                   e.addEventListener( evt, options.on[ evt ].bind( e ), false );
                 } else {
-                  e.addEventListener( evt, options.on[ evt ].handler.bind( e ), typeof options.on[ evt ].capture !== "undefined" ?
-                    options.on[ evt ].capture : false );
+                  e.addEventListener( evt, options.on[ evt ].handler.bind( e ), typeof options.on[ evt ].capture !==
+                    "undefined" ? options.on[ evt ].capture : false );
                 }
               }
             }
@@ -6431,8 +6435,8 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
        * @return {*}       a or b
        */
       ifdef: function ifdef( expr, a, b ) {
-        return ( typeof expr !== "undefined" ) ? ( ( typeof a !== "undefined" ) ? a : true ) : ( ( typeof b !== "undefined" ) ? b :
-          false );
+        return ( typeof expr !== "undefined" ) ? ( ( typeof a !== "undefined" ) ? a : true ) : ( ( typeof b !== "undefined" ) ?
+          b : false );
       },
       /**
        * forIn - return an array containing the results of calling `fn` for
@@ -6495,14 +6499,14 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
     // create bindings for each HTML element (from: https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
     els = [ "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio", "b", "base", "basefont", "bdi",
       "bdo", "bgsound", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code",
-      "col", "colgroup", "content", "data", "datalist", "dd", "decorator", "del", "details", "dfn", "dialog", "dir", "div", "dl",
-      "dt", "element", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frameset", "h1", "h2", "h3",
-      "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "isindex", "kbd",
-      "keygen", "label", "legend", "li", "link", "listing", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter",
-      "nav", "nobr", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "plaintext",
-      "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "shadow", "small", "source",
-      "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea",
-      "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "xmp"
+      "col", "colgroup", "content", "data", "datalist", "dd", "decorator", "del", "details", "dfn", "dialog", "dir", "div",
+      "dl", "dt", "element", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frameset", "h1",
+      "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "isindex",
+      "kbd", "keygen", "label", "legend", "li", "link", "listing", "main", "map", "mark", "marquee", "menu", "menuitem", "meta",
+      "meter", "nav", "nobr", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture",
+      "plaintext", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "shadow", "small",
+      "source", "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template",
+      "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "xmp"
     ];
   els.forEach( function ( el ) {
     h[ el ] = h.el.bind( h, el );
@@ -6512,7 +6516,6 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
   h.dF = h.DF;
   return h;
 } );
-
 /**
  *
  * # simple routing
@@ -6572,60 +6575,60 @@ define( 'yasmf/util/router',[],function () {
    * @return {*}                  component pieces
    */
   function parseURL( url, baseURL, parseHash ) {
-    if ( baseURL === undefined ) {
-      baseURL = "/";
+      if ( baseURL === undefined ) {
+        baseURL = "/";
+      }
+      if ( parseHash === undefined ) {
+        parseHash = true;
+      }
+      var a = document.createElement( "a" ),
+        pathString,
+        queryString,
+        hashString,
+        queryParts, pathParts, hashParts;
+      // parse the url
+      a.href = url;
+      pathString = decodeURIComponent( a.pathname );
+      queryString = decodeURIComponent( a.search );
+      hashString = decodeURIComponent( a.hash );
+      if ( hashString === "" && parseHash ) {
+        hashString = "#/";
+      }
+      // remove the base url
+      if ( pathString.substr( 0, baseURL.length ) === baseURL ) {
+        pathString = pathString.substr( baseURL.length );
+      }
+      // don't need the ? or # on the query/hash string
+      queryString = queryString.substr( 1 );
+      hashString = hashString.substr( 1 );
+      // split the query string
+      queryParts = queryString.split( "&" );
+      // and split the href
+      pathParts = pathString.split( "/" );
+      // split the hash, too
+      if ( parseHash ) {
+        hashParts = hashString.split( "/" );
+      }
+      return {
+        path: pathString,
+        query: queryString,
+        hash: hashString,
+        queryParts: queryParts,
+        pathParts: pathParts,
+        hashParts: hashParts
+      };
     }
-    if ( parseHash === undefined ) {
-      parseHash = true;
-    }
-    var a = document.createElement( "a" ),
-      pathString,
-      queryString,
-      hashString,
-      queryParts, pathParts, hashParts;
-    // parse the url
-    a.href = url;
-    pathString = decodeURIComponent( a.pathname );
-    queryString = decodeURIComponent( a.search );
-    hashString = decodeURIComponent( a.hash );
-    if ( hashString === "" && parseHash ) {
-      hashString = "#/";
-    }
-    // remove the base url
-    if ( pathString.substr( 0, baseURL.length ) === baseURL ) {
-      pathString = pathString.substr( baseURL.length );
-    }
-    // don't need the ? or # on the query/hash string
-    queryString = queryString.substr( 1 );
-    hashString = hashString.substr( 1 );
-    // split the query string
-    queryParts = queryString.split( "&" );
-    // and split the href
-    pathParts = pathString.split( "/" );
-    // split the hash, too
-    if ( parseHash ) {
-      hashParts = hashString.split( "/" );
-    }
-    return {
-      path: pathString,
-      query: queryString,
-      hash: hashString,
-      queryParts: queryParts,
-      pathParts: pathParts,
-      hashParts: hashParts
-    };
-  }
-  /**
-   * Determines if a route matches, and if it does, copies
-   * any variables out into `vars`. The routes must have been previously
-   * parsed with parseURL.
-   *
-   * @method routeMatches
-   * @param  {type} candidate candidate URL
-   * @param  {type} template  template to check (variables of the form :someId)
-   * @param  {type} vars      byref: this object will receive any variables
-   * @return {*}              if matches, true.
-   */
+    /**
+     * Determines if a route matches, and if it does, copies
+     * any variables out into `vars`. The routes must have been previously
+     * parsed with parseURL.
+     *
+     * @method routeMatches
+     * @param  {type} candidate candidate URL
+     * @param  {type} template  template to check (variables of the form :someId)
+     * @param  {type} vars      byref: this object will receive any variables
+     * @return {*}              if matches, true.
+     */
   function routeMatches( candidate, template, vars ) {
     // routes must have the same number of parts
     if ( candidate.hashParts.length !== template.hashParts.length ) {
@@ -6840,7 +6843,6 @@ define( 'yasmf/util/router',[],function () {
   };
   return Router;
 } );
-
 /**
  *
  * Core of YASMF-UI; defines the version and basic UI  convenience methods.
@@ -6904,32 +6906,32 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
    * @return {Animation}              self, for chaining
    */
   function _pushAnimation( property, value, timing, timingFunction ) {
-    var newProp, newValue, prefix, jsPrefix, newJsProp;
-    for ( var i = 0, l = prefixes.length; i < l; i++ ) {
-      prefix = prefixes[ i ];
-      jsPrefix = jsPrefixes[ i ];
-      newProp = prefix + property;
-      if ( jsPrefix !== "" ) {
-        newJsProp = jsPrefix + property.substr( 0, 1 ).toUpperCase() + property.substr( 1 );
-      } else {
-        newJsProp = property;
+      var newProp, newValue, prefix, jsPrefix, newJsProp;
+      for ( var i = 0, l = prefixes.length; i < l; i++ ) {
+        prefix = prefixes[ i ];
+        jsPrefix = jsPrefixes[ i ];
+        newProp = prefix + property;
+        if ( jsPrefix !== "" ) {
+          newJsProp = jsPrefix + property.substr( 0, 1 ).toUpperCase() + property.substr( 1 );
+        } else {
+          newJsProp = property;
+        }
+        newValue = value.replace( "{-}", prefix );
+        if ( typeof this._el.style[ newJsProp ] !== "undefined" ) {
+          this._animations.push( [ newProp, newValue ] );
+          this._transitions.push( [ newProp, ( typeof timing !== "undefined" ? timing : this.timing ) + "s", ( typeof timingFunction !==
+            "undefined" ? timingFunction : this.timingFunction ) ] );
+        }
+        this._maxTiming = Math.max( this._maxTiming, ( typeof timing !== "undefined" ? timing : this.timing ) );
       }
-      newValue = value.replace( "{-}", prefix );
-      if ( typeof this._el.style[ newJsProp ] !== "undefined" ) {
-        this._animations.push( [ newProp, newValue ] );
-        this._transitions.push( [ newProp, ( typeof timing !== "undefined" ? timing : this.timing ) + "s", ( typeof timingFunction !==
-          "undefined" ? timingFunction : this.timingFunction ) ] );
-      }
-      this._maxTiming = Math.max( this._maxTiming, ( typeof timing !== "undefined" ? timing : this.timing ) );
+      return this;
     }
-    return this;
-  }
-  /**
-   * Set the default timing function for following animations
-   * @method setTimingFunction
-   * @param {string} timingFunction      the timing function to assign, like "ease-in-out"
-   * @return {Animation}                 self
-   */
+    /**
+     * Set the default timing function for following animations
+     * @method setTimingFunction
+     * @param {string} timingFunction      the timing function to assign, like "ease-in-out"
+     * @return {Animation}                 self
+     */
   Animation.prototype.setTimingFunction = function setTimingFunction( timingFunction ) {
     this.timingFunction = timingFunction;
     return this;
@@ -7553,7 +7555,6 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
   Node.prototype.$s = UI.styleElement;
   return UI;
 } );
-
 /**
  *
  * Basic cross-platform mobile Event Handling for YASMF
@@ -7722,7 +7723,6 @@ define( 'yasmf/ui/event',[ "yasmf/util/device" ], function ( theDevice ) {
   };
   return event;
 } );
-
 /**
  *
  * View Containers are simple objects that provide very basic view management with
@@ -8005,7 +8005,6 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object", "yasmf/util/h" ], functi
   // return the new factory
   return ViewContainer;
 } );
-
 /**
  *
  * Navigation Controllers provide basic support for view stack management (as in push, pop)
@@ -8196,12 +8195,12 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         if ( usingAnimation ) {
           UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-webkit-transform " +
             animationDelay + "s " + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-moz-transform " + animationDelay +
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-moz-transform " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-ms-transform " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "transform " + animationDelay +
             "s " + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "-ms-transform " + animationDelay +
-            "s " + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], "transition", "transform " + animationDelay + "s " +
-            animationType );
           UI.styleElements( theHidingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
             animationDelay + "s " + animationType );
           UI.styleElements( theShowingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
@@ -8296,10 +8295,10 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         if ( usingAnimation ) {
           UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-webkit-transform " +
             animationDelay + "s " + animationType );
-          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-moz-transform " + animationDelay +
-            "s " + animationType );
-          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-ms-transform " + animationDelay +
-            "s " + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-moz-transform " +
+            animationDelay + "s " + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "-ms-transform " +
+            animationDelay + "s " + animationType );
           UI.styleElements( [ thePoppingView.element, theShowingView.element ], "transition", "transform " + animationDelay +
             "s " + animationType );
           UI.styleElements( thePoppingView.element.querySelectorAll( ".ui-navigation-bar *" ), "transition", "opacity " +
@@ -8411,8 +8410,8 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
         self.emit( "viewWillAppear" );
         setTimeout( function () {
           fromView.classList.add( "ui-disabled" );
-          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction ).scale(
-            "0.9" ).opacity( "0.9" ).endAnimation();
+          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .scale( "0.9" ).opacity( "0.9" ).endAnimation();
           UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
             .translate3d( "0", "0", "" + theModalViewZ + "px" ).endAnimation( function sendNotifications() {
               self.emit( "viewDidAppear" );
@@ -8545,7 +8544,6 @@ define( 'yasmf/ui/navigationController',[ "yasmf/ui/core", "yasmf/ui/viewContain
     };
   return NavigationController;
 } );
-
 /**
  *
  * Split View Controllers provide basic support for side-by-side views
@@ -8866,7 +8864,6 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
   };
   return SplitViewController;
 } );
-
 /**
  *
  * Tab View Controllers provide basic support for tabbed views
@@ -9191,7 +9188,6 @@ define( 'yasmf/ui/tabViewController',[ "yasmf/ui/core", "yasmf/ui/viewContainer"
   };
   return TabViewController;
 } );
-
 /**
  *
  * Provides native-like alert methods, including prompts and messages.
@@ -9663,7 +9659,6 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
   };
   return Alert;
 } );
-
 /**
  *
  * Provides native-like alert methods, including prompts and messages.
@@ -9767,7 +9762,6 @@ define( 'yasmf/ui/spinner',[ "yasmf/util/core", "yasmf/util/object", "yasmf/ui/c
   };
   return Spinner;
 } );
-
 /**
  *
  * # YASMF-Next (Yet Another Simple Mobile Framework Next Gen)
@@ -9826,7 +9820,6 @@ define( 'yasmf',['require','yasmf/util/core','yasmf/util/datetime','yasmf/util/f
   _y.UI.Spinner = require( "yasmf/ui/spinner" );
   return _y;
 } );
-
   var library = require('yasmf');
   if(typeof module !== 'undefined' && module.exports) {
     module.exports = library;
