@@ -9,10 +9,10 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function ( _
     self._spinnerButton = null;
     self.testAlerts = function () {
       function logTappedButton( sender, notice, data ) {
-        var buttonIndex = data[ 0 ];
-        console.log( "Button tapped in alert (" + sender.title + "): " + buttonIndex );
-      }
-      // one button alert
+          var buttonIndex = data[ 0 ];
+          console.log( "Button tapped in alert (" + sender.title + "): " + buttonIndex );
+        }
+        // one button alert
       var oneAlert = new _y.UI.Alert();
       oneAlert.initWithOptions( {
         title: "One Button Alert",
@@ -80,17 +80,17 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function ( _
       fourAlert.title = "This is a new title.";
     };
     self.testSpinner = function () {
-      var s = new _y.UI.Spinner( {
-        text: "This is a test...",
-        tintedBackground: true
-      } );
-      s.show();
-      setTimeout( function () {
-        s.hide( s.destroy );
-        s = null;
-      }, 30000 );
-    }
-    //    self.overrideSuper ( self.class, "render", self.render)
+        var s = new _y.UI.Spinner( {
+          text: "This is a test...",
+          tintedBackground: true
+        } );
+        s.show();
+        setTimeout( function () {
+          s.hide( s.destroy );
+          s = null;
+        }, 30000 );
+      }
+      //    self.overrideSuper ( self.class, "render", self.render)
     self.override( function render() {
       return _y.template( DemoListViewHTML, {
         "APP_TITLE": _y.T( "APP_TITLE" )

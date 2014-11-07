@@ -7,10 +7,10 @@ define( [ "yasmf", "text!html/DemoListView.html!strip", "hammer" ], function ( _
     self._alertButton = null;
     self.testAlerts = function () {
       function logTappedButton( sender, notice, data ) {
-        var buttonIndex = data[ 0 ];
-        console.log( "Button tapped in alert (" + sender.title + "): " + buttonIndex );
-      }
-      // one button alert
+          var buttonIndex = data[ 0 ];
+          console.log( "Button tapped in alert (" + sender.title + "): " + buttonIndex );
+        }
+        // one button alert
       var oneAlert = new _y.UI.Alert();
       oneAlert.initWithOptions( {
         title: "One Button Alert",
