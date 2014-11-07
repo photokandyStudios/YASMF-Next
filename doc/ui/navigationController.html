@@ -144,12 +144,12 @@ fills the screen.</p></div></div><div class="code"><div class="wrapper">      se
         UI.styleElement( theShowingView.element, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"translate3d(100%,0,"</span> + theShowingViewZ + <span class="hljs-string">"px)"</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set up an animation</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( usingAnimation ) {
           UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-webkit-transform "</span> +
             animationDelay + <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> + animationDelay +
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"transform "</span> + animationDelay +
             <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> + animationDelay +
-            <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"transform "</span> + animationDelay + <span class="hljs-string">"s "</span> +
-            animationType );
           UI.styleElements( theHidingView.element.querySelectorAll( <span class="hljs-string">".ui-navigation-bar *"</span> ), <span class="hljs-string">"transition"</span>, <span class="hljs-string">"opacity "</span> +
             animationDelay + <span class="hljs-string">"s "</span> + animationType );
           UI.styleElements( theShowingView.element.querySelectorAll( <span class="hljs-string">".ui-navigation-bar *"</span> ), <span class="hljs-string">"transition"</span>, <span class="hljs-string">"opacity "</span> +
@@ -221,10 +221,10 @@ view is at 0</p></div></div><div class="code"><div class="wrapper">        UI.st
         }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set up an animation</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( usingAnimation ) {
           UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-webkit-transform "</span> +
             animationDelay + <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> + animationDelay +
-            <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> + animationDelay +
-            <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
           UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"transform "</span> + animationDelay +
             <span class="hljs-string">"s "</span> + animationType );
           UI.styleElements( thePoppingView.element.querySelectorAll( <span class="hljs-string">".ui-navigation-bar *"</span> ), <span class="hljs-string">"transition"</span>, <span class="hljs-string">"opacity "</span> +
@@ -309,8 +309,8 @@ parameter (<code>options</code>).</p>
         self.emit( <span class="hljs-string">"viewWillAppear"</span> );
         setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
           fromView.classList.add( <span class="hljs-string">"ui-disabled"</span> );
-          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction ).scale(
-            <span class="hljs-string">"0.9"</span> ).opacity( <span class="hljs-string">"0.9"</span> ).endAnimation();
+          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .scale( <span class="hljs-string">"0.9"</span> ).opacity( <span class="hljs-string">"0.9"</span> ).endAnimation();
           UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
             .translate3d( <span class="hljs-string">"0"</span>, <span class="hljs-string">"0"</span>, <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span> ).endAnimation( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendNotifications</span><span class="hljs-params">()</span> </span>{
               self.emit( <span class="hljs-string">"viewDidAppear"</span> );

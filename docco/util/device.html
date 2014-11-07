@@ -271,12 +271,16 @@ for those using Cordova &lt;= 2.2.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-comment">/*if (ua.indexOf("mobile safari") &gt; -1)
-          {
-            return "phone";
-          }*/</span>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"mobile safari"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;
+        }
         <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"mobile safari"</span> ) &lt; <span class="hljs-number">0</span> &amp;&amp; ua.indexOf( <span class="hljs-string">"safari"</span> ) &gt; -<span class="hljs-number">1</span> ) {
           <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
+        }
+        <span class="hljs-keyword">if</span> ( ( <span class="hljs-built_in">Math</span>.max( <span class="hljs-built_in">window</span>.screen.width, <span class="hljs-built_in">window</span>.screen.height ) / <span class="hljs-built_in">window</span>.devicePixelRatio ) &gt;= <span class="hljs-number">900</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;
         }
       }</pre></div></div>
             
@@ -294,7 +298,7 @@ especially as phones get bigger screens with higher DPI.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( ( <span class="hljs-built_in">Math</span>.max( <span class="hljs-built_in">window</span>.screen.width, <span class="hljs-built_in">window</span>.screen.height ) / <span class="hljs-built_in">window</span>.devicePixelRatio ) &gt;= <span class="hljs-number">900</span> ) {
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( ( <span class="hljs-built_in">Math</span>.max( <span class="hljs-built_in">window</span>.screen.width, <span class="hljs-built_in">window</span>.screen.height ) ) &gt;= <span class="hljs-number">900</span> ) {
         <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
       }
       <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;

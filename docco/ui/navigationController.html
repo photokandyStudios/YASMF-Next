@@ -349,12 +349,12 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( usingAnimation ) {
           UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-webkit-transform "</span> +
             animationDelay + <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> + animationDelay +
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"transform "</span> + animationDelay +
             <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> + animationDelay +
-            <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ theShowingView.element, theHidingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"transform "</span> + animationDelay + <span class="hljs-string">"s "</span> +
-            animationType );
           UI.styleElements( theHidingView.element.querySelectorAll( <span class="hljs-string">".ui-navigation-bar *"</span> ), <span class="hljs-string">"transition"</span>, <span class="hljs-string">"opacity "</span> +
             animationDelay + <span class="hljs-string">"s "</span> + animationType );
           UI.styleElements( theShowingView.element.querySelectorAll( <span class="hljs-string">".ui-navigation-bar *"</span> ), <span class="hljs-string">"transition"</span>, <span class="hljs-string">"opacity "</span> +
@@ -605,10 +605,10 @@ view is at 0</p>
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( usingAnimation ) {
           UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-webkit-transform "</span> +
             animationDelay + <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> + animationDelay +
-            <span class="hljs-string">"s "</span> + animationType );
-          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> + animationDelay +
-            <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-moz-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
+          UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"-ms-transform "</span> +
+            animationDelay + <span class="hljs-string">"s "</span> + animationType );
           UI.styleElements( [ thePoppingView.element, theShowingView.element ], <span class="hljs-string">"transition"</span>, <span class="hljs-string">"transform "</span> + animationDelay +
             <span class="hljs-string">"s "</span> + animationType );
           UI.styleElements( thePoppingView.element.querySelectorAll( <span class="hljs-string">".ui-navigation-bar *"</span> ), <span class="hljs-string">"transition"</span>, <span class="hljs-string">"opacity "</span> +
@@ -876,8 +876,8 @@ view is at 0</p>
         self.emit( <span class="hljs-string">"viewWillAppear"</span> );
         setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
           fromView.classList.add( <span class="hljs-string">"ui-disabled"</span> );
-          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction ).scale(
-            <span class="hljs-string">"0.9"</span> ).opacity( <span class="hljs-string">"0.9"</span> ).endAnimation();
+          UI.beginAnimation( fromView ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
+            .scale( <span class="hljs-string">"0.9"</span> ).opacity( <span class="hljs-string">"0.9"</span> ).endAnimation();
           UI.beginAnimation( self.element ).setTiming( defaultOpts.withDelay ).setTimingFunction( defaultOpts.withTimingFunction )
             .translate3d( <span class="hljs-string">"0"</span>, <span class="hljs-string">"0"</span>, <span class="hljs-string">""</span> + theModalViewZ + <span class="hljs-string">"px"</span> ).endAnimation( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendNotifications</span><span class="hljs-params">()</span> </span>{
               self.emit( <span class="hljs-string">"viewDidAppear"</span> );

@@ -29,47 +29,47 @@ define( [ <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_requestQuota</span><span class="hljs-params">( fileSystemType, requestedDataSize )</span> </span>{
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">try</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attempt to ask for a quota</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> PERSISTENT = ( <span class="hljs-keyword">typeof</span> LocalFileSystem !== <span class="hljs-string">"undefined"</span> ) ? LocalFileSystem.PERSISTENT : <span class="hljs-built_in">window</span>.PERSISTENT,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Chrome has <code>webkitPersistentStorage</code> and <code>navigator.webkitTemporaryStorage</code></p></div></div><div class="code"><div class="wrapper">          storageInfo = fileSystemType === PERSISTENT ? navigator.webkitPersistentStorage : navigator.webkitTemporaryStorage;
-        <span class="hljs-keyword">if</span> ( storageInfo ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>now make sure we can request a quota</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( storageInfo.requestQuota ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>request the quota</p></div></div><div class="code"><div class="wrapper">            storageInfo.requestQuota( requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( grantedBytes )</span> </span>{
-              <span class="hljs-keyword">if</span> ( DEBUG ) {
-                <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota granted: "</span>, fileSystemType,
-                  grantedBytes
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">try</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attempt to ask for a quota</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">var</span> PERSISTENT = ( <span class="hljs-keyword">typeof</span> LocalFileSystem !== <span class="hljs-string">"undefined"</span> ) ? LocalFileSystem.PERSISTENT : <span class="hljs-built_in">window</span>.PERSISTENT,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Chrome has <code>webkitPersistentStorage</code> and <code>navigator.webkitTemporaryStorage</code></p></div></div><div class="code"><div class="wrapper">            storageInfo = fileSystemType === PERSISTENT ? navigator.webkitPersistentStorage : navigator.webkitTemporaryStorage;
+          <span class="hljs-keyword">if</span> ( storageInfo ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>now make sure we can request a quota</p></div></div><div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> ( storageInfo.requestQuota ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>request the quota</p></div></div><div class="code"><div class="wrapper">              storageInfo.requestQuota( requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( grantedBytes )</span> </span>{
+                <span class="hljs-keyword">if</span> ( DEBUG ) {
+                  <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota granted: "</span>, fileSystemType,
+                    grantedBytes
+                  ].join( <span class="hljs-string">" "</span> ) );
+                }
+                deferred.resolve( grantedBytes );
+              }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+                <span class="hljs-keyword">if</span> ( DEBUG ) {
+                  <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota rejected: "</span>, fileSystemType,
+                    requestedDataSize, anError
+                  ].join( <span class="hljs-string">" "</span> ) );
+                }
+                deferred.reject( anError );
+              } );
+            } <span class="hljs-keyword">else</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>not everything supports asking for a quota -- like Cordova.
+Instead, let&#39;s assume we get permission</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-keyword">if</span> ( DEBUG ) {
+                <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no requestQuota: "</span>,
+                  fileSystemType, requestedDataSize
                 ].join( <span class="hljs-string">" "</span> ) );
               }
-              deferred.resolve( grantedBytes );
-            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-              <span class="hljs-keyword">if</span> ( DEBUG ) {
-                <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota rejected: "</span>, fileSystemType,
-                  requestedDataSize, anError
-                ].join( <span class="hljs-string">" "</span> ) );
-              }
-              deferred.reject( anError );
-            } );
-          } <span class="hljs-keyword">else</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>not everything supports asking for a quota -- like Cordova.
-Instead, let&#39;s assume we get permission</p></div></div><div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> ( DEBUG ) {
-              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no requestQuota: "</span>,
+              deferred.resolve( requestedDataSize );
+            }
+          } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> ( DEBUG ) {
+              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no storageInfo: "</span>,
                 fileSystemType, requestedDataSize
               ].join( <span class="hljs-string">" "</span> ) );
             }
             deferred.resolve( requestedDataSize );
           }
-        } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">if</span> ( DEBUG ) {
-            <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no storageInfo: "</span>,
-              fileSystemType, requestedDataSize
-            ].join( <span class="hljs-string">" "</span> ) );
-          }
-          deferred.resolve( requestedDataSize );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
         }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _requestFileSystem</span></p>
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _requestFileSystem</span></p>
 <p>Request a file system with the requested size (obtained first by getting a quota)</p>
 <p>Parameters:</p>
 <ul>
@@ -79,30 +79,30 @@ Instead, let&#39;s assume we get permission</p></div></div><div class="code"><di
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_requestFileSystem</span><span class="hljs-params">( fileSystemType, requestedDataSize )</span> </span>{
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">try</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>fix issue #2 by chasen where using <code>webkitRequestFileSystem</code> was having problems
-on Android 4.2.2</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> requestFileSystem = <span class="hljs-built_in">window</span>.requestFileSystem || <span class="hljs-built_in">window</span>.webkitRequestFileSystem;
-        requestFileSystem( fileSystemType, requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileSystem )</span> </span>{
-          <span class="hljs-keyword">if</span> ( DEBUG ) {
-            <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: got a file system"</span>, theFileSystem ].join( <span class="hljs-string">" "</span> ) );
-          }
-          deferred.resolve( theFileSystem );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          <span class="hljs-keyword">if</span> ( DEBUG ) {
-            <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: couldn't get a file system"</span>,
-              fileSystemType
-            ].join( <span class="hljs-string">" "</span> ) );
-          }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">try</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>fix issue #2 by chasen where using <code>webkitRequestFileSystem</code> was having problems
+on Android 4.2.2</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">var</span> requestFileSystem = <span class="hljs-built_in">window</span>.requestFileSystem || <span class="hljs-built_in">window</span>.webkitRequestFileSystem;
+          requestFileSystem( fileSystemType, requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileSystem )</span> </span>{
+            <span class="hljs-keyword">if</span> ( DEBUG ) {
+              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: got a file system"</span>, theFileSystem ].join( <span class="hljs-string">" "</span> ) );
+            }
+            deferred.resolve( theFileSystem );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            <span class="hljs-keyword">if</span> ( DEBUG ) {
+              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: couldn't get a file system"</span>,
+                fileSystemType
+              ].join( <span class="hljs-string">" "</span> ) );
+            }
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _resolveLocalFileSystemURL</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _resolveLocalFileSystemURL</span></p>
 <p>Resolves theURI to a fileEntry or directoryEntry, if possible.
 If <code>theURL</code> contains <code>private</code> or <code>localhost</code> as its first element, it will be removed. If
 <code>theURL</code> does not have a URL scheme, <code>file://</code> will be assumed.</p>
@@ -110,37 +110,37 @@ If <code>theURL</code> contains <code>private</code> or <code>localhost</code> a
 <ul>
 <li><strong>theURL must be a String.</strong><br/>(the path, should start with file://, but if it doesn&#39;t we&#39;ll add it.)</li>
 </ul></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_resolveLocalFileSystemURL</span><span class="hljs-params">( theURL )</span> </span>{
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_resolveLocalFileSystemURL: "</span>, theURL ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">try</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>split the parts of the URL</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> parts = theURL.split( <span class="hljs-string">":"</span> ),
-          protocol, path;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>can only have two parts</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( parts.length &gt; <span class="hljs-number">2</span> ) {
-          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"The URI is not well-formed; missing protocol: "</span> + theURL );
-        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if only one part, we assume <code>file</code> as the protocol</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( parts.length &lt; <span class="hljs-number">2</span> ) {
-          protocol = <span class="hljs-string">"file"</span>;
-          path = parts[ <span class="hljs-number">0</span> ];
-        } <span class="hljs-keyword">else</span> {
-          protocol = parts[ <span class="hljs-number">0</span> ];
-          path = parts[ <span class="hljs-number">1</span> ];
-        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>split the path components</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> pathComponents = path.split( <span class="hljs-string">"/"</span> ),
-          newPathComponents = [];</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>iterate over each component and trim as we go</p></div></div><div class="code"><div class="wrapper">        pathComponents.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( part )</span> </span>{
-          part = part.trim();
-          <span class="hljs-keyword">if</span> ( part !== <span class="hljs-string">""</span> ) { <span class="hljs-comment">// remove /private if it is the first item in the new array, for iOS sake</span>
-            <span class="hljs-keyword">if</span> ( !( ( part === <span class="hljs-string">"private"</span> || part === <span class="hljs-string">"localhost"</span> ) &amp;&amp; newPathComponents.length === <span class="hljs-number">0</span> ) ) {
-              newPathComponents.push( part );
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_resolveLocalFileSystemURL: "</span>, theURL ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">try</span> {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>split the parts of the URL</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">var</span> parts = theURL.split( <span class="hljs-string">":"</span> ),
+            protocol, path;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>can only have two parts</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( parts.length &gt; <span class="hljs-number">2</span> ) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"The URI is not well-formed; missing protocol: "</span> + theURL );
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if only one part, we assume <code>file</code> as the protocol</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">if</span> ( parts.length &lt; <span class="hljs-number">2</span> ) {
+            protocol = <span class="hljs-string">"file"</span>;
+            path = parts[ <span class="hljs-number">0</span> ];
+          } <span class="hljs-keyword">else</span> {
+            protocol = parts[ <span class="hljs-number">0</span> ];
+            path = parts[ <span class="hljs-number">1</span> ];
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>split the path components</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">var</span> pathComponents = path.split( <span class="hljs-string">"/"</span> ),
+            newPathComponents = [];</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>iterate over each component and trim as we go</p></div></div><div class="code"><div class="wrapper">          pathComponents.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( part )</span> </span>{
+            part = part.trim();
+            <span class="hljs-keyword">if</span> ( part !== <span class="hljs-string">""</span> ) { <span class="hljs-comment">// remove /private if it is the first item in the new array, for iOS sake</span>
+              <span class="hljs-keyword">if</span> ( !( ( part === <span class="hljs-string">"private"</span> || part === <span class="hljs-string">"localhost"</span> ) &amp;&amp; newPathComponents.length === <span class="hljs-number">0</span> ) ) {
+                newPathComponents.push( part );
+              }
             }
-          }
-        } );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>rejoin the path components</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> theNewURI = newPathComponents.join( <span class="hljs-string">"/"</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add the protocol</p></div></div><div class="code"><div class="wrapper">        theNewURI = protocol + <span class="hljs-string">":///"</span> + theNewURI;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and resolve the URL.</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-built_in">window</span>.resolveLocalFileSystemURL( theNewURI, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theEntry )</span> </span>{
-          deferred.resolve( theEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+          } );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>rejoin the path components</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">var</span> theNewURI = newPathComponents.join( <span class="hljs-string">"/"</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>add the protocol</p></div></div><div class="code"><div class="wrapper">          theNewURI = protocol + <span class="hljs-string">":///"</span> + theNewURI;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>and resolve the URL.</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-built_in">window</span>.resolveLocalFileSystemURL( theNewURI, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theEntry )</span> </span>{
+            deferred.resolve( theEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _getDirectoryEntry typedef {{}} DirectoryEntry
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _getDirectoryEntry typedef {{}} DirectoryEntry
 HTML5 File API Directory Type
 Returns a directory entry based on the path from the parent using
 the specified options, if specified. <code>options</code> takes the form:
@@ -155,25 +155,25 @@ the specified options, if specified. <code>options</code> takes the form:
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getDirectoryEntry</span><span class="hljs-params">( parent, path, options )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getDirectoryEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
-          deferred.resolve( path );
-        } <span class="hljs-keyword">else</span> {
-          parent.getDirectory( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theDirectoryEntry )</span> </span>{
-            deferred.resolve( theDirectoryEntry );
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getDirectoryEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
         }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method getFileEntry</span></p>
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
+            deferred.resolve( path );
+          } <span class="hljs-keyword">else</span> {
+            parent.getDirectory( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theDirectoryEntry )</span> </span>{
+              deferred.resolve( theDirectoryEntry );
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
+          }
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method getFileEntry</span></p>
 <p>Returns a file entry based on the path from the parent using
 the specified options. <code>options</code> takes the form of <code>{ create: true/false, exclusive: true/false}</code></p>
 <p>Parameters:</p>
@@ -186,25 +186,25 @@ the specified options. <code>options</code> takes the form of <code>{ create: tr
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getFileEntry</span><span class="hljs-params">( parent, path, options )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
-          deferred.resolve( path );
-        } <span class="hljs-keyword">else</span> {
-          parent.getFile( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileEntry )</span> </span>{
-            deferred.resolve( theFileEntry );
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
         }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _getFileObject typedef {{}} FileEntry
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
+            deferred.resolve( path );
+          } <span class="hljs-keyword">else</span> {
+            parent.getFile( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileEntry )</span> </span>{
+              deferred.resolve( theFileEntry );
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
+          }
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _getFileObject typedef {{}} FileEntry
 HTML5 File API File Entry
 Returns a file object based on the file entry.</span></p>
 <p>Parameters:</p>
@@ -212,21 +212,21 @@ Returns a file object based on the file entry.</span></p>
 <li><strong>fileEntry must be a FileEntry.</strong><br/>(The file Entry)</li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getFileObject</span><span class="hljs-params">( fileEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileObject:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        fileEntry.file( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFile )</span> </span>{
-          deferred.resolve( theFile );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileObject:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          fileEntry.file( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFile )</span> </span>{
+            deferred.resolve( theFile );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _readFileContents</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _readFileContents</span></p>
 <p>Reads the file contents from a file object. readAsKind indicates how
 to read the file (&quot;Text&quot;, &quot;DataURL&quot;, &quot;BinaryString&quot;, &quot;ArrayBuffer&quot;).</p>
 <p>Parameters:</p>
@@ -237,45 +237,45 @@ to read the file (&quot;Text&quot;, &quot;DataURL&quot;, &quot;BinaryString&quot
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_readFileContents</span><span class="hljs-params">( fileObject, readAsKind )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readFileContents:"</span>, fileObject, readAsKind ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">var</span> fileReader = <span class="hljs-keyword">new</span> FileReader();
-        fileReader.onloadend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
-          deferred.resolve( e.target.result );
-        };
-        fileReader.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readFileContents:"</span>, fileObject, readAsKind ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">var</span> fileReader = <span class="hljs-keyword">new</span> FileReader();
+          fileReader.onloadend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+            deferred.resolve( e.target.result );
+          };
+          fileReader.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          };
+          fileReader[ <span class="hljs-string">"readAs"</span> + readAsKind ]( fileObject );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        };
-        fileReader[ <span class="hljs-string">"readAs"</span> + readAsKind ]( fileObject );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createFileWriter</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createFileWriter</span></p>
 <p>Creates a file writer for the file entry; <code>fileEntry</code> must exist</p>
 <p>Parameters:</p>
 <ul>
 <li><strong>fileEntry must be a FileEntry.</strong><br/>(The file entry to write to)</li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(the Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_createFileWriter</span><span class="hljs-params">( fileEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_createFileWriter:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">var</span> fileWriter = fileEntry.createWriter( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileWriter )</span> </span>{
-          deferred.resolve( theFileWriter );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_createFileWriter:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">var</span> fileWriter = fileEntry.createWriter( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileWriter )</span> </span>{
+            deferred.resolve( theFileWriter );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _writeFileContents typedef {{}} FileWriter
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _writeFileContents typedef {{}} FileWriter
 HTML5 File API File Writer Type
 Write the contents to the fileWriter; <code>contents</code> should be a Blob.</span></p>
 <p>Parameters:</p>
@@ -286,26 +286,26 @@ Write the contents to the fileWriter; <code>contents</code> should be a Blob.</s
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(the Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_writeFileContents</span><span class="hljs-params">( fileWriter, contents )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_writeFileContents:"</span>, fileWriter, contents ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        fileWriter.onwrite = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_writeFileContents:"</span>, fileWriter, contents ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
           fileWriter.onwrite = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
-            deferred.resolve( e );
+            fileWriter.onwrite = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+              deferred.resolve( e );
+            };
+            fileWriter.write( contents );
           };
-          fileWriter.write( contents );
-        };
-        fileWriter.onError = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+          fileWriter.onError = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          };
+          fileWriter.truncate( <span class="hljs-number">0</span> ); <span class="hljs-comment">// clear out the contents, first</span>
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        };
-        fileWriter.truncate( <span class="hljs-number">0</span> ); <span class="hljs-comment">// clear out the contents, first</span>
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _copyFile</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _copyFile</span></p>
 <p>Copy the file to the specified parent directory, with an optional new name</p>
 <p>Parameters:</p>
 <ul>
@@ -317,23 +317,23 @@ Write the contents to the fileWriter; <code>contents</code> should be a Blob.</s
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_copyFile</span><span class="hljs-params">( theFileEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyFile:"</span>, theFileEntry, theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theFileEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
-          deferred.resolve( theNewFileEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyFile:"</span>, theFileEntry, theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theFileEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
+            deferred.resolve( theNewFileEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _moveFile</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _moveFile</span></p>
 <p>Move the file to the specified parent directory, with an optional new name</p>
 <p>Parameters:</p>
 <ul>
@@ -345,44 +345,44 @@ Write the contents to the fileWriter; <code>contents</code> should be a Blob.</s
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_moveFile</span><span class="hljs-params">( theFileEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveFile:"</span>, theFileEntry, theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theFileEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
-          deferred.resolve( theNewFileEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveFile:"</span>, theFileEntry, theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theFileEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
+            deferred.resolve( theNewFileEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _removeFile</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _removeFile</span></p>
 <p>Remove the file from the file system</p>
 <p>Parameters:</p>
 <ul>
 <li><strong>theFileEntry must be a FileEntry.</strong><br/>(The file to remove)</li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_removeFile</span><span class="hljs-params">( theFileEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeFile:"</span>, theFileEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theFileEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
-          deferred.resolve();
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeFile:"</span>, theFileEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theFileEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
+            deferred.resolve();
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _copyDirectory</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _copyDirectory</span></p>
 <p>Copies a directory to the specified directory, with an optional new name. The directory
 is copied recursively.</p>
 <p>Parameters:</p>
@@ -395,24 +395,24 @@ is copied recursively.</p>
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(A promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_copyDirectory</span><span class="hljs-params">( theDirectoryEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyDirectory:"</span>, theDirectoryEntry,
-          theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
-          deferred.resolve( theNewDirectoryEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyDirectory:"</span>, theDirectoryEntry,
+            theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
+            deferred.resolve( theNewDirectoryEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _moveDirectory</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _moveDirectory</span></p>
 <p>Moves a directory to the specified directory, with an optional new name. The directory
 is moved recursively.</p>
 <p>Parameters:</p>
@@ -425,24 +425,24 @@ is moved recursively.</p>
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(A promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_moveDirectory</span><span class="hljs-params">( theDirectoryEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveDirectory:"</span>, theDirectoryEntry,
-          theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
-          deferred.resolve( theNewDirectoryEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveDirectory:"</span>, theDirectoryEntry,
+            theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
+            deferred.resolve( theNewDirectoryEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _removeDirectory</span></p>
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _removeDirectory</span></p>
 <p>Removes a directory from the file system. If recursively is true, the directory is removed
 recursively.</p>
 <p>Parameters:</p>
@@ -453,63 +453,63 @@ recursively.</p>
 </li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The Promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_removeDirectory</span><span class="hljs-params">( theDirectoryEntry, recursively )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeDirectory:"</span>, theDirectoryEntry, <span class="hljs-string">"recursively"</span>,
-          recursively
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">if</span> ( !recursively ) {
-          theDirectoryEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
-            deferred.resolve();
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
-        } <span class="hljs-keyword">else</span> {
-          theDirectoryEntry.removeRecursively( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
-            deferred.resolve();
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeDirectory:"</span>, theDirectoryEntry, <span class="hljs-string">"recursively"</span>,
+            recursively
+          ].join( <span class="hljs-string">" "</span> ) );
         }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _readDirectoryContents</span></p>
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">if</span> ( !recursively ) {
+            theDirectoryEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
+              deferred.resolve();
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
+          } <span class="hljs-keyword">else</span> {
+            theDirectoryEntry.removeRecursively( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
+              deferred.resolve();
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
+          }
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _readDirectoryContents</span></p>
 <p>Reads the contents of a directory</p>
 <p>Parameters:</p>
 <ul>
 <li><strong>theDirectoryEntry must be a DirectoryEntry.</strong><br/>(The directory to list)</li>
 </ul>
 <p><strong>Returns a Promise</strong><br/>(The promise)</p></div></div><div class="code"><div class="wrapper">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_readDirectoryContents</span><span class="hljs-params">( theDirectoryEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readDirectoryContents:"</span>, theDirectoryEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> directoryReader = theDirectoryEntry.createReader(),
-        entries = [],
-        deferred = Q.defer();
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readDirectoryContents:"</span>, theDirectoryEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> directoryReader = theDirectoryEntry.createReader(),
+          entries = [],
+          deferred = Q.defer();
 
-      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readEntries</span><span class="hljs-params">()</span> </span>{
-        directoryReader.readEntries( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theEntries )</span> </span>{
-          <span class="hljs-keyword">if</span> ( !theEntries.length ) {
-            deferred.resolve( entries );
-          } <span class="hljs-keyword">else</span> {
-            entries = entries.concat( <span class="hljs-built_in">Array</span>.prototype.slice.call( theEntries || [], <span class="hljs-number">0</span> ) );
-            readEntries();
-          }
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readEntries</span><span class="hljs-params">()</span> </span>{
+          directoryReader.readEntries( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theEntries )</span> </span>{
+            <span class="hljs-keyword">if</span> ( !theEntries.length ) {
+              deferred.resolve( entries );
+            } <span class="hljs-keyword">else</span> {
+              entries = entries.concat( <span class="hljs-built_in">Array</span>.prototype.slice.call( theEntries || [], <span class="hljs-number">0</span> ) );
+              readEntries();
+            }
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        }
+        <span class="hljs-keyword">try</span> {
+          readEntries();
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      }
-      <span class="hljs-keyword">try</span> {
-        readEntries();
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> class FileManager</span></p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"UTIL.FileManager"</span>,
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> class FileManager</span></p></div></div><div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"UTIL.FileManager"</span>,
       FileManager = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
         <span class="hljs-keyword">var</span> self,</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>determine if we have a <code>BaseObject</code> available or not</p></div></div><div class="code"><div class="wrapper">          hasBaseObject = ( <span class="hljs-keyword">typeof</span> BaseObject !== <span class="hljs-string">"undefined"</span> );
         <span class="hljs-keyword">if</span> ( hasBaseObject ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if we do, subclass it</p></div></div><div class="code"><div class="wrapper">          self = <span class="hljs-keyword">new</span> BaseObject();

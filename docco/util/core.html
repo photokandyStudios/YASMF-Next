@@ -123,94 +123,94 @@ define( [ <span class="hljs-string">"globalize"</span>, <span class="hljs-string
    * @returns {*}               Either the property requested or the entire CSS style declaration
    */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getComputedStyle</span><span class="hljs-params">( element, property )</span> </span>{
-    <span class="hljs-keyword">if</span> ( !( element <span class="hljs-keyword">instanceof</span> Node ) &amp;&amp; <span class="hljs-keyword">typeof</span> element === <span class="hljs-string">"string"</span> ) {
-      property = element;
-      element = <span class="hljs-keyword">this</span>;
+      <span class="hljs-keyword">if</span> ( !( element <span class="hljs-keyword">instanceof</span> Node ) &amp;&amp; <span class="hljs-keyword">typeof</span> element === <span class="hljs-string">"string"</span> ) {
+        property = element;
+        element = <span class="hljs-keyword">this</span>;
+      }
+      <span class="hljs-keyword">var</span> computedStyle = <span class="hljs-built_in">window</span>.getComputedStyle( element );
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> property !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">return</span> computedStyle.getPropertyValue( property );
+      }
+      <span class="hljs-keyword">return</span> computedStyle;
     }
-    <span class="hljs-keyword">var</span> computedStyle = <span class="hljs-built_in">window</span>.getComputedStyle( element );
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> property !== <span class="hljs-string">"undefined"</span> ) {
-      <span class="hljs-keyword">return</span> computedStyle.getPropertyValue( property );
-    }
-    <span class="hljs-keyword">return</span> computedStyle;
-  }
-  <span class="hljs-comment">/**
-   * @method _arrayize
-   * @private
-   * @param {NodeList} list     the list to convert
-   * @returns {Array}           the converted array
-   */</span>
+    <span class="hljs-comment">/**
+     * @method _arrayize
+     * @private
+     * @param {NodeList} list     the list to convert
+     * @returns {Array}           the converted array
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_arrayize</span><span class="hljs-params">( list )</span> </span>{
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.prototype.splice.call( list, <span class="hljs-number">0</span> );
-  }
-  <span class="hljs-comment">/**
-   * @method getElementById
-   * @private
-   * @param {Node} parent      the parent to execute getElementById on
-   * @param {string} elementId the element ID to search for
-   * @returns {Node}           the element or null if not found
-   */</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.prototype.splice.call( list, <span class="hljs-number">0</span> );
+    }
+    <span class="hljs-comment">/**
+     * @method getElementById
+     * @private
+     * @param {Node} parent      the parent to execute getElementById on
+     * @param {string} elementId the element ID to search for
+     * @returns {Node}           the element or null if not found
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getElementById</span><span class="hljs-params">( parent, elementId )</span> </span>{
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
-      elementId = parent;
-      parent = <span class="hljs-built_in">document</span>;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+        elementId = parent;
+        parent = <span class="hljs-built_in">document</span>;
+      }
+      <span class="hljs-keyword">return</span> ( parent.getElementById( elementId ) );
     }
-    <span class="hljs-keyword">return</span> ( parent.getElementById( elementId ) );
-  }
-  <span class="hljs-comment">/**
-   * @method querySelector
-   * @private
-   * @param {Node} parent       the parent to execute querySelector on
-   * @param {string} selector   the CSS selector to use
-   * @returns {Node}            the located element or null if not found
-   */</span>
+    <span class="hljs-comment">/**
+     * @method querySelector
+     * @private
+     * @param {Node} parent       the parent to execute querySelector on
+     * @param {string} selector   the CSS selector to use
+     * @returns {Node}            the located element or null if not found
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">querySelector</span><span class="hljs-params">( parent, selector )</span> </span>{
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
-      selector = parent;
-      parent = <span class="hljs-built_in">document</span>;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+        selector = parent;
+        parent = <span class="hljs-built_in">document</span>;
+      }
+      <span class="hljs-keyword">return</span> ( parent.querySelector( selector ) );
     }
-    <span class="hljs-keyword">return</span> ( parent.querySelector( selector ) );
-  }
-  <span class="hljs-comment">/**
-   * @method querySelectorAll
-   * @private
-   * @param {Node} parent     the parent to execute querySelectorAll on
-   * @param {string} selector the selector to use
-   * @returns {Array}         the found elements; if none: []
-   */</span>
+    <span class="hljs-comment">/**
+     * @method querySelectorAll
+     * @private
+     * @param {Node} parent     the parent to execute querySelectorAll on
+     * @param {string} selector the selector to use
+     * @returns {Array}         the found elements; if none: []
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">querySelectorAll</span><span class="hljs-params">( parent, selector )</span> </span>{
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
-      selector = parent;
-      parent = <span class="hljs-built_in">document</span>;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+        selector = parent;
+        parent = <span class="hljs-built_in">document</span>;
+      }
+      <span class="hljs-keyword">return</span> _arrayize( parent.querySelectorAll( selector ) );
     }
-    <span class="hljs-keyword">return</span> _arrayize( parent.querySelectorAll( selector ) );
-  }
-  <span class="hljs-comment">/**
-   * @method $
-   * @private
-   * @param {string} selector   the CSS selector to use
-   * @returns {Node}            The located element, relative to `this`
-   */</span>
+    <span class="hljs-comment">/**
+     * @method $
+     * @private
+     * @param {string} selector   the CSS selector to use
+     * @returns {Node}            The located element, relative to `this`
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$</span><span class="hljs-params">( selector )</span> </span>{
-    <span class="hljs-keyword">return</span> querySelector( <span class="hljs-keyword">this</span>, selector );
-  }
-  <span class="hljs-comment">/**
-   * @method $$
-   * @private
-   * @param {string} selector   the CSS selector to use
-   * @returns {Array}           the located elements, relative to `this`
-   */</span>
+      <span class="hljs-keyword">return</span> querySelector( <span class="hljs-keyword">this</span>, selector );
+    }
+    <span class="hljs-comment">/**
+     * @method $$
+     * @private
+     * @param {string} selector   the CSS selector to use
+     * @returns {Array}           the located elements, relative to `this`
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$$</span><span class="hljs-params">( selector )</span> </span>{
-    <span class="hljs-keyword">return</span> querySelectorAll( <span class="hljs-keyword">this</span>, selector );
-  }
-  <span class="hljs-comment">/**
-   * @method $id
-   * @private
-   * @param {string} id         the id of the element
-   * @returns {Node}            the located element or null if not found
-   */</span>
+      <span class="hljs-keyword">return</span> querySelectorAll( <span class="hljs-keyword">this</span>, selector );
+    }
+    <span class="hljs-comment">/**
+     * @method $id
+     * @private
+     * @param {string} id         the id of the element
+     * @returns {Node}            the located element or null if not found
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$id</span><span class="hljs-params">( id )</span> </span>{
-    <span class="hljs-keyword">return</span> getElementById( <span class="hljs-keyword">this</span>, id );
-  }</pre></div></div>
+      <span class="hljs-keyword">return</span> getElementById( <span class="hljs-keyword">this</span>, id );
+    }</pre></div></div>
             
         </li>
         
@@ -265,15 +265,15 @@ define( [ <span class="hljs-string">"globalize"</span>, <span class="hljs-string
    * License MIT: Copyright 2014 Kerri Shotts
    */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">valueForKeyPath</span><span class="hljs-params">( o, k, d )</span> </span>{
-    <span class="hljs-keyword">if</span> ( o === <span class="hljs-literal">undefined</span> || o === <span class="hljs-literal">null</span> ) {
-      <span class="hljs-keyword">return</span> ( d !== <span class="hljs-literal">undefined</span> ) ? d : o;
-    }
-    <span class="hljs-keyword">if</span> ( !( o <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) ) {
-      d = k;
-      k = o;
-      o = <span class="hljs-keyword">this</span>;
-    }
-    <span class="hljs-keyword">var</span> v = o;</pre></div></div>
+      <span class="hljs-keyword">if</span> ( o === <span class="hljs-literal">undefined</span> || o === <span class="hljs-literal">null</span> ) {
+        <span class="hljs-keyword">return</span> ( d !== <span class="hljs-literal">undefined</span> ) ? d : o;
+      }
+      <span class="hljs-keyword">if</span> ( !( o <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) ) {
+        d = k;
+        k = o;
+        o = <span class="hljs-keyword">this</span>;
+      }
+      <span class="hljs-keyword">var</span> v = o;</pre></div></div>
             
         </li>
         
@@ -292,125 +292,125 @@ and it would work like “field.field.field”.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    v = k.match( <span class="hljs-regexp">/([\w\$\\\-]+)/g</span> ).reduce( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( v, keyPart )</span> </span>{
-      <span class="hljs-keyword">if</span> ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) {
-        <span class="hljs-keyword">return</span> v;
-      }
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">return</span> v[ keyPart ];
-      } <span class="hljs-keyword">catch</span> ( err ) {
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
-      }
-    }, v );
-    <span class="hljs-keyword">return</span> ( ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) &amp;&amp; ( d !== <span class="hljs-literal">undefined</span> ) ) ? d : v;
-  }
-  <span class="hljs-comment">/**
-   * Interpolates values from the context into the string. Placeholders are of the
-   * form {...}. If values within {...} do not exist within context, they are
-   * replaced with undefined.
-   * @param  {string} str     string to interpolate
-   * @param  {*} context      context to use for interpolation
-   * @return {string}}        interpolated string
-   */</span>
+            <div class="content"><div class='highlight'><pre>      v = k.match( <span class="hljs-regexp">/([\w\$\\\-]+)/g</span> ).reduce( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( v, keyPart )</span> </span>{
+        <span class="hljs-keyword">if</span> ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) {
+          <span class="hljs-keyword">return</span> v;
+        }
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">return</span> v[ keyPart ];
+        } <span class="hljs-keyword">catch</span> ( err ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+        }
+      }, v );
+      <span class="hljs-keyword">return</span> ( ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) &amp;&amp; ( d !== <span class="hljs-literal">undefined</span> ) ) ? d : v;
+    }
+    <span class="hljs-comment">/**
+     * Interpolates values from the context into the string. Placeholders are of the
+     * form {...}. If values within {...} do not exist within context, they are
+     * replaced with undefined.
+     * @param  {string} str     string to interpolate
+     * @param  {*} context      context to use for interpolation
+     * @return {string}}        interpolated string
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">interpolate</span><span class="hljs-params">( str, context )</span> </span>{
-    <span class="hljs-keyword">var</span> newStr = str;
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> context === <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">var</span> newStr = str;
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> context === <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">return</span> newStr;
+      }
+      str.match( <span class="hljs-regexp">/\{([^\}]+)\}/g</span> ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( match )</span> </span>{
+        <span class="hljs-keyword">var</span> prop = match.substr( <span class="hljs-number">1</span>, match.length - <span class="hljs-number">2</span> ).trim();
+        newStr = newStr.replace( match, valueForKeyPath( context, prop ) );
+      } );
       <span class="hljs-keyword">return</span> newStr;
     }
-    str.match( <span class="hljs-regexp">/\{([^\}]+)\}/g</span> ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( match )</span> </span>{
-      <span class="hljs-keyword">var</span> prop = match.substr( <span class="hljs-number">1</span>, match.length - <span class="hljs-number">2</span> ).trim();
-      newStr = newStr.replace( match, valueForKeyPath( context, prop ) );
-    } );
-    <span class="hljs-keyword">return</span> newStr;
-  }
-  <span class="hljs-comment">/**
-   * Merges the supplied objects together and returns a copy containin the merged objects. The original
-   * objects are untouched, and a new object is returned containing a relatively deep copy of each object.
-   *
-   * Important Notes:
-   *   - Items that exist in any object but not in any other will be added to the target
-   *   - Should more than one item exist in the set of objects with the same key, the following rules occur:
-   *     - If both types are arrays, the result is a.concat(b)
-   *     - If both types are objects, the result is merge(a,b)
-   *     - Otherwise the result is b (b overwrites a)
-   *   - Should more than one item exist in the set of objects with the same key, but differ in type, the
-   *     second value overwrites the first.
-   *   - This is not a true deep copy! Should any property be a reference to another object or array, the
-   *     copied result may also be a reference (unless both the target and the source share the same item
-   *     with the same type). In other words: DON'T USE THIS AS A DEEP COPY METHOD
-   *
-   * It's really meant to make this kind of work easy:
-   *
-   * var x = { a: 1, b: "hi", c: [1,2] },
-   *     y = { a: 3, c: [3, 4], d: 0 },
-   *     z = merge (x,y);
-   *
-   * z is now { a: 3, b: "hi", c: [1,2,3,4], d:0 }.
-   *
-   * License MIT. Copyright Kerri Shotts 2014
-   */</span>
+    <span class="hljs-comment">/**
+     * Merges the supplied objects together and returns a copy containin the merged objects. The original
+     * objects are untouched, and a new object is returned containing a relatively deep copy of each object.
+     *
+     * Important Notes:
+     *   - Items that exist in any object but not in any other will be added to the target
+     *   - Should more than one item exist in the set of objects with the same key, the following rules occur:
+     *     - If both types are arrays, the result is a.concat(b)
+     *     - If both types are objects, the result is merge(a,b)
+     *     - Otherwise the result is b (b overwrites a)
+     *   - Should more than one item exist in the set of objects with the same key, but differ in type, the
+     *     second value overwrites the first.
+     *   - This is not a true deep copy! Should any property be a reference to another object or array, the
+     *     copied result may also be a reference (unless both the target and the source share the same item
+     *     with the same type). In other words: DON'T USE THIS AS A DEEP COPY METHOD
+     *
+     * It's really meant to make this kind of work easy:
+     *
+     * var x = { a: 1, b: "hi", c: [1,2] },
+     *     y = { a: 3, c: [3, 4], d: 0 },
+     *     z = merge (x,y);
+     *
+     * z is now { a: 3, b: "hi", c: [1,2,3,4], d:0 }.
+     *
+     * License MIT. Copyright Kerri Shotts 2014
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">merge</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> t = {},
-      args = <span class="hljs-built_in">Array</span>.prototype.slice.call( <span class="hljs-built_in">arguments</span>, <span class="hljs-number">0</span> );
-    args.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( s )</span> </span>{
-      <span class="hljs-built_in">Object</span>.keys( s ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( prop )</span> </span>{
-        <span class="hljs-keyword">var</span> e = s[ prop ];
-        <span class="hljs-keyword">if</span> ( e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
-          <span class="hljs-keyword">if</span> ( t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
-            t[ prop ] = t[ prop ].concat( e );
-          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) || !( t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) ) {
+      <span class="hljs-keyword">var</span> t = {},
+        args = <span class="hljs-built_in">Array</span>.prototype.slice.call( <span class="hljs-built_in">arguments</span>, <span class="hljs-number">0</span> );
+      args.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( s )</span> </span>{
+        <span class="hljs-built_in">Object</span>.keys( s ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( prop )</span> </span>{
+          <span class="hljs-keyword">var</span> e = s[ prop ];
+          <span class="hljs-keyword">if</span> ( e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+            <span class="hljs-keyword">if</span> ( t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+              t[ prop ] = t[ prop ].concat( e );
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) || !( t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) ) {
+              t[ prop ] = e;
+            }
+          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) {
+            t[ prop ] = merge( t[ prop ], e );
+          } <span class="hljs-keyword">else</span> {
             t[ prop ] = e;
           }
-        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; t[ prop ] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) {
-          t[ prop ] = merge( t[ prop ], e );
-        } <span class="hljs-keyword">else</span> {
-          t[ prop ] = e;
-        }
+        } );
       } );
-    } );
-    <span class="hljs-keyword">return</span> t;
-  }
-  <span class="hljs-comment">/**
-   * Validates a source against the specified rules. `source` can look like this:
-   *
-   *     { aString: "hi", aNumber: { hi: 294.12 }, anInteger: 1944.32 }
-   *
-   * `rules` can look like this:
-   *
-   *     {
-   *       "a-string": {
-   *         title: "A String",     -- optional; if not supplied, key is used
-   *         key: "aString",        -- optional: if not supplied the name of this rule is used as the key
-   *         required: true,        -- optional: if not supplied, value is not required
-   *         type: "string",        -- string, number, integer, array, date, boolean, object, *(any)
-   *         minLength: 1,          -- optional: minimum length (string, array)
-   *         maxLength: 255         -- optional: maximum length (string, array)
-   *       },
-   *       "a-number": {
-   *         title: "A Number",
-   *         key: "aNumber.hi",     -- keys can have . and [] to reference properties within objects
-   *         required: false,
-   *         type: "number",
-   *         min: 0,                -- if specified, number/integer can't be smaller than this number
-   *         max: 100               -- if specified, number/integer can't be larger than this number
-   *       },
-   *       "an-integer": {
-   *         title: "An Integer",
-   *         key: "anInteger",
-   *         required: true,
-   *         type: "integer",
-   *         enum: [1, 2, 4, 8]     -- if specified, the value must be a part of the array
-   *                                -- may also be specified as an array of objects with title/value properties
-   *       }
-   *     }
-   *
-   * @param {*} source       source to validate
-   * @param {*} rules        validation rules
-   * @returns {*}            an object with two fields: `validates: true|false` and `message: validation message`
-   *
-   * LICENSE: MIT
-   * Copyright Kerri Shotts, 2014
-   */</span>
+      <span class="hljs-keyword">return</span> t;
+    }
+    <span class="hljs-comment">/**
+     * Validates a source against the specified rules. `source` can look like this:
+     *
+     *     { aString: "hi", aNumber: { hi: 294.12 }, anInteger: 1944.32 }
+     *
+     * `rules` can look like this:
+     *
+     *     {
+     *       "a-string": {
+     *         title: "A String",     -- optional; if not supplied, key is used
+     *         key: "aString",        -- optional: if not supplied the name of this rule is used as the key
+     *         required: true,        -- optional: if not supplied, value is not required
+     *         type: "string",        -- string, number, integer, array, date, boolean, object, *(any)
+     *         minLength: 1,          -- optional: minimum length (string, array)
+     *         maxLength: 255         -- optional: maximum length (string, array)
+     *       },
+     *       "a-number": {
+     *         title: "A Number",
+     *         key: "aNumber.hi",     -- keys can have . and [] to reference properties within objects
+     *         required: false,
+     *         type: "number",
+     *         min: 0,                -- if specified, number/integer can't be smaller than this number
+     *         max: 100               -- if specified, number/integer can't be larger than this number
+     *       },
+     *       "an-integer": {
+     *         title: "An Integer",
+     *         key: "anInteger",
+     *         required: true,
+     *         type: "integer",
+     *         enum: [1, 2, 4, 8]     -- if specified, the value must be a part of the array
+     *                                -- may also be specified as an array of objects with title/value properties
+     *       }
+     *     }
+     *
+     * @param {*} source       source to validate
+     * @param {*} rules        validation rules
+     * @returns {*}            an object with two fields: `validates: true|false` and `message: validation message`
+     *
+     * LICENSE: MIT
+     * Copyright Kerri Shotts, 2014
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">validate</span><span class="hljs-params">( source, rules )</span> </span>{
     <span class="hljs-keyword">var</span> r = {
       validates: <span class="hljs-literal">true</span>,
@@ -527,74 +527,76 @@ and it would work like “field.field.field”.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        r.message = <span class="hljs-string">"Type Mismatch; expected "</span> + rule.type + <span class="hljs-string">" not "</span> + ( <span class="hljs-keyword">typeof</span> v ) + <span class="hljs-string">" in "</span> + title;
-        <span class="hljs-keyword">switch</span> ( rule.type ) {
-        <span class="hljs-keyword">case</span> <span class="hljs-string">"number"</span>:
-          <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> ) {
-            <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( <span class="hljs-built_in">parseFloat</span>( v ) ) ) {
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">null</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+          r.message = <span class="hljs-string">"Type Mismatch; expected "</span> + rule.type + <span class="hljs-string">" not "</span> + ( <span class="hljs-keyword">typeof</span> v ) + <span class="hljs-string">" in "</span> + title;
+          <span class="hljs-keyword">switch</span> ( rule.type ) {
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"float"</span>:
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"number"</span>:
+            <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> ) {
+              <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( <span class="hljs-built_in">parseFloat</span>( v ) ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+              <span class="hljs-keyword">if</span> ( v != <span class="hljs-built_in">parseFloat</span>( v ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
+            <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> ) {
+              <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( <span class="hljs-built_in">parseInt</span>( v, <span class="hljs-number">10</span> ) ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+              <span class="hljs-keyword">if</span> ( v != <span class="hljs-built_in">parseInt</span>( v, <span class="hljs-number">10</span> ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"array"</span>:
+            <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> &amp;&amp; !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) ) {
               r.validates = <span class="hljs-literal">false</span>;
               <span class="hljs-keyword">return</span>;
             }
-            <span class="hljs-keyword">if</span> ( v != <span class="hljs-built_in">parseFloat</span>( v ) ) {
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"date"</span>:
+            <span class="hljs-keyword">if</span> ( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) {
+              <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> &amp;&amp; <span class="hljs-built_in">isNaN</span>( v.getTime() ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                r.message = <span class="hljs-string">"Invalid date in "</span> + title;
+                <span class="hljs-keyword">return</span>;
+              }
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> v === <span class="hljs-string">"string"</span> ) {
+              <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>( v ) ).getTime() ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                r.message = <span class="hljs-string">"Invalid date in "</span> + title;
+                <span class="hljs-keyword">return</span>;
+              }
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-string">"object"</span> ) &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"object"</span>:
+            <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"*"</span>:
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">default</span>:
+            <span class="hljs-keyword">if</span> ( !( <span class="hljs-keyword">typeof</span> v === rule.type || v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) ) {
               r.validates = <span class="hljs-literal">false</span>;
               <span class="hljs-keyword">return</span>;
             }
           }
-          <span class="hljs-keyword">break</span>;
-        <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
-          <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> ) {
-            <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( <span class="hljs-built_in">parseInt</span>( v, <span class="hljs-number">10</span> ) ) ) {
-              r.validates = <span class="hljs-literal">false</span>;
-              <span class="hljs-keyword">return</span>;
-            }
-            <span class="hljs-keyword">if</span> ( v != <span class="hljs-built_in">parseInt</span>( v, <span class="hljs-number">10</span> ) ) {
-              r.validates = <span class="hljs-literal">false</span>;
-              <span class="hljs-keyword">return</span>;
-            }
-          }
-          <span class="hljs-keyword">break</span>;
-        <span class="hljs-keyword">case</span> <span class="hljs-string">"array"</span>:
-          <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> &amp;&amp; !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) ) {
-            r.validates = <span class="hljs-literal">false</span>;
-            <span class="hljs-keyword">return</span>;
-          }
-          <span class="hljs-keyword">break</span>;
-        <span class="hljs-keyword">case</span> <span class="hljs-string">"date"</span>:
-          <span class="hljs-keyword">if</span> ( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) {
-            <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> ) ) {
-              r.validates = <span class="hljs-literal">false</span>;
-              <span class="hljs-keyword">return</span>;
-            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> &amp;&amp; <span class="hljs-built_in">isNaN</span>( v.getTime() ) ) {
-              r.validates = <span class="hljs-literal">false</span>;
-              r.message = <span class="hljs-string">"Invalid date in "</span> + title;
-              <span class="hljs-keyword">return</span>;
-            }
-          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> v === <span class="hljs-string">"string"</span> ) {
-            <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>( v ) ).getTime() ) ) {
-              r.validates = <span class="hljs-literal">false</span>;
-              r.message = <span class="hljs-string">"Invalid date in "</span> + title;
-              <span class="hljs-keyword">return</span>;
-            }
-          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-string">"object"</span> ) &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
-            r.validates = <span class="hljs-literal">false</span>;
-            <span class="hljs-keyword">return</span>;
-          }
-          <span class="hljs-keyword">break</span>;
-        <span class="hljs-keyword">case</span> <span class="hljs-string">"object"</span>:
-          <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
-            r.validates = <span class="hljs-literal">false</span>;
-            <span class="hljs-keyword">return</span>;
-          }
-          <span class="hljs-keyword">break</span>;
-        <span class="hljs-keyword">case</span> <span class="hljs-string">"*"</span>:
-          <span class="hljs-keyword">break</span>;
-        <span class="hljs-keyword">default</span>:
-          <span class="hljs-keyword">if</span> ( !( <span class="hljs-keyword">typeof</span> v === rule.type || v === <span class="hljs-literal">undefined</span> ) ) {
-            r.validates = <span class="hljs-literal">false</span>;
-            <span class="hljs-keyword">return</span>;
-          }
-        }
-        r.message = <span class="hljs-string">""</span>;</pre></div></div>
+          r.message = <span class="hljs-string">""</span>;</pre></div></div>
             
         </li>
         
@@ -610,16 +612,16 @@ check range</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        r.message = <span class="hljs-string">"Value out of range "</span> + v + <span class="hljs-string">" in "</span> + title;
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> rule.min === <span class="hljs-string">"number"</span> &amp;&amp; v &lt; rule.min ) {
-          r.validates = <span class="hljs-literal">false</span>;
-          <span class="hljs-keyword">return</span>;
-        }
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> rule.max === <span class="hljs-string">"number"</span> &amp;&amp; v &gt; rule.max ) {
-          r.validates = <span class="hljs-literal">false</span>;
-          <span class="hljs-keyword">return</span>;
-        }
-        r.message = <span class="hljs-string">""</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          r.message = <span class="hljs-string">"Value out of range "</span> + v + <span class="hljs-string">" in "</span> + title;
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> rule.min === <span class="hljs-string">"number"</span> &amp;&amp; v &lt; rule.min ) {
+            r.validates = <span class="hljs-literal">false</span>;
+            <span class="hljs-keyword">return</span>;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> rule.max === <span class="hljs-string">"number"</span> &amp;&amp; v &gt; rule.max ) {
+            r.validates = <span class="hljs-literal">false</span>;
+            <span class="hljs-keyword">return</span>;
+          }
+          r.message = <span class="hljs-string">""</span>;</pre></div></div>
             
         </li>
         
@@ -634,12 +636,13 @@ check range</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( ( <span class="hljs-keyword">typeof</span> rule.minLength === <span class="hljs-string">"number"</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length &lt; rule.minLength ) ||
-          ( <span class="hljs-keyword">typeof</span> rule.maxLength === <span class="hljs-string">"number"</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length &gt; rule.maxLength ) ) {
-          r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" out of length range"</span>;
-          r.validates = <span class="hljs-literal">false</span>;
-          <span class="hljs-keyword">return</span>;
-        }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( ( <span class="hljs-keyword">typeof</span> rule.minLength === <span class="hljs-string">"number"</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length &lt; rule.minLength ) ||
+            ( <span class="hljs-keyword">typeof</span> rule.maxLength === <span class="hljs-string">"number"</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length &gt; rule.maxLength )
+          ) {
+            r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" out of length range"</span>;
+            r.validates = <span class="hljs-literal">false</span>;
+            <span class="hljs-keyword">return</span>;
+          }</pre></div></div>
             
         </li>
         
@@ -654,19 +657,19 @@ check range</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( rule.enum <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
-          <span class="hljs-keyword">if</span> ( rule.enum.filter( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
-            <span class="hljs-keyword">if</span> ( e.value !== <span class="hljs-literal">undefined</span> ) {
-              <span class="hljs-keyword">return</span> e.value == v;
-            } <span class="hljs-keyword">else</span> {
-              <span class="hljs-keyword">return</span> e == v;
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( rule.enum <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+            <span class="hljs-keyword">if</span> ( rule.enum.filter( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+                <span class="hljs-keyword">if</span> ( e.value !== <span class="hljs-literal">undefined</span> ) {
+                  <span class="hljs-keyword">return</span> e.value == v;
+                } <span class="hljs-keyword">else</span> {
+                  <span class="hljs-keyword">return</span> e == v;
+                }
+              } ).length === <span class="hljs-number">0</span> ) {
+              r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" contains unexpected value "</span> + v + <span class="hljs-string">" in "</span> + title;
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
             }
-          } ).length === <span class="hljs-number">0</span> ) {
-            r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" contains unexpected value "</span> + v + <span class="hljs-string">" in "</span> + title;
-            r.validates = <span class="hljs-literal">false</span>;
-            <span class="hljs-keyword">return</span>;
-          }
-        }</pre></div></div>
+          }</pre></div></div>
             
         </li>
         
@@ -681,11 +684,12 @@ check range</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( rule.pattern <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
-          <span class="hljs-keyword">if</span> ( v.match( rule.pattern ) === <span class="hljs-literal">null</span> ) {
-            r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" doesn't match pattern in "</span> + title;
-            r.validates = <span class="hljs-literal">false</span>;
-            <span class="hljs-keyword">return</span>;
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( rule.pattern <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+            <span class="hljs-keyword">if</span> ( v.match( rule.pattern ) === <span class="hljs-literal">null</span> ) {
+              r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" doesn't match pattern in "</span> + title;
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
+            }
           }
         }
       }

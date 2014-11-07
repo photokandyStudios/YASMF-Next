@@ -144,32 +144,32 @@ define( [ <span class="hljs-string">"yasmf/util/device"</span>, <span class="hlj
    * @return {Animation}              self, for chaining
    */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_pushAnimation</span><span class="hljs-params">( property, value, timing, timingFunction )</span> </span>{
-    <span class="hljs-keyword">var</span> newProp, newValue, prefix, jsPrefix, newJsProp;
-    <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
-      prefix = prefixes[ i ];
-      jsPrefix = jsPrefixes[ i ];
-      newProp = prefix + property;
-      <span class="hljs-keyword">if</span> ( jsPrefix !== <span class="hljs-string">""</span> ) {
-        newJsProp = jsPrefix + property.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ).toUpperCase() + property.substr( <span class="hljs-number">1</span> );
-      } <span class="hljs-keyword">else</span> {
-        newJsProp = property;
+      <span class="hljs-keyword">var</span> newProp, newValue, prefix, jsPrefix, newJsProp;
+      <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = prefixes.length; i &lt; l; i++ ) {
+        prefix = prefixes[ i ];
+        jsPrefix = jsPrefixes[ i ];
+        newProp = prefix + property;
+        <span class="hljs-keyword">if</span> ( jsPrefix !== <span class="hljs-string">""</span> ) {
+          newJsProp = jsPrefix + property.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ).toUpperCase() + property.substr( <span class="hljs-number">1</span> );
+        } <span class="hljs-keyword">else</span> {
+          newJsProp = property;
+        }
+        newValue = value.replace( <span class="hljs-string">"{-}"</span>, prefix );
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._el.style[ newJsProp ] !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">this</span>._animations.push( [ newProp, newValue ] );
+          <span class="hljs-keyword">this</span>._transitions.push( [ newProp, ( <span class="hljs-keyword">typeof</span> timing !== <span class="hljs-string">"undefined"</span> ? timing : <span class="hljs-keyword">this</span>.timing ) + <span class="hljs-string">"s"</span>, ( <span class="hljs-keyword">typeof</span> timingFunction !==
+            <span class="hljs-string">"undefined"</span> ? timingFunction : <span class="hljs-keyword">this</span>.timingFunction ) ] );
+        }
+        <span class="hljs-keyword">this</span>._maxTiming = <span class="hljs-built_in">Math</span>.max( <span class="hljs-keyword">this</span>._maxTiming, ( <span class="hljs-keyword">typeof</span> timing !== <span class="hljs-string">"undefined"</span> ? timing : <span class="hljs-keyword">this</span>.timing ) );
       }
-      newValue = value.replace( <span class="hljs-string">"{-}"</span>, prefix );
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._el.style[ newJsProp ] !== <span class="hljs-string">"undefined"</span> ) {
-        <span class="hljs-keyword">this</span>._animations.push( [ newProp, newValue ] );
-        <span class="hljs-keyword">this</span>._transitions.push( [ newProp, ( <span class="hljs-keyword">typeof</span> timing !== <span class="hljs-string">"undefined"</span> ? timing : <span class="hljs-keyword">this</span>.timing ) + <span class="hljs-string">"s"</span>, ( <span class="hljs-keyword">typeof</span> timingFunction !==
-          <span class="hljs-string">"undefined"</span> ? timingFunction : <span class="hljs-keyword">this</span>.timingFunction ) ] );
-      }
-      <span class="hljs-keyword">this</span>._maxTiming = <span class="hljs-built_in">Math</span>.max( <span class="hljs-keyword">this</span>._maxTiming, ( <span class="hljs-keyword">typeof</span> timing !== <span class="hljs-string">"undefined"</span> ? timing : <span class="hljs-keyword">this</span>.timing ) );
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     }
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  }
-  <span class="hljs-comment">/**
-   * Set the default timing function for following animations
-   * @method setTimingFunction
-   * @param {string} timingFunction      the timing function to assign, like "ease-in-out"
-   * @return {Animation}                 self
-   */</span>
+    <span class="hljs-comment">/**
+     * Set the default timing function for following animations
+     * @method setTimingFunction
+     * @param {string} timingFunction      the timing function to assign, like "ease-in-out"
+     * @return {Animation}                 self
+     */</span>
   Animation.prototype.setTimingFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTimingFunction</span><span class="hljs-params">( timingFunction )</span> </span>{
     <span class="hljs-keyword">this</span>.timingFunction = timingFunction;
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;

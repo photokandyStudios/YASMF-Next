@@ -72,15 +72,19 @@ instead.</p>
         <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;
       }
       <span class="hljs-keyword">var</span> ua = navigator.userAgent.toLowerCase();
-      <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"android"</span> ) &gt; -<span class="hljs-number">1</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>android reports if it is a phone or tablet based on user agent</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-comment">/*if (ua.indexOf("mobile safari") &gt; -1)
-          {
-            return "phone";
-          }*/</span>
+      <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"android"</span> ) &gt; -<span class="hljs-number">1</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>android reports if it is a phone or tablet based on user agent</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"mobile safari"</span> ) &gt; -<span class="hljs-number">1</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;
+        }
         <span class="hljs-keyword">if</span> ( ua.indexOf( <span class="hljs-string">"mobile safari"</span> ) &lt; <span class="hljs-number">0</span> &amp;&amp; ua.indexOf( <span class="hljs-string">"safari"</span> ) &gt; -<span class="hljs-number">1</span> ) {
           <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
         }
+        <span class="hljs-keyword">if</span> ( ( <span class="hljs-built_in">Math</span>.max( <span class="hljs-built_in">window</span>.screen.width, <span class="hljs-built_in">window</span>.screen.height ) / <span class="hljs-built_in">window</span>.devicePixelRatio ) &gt;= <span class="hljs-number">900</span> ) {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;
+        }
       }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>the following is hacky, and not guaranteed to work all the time,
-especially as phones get bigger screens with higher DPI.</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( ( <span class="hljs-built_in">Math</span>.max( <span class="hljs-built_in">window</span>.screen.width, <span class="hljs-built_in">window</span>.screen.height ) / <span class="hljs-built_in">window</span>.devicePixelRatio ) &gt;= <span class="hljs-number">900</span> ) {
+especially as phones get bigger screens with higher DPI.</p></div></div><div class="code"><div class="wrapper">      <span class="hljs-keyword">if</span> ( ( <span class="hljs-built_in">Math</span>.max( <span class="hljs-built_in">window</span>.screen.width, <span class="hljs-built_in">window</span>.screen.height ) ) &gt;= <span class="hljs-number">900</span> ) {
         <span class="hljs-keyword">return</span> <span class="hljs-string">"tablet"</span>;
       }
       <span class="hljs-keyword">return</span> <span class="hljs-string">"phone"</span>;

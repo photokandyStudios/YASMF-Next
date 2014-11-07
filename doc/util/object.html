@@ -354,7 +354,8 @@ attach to a notification that isn&#39;t registered.</p>
 </ul></div></div><div class="code"><div class="wrapper">      self.registerNotification = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNotification, async )</span> </span>{
         <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self._notificationListeners[ theNotification ] === <span class="hljs-string">"undefined"</span> ) {
           self._notificationListeners[ theNotification ] = [];
-          self._notificationListeners[ theNotification ]._useAsyncNotifications = ( <span class="hljs-keyword">typeof</span> async !== <span class="hljs-string">"undefined"</span> ? async : <span class="hljs-literal">true</span> );
+          self._notificationListeners[ theNotification ]._useAsyncNotifications = ( <span class="hljs-keyword">typeof</span> async !== <span class="hljs-string">"undefined"</span> ? async :
+            <span class="hljs-literal">true</span> );
         }
         <span class="hljs-keyword">if</span> ( self._traceNotifications ) {
           <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Registering notification "</span> + theNotification );
@@ -363,75 +364,75 @@ attach to a notification that isn&#39;t registered.</p>
       self._traceNotifications = <span class="hljs-literal">false</span>;
 
       <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_doNotification</span><span class="hljs-params">( theNotification, options )</span> </span>{
-        <span class="hljs-keyword">var</span> args,
-          lastOnly = <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
-          args = ( <span class="hljs-keyword">typeof</span> options.args !== <span class="hljs-string">"undefined"</span> ) ? options.args : <span class="hljs-literal">undefined</span>;
-          lastOnly = ( <span class="hljs-keyword">typeof</span> options.lastOnly !== <span class="hljs-string">"undefined"</span> ) ? options.lastOnly : <span class="hljs-literal">false</span>;
-        }
-        <span class="hljs-keyword">if</span> ( !self._notificationListeners[ theNotification ] ) {
-          <span class="hljs-built_in">console</span>.log( theNotification + <span class="hljs-string">" has not been registered."</span> );
-          <span class="hljs-comment">//return;</span>
-        }
-        <span class="hljs-keyword">if</span> ( self._traceNotifications ) {
-          <span class="hljs-keyword">if</span> ( self._notificationListeners[ theNotification ] ) {
-            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Notifying "</span> + self._notificationListeners[ theNotification ].length + <span class="hljs-string">" listeners for "</span> +
-              theNotification + <span class="hljs-string">" ( "</span> + args + <span class="hljs-string">" ) "</span> );
-          } <span class="hljs-keyword">else</span> {
-            <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Can't notify any explicit listeners for "</span>, theNotification, <span class="hljs-string">"but wildcards will fire."</span> );
+          <span class="hljs-keyword">var</span> args,
+            lastOnly = <span class="hljs-literal">false</span>;
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+            args = ( <span class="hljs-keyword">typeof</span> options.args !== <span class="hljs-string">"undefined"</span> ) ? options.args : <span class="hljs-literal">undefined</span>;
+            lastOnly = ( <span class="hljs-keyword">typeof</span> options.lastOnly !== <span class="hljs-string">"undefined"</span> ) ? options.lastOnly : <span class="hljs-literal">false</span>;
           }
-        }
-        <span class="hljs-keyword">var</span> async = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[ theNotification ]
-          ._useAsyncNotifications : <span class="hljs-literal">true</span>,
-          notifyListener = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theListener, theNotification, args )</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-              <span class="hljs-keyword">try</span> {
-                theListener.apply( self, [ self, theNotification, args ].concat( <span class="hljs-built_in">arguments</span> ) );
-              } <span class="hljs-keyword">catch</span> ( err ) {
-                <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"WARNING"</span>, theNotification, <span class="hljs-string">"experienced an uncaught error:"</span>, err );
-              }
-            };
-          },
-          handlers = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[ theNotification ]
-          .slice() : []; <span class="hljs-comment">// copy!</span>
-        <span class="hljs-keyword">if</span> ( lastOnly &amp;&amp; handlers.length &gt; <span class="hljs-number">1</span> ) {
-          handlers = [ handlers.pop() ];
-        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attach * handlers</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> handler, push = <span class="hljs-literal">false</span>;
-        <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> listener <span class="hljs-keyword">in</span> self._notificationListeners ) {
-          <span class="hljs-keyword">if</span> ( self._notificationListeners.hasOwnProperty( listener ) ) {
-            handler = self._notificationListeners[ listener ];
-            push = <span class="hljs-literal">false</span>;
-            <span class="hljs-keyword">if</span> ( listener.indexOf( <span class="hljs-string">"*"</span> ) &gt; -<span class="hljs-number">1</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>candidate listener; see if it matches</p></div></div><div class="code"><div class="wrapper">              <span class="hljs-keyword">if</span> ( listener === <span class="hljs-string">"*"</span> ) {
-                push = <span class="hljs-literal">true</span>;
-              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">1</span> ) === theNotification.substr( -<span class="hljs-number">1</span> * ( listener.length -
-                <span class="hljs-number">1</span> ) ) ) {
-                push = <span class="hljs-literal">true</span>;
-              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( -<span class="hljs-number">1</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) === theNotification.substr(
-                <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) ) {
-                push = <span class="hljs-literal">true</span>;
-              } <span class="hljs-keyword">else</span> {
-                <span class="hljs-keyword">var</span> starPos = listener.indexOf( <span class="hljs-string">"*"</span> );
-                <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, starPos ) === theNotification.substr( <span class="hljs-number">0</span>, starPos ) &amp;&amp; listener.substr( starPos + <span class="hljs-number">1</span> ) ===
-                  theNotification.substr( -<span class="hljs-number">1</span> * ( listener.length - starPos - <span class="hljs-number">1</span> ) ) ) {
-                  push = <span class="hljs-literal">true</span>;
+          <span class="hljs-keyword">if</span> ( !self._notificationListeners[ theNotification ] ) {
+            <span class="hljs-built_in">console</span>.log( theNotification + <span class="hljs-string">" has not been registered."</span> );
+            <span class="hljs-comment">//return;</span>
+          }
+          <span class="hljs-keyword">if</span> ( self._traceNotifications ) {
+            <span class="hljs-keyword">if</span> ( self._notificationListeners[ theNotification ] ) {
+              <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Notifying "</span> + self._notificationListeners[ theNotification ].length + <span class="hljs-string">" listeners for "</span> +
+                theNotification + <span class="hljs-string">" ( "</span> + args + <span class="hljs-string">" ) "</span> );
+            } <span class="hljs-keyword">else</span> {
+              <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Can't notify any explicit listeners for "</span>, theNotification, <span class="hljs-string">"but wildcards will fire."</span> );
+            }
+          }
+          <span class="hljs-keyword">var</span> async = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[
+              theNotification ]._useAsyncNotifications : <span class="hljs-literal">true</span>,
+            notifyListener = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theListener, theNotification, args )</span> </span>{
+              <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+                <span class="hljs-keyword">try</span> {
+                  theListener.apply( self, [ self, theNotification, args ].concat( <span class="hljs-built_in">arguments</span> ) );
+                } <span class="hljs-keyword">catch</span> ( err ) {
+                  <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"WARNING"</span>, theNotification, <span class="hljs-string">"experienced an uncaught error:"</span>, err );
                 }
-              }
-              <span class="hljs-keyword">if</span> ( push ) {
-                handler.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( handler )</span> </span>{
-                  handlers.push( handler );
-                } );
+              };
+            },
+            handlers = self._notificationListeners[ theNotification ] !== <span class="hljs-literal">undefined</span> ? self._notificationListeners[
+              theNotification ].slice() : []; <span class="hljs-comment">// copy!</span>
+          <span class="hljs-keyword">if</span> ( lastOnly &amp;&amp; handlers.length &gt; <span class="hljs-number">1</span> ) {
+            handlers = [ handlers.pop() ];
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>attach * handlers</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">var</span> handler, push = <span class="hljs-literal">false</span>;
+          <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> listener <span class="hljs-keyword">in</span> self._notificationListeners ) {
+            <span class="hljs-keyword">if</span> ( self._notificationListeners.hasOwnProperty( listener ) ) {
+              handler = self._notificationListeners[ listener ];
+              push = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">if</span> ( listener.indexOf( <span class="hljs-string">"*"</span> ) &gt; -<span class="hljs-number">1</span> ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>candidate listener; see if it matches</p></div></div><div class="code"><div class="wrapper">                <span class="hljs-keyword">if</span> ( listener === <span class="hljs-string">"*"</span> ) {
+                  push = <span class="hljs-literal">true</span>;
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">1</span> ) === theNotification.substr( -<span class="hljs-number">1</span> * ( listener
+                    .length - <span class="hljs-number">1</span> ) ) ) {
+                  push = <span class="hljs-literal">true</span>;
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( listener.substr( -<span class="hljs-number">1</span>, <span class="hljs-number">1</span> ) === <span class="hljs-string">"*"</span> &amp;&amp; listener.substr( <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) === theNotification.substr(
+                    <span class="hljs-number">0</span>, listener.length - <span class="hljs-number">1</span> ) ) {
+                  push = <span class="hljs-literal">true</span>;
+                } <span class="hljs-keyword">else</span> {
+                  <span class="hljs-keyword">var</span> starPos = listener.indexOf( <span class="hljs-string">"*"</span> );
+                  <span class="hljs-keyword">if</span> ( listener.substr( <span class="hljs-number">0</span>, starPos ) === theNotification.substr( <span class="hljs-number">0</span>, starPos ) &amp;&amp; listener.substr( starPos + <span class="hljs-number">1</span> ) ===
+                    theNotification.substr( -<span class="hljs-number">1</span> * ( listener.length - starPos - <span class="hljs-number">1</span> ) ) ) {
+                    push = <span class="hljs-literal">true</span>;
+                  }
+                }
+                <span class="hljs-keyword">if</span> ( push ) {
+                  handler.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( handler )</span> </span>{
+                    handlers.push( handler );
+                  } );
+                }
               }
             }
           }
-        }
-        <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = handlers.length; i &lt; l; i++ ) {
-          <span class="hljs-keyword">if</span> ( async ) {
-            setTimeout( notifyListener( handlers[ i ], theNotification, args ), <span class="hljs-number">0</span> );
-          } <span class="hljs-keyword">else</span> {
-            ( notifyListener( handlers[ i ], theNotification, args ) )();
+          <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = handlers.length; i &lt; l; i++ ) {
+            <span class="hljs-keyword">if</span> ( async ) {
+              setTimeout( notifyListener( handlers[ i ], theNotification, args ), <span class="hljs-number">0</span> );
+            } <span class="hljs-keyword">else</span> {
+              ( notifyListener( handlers[ i ], theNotification, args ) )();
+            }
           }
-        }
-      }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notify is aliased as emit</span></p>
+        }</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method notify is aliased as emit</span></p>
 <p>Notifies all listeners of a particular notification that the notification
 has been triggered. If the notification hasn&#39;t been registered via
 <code>registerNotification</code>, an error is logged to the console, but the function
@@ -794,9 +795,6 @@ triggering element, and keyPath is on <code>data-y-keyPath</code> attribute.</p>
           keyPath = inKeyPath,
           dataValue = inValue;
         <span class="hljs-keyword">try</span> {
-          <span class="hljs-keyword">if</span> ( keyType === <span class="hljs-literal">undefined</span> ) {
-            keyType = self._dataBindingTypes[ keyPath ];
-          }
           <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span> !== self &amp;&amp; <span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> Node ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we&#39;ve been called from an event handler</p></div></div><div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyType"</span> ) !== <span class="hljs-literal">undefined</span> ) {
               keyType = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyType"</span> );
             }
@@ -823,6 +821,9 @@ triggering element, and keyPath is on <code>data-y-keyPath</code> attribute.</p>
               self[ keyPath ] = dataValue;
             }
             <span class="hljs-keyword">return</span>;
+          }
+          <span class="hljs-keyword">if</span> ( keyType === <span class="hljs-literal">undefined</span> ) {
+            keyType = self._dataBindingTypes[ keyPath ];
           }
           <span class="hljs-keyword">switch</span> ( keyType ) {
           <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
@@ -863,6 +864,9 @@ with defineProperty and defineObservableProperty.</p>
             keyType = <span class="hljs-string">"string"</span>;
           }
           v = self[ keyPath ];
+          <span class="hljs-keyword">if</span> ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) {
+            v = <span class="hljs-string">""</span>;
+          }
           <span class="hljs-keyword">if</span> ( keyPathEls !== <span class="hljs-literal">undefined</span> ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = keyPathEls.length; i &lt; l; i++ ) {
               el = keyPathEls[ i ];

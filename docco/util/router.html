@@ -145,17 +145,17 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
    * @return {*}                  component pieces
    */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseURL</span><span class="hljs-params">( url, baseURL, parseHash )</span> </span>{
-    <span class="hljs-keyword">if</span> ( baseURL === <span class="hljs-literal">undefined</span> ) {
-      baseURL = <span class="hljs-string">"/"</span>;
-    }
-    <span class="hljs-keyword">if</span> ( parseHash === <span class="hljs-literal">undefined</span> ) {
-      parseHash = <span class="hljs-literal">true</span>;
-    }
-    <span class="hljs-keyword">var</span> a = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"a"</span> ),
-      pathString,
-      queryString,
-      hashString,
-      queryParts, pathParts, hashParts;</pre></div></div>
+      <span class="hljs-keyword">if</span> ( baseURL === <span class="hljs-literal">undefined</span> ) {
+        baseURL = <span class="hljs-string">"/"</span>;
+      }
+      <span class="hljs-keyword">if</span> ( parseHash === <span class="hljs-literal">undefined</span> ) {
+        parseHash = <span class="hljs-literal">true</span>;
+      }
+      <span class="hljs-keyword">var</span> a = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"a"</span> ),
+        pathString,
+        queryString,
+        hashString,
+        queryParts, pathParts, hashParts;</pre></div></div>
             
         </li>
         
@@ -170,13 +170,13 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    a.href = url;
-    pathString = <span class="hljs-built_in">decodeURIComponent</span>( a.pathname );
-    queryString = <span class="hljs-built_in">decodeURIComponent</span>( a.search );
-    hashString = <span class="hljs-built_in">decodeURIComponent</span>( a.hash );
-    <span class="hljs-keyword">if</span> ( hashString === <span class="hljs-string">""</span> &amp;&amp; parseHash ) {
-      hashString = <span class="hljs-string">"#/"</span>;
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      a.href = url;
+      pathString = <span class="hljs-built_in">decodeURIComponent</span>( a.pathname );
+      queryString = <span class="hljs-built_in">decodeURIComponent</span>( a.search );
+      hashString = <span class="hljs-built_in">decodeURIComponent</span>( a.hash );
+      <span class="hljs-keyword">if</span> ( hashString === <span class="hljs-string">""</span> &amp;&amp; parseHash ) {
+        hashString = <span class="hljs-string">"#/"</span>;
+      }</pre></div></div>
             
         </li>
         
@@ -191,9 +191,9 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( pathString.substr( <span class="hljs-number">0</span>, baseURL.length ) === baseURL ) {
-      pathString = pathString.substr( baseURL.length );
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( pathString.substr( <span class="hljs-number">0</span>, baseURL.length ) === baseURL ) {
+        pathString = pathString.substr( baseURL.length );
+      }</pre></div></div>
             
         </li>
         
@@ -208,8 +208,8 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    queryString = queryString.substr( <span class="hljs-number">1</span> );
-    hashString = hashString.substr( <span class="hljs-number">1</span> );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      queryString = queryString.substr( <span class="hljs-number">1</span> );
+      hashString = hashString.substr( <span class="hljs-number">1</span> );</pre></div></div>
             
         </li>
         
@@ -224,7 +224,7 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    queryParts = queryString.split( <span class="hljs-string">"&amp;"</span> );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      queryParts = queryString.split( <span class="hljs-string">"&amp;"</span> );</pre></div></div>
             
         </li>
         
@@ -239,7 +239,7 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    pathParts = pathString.split( <span class="hljs-string">"/"</span> );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      pathParts = pathString.split( <span class="hljs-string">"/"</span> );</pre></div></div>
             
         </li>
         
@@ -254,29 +254,29 @@ define( <span class="hljs-function"><span class="hljs-keyword">function</span> <
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( parseHash ) {
-      hashParts = hashString.split( <span class="hljs-string">"/"</span> );
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( parseHash ) {
+        hashParts = hashString.split( <span class="hljs-string">"/"</span> );
+      }
+      <span class="hljs-keyword">return</span> {
+        path: pathString,
+        query: queryString,
+        hash: hashString,
+        queryParts: queryParts,
+        pathParts: pathParts,
+        hashParts: hashParts
+      };
     }
-    <span class="hljs-keyword">return</span> {
-      path: pathString,
-      query: queryString,
-      hash: hashString,
-      queryParts: queryParts,
-      pathParts: pathParts,
-      hashParts: hashParts
-    };
-  }
-  <span class="hljs-comment">/**
-   * Determines if a route matches, and if it does, copies
-   * any variables out into `vars`. The routes must have been previously
-   * parsed with parseURL.
-   *
-   * @method routeMatches
-   * @param  {type} candidate candidate URL
-   * @param  {type} template  template to check (variables of the form :someId)
-   * @param  {type} vars      byref: this object will receive any variables
-   * @return {*}              if matches, true.
-   */</span>
+    <span class="hljs-comment">/**
+     * Determines if a route matches, and if it does, copies
+     * any variables out into `vars`. The routes must have been previously
+     * parsed with parseURL.
+     *
+     * @method routeMatches
+     * @param  {type} candidate candidate URL
+     * @param  {type} template  template to check (variables of the form :someId)
+     * @param  {type} vars      byref: this object will receive any variables
+     * @return {*}              if matches, true.
+     */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">routeMatches</span><span class="hljs-params">( candidate, template, vars )</span> </span>{</pre></div></div>
             
         </li>

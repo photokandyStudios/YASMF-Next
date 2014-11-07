@@ -130,11 +130,11 @@ define( [ <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf
      * @return {Promise}                   The promise
      */</span>
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_requestQuota</span><span class="hljs-params">( fileSystemType, requestedDataSize )</span> </span>{
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">try</span> {</pre></div></div>
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">try</span> {</pre></div></div>
             
         </li>
         
@@ -149,7 +149,7 @@ define( [ <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> PERSISTENT = ( <span class="hljs-keyword">typeof</span> LocalFileSystem !== <span class="hljs-string">"undefined"</span> ) ? LocalFileSystem.PERSISTENT : <span class="hljs-built_in">window</span>.PERSISTENT,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> PERSISTENT = ( <span class="hljs-keyword">typeof</span> LocalFileSystem !== <span class="hljs-string">"undefined"</span> ) ? LocalFileSystem.PERSISTENT : <span class="hljs-built_in">window</span>.PERSISTENT,</pre></div></div>
             
         </li>
         
@@ -164,8 +164,8 @@ define( [ <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          storageInfo = fileSystemType === PERSISTENT ? navigator.webkitPersistentStorage : navigator.webkitTemporaryStorage;
-        <span class="hljs-keyword">if</span> ( storageInfo ) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            storageInfo = fileSystemType === PERSISTENT ? navigator.webkitPersistentStorage : navigator.webkitTemporaryStorage;
+          <span class="hljs-keyword">if</span> ( storageInfo ) {</pre></div></div>
             
         </li>
         
@@ -180,7 +180,7 @@ define( [ <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( storageInfo.requestQuota ) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( storageInfo.requestQuota ) {</pre></div></div>
             
         </li>
         
@@ -195,22 +195,22 @@ define( [ <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            storageInfo.requestQuota( requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( grantedBytes )</span> </span>{
-              <span class="hljs-keyword">if</span> ( DEBUG ) {
-                <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota granted: "</span>, fileSystemType,
-                  grantedBytes
-                ].join( <span class="hljs-string">" "</span> ) );
-              }
-              deferred.resolve( grantedBytes );
-            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-              <span class="hljs-keyword">if</span> ( DEBUG ) {
-                <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota rejected: "</span>, fileSystemType,
-                  requestedDataSize, anError
-                ].join( <span class="hljs-string">" "</span> ) );
-              }
-              deferred.reject( anError );
-            } );
-          } <span class="hljs-keyword">else</span> {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>              storageInfo.requestQuota( requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( grantedBytes )</span> </span>{
+                <span class="hljs-keyword">if</span> ( DEBUG ) {
+                  <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota granted: "</span>, fileSystemType,
+                    grantedBytes
+                  ].join( <span class="hljs-string">" "</span> ) );
+                }
+                deferred.resolve( grantedBytes );
+              }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+                <span class="hljs-keyword">if</span> ( DEBUG ) {
+                  <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: quota rejected: "</span>, fileSystemType,
+                    requestedDataSize, anError
+                  ].join( <span class="hljs-string">" "</span> ) );
+                }
+                deferred.reject( anError );
+              } );
+            } <span class="hljs-keyword">else</span> {</pre></div></div>
             
         </li>
         
@@ -226,40 +226,40 @@ Instead, let’s assume we get permission</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( DEBUG ) {
-              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no requestQuota: "</span>,
+            <div class="content"><div class='highlight'><pre>              <span class="hljs-keyword">if</span> ( DEBUG ) {
+                <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no requestQuota: "</span>,
+                  fileSystemType, requestedDataSize
+                ].join( <span class="hljs-string">" "</span> ) );
+              }
+              deferred.resolve( requestedDataSize );
+            }
+          } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> ( DEBUG ) {
+              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no storageInfo: "</span>,
                 fileSystemType, requestedDataSize
               ].join( <span class="hljs-string">" "</span> ) );
             }
             deferred.resolve( requestedDataSize );
           }
-        } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">if</span> ( DEBUG ) {
-            <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestQuota: couldn't request quota -- no storageInfo: "</span>,
-              fileSystemType, requestedDataSize
-            ].join( <span class="hljs-string">" "</span> ) );
-          }
-          deferred.resolve( requestedDataSize );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
         }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
+        <span class="hljs-keyword">return</span> deferred.promise;
       }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Request a file system with the requested size (obtained first by getting a quota)
-     * @method _requestFileSystem
-     * @private
-     * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
-     * @param  {Number} requestedDataSize The quota
-     * @return {Promise}                   The promise
-     */</span>
+      <span class="hljs-comment">/**
+       * Request a file system with the requested size (obtained first by getting a quota)
+       * @method _requestFileSystem
+       * @private
+       * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
+       * @param  {Number} requestedDataSize The quota
+       * @return {Promise}                   The promise
+       */</span>
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_requestFileSystem</span><span class="hljs-params">( fileSystemType, requestedDataSize )</span> </span>{
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">try</span> {</pre></div></div>
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: "</span>, fileSystemType, requestedDataSize ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">try</span> {</pre></div></div>
             
         </li>
         
@@ -275,39 +275,39 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> requestFileSystem = <span class="hljs-built_in">window</span>.requestFileSystem || <span class="hljs-built_in">window</span>.webkitRequestFileSystem;
-        requestFileSystem( fileSystemType, requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileSystem )</span> </span>{
-          <span class="hljs-keyword">if</span> ( DEBUG ) {
-            <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: got a file system"</span>, theFileSystem ].join( <span class="hljs-string">" "</span> ) );
-          }
-          deferred.resolve( theFileSystem );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          <span class="hljs-keyword">if</span> ( DEBUG ) {
-            <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: couldn't get a file system"</span>,
-              fileSystemType
-            ].join( <span class="hljs-string">" "</span> ) );
-          }
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> requestFileSystem = <span class="hljs-built_in">window</span>.requestFileSystem || <span class="hljs-built_in">window</span>.webkitRequestFileSystem;
+          requestFileSystem( fileSystemType, requestedDataSize, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileSystem )</span> </span>{
+            <span class="hljs-keyword">if</span> ( DEBUG ) {
+              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: got a file system"</span>, theFileSystem ].join( <span class="hljs-string">" "</span> ) );
+            }
+            deferred.resolve( theFileSystem );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            <span class="hljs-keyword">if</span> ( DEBUG ) {
+              <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_requestFileSystem: couldn't get a file system"</span>,
+                fileSystemType
+              ].join( <span class="hljs-string">" "</span> ) );
+            }
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
       }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Resolves theURI to a fileEntry or directoryEntry, if possible.
-     * If `theURL` contains `private` or `localhost` as its first element, it will be removed. If
-     * `theURL` does not have a URL scheme, `file://` will be assumed.
-     * @method _resolveLocalFileSystemURL
-     * @private
-     * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
-     */</span>
+      <span class="hljs-comment">/**
+       * Resolves theURI to a fileEntry or directoryEntry, if possible.
+       * If `theURL` contains `private` or `localhost` as its first element, it will be removed. If
+       * `theURL` does not have a URL scheme, `file://` will be assumed.
+       * @method _resolveLocalFileSystemURL
+       * @private
+       * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
+       */</span>
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_resolveLocalFileSystemURL</span><span class="hljs-params">( theURL )</span> </span>{
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_resolveLocalFileSystemURL: "</span>, theURL ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">try</span> {</pre></div></div>
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_resolveLocalFileSystemURL: "</span>, theURL ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">try</span> {</pre></div></div>
             
         </li>
         
@@ -322,8 +322,8 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> parts = theURL.split( <span class="hljs-string">":"</span> ),
-          protocol, path;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> parts = theURL.split( <span class="hljs-string">":"</span> ),
+            protocol, path;</pre></div></div>
             
         </li>
         
@@ -338,9 +338,9 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( parts.length &gt; <span class="hljs-number">2</span> ) {
-          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"The URI is not well-formed; missing protocol: "</span> + theURL );
-        }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( parts.length &gt; <span class="hljs-number">2</span> ) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"The URI is not well-formed; missing protocol: "</span> + theURL );
+          }</pre></div></div>
             
         </li>
         
@@ -355,13 +355,13 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( parts.length &lt; <span class="hljs-number">2</span> ) {
-          protocol = <span class="hljs-string">"file"</span>;
-          path = parts[ <span class="hljs-number">0</span> ];
-        } <span class="hljs-keyword">else</span> {
-          protocol = parts[ <span class="hljs-number">0</span> ];
-          path = parts[ <span class="hljs-number">1</span> ];
-        }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( parts.length &lt; <span class="hljs-number">2</span> ) {
+            protocol = <span class="hljs-string">"file"</span>;
+            path = parts[ <span class="hljs-number">0</span> ];
+          } <span class="hljs-keyword">else</span> {
+            protocol = parts[ <span class="hljs-number">0</span> ];
+            path = parts[ <span class="hljs-number">1</span> ];
+          }</pre></div></div>
             
         </li>
         
@@ -376,8 +376,8 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> pathComponents = path.split( <span class="hljs-string">"/"</span> ),
-          newPathComponents = [];</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> pathComponents = path.split( <span class="hljs-string">"/"</span> ),
+            newPathComponents = [];</pre></div></div>
             
         </li>
         
@@ -392,14 +392,14 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        pathComponents.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( part )</span> </span>{
-          part = part.trim();
-          <span class="hljs-keyword">if</span> ( part !== <span class="hljs-string">""</span> ) { <span class="hljs-comment">// remove /private if it is the first item in the new array, for iOS sake</span>
-            <span class="hljs-keyword">if</span> ( !( ( part === <span class="hljs-string">"private"</span> || part === <span class="hljs-string">"localhost"</span> ) &amp;&amp; newPathComponents.length === <span class="hljs-number">0</span> ) ) {
-              newPathComponents.push( part );
+            <div class="content"><div class='highlight'><pre>          pathComponents.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( part )</span> </span>{
+            part = part.trim();
+            <span class="hljs-keyword">if</span> ( part !== <span class="hljs-string">""</span> ) { <span class="hljs-comment">// remove /private if it is the first item in the new array, for iOS sake</span>
+              <span class="hljs-keyword">if</span> ( !( ( part === <span class="hljs-string">"private"</span> || part === <span class="hljs-string">"localhost"</span> ) &amp;&amp; newPathComponents.length === <span class="hljs-number">0</span> ) ) {
+                newPathComponents.push( part );
+              }
             }
-          }
-        } );</pre></div></div>
+          } );</pre></div></div>
             
         </li>
         
@@ -414,7 +414,7 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> theNewURI = newPathComponents.join( <span class="hljs-string">"/"</span> );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> theNewURI = newPathComponents.join( <span class="hljs-string">"/"</span> );</pre></div></div>
             
         </li>
         
@@ -429,7 +429,7 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        theNewURI = protocol + <span class="hljs-string">":///"</span> + theNewURI;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          theNewURI = protocol + <span class="hljs-string">":///"</span> + theNewURI;</pre></div></div>
             
         </li>
         
@@ -444,399 +444,399 @@ on Android 4.2.2</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-built_in">window</span>.resolveLocalFileSystemURL( theNewURI, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theEntry )</span> </span>{
-          deferred.resolve( theEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-built_in">window</span>.resolveLocalFileSystemURL( theNewURI, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theEntry )</span> </span>{
+            deferred.resolve( theEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
       }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * @typedef {{}} DirectoryEntry
-     * HTML5 File API Directory Type
-     */</span>
-    <span class="hljs-comment">/**
-     * Returns a directory entry based on the path from the parent using
-     * the specified options, if specified. `options` takes the form:
-     * ` {create: true/false, exclusive true/false }`
-     * @method _getDirectoryEntry
-     * @private
-     * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
-     * @param  {String} path    The relative or absolute path or a {DirectoryEntry}
-     * @param  {Object} options The options (that is, create the directory if it doesn't exist, etc.)
-     * @return {Promise}         The promise
-     */</span>
+      <span class="hljs-comment">/**
+       * @typedef {{}} DirectoryEntry
+       * HTML5 File API Directory Type
+       */</span>
+      <span class="hljs-comment">/**
+       * Returns a directory entry based on the path from the parent using
+       * the specified options, if specified. `options` takes the form:
+       * ` {create: true/false, exclusive true/false }`
+       * @method _getDirectoryEntry
+       * @private
+       * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
+       * @param  {String} path    The relative or absolute path or a {DirectoryEntry}
+       * @param  {Object} options The options (that is, create the directory if it doesn't exist, etc.)
+       * @return {Promise}         The promise
+       */</span>
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getDirectoryEntry</span><span class="hljs-params">( parent, path, options )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getDirectoryEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
-          deferred.resolve( path );
-        } <span class="hljs-keyword">else</span> {
-          parent.getDirectory( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theDirectoryEntry )</span> </span>{
-            deferred.resolve( theDirectoryEntry );
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getDirectoryEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
         }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Returns a file entry based on the path from the parent using
-     * the specified options. `options` takes the form of `{ create: true/false, exclusive: true/false}`
-     * @method getFileEntry
-     * @private
-     * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
-     * @param  {String} path    The relative or absolute path
-     * @param  {Object} options The options (that is, create the file if it doesn't exist, etc.)
-     * @return {Promise}         The promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getFileEntry</span><span class="hljs-params">( parent, path, options )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
-          deferred.resolve( path );
-        } <span class="hljs-keyword">else</span> {
-          parent.getFile( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileEntry )</span> </span>{
-            deferred.resolve( theFileEntry );
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
-        }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * @typedef {{}} FileEntry
-     * HTML5 File API File Entry
-     */</span>
-    <span class="hljs-comment">/**
-     * Returns a file object based on the file entry.
-     * @method _getFileObject
-     * @private
-     * @param  {FileEntry} fileEntry The file Entry
-     * @return {Promise}           The Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getFileObject</span><span class="hljs-params">( fileEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileObject:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        fileEntry.file( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFile )</span> </span>{
-          deferred.resolve( theFile );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Reads the file contents from a file object. readAsKind indicates how
-     * to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").
-     * @method _readFileContents
-     * @private
-     * @param  {File} fileObject File to read
-     * @param  {String} readAsKind "Text", "DataURL", "BinaryString", "ArrayBuffer"
-     * @return {Promise}            The Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_readFileContents</span><span class="hljs-params">( fileObject, readAsKind )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readFileContents:"</span>, fileObject, readAsKind ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">var</span> fileReader = <span class="hljs-keyword">new</span> FileReader();
-        fileReader.onloadend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
-          deferred.resolve( e.target.result );
-        };
-        fileReader.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        };
-        fileReader[ <span class="hljs-string">"readAs"</span> + readAsKind ]( fileObject );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Creates a file writer for the file entry; `fileEntry` must exist
-     * @method _createFileWriter
-     * @private
-     * @param  {FileEntry} fileEntry The file entry to write to
-     * @return {Promise}           the Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_createFileWriter</span><span class="hljs-params">( fileEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_createFileWriter:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">var</span> fileWriter = fileEntry.createWriter( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileWriter )</span> </span>{
-          deferred.resolve( theFileWriter );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * @typedef {{}} FileWriter
-     * HTML5 File API File Writer Type
-     */</span>
-    <span class="hljs-comment">/**
-     * Write the contents to the fileWriter; `contents` should be a Blob.
-     * @method _writeFileContents
-     * @private
-     * @param  {FileWriter} fileWriter Obtained from _createFileWriter
-     * @param  {*} contents   The contents to write
-     * @return {Promise}            the Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_writeFileContents</span><span class="hljs-params">( fileWriter, contents )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_writeFileContents:"</span>, fileWriter, contents ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        fileWriter.onwrite = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
-          fileWriter.onwrite = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
-            deferred.resolve( e );
-          };
-          fileWriter.write( contents );
-        };
-        fileWriter.onError = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        };
-        fileWriter.truncate( <span class="hljs-number">0</span> ); <span class="hljs-comment">// clear out the contents, first</span>
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Copy the file to the specified parent directory, with an optional new name
-     * @method _copyFile
-     * @private
-     * @param  {FileEntry} theFileEntry            The file to copy
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the file to
-     * @param  {String} theNewName              The new name of the file ( or undefined simply to copy )
-     * @return {Promise}                         The Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_copyFile</span><span class="hljs-params">( theFileEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyFile:"</span>, theFileEntry, theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theFileEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
-          deferred.resolve( theNewFileEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Move the file to the specified parent directory, with an optional new name
-     * @method _moveFile
-     * @private
-     * @param  {FileEntry} theFileEntry            The file to move or rename
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the file to (or the same as the file in order to rename)
-     * @param  {String} theNewName              The new name of the file ( or undefined simply to move )
-     * @return {Promise}                         The Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_moveFile</span><span class="hljs-params">( theFileEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveFile:"</span>, theFileEntry, theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theFileEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
-          deferred.resolve( theNewFileEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Remove the file from the file system
-     * @method _removeFile
-     * @private
-     * @param  {FileEntry} theFileEntry The file to remove
-     * @return {Promise}              The Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_removeFile</span><span class="hljs-params">( theFileEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeFile:"</span>, theFileEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theFileEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
-          deferred.resolve();
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Copies a directory to the specified directory, with an optional new name. The directory
-     * is copied recursively.
-     * @method _copyDirectory
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry       The directory to copy
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the first directory to
-     * @param  {String} theNewName              The optional new name for the directory
-     * @return {Promise}                         A promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_copyDirectory</span><span class="hljs-params">( theDirectoryEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyDirectory:"</span>, theDirectoryEntry,
-          theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
-          deferred.resolve( theNewDirectoryEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Moves a directory to the specified directory, with an optional new name. The directory
-     * is moved recursively.
-     * @method _moveDirectory
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry       The directory to move
-     * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the first directory to
-     * @param  {String} theNewName              The optional new name for the directory
-     * @return {Promise}                         A promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_moveDirectory</span><span class="hljs-params">( theDirectoryEntry, theParentDirectoryEntry, theNewName )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveDirectory:"</span>, theDirectoryEntry,
-          theParentDirectoryEntry,
-          theNewName
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
-          deferred.resolve( theNewDirectoryEntry );
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-          deferred.reject( anError );
-        } );
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Removes a directory from the file system. If recursively is true, the directory is removed
-     * recursively.
-     * @method _removeDirectory
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry The directory to remove
-     * @param  {Boolean} recursively       If true, remove recursively
-     * @return {Promise}                   The Promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_removeDirectory</span><span class="hljs-params">( theDirectoryEntry, recursively )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeDirectory:"</span>, theDirectoryEntry, <span class="hljs-string">"recursively"</span>,
-          recursively
-        ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> deferred = Q.defer();
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">if</span> ( !recursively ) {
-          theDirectoryEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
-            deferred.resolve();
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
-        } <span class="hljs-keyword">else</span> {
-          theDirectoryEntry.removeRecursively( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
-            deferred.resolve();
-          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
-            deferred.reject( anError );
-          } );
-        }
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
-      }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * Reads the contents of a directory
-     * @method _readDirectoryContents
-     * @private
-     * @param  {DirectoryEntry} theDirectoryEntry The directory to list
-     * @return {Promise}                   The promise
-     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_readDirectoryContents</span><span class="hljs-params">( theDirectoryEntry )</span> </span>{
-      <span class="hljs-keyword">if</span> ( DEBUG ) {
-        <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readDirectoryContents:"</span>, theDirectoryEntry ].join( <span class="hljs-string">" "</span> ) );
-      }
-      <span class="hljs-keyword">var</span> directoryReader = theDirectoryEntry.createReader(),
-        entries = [],
-        deferred = Q.defer();
-
-      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readEntries</span><span class="hljs-params">()</span> </span>{
-        directoryReader.readEntries( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theEntries )</span> </span>{
-          <span class="hljs-keyword">if</span> ( !theEntries.length ) {
-            deferred.resolve( entries );
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
+            deferred.resolve( path );
           } <span class="hljs-keyword">else</span> {
-            entries = entries.concat( <span class="hljs-built_in">Array</span>.prototype.slice.call( theEntries || [], <span class="hljs-number">0</span> ) );
-            readEntries();
+            parent.getDirectory( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theDirectoryEntry )</span> </span>{
+              deferred.resolve( theDirectoryEntry );
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
           }
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+        } <span class="hljs-keyword">catch</span> ( anError ) {
           deferred.reject( anError );
-        } );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
       }
-      <span class="hljs-keyword">try</span> {
-        readEntries();
-      } <span class="hljs-keyword">catch</span> ( anError ) {
-        deferred.reject( anError );
+      <span class="hljs-comment">/**
+       * Returns a file entry based on the path from the parent using
+       * the specified options. `options` takes the form of `{ create: true/false, exclusive: true/false}`
+       * @method getFileEntry
+       * @private
+       * @param  {DirectoryEntry} parent  The parent that path is relative from (or absolute)
+       * @param  {String} path    The relative or absolute path
+       * @param  {Object} options The options (that is, create the file if it doesn't exist, etc.)
+       * @return {Promise}         The promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getFileEntry</span><span class="hljs-params">( parent, path, options )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileEntry:"</span>, parent, path, options ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> path === <span class="hljs-string">"object"</span> ) {
+            deferred.resolve( path );
+          } <span class="hljs-keyword">else</span> {
+            parent.getFile( path, options || {}, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileEntry )</span> </span>{
+              deferred.resolve( theFileEntry );
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
+          }
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
       }
-      <span class="hljs-keyword">return</span> deferred.promise;
-    }
-    <span class="hljs-comment">/**
-     * @class FileManager
-     */</span>
+      <span class="hljs-comment">/**
+       * @typedef {{}} FileEntry
+       * HTML5 File API File Entry
+       */</span>
+      <span class="hljs-comment">/**
+       * Returns a file object based on the file entry.
+       * @method _getFileObject
+       * @private
+       * @param  {FileEntry} fileEntry The file Entry
+       * @return {Promise}           The Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_getFileObject</span><span class="hljs-params">( fileEntry )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_getFileObject:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          fileEntry.file( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFile )</span> </span>{
+            deferred.resolve( theFile );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Reads the file contents from a file object. readAsKind indicates how
+       * to read the file ("Text", "DataURL", "BinaryString", "ArrayBuffer").
+       * @method _readFileContents
+       * @private
+       * @param  {File} fileObject File to read
+       * @param  {String} readAsKind "Text", "DataURL", "BinaryString", "ArrayBuffer"
+       * @return {Promise}            The Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_readFileContents</span><span class="hljs-params">( fileObject, readAsKind )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readFileContents:"</span>, fileObject, readAsKind ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">var</span> fileReader = <span class="hljs-keyword">new</span> FileReader();
+          fileReader.onloadend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+            deferred.resolve( e.target.result );
+          };
+          fileReader.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          };
+          fileReader[ <span class="hljs-string">"readAs"</span> + readAsKind ]( fileObject );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Creates a file writer for the file entry; `fileEntry` must exist
+       * @method _createFileWriter
+       * @private
+       * @param  {FileEntry} fileEntry The file entry to write to
+       * @return {Promise}           the Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_createFileWriter</span><span class="hljs-params">( fileEntry )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_createFileWriter:"</span>, fileEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">var</span> fileWriter = fileEntry.createWriter( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theFileWriter )</span> </span>{
+            deferred.resolve( theFileWriter );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * @typedef {{}} FileWriter
+       * HTML5 File API File Writer Type
+       */</span>
+      <span class="hljs-comment">/**
+       * Write the contents to the fileWriter; `contents` should be a Blob.
+       * @method _writeFileContents
+       * @private
+       * @param  {FileWriter} fileWriter Obtained from _createFileWriter
+       * @param  {*} contents   The contents to write
+       * @return {Promise}            the Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_writeFileContents</span><span class="hljs-params">( fileWriter, contents )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_writeFileContents:"</span>, fileWriter, contents ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          fileWriter.onwrite = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+            fileWriter.onwrite = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+              deferred.resolve( e );
+            };
+            fileWriter.write( contents );
+          };
+          fileWriter.onError = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          };
+          fileWriter.truncate( <span class="hljs-number">0</span> ); <span class="hljs-comment">// clear out the contents, first</span>
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Copy the file to the specified parent directory, with an optional new name
+       * @method _copyFile
+       * @private
+       * @param  {FileEntry} theFileEntry            The file to copy
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the file to
+       * @param  {String} theNewName              The new name of the file ( or undefined simply to copy )
+       * @return {Promise}                         The Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_copyFile</span><span class="hljs-params">( theFileEntry, theParentDirectoryEntry, theNewName )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyFile:"</span>, theFileEntry, theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theFileEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
+            deferred.resolve( theNewFileEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Move the file to the specified parent directory, with an optional new name
+       * @method _moveFile
+       * @private
+       * @param  {FileEntry} theFileEntry            The file to move or rename
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the file to (or the same as the file in order to rename)
+       * @param  {String} theNewName              The new name of the file ( or undefined simply to move )
+       * @return {Promise}                         The Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_moveFile</span><span class="hljs-params">( theFileEntry, theParentDirectoryEntry, theNewName )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveFile:"</span>, theFileEntry, theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theFileEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewFileEntry )</span> </span>{
+            deferred.resolve( theNewFileEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Remove the file from the file system
+       * @method _removeFile
+       * @private
+       * @param  {FileEntry} theFileEntry The file to remove
+       * @return {Promise}              The Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_removeFile</span><span class="hljs-params">( theFileEntry )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeFile:"</span>, theFileEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theFileEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
+            deferred.resolve();
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Copies a directory to the specified directory, with an optional new name. The directory
+       * is copied recursively.
+       * @method _copyDirectory
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry       The directory to copy
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to copy the first directory to
+       * @param  {String} theNewName              The optional new name for the directory
+       * @return {Promise}                         A promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_copyDirectory</span><span class="hljs-params">( theDirectoryEntry, theParentDirectoryEntry, theNewName )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_copyDirectory:"</span>, theDirectoryEntry,
+            theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theDirectoryEntry.copyTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
+            deferred.resolve( theNewDirectoryEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Moves a directory to the specified directory, with an optional new name. The directory
+       * is moved recursively.
+       * @method _moveDirectory
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry       The directory to move
+       * @param  {DirectoryEntry} theParentDirectoryEntry The parent directory to move the first directory to
+       * @param  {String} theNewName              The optional new name for the directory
+       * @return {Promise}                         A promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_moveDirectory</span><span class="hljs-params">( theDirectoryEntry, theParentDirectoryEntry, theNewName )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_moveDirectory:"</span>, theDirectoryEntry,
+            theParentDirectoryEntry,
+            theNewName
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          theDirectoryEntry.moveTo( theParentDirectoryEntry, theNewName, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theNewDirectoryEntry )</span> </span>{
+            deferred.resolve( theNewDirectoryEntry );
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Removes a directory from the file system. If recursively is true, the directory is removed
+       * recursively.
+       * @method _removeDirectory
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry The directory to remove
+       * @param  {Boolean} recursively       If true, remove recursively
+       * @return {Promise}                   The Promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_removeDirectory</span><span class="hljs-params">( theDirectoryEntry, recursively )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_removeDirectory:"</span>, theDirectoryEntry, <span class="hljs-string">"recursively"</span>,
+            recursively
+          ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> deferred = Q.defer();
+        <span class="hljs-keyword">try</span> {
+          <span class="hljs-keyword">if</span> ( !recursively ) {
+            theDirectoryEntry.remove( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
+              deferred.resolve();
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
+          } <span class="hljs-keyword">else</span> {
+            theDirectoryEntry.removeRecursively( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">()</span> </span>{
+              deferred.resolve();
+            }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+              deferred.reject( anError );
+            } );
+          }
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * Reads the contents of a directory
+       * @method _readDirectoryContents
+       * @private
+       * @param  {DirectoryEntry} theDirectoryEntry The directory to list
+       * @return {Promise}                   The promise
+       */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_readDirectoryContents</span><span class="hljs-params">( theDirectoryEntry )</span> </span>{
+        <span class="hljs-keyword">if</span> ( DEBUG ) {
+          <span class="hljs-built_in">console</span>.log( [ <span class="hljs-string">"_readDirectoryContents:"</span>, theDirectoryEntry ].join( <span class="hljs-string">" "</span> ) );
+        }
+        <span class="hljs-keyword">var</span> directoryReader = theDirectoryEntry.createReader(),
+          entries = [],
+          deferred = Q.defer();
+
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readEntries</span><span class="hljs-params">()</span> </span>{
+          directoryReader.readEntries( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">success</span><span class="hljs-params">( theEntries )</span> </span>{
+            <span class="hljs-keyword">if</span> ( !theEntries.length ) {
+              deferred.resolve( entries );
+            } <span class="hljs-keyword">else</span> {
+              entries = entries.concat( <span class="hljs-built_in">Array</span>.prototype.slice.call( theEntries || [], <span class="hljs-number">0</span> ) );
+              readEntries();
+            }
+          }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">failure</span><span class="hljs-params">( anError )</span> </span>{
+            deferred.reject( anError );
+          } );
+        }
+        <span class="hljs-keyword">try</span> {
+          readEntries();
+        } <span class="hljs-keyword">catch</span> ( anError ) {
+          deferred.reject( anError );
+        }
+        <span class="hljs-keyword">return</span> deferred.promise;
+      }
+      <span class="hljs-comment">/**
+       * @class FileManager
+       */</span>
     <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"UTIL.FileManager"</span>,
       FileManager = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
         <span class="hljs-keyword">var</span> self,</pre></div></div>
