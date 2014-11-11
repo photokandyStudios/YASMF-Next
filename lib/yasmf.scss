@@ -367,9 +367,6 @@ div {
   width: 100%;
 }
 
-/* Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android <4.4
-   will fail spectacularly */
-
 .ui-off-canvas-view {
   width: -webkit-calc(100% + 320px);
   width: calc(100% + 320px);
@@ -381,6 +378,16 @@ div {
   width: -webkit-calc(100% + 280px);
   width: calc(100% + 280px);
   @include transform(translateX(-280px));
+}
+
+.androidC .ui-off-canvas-view {
+  width: 100%;
+  padding-left: 320px;
+  @include box-sizing(content-box);
+}
+
+.androidC.phone .ui-off-canvas-view {
+  padding-left: 280px;
 }
 
 .ui-split-overlay-view {
@@ -963,6 +970,11 @@ $android-destructive-color: #C00;
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   margin-left:   0;
 }
+.androidC .ui-list-item,
+.androidC .ui-list-heading {
+  display: table;
+  width:   100%;
+}
 
 /* List Items can have indicators attached, which will appear
    on the right of the list item. */
@@ -988,6 +1000,12 @@ $android-destructive-color: #C00;
 
 .ui-list-item-flex-contents .ui-fill {
   @include flex(1);
+
+  .androidC & {
+    display: table-cell;
+    width: 100%;
+    padding: 10px;
+  }
 }
 
 .ui-list-heading .ui-list-item-flex-contents .ui-label {
@@ -1006,6 +1024,12 @@ $android-destructive-color: #C00;
 .android .ui-list-heading .ui-indicator,
 .android .ui-list-item .ui-indicator {
   background-color: white;
+}
+
+.androidC .ui-list-item-flex-contents .ui-indicator {
+  display: table-cell;
+  @include mask-position(center center);
+  @include mask-repeat(no-repeat);
 }
 
 .ui-list-item .ui-arrow-direction-right,
@@ -1043,7 +1067,13 @@ $android-destructive-color: #C00;
 .ui-list-heading .ui-list-item-flex-contents {
   @include flex-box();
   background-color: transparent;
+
+  .androidC & {
+    display: table-row;
+    margin: -10px;
+  }
 }
+
 
 /* A list action group can be used to group actions together as in a swipe-to-delete mechanism */
 
