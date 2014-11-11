@@ -327,8 +327,9 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
 
 <span class="hljs-class">.ui-split-view</span> {
   <span class="hljs-attribute">width</span><span class="hljs-value">: <span class="hljs-number">100%</span>;</span>
-}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android &lt;4.4
-   will fail spectacularly </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ui-off-canvas-view</span> {
+}
+
+<span class="hljs-class">.ui-off-canvas-view</span> {
   <span class="hljs-attribute">width</span><span class="hljs-value">: <span class="hljs-function">-webkit-calc</span>(<span class="hljs-number">100%</span> + <span class="hljs-number">320px</span>);</span>
   <span class="hljs-attribute">width</span><span class="hljs-value">: <span class="hljs-function">calc</span>(<span class="hljs-number">100%</span> + <span class="hljs-number">320px</span>);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> transform</span>(<span class="hljs-function">translateX</span>(-<span class="hljs-number">320px</span>));</span>
@@ -339,6 +340,16 @@ would carry to here, but on Android, it doesn&#39;t.</p></div></div><div class="
   <span class="hljs-attribute">width</span><span class="hljs-value">: <span class="hljs-function">-webkit-calc</span>(<span class="hljs-number">100%</span> + <span class="hljs-number">280px</span>);</span>
   <span class="hljs-attribute">width</span><span class="hljs-value">: <span class="hljs-function">calc</span>(<span class="hljs-number">100%</span> + <span class="hljs-number">280px</span>);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> transform</span>(<span class="hljs-function">translateX</span>(-<span class="hljs-number">280px</span>));</span>
+}
+
+<span class="hljs-class">.androidC</span> <span class="hljs-class">.ui-off-canvas-view</span> {
+  <span class="hljs-attribute">width</span><span class="hljs-value">: <span class="hljs-number">100%</span>;</span>
+  <span class="hljs-attribute">padding-left</span><span class="hljs-value">: <span class="hljs-number">320px</span>;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> box-sizing</span>(<span class="hljs-keyword">content</span>-box);</span>
+}
+
+<span class="hljs-class">.androidC</span><span class="hljs-class">.phone</span> <span class="hljs-class">.ui-off-canvas-view</span> {
+  <span class="hljs-attribute">padding-left</span><span class="hljs-value">: <span class="hljs-number">280px</span>;</span>
 }
 
 <span class="hljs-class">.ui-split-overlay-view</span> {
@@ -857,6 +868,11 @@ reset the navigation bar height</p></div></div><div class="code"><div class="wra
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-list-heading</span> {
   <span class="hljs-attribute">border-bottom</span><span class="hljs-value">: <span class="hljs-number">1px</span> solid <span class="hljs-function">rgba</span>(<span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">0.25</span>);</span>
   <span class="hljs-attribute">margin-left</span><span class="hljs-value">:   <span class="hljs-number">0</span>;</span>
+}
+<span class="hljs-class">.androidC</span> <span class="hljs-class">.ui-list-item</span>,
+<span class="hljs-class">.androidC</span> <span class="hljs-class">.ui-list-heading</span> {
+  <span class="hljs-attribute">display</span><span class="hljs-value">: table;</span>
+  <span class="hljs-attribute">width</span><span class="hljs-value">:   <span class="hljs-number">100%</span>;</span>
 }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>List Items can have indicators attached, which will appear
    on the right of the list item. </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ui-list-item</span> <span class="hljs-class">.ui-indicator</span>,
 <span class="hljs-class">.ui-list-heading</span> <span class="hljs-class">.ui-indicator</span> {
@@ -879,6 +895,12 @@ reset the navigation bar height</p></div></div><div class="code"><div class="wra
 
 <span class="hljs-class">.ui-list-item-flex-contents</span> <span class="hljs-class">.ui-fill</span> {
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> flex</span>(<span class="hljs-number">1</span>);</span>
+
+  <span class="hljs-class">.androidC</span> &amp; {
+    <span class="hljs-attribute">display</span><span class="hljs-value">: table-cell;</span>
+    <span class="hljs-attribute">width</span><span class="hljs-value">: <span class="hljs-number">100%</span>;</span>
+    <span class="hljs-attribute">padding</span><span class="hljs-value">: <span class="hljs-number">10px</span>;</span>
+  }
 }
 
 <span class="hljs-class">.ui-list-heading</span> <span class="hljs-class">.ui-list-item-flex-contents</span> <span class="hljs-class">.ui-label</span> {
@@ -897,6 +919,12 @@ reset the navigation bar height</p></div></div><div class="code"><div class="wra
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-list-heading</span> <span class="hljs-class">.ui-indicator</span>,
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-list-item</span> <span class="hljs-class">.ui-indicator</span> {
   <span class="hljs-attribute">background-color</span><span class="hljs-value">: white;</span>
+}
+
+<span class="hljs-class">.androidC</span> <span class="hljs-class">.ui-list-item-flex-contents</span> <span class="hljs-class">.ui-indicator</span> {
+  <span class="hljs-attribute">display</span><span class="hljs-value">: table-cell;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-position</span>(center<span class="hljs-preprocessor"> center</span>);</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> mask-repeat</span>(no-repeat);</span>
 }
 
 <span class="hljs-class">.ui-list-item</span> <span class="hljs-class">.ui-arrow-direction-right</span>,
@@ -930,6 +958,11 @@ reset the navigation bar height</p></div></div><div class="code"><div class="wra
 <span class="hljs-class">.ui-list-heading</span> <span class="hljs-class">.ui-list-item-flex-contents</span> {
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> flex-box</span>();</span>
   <span class="hljs-attribute">background-color</span><span class="hljs-value">: transparent;</span>
+
+  <span class="hljs-class">.androidC</span> &amp; {
+    <span class="hljs-attribute">display</span><span class="hljs-value">: table-row;</span>
+    <span class="hljs-attribute">margin</span><span class="hljs-value">: -<span class="hljs-number">10px</span>;</span>
+  }
 }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>A list action group can be used to group actions together as in a swipe-to-delete mechanism </p></div></div><div class="code"><div class="wrapper"><span class="hljs-class">.ui-list-item</span> <span class="hljs-class">.ui-list-action-group</span>,
 <span class="hljs-class">.ui-list-heading</span> <span class="hljs-class">.ui-list-action-group</span> {
   <span class="hljs-attribute">background-color</span><span class="hljs-value">: <span class="hljs-hexcolor">#CCC</span>;</span>

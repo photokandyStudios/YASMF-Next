@@ -527,7 +527,7 @@ and it would work like “field.field.field”.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">null</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">null</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v != <span class="hljs-string">""</span> ) {
           r.message = <span class="hljs-string">"Type Mismatch; expected "</span> + rule.type + <span class="hljs-string">" not "</span> + ( <span class="hljs-keyword">typeof</span> v ) + <span class="hljs-string">" in "</span> + title;
           <span class="hljs-keyword">switch</span> ( rule.type ) {
           <span class="hljs-keyword">case</span> <span class="hljs-string">"float"</span>:

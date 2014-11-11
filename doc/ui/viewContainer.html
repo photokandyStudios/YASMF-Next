@@ -121,7 +121,7 @@ DOM elements backing the view if they weren&#39;t already created.</p></div></di
       <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> renderOutput === <span class="hljs-string">"string"</span> ) {
         self.element.innerHTML = self.render();
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> renderOutput === <span class="hljs-string">"object"</span> ) {
-        self.element.innerHTML = <span class="hljs-string">""</span>;
+        <span class="hljs-comment">//self.element.innerHTML = "";</span>
         h.renderTo( renderOutput, self.element );
       }
     };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>

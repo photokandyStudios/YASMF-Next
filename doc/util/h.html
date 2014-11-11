@@ -413,13 +413,22 @@ at that point <code>appendChild</code> fails.</p>
 </li>
 <li><p><strong>el must be a Node.</strong><br/>(Element to attach to)</p>
 </li>
-</ul></div></div><div class="code"><div class="wrapper">      renderTo: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderTo</span><span class="hljs-params">( n, el )</span> </span>{
+<li><p><strong>idx must be a Number.</strong><br/>(index (optional))</p>
+</li>
+</ul></div></div><div class="code"><div class="wrapper">      renderTo: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderTo</span><span class="hljs-params">( n, el, idx )</span> </span>{
+        <span class="hljs-keyword">if</span> ( !idx ) {
+          idx = <span class="hljs-number">0</span>;
+        }
         <span class="hljs-keyword">if</span> ( n <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
           <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = n.length; i &lt; l; i++ ) {
-            el.appendChild( n[ i ] );
+            renderTo( n[ i ], el, i );
           }
         } <span class="hljs-keyword">else</span> {
-          el.appendChild( n );
+          <span class="hljs-keyword">if</span> ( el.hasChildNodes() &amp;&amp; idx &lt; el.childNodes.length ) {
+            el.replaceChild( n, el.childNodes[ idx ] );
+          } <span class="hljs-keyword">else</span> {
+            el.appendChild( n );
+          }
         }
       }
     },</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create bindings for each HTML element (from: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">https://developer.mozilla.org/en-US/docs/Web/HTML/Element</a>)</p></div></div><div class="code"><div class="wrapper">    els = [ <span class="hljs-string">"a"</span>, <span class="hljs-string">"abbr"</span>, <span class="hljs-string">"acronym"</span>, <span class="hljs-string">"address"</span>, <span class="hljs-string">"applet"</span>, <span class="hljs-string">"area"</span>, <span class="hljs-string">"article"</span>, <span class="hljs-string">"aside"</span>, <span class="hljs-string">"audio"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"base"</span>, <span class="hljs-string">"basefont"</span>, <span class="hljs-string">"bdi"</span>,

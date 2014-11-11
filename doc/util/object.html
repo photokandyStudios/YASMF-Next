@@ -267,11 +267,17 @@ you aren&#39;t watching the console, the function fails nearly silently.</p>
 <li><p><strong>theListener must be a Function.</strong><br/>(the function (or reference) to be called when the notification is triggered.)</p>
 </li>
 </ul>
-<p><strong>Returns a *</strong><br/>(returns self for chaining)</p></div></div><div class="code"><div class="wrapper">      self.addListenerForNotification = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNotification, theListener, async )</span> </span>{
+<p><strong>Returns a *</strong><br/>(returns self for chaining)</p></div></div><div class="code"><div class="wrapper">      self.addListenerForNotification = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addListenerForNotification</span><span class="hljs-params">( theNotification, theListener, async )</span> </span>{
+        <span class="hljs-keyword">if</span> ( theNotification <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+          theNotification.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( n )</span> </span>{
+            addListenerForNotification( n, theListener, async );
+          } );
+          <span class="hljs-keyword">return</span> self;
+        }
         <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theNotification === <span class="hljs-string">"object"</span> ) {
           <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> n <span class="hljs-keyword">in</span> theNotification ) {
             <span class="hljs-keyword">if</span> ( theNotification.hasOwnProperty( n ) ) {
-              self.addListenerForNotification( n, theNotification[ n ], theListener ); <span class="hljs-comment">// async would shift up</span>
+              addListenerForNotification( n, theNotification[ n ], theListener ); <span class="hljs-comment">// async would shift up</span>
             }
           }
           <span class="hljs-keyword">return</span> self;
@@ -319,7 +325,13 @@ you aren&#39;t watching the console, the function fails nearly silently.</p>
 </li>
 <li><p><strong>theListener must be a Function.</strong><br/>(The function or reference to remove)</p>
 </li>
-</ul></div></div><div class="code"><div class="wrapper">      self.removeListenerForNotification = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNotification, theListener )</span> </span>{
+</ul></div></div><div class="code"><div class="wrapper">      self.removeListenerForNotification = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeListenerForNotification</span><span class="hljs-params">( theNotification, theListener )</span> </span>{
+        <span class="hljs-keyword">if</span> ( theNotification <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+          theNotification.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( n )</span> </span>{
+            removeListenerForNotification( n, theListener );
+          } );
+          <span class="hljs-keyword">return</span> self;
+        }
         <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theNotification === <span class="hljs-string">"object"</span> ) {
           <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> n <span class="hljs-keyword">in</span> theNotification ) {
             <span class="hljs-keyword">if</span> ( theNotification.hasOwnProperty( n ) ) {
@@ -802,10 +814,10 @@ triggering element, and keyPath is on <code>data-y-keyPath</code> attribute.</p>
             dataValue = <span class="hljs-keyword">this</span>.value;
             <span class="hljs-keyword">switch</span> ( keyType ) {
             <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
-              self[ keyPath ] = <span class="hljs-built_in">parseInt</span>( dataValue, <span class="hljs-number">10</span> );
+              self[ keyPath ] = ( dataValue === <span class="hljs-string">""</span> ) ? <span class="hljs-literal">null</span> : <span class="hljs-built_in">parseInt</span>( dataValue, <span class="hljs-number">10</span> );
               <span class="hljs-keyword">break</span>;
             <span class="hljs-keyword">case</span> <span class="hljs-string">"float"</span>:
-              self[ keyPath ] = <span class="hljs-built_in">parseFloat</span>( dataValue );
+              self[ keyPath ] = ( dataValue === <span class="hljs-string">""</span> ) ? <span class="hljs-literal">null</span> : <span class="hljs-built_in">parseFloat</span>( dataValue );
               <span class="hljs-keyword">break</span>;
             <span class="hljs-keyword">case</span> <span class="hljs-string">"boolean"</span>:
               <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.checked !== <span class="hljs-literal">undefined</span> ) {
@@ -871,15 +883,25 @@ with defineProperty and defineObservableProperty.</p>
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = keyPathEls.length; i &lt; l; i++ ) {
               el = keyPathEls[ i ];
               <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"date"</span> ) {
-                el.valueAsDate = v;
+                <span class="hljs-keyword">if</span> ( el.valueAsDate !== v ) {
+                  el.valueAsDate = v;
+                }
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"checkbox"</span> ) {
-                el.checked = v;
+                <span class="hljs-keyword">if</span> ( el.checked !== v ) {
+                  el.checked = v;
+                }
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.value !== <span class="hljs-string">"undefined"</span> ) {
-                el.value = v;
+                <span class="hljs-keyword">if</span> ( el.value != v ) {
+                  el.value = v;
+                }
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.textContent !== <span class="hljs-string">"undefined"</span> ) {
-                el.textContent = v;
+                <span class="hljs-keyword">if</span> ( el.textContent != v ) {
+                  el.textContent = v;
+                }
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.innerText !== <span class="hljs-string">"undefined"</span> ) {
-                el.innerText = v;
+                <span class="hljs-keyword">if</span> ( el.innerText != v ) {
+                  el.innerText = v;
+                }
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Data bind failure; browser doesn't understand value, textContent, or innerText."</span> );
               }

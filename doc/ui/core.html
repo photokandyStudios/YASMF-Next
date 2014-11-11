@@ -444,25 +444,52 @@ to be notified when the back button is pressed.</p>
         curFormFactor,
         curScale,
         curConvenience,
-        curDevice = theDevice.platform();
-      <span class="hljs-keyword">if</span> ( curDevice === <span class="hljs-string">"ios"</span> ) {
-        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 9"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios9 iosM"</span>;
+        curDevice = theDevice.platform(),
+        OSLevel;
+      <span class="hljs-keyword">switch</span> ( curDevice ) {
+      <span class="hljs-keyword">case</span> <span class="hljs-string">"mac"</span>:
+        <span class="hljs-keyword">try</span> {
+          OSLevel = <span class="hljs-string">""</span> + <span class="hljs-built_in">parseFloat</span>( ( navigator.userAgent.match( <span class="hljs-regexp">/OS X ([0-9_]+)/</span> )[ <span class="hljs-number">1</span> ] ).replace( <span class="hljs-regexp">/_/g</span>, <span class="hljs-string">"."</span> ) );
+        } <span class="hljs-keyword">catch</span> ( e ) {}
+        <span class="hljs-keyword">if</span> ( OSLevel !== <span class="hljs-literal">undefined</span> ) {
+          curDevice += <span class="hljs-string">" mac"</span> + ( OSLevel.length &lt; <span class="hljs-number">5</span> ? <span class="hljs-string">"C"</span> : <span class="hljs-string">"M"</span> );
         }
-        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 8"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios8 iosM"</span>;
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-string">"ios"</span>:
+        <span class="hljs-keyword">try</span> {
+          OSLevel = navigator.userAgent.match( <span class="hljs-regexp">/OS ([0-9]+)/</span> )[ <span class="hljs-number">1</span> ];
+        } <span class="hljs-keyword">catch</span> ( e ) {}
+        <span class="hljs-keyword">if</span> ( OSLevel !== <span class="hljs-literal">undefined</span> ) {
+          curDevice += <span class="hljs-string">" ios"</span> + OSLevel + <span class="hljs-string">" ios"</span> + ( OSLevel &lt; <span class="hljs-number">7</span> ? <span class="hljs-string">"C"</span> : <span class="hljs-string">"M"</span> );
         }
-        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 7"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios7 iosM"</span>;
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-string">"android"</span>:
+        <span class="hljs-keyword">try</span> {
+          OSLevel = <span class="hljs-built_in">parseFloat</span>( navigator.userAgent.match( <span class="hljs-regexp">/Android ([0-9.]+)/</span> )[ <span class="hljs-number">1</span> ] );
+        } <span class="hljs-keyword">catch</span> ( e ) {}
+        <span class="hljs-keyword">if</span> ( OSLevel !== <span class="hljs-literal">undefined</span> ) {
+          curDevice += <span class="hljs-string">" android"</span> + ( <span class="hljs-string">""</span> + OSLevel ).replace( <span class="hljs-regexp">/\./g</span>, <span class="hljs-string">"-"</span> ) + <span class="hljs-string">" android"</span> + ( ( OSLevel &lt; <span class="hljs-number">4.4</span> ) ? <span class="hljs-string">"C"</span> : ( (
+            OSLevel &gt;= <span class="hljs-number">5</span> ) ? <span class="hljs-string">"M"</span> : <span class="hljs-string">"K"</span> ) )
         }
-        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 6"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios6 iosC"</span>;
-        }
-        <span class="hljs-keyword">if</span> ( navigator.userAgent.indexOf( <span class="hljs-string">"OS 5"</span> ) &gt; -<span class="hljs-number">1</span> ) {
-          curDevice += <span class="hljs-string">" ios5 iosC"</span>;
-        }
-      }
-      curFormFactor = theDevice.formFactor();
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">default</span>:
+      }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p> if ( curDevice === &quot;ios&quot; ) {
+ if ( navigator.userAgent.indexOf( &quot;OS 9&quot; ) &gt; -1 ) {
+ curDevice += &quot; ios9 iosM&quot;;
+ }
+ if ( navigator.userAgent.indexOf( &quot;OS 8&quot; ) &gt; -1 ) {
+ curDevice += &quot; ios8 iosM&quot;;
+ }
+ if ( navigator.userAgent.indexOf( &quot;OS 7&quot; ) &gt; -1 ) {
+ curDevice += &quot; ios7 iosM&quot;;
+ }
+ if ( navigator.userAgent.indexOf( &quot;OS 6&quot; ) &gt; -1 ) {
+ curDevice += &quot; ios6 iosC&quot;;
+ }
+ if ( navigator.userAgent.indexOf( &quot;OS 5&quot; ) &gt; -1 ) {
+ curDevice += &quot; ios5 iosC&quot;;
+ }
+ } </p></div></div><div class="code"><div class="wrapper">      curFormFactor = theDevice.formFactor();
       curOrientation = theDevice.isPortrait() ? <span class="hljs-string">"portrait"</span> : <span class="hljs-string">"landscape"</span>;
       curScale = theDevice.isRetina() ? <span class="hljs-string">"hiDPI"</span> : <span class="hljs-string">"loDPI"</span>;
       curScale += <span class="hljs-string">" scale"</span> + <span class="hljs-built_in">window</span>.devicePixelRatio + <span class="hljs-string">"x"</span>;
@@ -480,8 +507,8 @@ to be notified when the back button is pressed.</p>
         curConvenience = <span class="hljs-string">"droid-phone"</span>;
       }
       <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span>.body !== <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-built_in">document</span>.body !== <span class="hljs-literal">null</span> ) {
-        <span class="hljs-built_in">document</span>.body.setAttribute( <span class="hljs-string">"class"</span>, curDevice + <span class="hljs-string">" "</span> + curFormFactor + <span class="hljs-string">" "</span> + curOrientation + <span class="hljs-string">" "</span> + curScale + <span class="hljs-string">" "</span> +
-          curConvenience );
+        <span class="hljs-built_in">document</span>.body.setAttribute( <span class="hljs-string">"class"</span>, [ curDevice, curFormFactor, curOrientation, curScale, curConvenience ].join(
+          <span class="hljs-string">" "</span> ) );
       }
       self.notify( <span class="hljs-string">"orientationChanged"</span> );
     };
