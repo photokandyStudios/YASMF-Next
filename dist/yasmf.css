@@ -194,8 +194,6 @@ div {
 .ui-split-view {
   width: 100%; }
 
-/* Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android <4.4
-   will fail spectacularly */
 .ui-off-canvas-view {
   width: -webkit-calc(100% + 320px);
   width: calc(100% + 320px);
@@ -218,6 +216,18 @@ div {
   -ms-transform: translateX(-280px);
   -o-transform: translateX(-280px);
   transform: translateX(-280px); }
+
+.androidC .ui-off-canvas-view {
+  width: 100%;
+  padding-left: 320px;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -ms-box-sizing: content-box;
+  -o-box-sizing: content-box;
+  box-sizing: content-box; }
+
+.androidC.phone .ui-off-canvas-view {
+  padding-left: 280px; }
 
 .ui-split-overlay-view {
   width: 100%; }
@@ -784,6 +794,11 @@ div {
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   margin-left: 0; }
 
+.androidC .ui-list-item,
+.androidC .ui-list-heading {
+  display: table;
+  width: 100%; }
+
 /* List Items can have indicators attached, which will appear
    on the right of the list item. */
 .ui-list-item .ui-indicator,
@@ -814,6 +829,10 @@ div {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1; }
+  .androidC .ui-list-item-flex-contents .ui-fill {
+    display: table-cell;
+    width: 100%;
+    padding: 10px; }
 
 .ui-list-heading .ui-list-item-flex-contents .ui-label {
   -webkit-box-flex: 1;
@@ -832,6 +851,19 @@ div {
 .android .ui-list-heading .ui-indicator,
 .android .ui-list-item .ui-indicator {
   background-color: white; }
+
+.androidC .ui-list-item-flex-contents .ui-indicator {
+  display: table-cell;
+  -webkit-mask-position: center center;
+  -moz-mask-position: center center;
+  -ms-mask-position: center center;
+  -o-mask-position: center center;
+  mask-position: center center;
+  -webkit-mask-repeat: no-repeat;
+  -moz-mask-repeat: no-repeat;
+  -ms-mask-repeat: no-repeat;
+  -o-mask-repeat: no-repeat;
+  mask-repeat: no-repeat; }
 
 .ui-list-item .ui-arrow-direction-right,
 .ui-list-heading .ui-arrow-direction-right {
@@ -874,6 +906,10 @@ div {
   display: -webkit-flex;
   display: flex;
   background-color: transparent; }
+  .androidC .ui-list-item .ui-list-item-flex-contents, .androidC
+  .ui-list-heading .ui-list-item-flex-contents {
+    display: table-row;
+    margin: -10px; }
 
 /* A list action group can be used to group actions together as in a swipe-to-delete mechanism */
 .ui-list-item .ui-list-action-group,

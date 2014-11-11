@@ -2344,7 +2344,7 @@ define( 'yasmf/util/core',[ "globalize", "cultures/globalize.culture.en-US" ], f
           return;
         }
         // is it of the right type?
-        if ( v !== null && v !== undefined ) {
+        if ( v !== null && v !== undefined && v != "" ) {
           r.message = "Type Mismatch; expected " + rule.type + " not " + ( typeof v ) + " in " + title;
           switch ( rule.type ) {
           case "float":
@@ -3895,11 +3895,17 @@ define( 'yasmf/util/object',[],function () {
        *                                notification is triggered.
        * @returns {*} returns self for chaining
        */
-      self.addListenerForNotification = function ( theNotification, theListener, async ) {
+      self.addListenerForNotification = function addListenerForNotification( theNotification, theListener, async ) {
+        if ( theNotification instanceof Array ) {
+          theNotification.forEach( function ( n ) {
+            addListenerForNotification( n, theListener, async );
+          } );
+          return self;
+        }
         if ( typeof theNotification === "object" ) {
           for ( var n in theNotification ) {
             if ( theNotification.hasOwnProperty( n ) ) {
-              self.addListenerForNotification( n, theNotification[ n ], theListener ); // async would shift up
+              addListenerForNotification( n, theNotification[ n ], theListener ); // async would shift up
             }
           }
           return self;
@@ -3945,7 +3951,13 @@ define( 'yasmf/util/object',[],function () {
        * @param {String} theNotification  the notification
        * @param {Function} theListener  The function or reference to remove
        */
-      self.removeListenerForNotification = function ( theNotification, theListener ) {
+      self.removeListenerForNotification = function removeListenerForNotification( theNotification, theListener ) {
+        if ( theNotification instanceof Array ) {
+          theNotification.forEach( function ( n ) {
+            removeListenerForNotification( n, theListener );
+          } );
+          return self;
+        }
         if ( typeof theNotification === "object" ) {
           for ( var n in theNotification ) {
             if ( theNotification.hasOwnProperty( n ) ) {
@@ -4497,10 +4509,10 @@ define( 'yasmf/util/object',[],function () {
             dataValue = this.value;
             switch ( keyType ) {
             case "integer":
-              self[ keyPath ] = parseInt( dataValue, 10 );
+              self[ keyPath ] = ( dataValue === "" ) ? null : parseInt( dataValue, 10 );
               break;
             case "float":
-              self[ keyPath ] = parseFloat( dataValue );
+              self[ keyPath ] = ( dataValue === "" ) ? null : parseFloat( dataValue );
               break;
             case "boolean":
               if ( this.checked !== undefined ) {
@@ -4568,15 +4580,25 @@ define( 'yasmf/util/object',[],function () {
             for ( var i = 0, l = keyPathEls.length; i < l; i++ ) {
               el = keyPathEls[ i ];
               if ( el.type === "date" ) {
-                el.valueAsDate = v;
+                if ( el.valueAsDate !== v ) {
+                  el.valueAsDate = v;
+                }
               } else if ( el.type === "checkbox" ) {
-                el.checked = v;
+                if ( el.checked !== v ) {
+                  el.checked = v;
+                }
               } else if ( typeof el.value !== "undefined" ) {
-                el.value = v;
+                if ( el.value != v ) {
+                  el.value = v;
+                }
               } else if ( typeof el.textContent !== "undefined" ) {
-                el.textContent = v;
+                if ( el.textContent != v ) {
+                  el.textContent = v;
+                }
               } else if ( typeof el.innerText !== "undefined" ) {
-                el.innerText = v;
+                if ( el.innerText != v ) {
+                  el.innerText = v;
+                }
               } else {
                 console.log( "Data bind failure; browser doesn't understand value, textContent, or innerText." );
               }
@@ -6485,14 +6507,22 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
        * @method renderTo
        * @param  {Array|Node} n  Array or single node to append to the element
        * @param  {Node} el Element to attach to
+       * @param  {Number} idx  index (optional)
        */
-      renderTo: function renderTo( n, el ) {
+      renderTo: function renderTo( n, el, idx ) {
+        if ( !idx ) {
+          idx = 0;
+        }
         if ( n instanceof Array ) {
           for ( var i = 0, l = n.length; i < l; i++ ) {
-            el.appendChild( n[ i ] );
+            renderTo( n[ i ], el, i );
           }
         } else {
-          el.appendChild( n );
+          if ( el.hasChildNodes() && idx < el.childNodes.length ) {
+            el.replaceChild( n, el.childNodes[ idx ] );
+          } else {
+            el.appendChild( n );
+          }
         }
       }
     },
@@ -7471,24 +7501,54 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
         curFormFactor,
         curScale,
         curConvenience,
-        curDevice = theDevice.platform();
-      if ( curDevice === "ios" ) {
-        if ( navigator.userAgent.indexOf( "OS 9" ) > -1 ) {
-          curDevice += " ios9 iosM";
+        curDevice = theDevice.platform(),
+        OSLevel;
+      switch ( curDevice ) {
+      case "mac":
+        try {
+          OSLevel = "" + parseFloat( ( navigator.userAgent.match( /OS X ([0-9_]+)/ )[ 1 ] ).replace( /_/g, "." ) );
+        } catch ( e ) {}
+        if ( OSLevel !== undefined ) {
+          curDevice += " mac" + ( OSLevel.length < 5 ? "C" : "M" );
         }
-        if ( navigator.userAgent.indexOf( "OS 8" ) > -1 ) {
-          curDevice += " ios8 iosM";
+        break;
+      case "ios":
+        try {
+          OSLevel = navigator.userAgent.match( /OS ([0-9]+)/ )[ 1 ];
+        } catch ( e ) {}
+        if ( OSLevel !== undefined ) {
+          curDevice += " ios" + OSLevel + " ios" + ( OSLevel < 7 ? "C" : "M" );
         }
-        if ( navigator.userAgent.indexOf( "OS 7" ) > -1 ) {
-          curDevice += " ios7 iosM";
+        break;
+      case "android":
+        try {
+          OSLevel = parseFloat( navigator.userAgent.match( /Android ([0-9.]+)/ )[ 1 ] );
+        } catch ( e ) {}
+        if ( OSLevel !== undefined ) {
+          curDevice += " android" + ( "" + OSLevel ).replace( /\./g, "-" ) + " android" + ( ( OSLevel < 4.4 ) ? "C" : ( (
+            OSLevel >= 5 ) ? "M" : "K" ) )
         }
-        if ( navigator.userAgent.indexOf( "OS 6" ) > -1 ) {
-          curDevice += " ios6 iosC";
-        }
-        if ( navigator.userAgent.indexOf( "OS 5" ) > -1 ) {
-          curDevice += " ios5 iosC";
-        }
+        break;
+      default:
       }
+      /*
+       if ( curDevice === "ios" ) {
+       if ( navigator.userAgent.indexOf( "OS 9" ) > -1 ) {
+       curDevice += " ios9 iosM";
+       }
+       if ( navigator.userAgent.indexOf( "OS 8" ) > -1 ) {
+       curDevice += " ios8 iosM";
+       }
+       if ( navigator.userAgent.indexOf( "OS 7" ) > -1 ) {
+       curDevice += " ios7 iosM";
+       }
+       if ( navigator.userAgent.indexOf( "OS 6" ) > -1 ) {
+       curDevice += " ios6 iosC";
+       }
+       if ( navigator.userAgent.indexOf( "OS 5" ) > -1 ) {
+       curDevice += " ios5 iosC";
+       }
+       } */
       curFormFactor = theDevice.formFactor();
       curOrientation = theDevice.isPortrait() ? "portrait" : "landscape";
       curScale = theDevice.isRetina() ? "hiDPI" : "loDPI";
@@ -7507,8 +7567,8 @@ define( 'yasmf/ui/core',[ "yasmf/util/device", "yasmf/util/object" ], function (
         curConvenience = "droid-phone";
       }
       if ( typeof document.body !== "undefined" && document.body !== null ) {
-        document.body.setAttribute( "class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " +
-          curConvenience );
+        document.body.setAttribute( "class", [ curDevice, curFormFactor, curOrientation, curScale, curConvenience ].join(
+          " " ) );
       }
       self.notify( "orientationChanged" );
     };
@@ -7913,7 +7973,7 @@ define( 'yasmf/ui/viewContainer',[ "yasmf/util/object", "yasmf/util/h" ], functi
       if ( typeof renderOutput === "string" ) {
         self.element.innerHTML = self.render();
       } else if ( typeof renderOutput === "object" ) {
-        self.element.innerHTML = "";
+        //self.element.innerHTML = "";
         h.renderTo( renderOutput, self.element );
       }
     };
