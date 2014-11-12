@@ -6211,6 +6211,8 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
      */
   var h = {
       VERSION: "0.1.100",
+      useDomMerging: false,
+      /* experimental! */
       /**
        * Returns a DOM tree containing the requested element and any further child
        * elements (as extra parameters)
@@ -6510,6 +6512,37 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
        * @param  {Number} idx  index (optional)
        */
       renderTo: function renderTo( n, el, idx ) {
+        function mergeTrees( a, b ) {
+          var alen, blen, i,
+            aHasChildren = a.hasChildNodes(),
+            bHasChildren = b.hasChildNodes(),
+            aChildNodes, bChildNodes;
+          if ( aHasChildren && bHasChildren ) {
+            alen = a.childNodes.length;
+            aChildNodes = [].slice.call( a.childNodes, 0 );
+            blen = b.childNodes.length;
+            bChildNodes = [].slice.call( b.childNodes, 0 );
+            for ( i = 0; i < alen; i++ ) {
+              if ( i < blen ) {
+                mergeTrees( aChildNodes[ i ], bChildNodes[ i ] );
+              } else {
+                a.removeChild( aChildNodes[ i ] )
+              }
+            }
+            for ( i = alen; i < blen; i++ ) {
+              a.appendChild( bChildNodes[ i ] );
+            }
+            if ( !a.isEqualNode( b ) ) {
+              a.parentNode.replaceChild( b, a );
+            }
+          } else if ( aHasChildren && !bHasChildren ) {
+            a.parentNode.replaceChild( b, a );
+          } else if ( !aHasChildren && bHasChildren ) {
+            a.parentNode.replaceChild( b, a );
+          } else {
+            a.parentNode.replaceChild( b, a );
+          }
+        }
         if ( !idx ) {
           idx = 0;
         }
@@ -6519,7 +6552,11 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
           }
         } else {
           if ( el.hasChildNodes() && idx < el.childNodes.length ) {
-            el.replaceChild( n, el.childNodes[ idx ] );
+            if ( h.useDomMerging ) {
+              mergeTrees( el.childNodes[ idx ], n );
+            } else {
+              el.replaceChild( n, el.childNodes[ idx ] );
+            }
           } else {
             el.appendChild( n );
           }
@@ -9597,7 +9634,7 @@ define( 'yasmf/ui/alert',[ "yasmf/util/core", "yasmf/util/device", "yasmf/util/o
           self.text = options.text;
         }
         if ( typeof options.wideButtons !== "undefined" ) {
-          self.wideButtons = wideButtons
+          self.wideButtons = options.wideButtons
         }
         if ( typeof options.buttons !== "undefined" ) {
           self.buttons = options.buttons;
