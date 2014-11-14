@@ -1458,6 +1458,7 @@ _getPrivateProperty, not get_privateProperty</p>
                   el.valueAsDate = v;
                 }
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"checkbox"</span> ) {
+                el.indeterminate = ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> );
                 <span class="hljs-keyword">if</span> ( el.checked !== v ) {
                   el.checked = v;
                 }

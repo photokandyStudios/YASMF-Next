@@ -349,6 +349,7 @@
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> outline</span>(none);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> text-rendering</span>(optimizeLegibility);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> backface-visibility</span>(hidden);</span>
+  -webkit-<span class="hljs-attribute">overflow</span>-scrolling<span class="hljs-value">: touch;</span>
 }
 
 <span class="hljs-tag">body</span><span class="hljs-class">.android</span> {
@@ -422,12 +423,12 @@ would carry to here, but on Android, it doesn’t.</p>
   <span class="hljs-attribute">line-height</span><span class="hljs-value">:                <span class="hljs-number">1em</span>;</span>
   <span class="hljs-attribute">font-size</span><span class="hljs-value">:                  <span class="hljs-number">20px</span>;</span>
   <span class="hljs-attribute">background-origin</span><span class="hljs-value">:          border-box;</span>
-  -webkit-<span class="hljs-attribute">overflow</span>-scrolling<span class="hljs-value">: touch;</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> rectTLBR</span>(<span class="hljs-number">0</span>,<span class="hljs-preprocessor"> 0</span>,<span class="hljs-preprocessor"> 0</span>,<span class="hljs-preprocessor"> 0</span>);</span>
   <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> transform</span>(<span class="hljs-function">translateZ</span>(<span class="hljs-number">0</span>));</span>
   <span class="hljs-attribute">z-index</span><span class="hljs-value">:                    <span class="hljs-number">2</span>;</span>
   <span class="hljs-attribute">background-color</span><span class="hljs-value">:           <span class="hljs-hexcolor">#E8E8E8</span>;</span>
   <span class="hljs-attribute">color</span><span class="hljs-value">:                      <span class="hljs-hexcolor">#333</span>;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> backface-visibility</span>(hidden);</span>
 }
 
 <span class="hljs-class">.android</span> <span class="hljs-class">.ui-container</span>,
@@ -1171,6 +1172,7 @@ right: 0;</p>
   <span class="hljs-attribute">right</span><span class="hljs-value">:    <span class="hljs-number">0</span>;</span>
   <span class="hljs-attribute">bottom</span><span class="hljs-value">:   <span class="hljs-number">0</span>;</span>
   <span class="hljs-attribute">overflow</span><span class="hljs-value">: auto;</span>
+  <span class="hljs-at_rule">@<span class="hljs-keyword">include</span><span class="hljs-preprocessor"> backface-visibility</span>(hidden);</span>
 }
 
 <span class="hljs-comment">/*****************************************************************************

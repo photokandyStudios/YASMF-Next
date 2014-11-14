@@ -118,51 +118,57 @@ are of the form <code>?attr=value&amp;attr=value...</code>.</p>
 <li><strong>tag must be a string.</strong><br/>(tag to parse)</li>
 </ul>
 <p><strong>Returns a *</strong><br/>(Object of the form <code>{ tag: tagName, id: id, class: class, query: query, queryPars: Array }</code>)</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseTag</span><span class="hljs-params">( tag )</span> </span>{
-      <span class="hljs-keyword">var</span> tagParts = {
-          tag: <span class="hljs-string">""</span>,
-          id: <span class="hljs-literal">undefined</span>,
-          <span class="hljs-keyword">class</span>: <span class="hljs-literal">undefined</span>,
-          query: <span class="hljs-literal">undefined</span>,
-          queryParts: []
-        },
-        hashPos = tag.indexOf( <span class="hljs-string">"#"</span> ),
-        dotPos = tag.indexOf( <span class="hljs-string">"."</span> ),
-        qmPos = tag.indexOf( <span class="hljs-string">"?"</span> );
-      <span class="hljs-keyword">if</span> ( qmPos &gt;= <span class="hljs-number">0</span> ) {
-        tagParts.query = tag.substr( qmPos + <span class="hljs-number">1</span> );
-        tagParts.queryParts = tagParts.query.split( <span class="hljs-string">"&amp;"</span> );
-        tag = tag.substr( <span class="hljs-number">0</span>, qmPos );
-      }
-      <span class="hljs-keyword">if</span> ( hashPos &lt; <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; <span class="hljs-number">0</span> ) {
-        tagParts.tag = tag;
-        <span class="hljs-keyword">return</span> tagParts;
-      }
-      <span class="hljs-keyword">if</span> ( hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; <span class="hljs-number">0</span> ) {
-        tagParts.tag = tag.substr( <span class="hljs-number">0</span>, hashPos );
-        tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span> );
-        <span class="hljs-keyword">return</span> tagParts;
-      }
-      <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &lt; <span class="hljs-number">0</span> ) {
-        tagParts.tag = tag.substr( <span class="hljs-number">0</span>, dotPos );
-        tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span> );
-        <span class="hljs-keyword">return</span> tagParts;
-      }
-      <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &lt; dotPos ) {
-        tagParts.tag = tag.substr( <span class="hljs-number">0</span>, hashPos );
-        tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span>, ( dotPos - hashPos ) - <span class="hljs-number">1</span> );
-        tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span> );
-        <span class="hljs-keyword">return</span> tagParts;
-      }
-      <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; hashPos ) {
-        tagParts.tag = tag.substr( <span class="hljs-number">0</span>, dotPos );
-        tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span>, ( hashPos - dotPos ) - <span class="hljs-number">1</span> );
-        tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span> );
-        <span class="hljs-keyword">return</span> tagParts;
-      }
+    <span class="hljs-keyword">var</span> tagParts = {
+        tag: <span class="hljs-string">""</span>,
+        id: <span class="hljs-literal">undefined</span>,
+        <span class="hljs-keyword">class</span>: <span class="hljs-literal">undefined</span>,
+        query: <span class="hljs-literal">undefined</span>,
+        queryParts: []
+      },
+      hashPos = tag.indexOf( <span class="hljs-string">"#"</span> ),
+      dotPos = tag.indexOf( <span class="hljs-string">"."</span> ),
+      qmPos = tag.indexOf( <span class="hljs-string">"?"</span> );
+    <span class="hljs-keyword">if</span> ( qmPos &gt;= <span class="hljs-number">0</span> ) {
+      tagParts.query = tag.substr( qmPos + <span class="hljs-number">1</span> );
+      tagParts.queryParts = tagParts.query.split( <span class="hljs-string">"&amp;"</span> );
+      tag = tag.substr( <span class="hljs-number">0</span>, qmPos );
+    }
+    <span class="hljs-keyword">if</span> ( hashPos &lt; <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; <span class="hljs-number">0</span> ) {
+      tagParts.tag = tag;
       <span class="hljs-keyword">return</span> tagParts;
-    }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>h templating engine</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">var</span> h = {
+    }
+    <span class="hljs-keyword">if</span> ( hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; <span class="hljs-number">0</span> ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, hashPos );
+      tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &lt; <span class="hljs-number">0</span> ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, dotPos );
+      tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &lt; dotPos ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, hashPos );
+      tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span>, ( dotPos - hashPos ) - <span class="hljs-number">1</span> );
+      tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">if</span> ( dotPos &gt;= <span class="hljs-number">0</span> &amp;&amp; hashPos &gt;= <span class="hljs-number">0</span> &amp;&amp; dotPos &lt; hashPos ) {
+      tagParts.tag = tag.substr( <span class="hljs-number">0</span>, dotPos );
+      tagParts.class = tag.substr( dotPos + <span class="hljs-number">1</span>, ( hashPos - dotPos ) - <span class="hljs-number">1</span> );
+      tagParts.id = tag.substr( hashPos + <span class="hljs-number">1</span> );
+      <span class="hljs-keyword">return</span> tagParts;
+    }
+    <span class="hljs-keyword">return</span> tagParts;
+  }
+  <span class="hljs-keyword">var</span> globalEvents = {},
+    renderEvents = {};
+  <span class="hljs-keyword">var</span> globalSequence = <span class="hljs-number">0</span>;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>h templating engine</p></div></div><div class="code"><div class="wrapper">  <span class="hljs-keyword">var</span> h = {
       VERSION: <span class="hljs-string">"0.1.100"</span>,
-      useDomMerging: <span class="hljs-literal">false</span>,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method el</span></p>
+      useDomMerging: <span class="hljs-literal">false</span>,
+      debug: <span class="hljs-literal">false</span>,
+      _globalEvents: globalEvents,
+      _renderEvents: renderEvents,</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method el</span></p>
 <p>experimental! 
 Returns a DOM tree containing the requested element and any further child
 elements (as extra parameters)</p>
@@ -185,12 +191,14 @@ elements (as extra parameters)</p>
 </li>
 </ul>
 <p><strong>Returns a Node</strong><br/>(DOM tree)</p></div></div><div class="code"><div class="wrapper">      el: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( tag )</span> </span>{
-        <span class="hljs-keyword">var</span> e, i, l, evt,
+        <span class="hljs-keyword">var</span> e, i, l, f, evt,
           options,
           content = [],
           contentTarget = [],
           bindValue,
-          tagParts = parseTag( tag ); <span class="hljs-comment">// parse tag; it should be of the form `tag[#id][.class][?attr=value[&amp;attr=value...]`</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the element; if <code>@DF</code> is used, a document fragment is used instead</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( tagParts.tag !== <span class="hljs-string">"@DF"</span> ) {
+          tagParts = parseTag( tag ),
+          elid,
+          events = []; <span class="hljs-comment">// parse tag; it should be of the form `tag[#id][.class][?attr=value[&amp;attr=value...]`</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create the element; if <code>@DF</code> is used, a document fragment is used instead</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> ( tagParts.tag !== <span class="hljs-string">"@DF"</span> ) {
           e = <span class="hljs-built_in">document</span>.createElement( tagParts.tag );
         } <span class="hljs-keyword">else</span> {
           e = <span class="hljs-built_in">document</span>.createDocumentFragment();
@@ -198,7 +206,12 @@ elements (as extra parameters)</p>
           e.className = tagParts.class;
         }
         <span class="hljs-keyword">if</span> ( tagParts.id !== <span class="hljs-literal">undefined</span> ) {
+          elid = tagParts.id;
           e.setAttribute( <span class="hljs-string">"id"</span>, tagParts.id );
+        } <span class="hljs-keyword">else</span> {
+          globalSequence++;
+          elid = <span class="hljs-string">"h-y-"</span> + globalSequence;
+          e.setAttribute( <span class="hljs-string">"id"</span>, elid );
         }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get the arguments as an array, ignoring the first parameter</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> args = <span class="hljs-built_in">Array</span>.prototype.slice.call( <span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span> );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>determine what we&#39;ve passed in the second/third parameter
 if it is an object (but not a node or array), it&#39;s a list of
 options to attach to the element. If it is a string, it&#39;s text
@@ -247,10 +260,24 @@ if the handler is an object, it must be of the form</p>
             <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.on ) {
               <span class="hljs-keyword">if</span> ( options.on.hasOwnProperty( evt ) ) {
                 <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on[ evt ] === <span class="hljs-string">"function"</span> ) {
-                  e.addEventListener( evt, options.on[ evt ].bind( e ), <span class="hljs-literal">false</span> );
+                  f = options.on[ evt ].bind( e );
+                  events.push( {
+                    type: <span class="hljs-string">"on"</span>,
+                    evt: evt,
+                    handler: f,
+                    capture: <span class="hljs-literal">false</span>
+                  } );
+                  e.addEventListener( evt, f, <span class="hljs-literal">false</span> );
                 } <span class="hljs-keyword">else</span> {
-                  e.addEventListener( evt, options.on[ evt ].handler.bind( e ), <span class="hljs-keyword">typeof</span> options.on[ evt ].capture !==
-                    <span class="hljs-string">"undefined"</span> ? options.on[ evt ].capture : <span class="hljs-literal">false</span> );
+                  f = options.on[ evt ].handler.bind( e );
+                  events.push( {
+                    type: <span class="hljs-string">"on"</span>,
+                    evt: evt,
+                    handler: f,
+                    capture: <span class="hljs-keyword">typeof</span> options.on[ evt ].capture !== <span class="hljs-string">"undefined"</span> ? options.on[ evt ].capture : <span class="hljs-literal">false</span>
+                  } );
+                  e.addEventListener( evt, f, <span class="hljs-keyword">typeof</span> options.on[ evt ].capture !== <span class="hljs-string">"undefined"</span> ? options.on[ evt ].capture :
+                    <span class="hljs-literal">false</span> );
                 }
               }
             }
@@ -259,6 +286,12 @@ it must be of the form <code>{ hammer: { gesture: { handler: fn, options: }, ham
             <span class="hljs-keyword">var</span> hammer = options.hammer.hammer;
             <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.hammer ) {
               <span class="hljs-keyword">if</span> ( options.hammer.hasOwnProperty( evt ) &amp;&amp; evt !== <span class="hljs-string">"hammer"</span> ) {
+                events.push( {
+                  type: <span class="hljs-string">"hammer"</span>,
+                  evt: evt,
+                  hammer: hammer,
+                  options: options.hammer[ evt ]
+                } );
                 hammer( e, options.hammer[ evt ].options ).on( evt, options.hammer[ evt ].handler );
               }
             }
@@ -297,18 +330,11 @@ the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyP
             <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> BaseObject !== <span class="hljs-string">"undefined"</span> ) {
               <span class="hljs-keyword">if</span> ( options.bind.object <span class="hljs-keyword">instanceof</span> BaseObject ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we have an object that has observable properties</p></div></div><div class="code"><div class="wrapper">                options.bind.object.dataBindOn( e, options.bind.keyPath, options.bind.keyType );
                 options.bind.object.notifyDataBindingElementsForKeyPath( options.bind.keyPath );
-                <span class="hljs-comment">/*// get the current value so it can be displayed
-                 if ( options.bind.object[ options.bind.keyPath ] !== undefined ) {
-                 if ( e.value !== undefined ) {
-                 e.value = options.bind.object[ options.bind.keyPath ];
-                 } else {
-                 e.textContent = options.bind.object[ options.bind.keyPath ];
-                 }
-                 }*/</span>
               }
             }
           }
-        }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the element (and associated tree)</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">return</span> e;
+        }
+        renderEvents[ elid ] = events;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the element (and associated tree)</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">return</span> e;
       },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method mapTo</span></p>
 <p>mapTo - Maps a keypath to another keypath based on <code>map</code>. <code>map</code> should look like this:</p>
 <pre><code>{
@@ -418,35 +444,112 @@ at that point <code>appendChild</code> fails.</p>
 <li><p><strong>idx must be a Number.</strong><br/>(index (optional))</p>
 </li>
 </ul></div></div><div class="code"><div class="wrapper">      renderTo: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderTo</span><span class="hljs-params">( n, el, idx )</span> </span>{
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mergeTrees</span><span class="hljs-params">( a, b )</span> </span>{
-          <span class="hljs-keyword">var</span> alen, blen, i,
-            aHasChildren = a.hasChildNodes(),
-            bHasChildren = b.hasChildNodes(),
-            aChildNodes, bChildNodes;
-          <span class="hljs-keyword">if</span> ( aHasChildren &amp;&amp; bHasChildren ) {
-            alen = a.childNodes.length;
-            aChildNodes = [].slice.call( a.childNodes, <span class="hljs-number">0</span> );
-            blen = b.childNodes.length;
-            bChildNodes = [].slice.call( b.childNodes, <span class="hljs-number">0</span> );
-            <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; alen; i++ ) {
-              <span class="hljs-keyword">if</span> ( i &lt; blen ) {
-                mergeTrees( aChildNodes[ i ], bChildNodes[ i ] );
-              } <span class="hljs-keyword">else</span> {
-                a.removeChild( aChildNodes[ i ] )
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transform</span><span class="hljs-params">( parent, nodeA, nodeB )</span> </span>{
+          <span class="hljs-keyword">var</span> hasChildren = [ <span class="hljs-literal">false</span>, <span class="hljs-literal">false</span> ],
+            childNodes = [
+              [],
+              []
+            ],
+            _A = <span class="hljs-number">0</span>,
+            _B = <span class="hljs-number">1</span>,
+            i, l,
+            len = [ <span class="hljs-number">0</span>, <span class="hljs-number">0</span> ],
+            nodes = [ nodeA, nodeB ],
+            attrs = [
+              [],
+              []
+            ],
+            styles = [ {}, {} ],
+            styleKeys = [
+              [],
+              []
+            ],
+            events = [
+              [],
+              []
+            ],
+            elid = [ <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span> ];
+          <span class="hljs-keyword">if</span> ( !nodeA &amp;&amp; !nodeB ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>nothing to do.</p></div></div><div class="code"><div class="wrapper">            <span class="hljs-keyword">return</span>;
+          }
+          <span class="hljs-keyword">if</span> ( !nodeA &amp;&amp; nodeB ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>there&#39;s no corresponding element in A; just add B.</p></div></div><div class="code"><div class="wrapper">            parent.appendChild( nodeB );
+            <span class="hljs-keyword">return</span>;
+          }
+          <span class="hljs-keyword">if</span> ( nodeA &amp;&amp; !nodeB ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>there&#39;s no corresponding element in B; remove A&#39;s element</p></div></div><div class="code"><div class="wrapper">            nodeA.remove();
+            <span class="hljs-keyword">return</span>;
+          }
+          <span class="hljs-keyword">if</span> ( ( nodeA.nodeType !== nodeB.nodeType ) || ( nodeB.nodeType !== <span class="hljs-number">1</span> ) ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if the node types are different, there&#39;s no reason to transform tree A -- just replace the whole thing</p></div></div><div class="code"><div class="wrapper">            parent.replaceChild( nodeB, nodeA );
+            <span class="hljs-keyword">return</span>;
+          }
+          <span class="hljs-keyword">if</span> ( nodeB.classList ) {
+            <span class="hljs-keyword">if</span> ( !nodeB.classList.contains( <span class="hljs-string">"ui-container"</span> ) &amp;&amp; !nodeB.classList.contains( <span class="hljs-string">"ui-list"</span> ) &amp;&amp; !nodeB.classList.contains(
+                <span class="hljs-string">"ui-scroll-container"</span> ) ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if the node types are different, there&#39;s no reason to transform tree A -- just replace the whole thing</p></div></div><div class="code"><div class="wrapper">              parent.replaceChild( nodeB, nodeA );
+              <span class="hljs-keyword">return</span>;
+            }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>set up for transforming this node</p></div></div><div class="code"><div class="wrapper">          nodes.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span><span class="hljs-params">( node, idx )</span> </span>{
+            hasChildren[ idx ] = node.hasChildNodes();
+            len[ idx ] = node.childNodes.length;
+            <span class="hljs-keyword">if</span> ( node.getAttribute ) {
+              elid[ idx ] = node.getAttribute( <span class="hljs-string">"id"</span> );
+            }
+            <span class="hljs-keyword">if</span> ( node.childNodes ) {
+              childNodes[ idx ] = [].slice.call( node.childNodes, <span class="hljs-number">0</span> );
+            }
+            <span class="hljs-keyword">if</span> ( node.attributes ) {
+              attrs[ idx ] = [].slice.call( node.attributes, <span class="hljs-number">0</span> );
+            }
+            <span class="hljs-keyword">if</span> ( node.styles ) {
+              styles[ idx ] = node.style;
+              styleKeys[ idx ] = <span class="hljs-built_in">Object</span>.keys( styles[ idx ] );
+            }
+          } );
+          events[ _A ] = globalEvents[ elid[ _A ] ] || [];
+          events[ _B ] = renderEvents[ elid[ _B ] ] || [];</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>transform all our children</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( len[ _A ], len[ _B ] ); i &lt; l; i++ ) {
+            transform( nodeA, childNodes[ _A ][ i ], childNodes[ _B ][ i ] );
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy attributes</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( attrs[ _A ].length, attrs[ _B ].length ); i &lt; l; i++ ) {
+            <span class="hljs-keyword">if</span> ( attrs[ _A ][ i ] ) {
+              <span class="hljs-keyword">if</span> ( !nodeB.hasAttribute( attrs[ _A ][ i ].name ) ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove any attributes that aren&#39;t present in B</p></div></div><div class="code"><div class="wrapper">                nodeA.removeAttribute( attrs[ _A ][ i ].name );
               }
             }
-            <span class="hljs-keyword">for</span> ( i = alen; i &lt; blen; i++ ) {
-              a.appendChild( bChildNodes[ i ] );
+            <span class="hljs-keyword">if</span> ( attrs[ _B ][ i ] ) {
+              nodeA.setAttribute( attrs[ _B ][ i ].name, attrs[ _B ][ i ].value );
             }
-            <span class="hljs-keyword">if</span> ( !a.isEqualNode( b ) ) {
-              a.parentNode.replaceChild( b, a );
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy styles</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( styles[ _A ].length, styles[ _B ].length ); i &lt; l; i++ ) {
+            <span class="hljs-keyword">if</span> ( styles[ _A ][ i ] ) {
+              <span class="hljs-keyword">if</span> ( !( styleKeys[ _B ][ i ] <span class="hljs-keyword">in</span> styleKeys[ _A ] ) ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>remove any styles that aren&#39;t present in B</p></div></div><div class="code"><div class="wrapper">                nodeA.style[ styleKeys[ _B ][ i ] ] = <span class="hljs-literal">null</span>;
+              }
             }
-          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( aHasChildren &amp;&amp; !bHasChildren ) {
-            a.parentNode.replaceChild( b, a );
-          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !aHasChildren &amp;&amp; bHasChildren ) {
-            a.parentNode.replaceChild( b, a );
-          } <span class="hljs-keyword">else</span> {
-            a.parentNode.replaceChild( b, a );
+            <span class="hljs-keyword">if</span> ( styles[ _B ][ i ] ) {
+              nodeA.style[ styleKeys[ _B ][ i ] ] = styles[ _B ][ styleKeys[ _B ][ i ] ];
+            }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy events</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( events[ _A ].length, events[ _B ].length ); i &lt; l; i++ ) {
+            [ <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ].forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doANode</span><span class="hljs-params">( whichNode )</span> </span>{
+              <span class="hljs-keyword">var</span> evt = events[ whichNode ][ i ],
+                node = nodes[ whichNode ],
+                handler;
+              <span class="hljs-keyword">if</span> ( evt ) {
+                <span class="hljs-keyword">switch</span> ( evt.type ) {
+                <span class="hljs-keyword">case</span> <span class="hljs-string">"on"</span>:
+                  handler = whichNode === _A ? <span class="hljs-string">"removeEventListener"</span> : <span class="hljs-string">"addEventListener"</span>;
+                  nodeA[ handler ]( evt.evt, evt.handler, evt.capture );
+                  <span class="hljs-keyword">break</span>;
+                <span class="hljs-keyword">case</span> <span class="hljs-string">"hammer"</span>:
+                  handler = whichNode === _A ? <span class="hljs-string">"off"</span> : <span class="hljs-string">"on"</span>;
+                  <span class="hljs-built_in">console</span>.log( handler, nodeA, evt.evt, evt.options.handler );
+                  evt.hammer( nodeA, evt.options.options )[ handler ]( evt.evt, evt.options.handler );
+                  <span class="hljs-keyword">break</span>;
+                <span class="hljs-keyword">default</span>:
+                }
+              }
+            } );
+          }
+          <span class="hljs-keyword">if</span> ( elid[ _A ] ) {
+            globalEvents[ elid[ _A ] ] = <span class="hljs-literal">null</span>;
+            <span class="hljs-keyword">delete</span> globalEvents[ elid[ _A ] ];
+          }
+          <span class="hljs-keyword">if</span> ( elid[ _B ] ) {
+            globalEvents[ elid[ _B ] ] = renderEvents[ elid[ _B ] ];
+            renderEvents[ elid[ _B ] ] = <span class="hljs-literal">null</span>;
+            <span class="hljs-keyword">delete</span> renderEvents[ elid[ _B ] ];
           }
         }
         <span class="hljs-keyword">if</span> ( !idx ) {
@@ -457,14 +560,28 @@ at that point <code>appendChild</code> fails.</p>
             renderTo( n[ i ], el, i );
           }
         } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">var</span> elid = [ <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span> ];
+          <span class="hljs-keyword">if</span> ( n ) {
+            elid[ <span class="hljs-number">1</span> ] = n.getAttribute( <span class="hljs-string">"id"</span> );
+          }
           <span class="hljs-keyword">if</span> ( el.hasChildNodes() &amp;&amp; idx &lt; el.childNodes.length ) {
+            elid[ <span class="hljs-number">0</span> ] = el.childNodes[ idx ].getAttribute( <span class="hljs-string">"id"</span> );
             <span class="hljs-keyword">if</span> ( h.useDomMerging ) {
-              mergeTrees( el.childNodes[ idx ], n );
+              transform( el, el.childNodes[ idx ], n );
             } <span class="hljs-keyword">else</span> {
               el.replaceChild( n, el.childNodes[ idx ] );
             }
           } <span class="hljs-keyword">else</span> {
             el.appendChild( n );
+          }
+          <span class="hljs-keyword">if</span> ( elid[ <span class="hljs-number">0</span> ] ) {
+            globalEvents[ elid[ <span class="hljs-number">0</span> ] ] = <span class="hljs-literal">null</span>;
+            <span class="hljs-keyword">delete</span> globalEvents[ elid[ <span class="hljs-number">0</span> ] ];
+          }
+          <span class="hljs-keyword">if</span> ( elid[ <span class="hljs-number">1</span> ] ) {
+            globalEvents[ elid[ <span class="hljs-number">1</span> ] ] = renderEvents[ elid[ <span class="hljs-number">1</span> ] ];
+            renderEvents[ elid[ <span class="hljs-number">1</span> ] ] = <span class="hljs-literal">null</span>;
+            <span class="hljs-keyword">delete</span> renderEvents[ elid[ <span class="hljs-number">1</span> ] ];
           }
         }
       }
