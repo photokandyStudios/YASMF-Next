@@ -6338,21 +6338,21 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
               if ( options.on.hasOwnProperty( evt ) ) {
                 if ( typeof options.on[ evt ] === "function" ) {
                   f = options.on[ evt ].bind( e );
-                  events.push( {
-                    type: "on",
-                    evt: evt,
-                    handler: f,
-                    capture: false
-                  } );
+                  /*events.push( {
+                   type: "on",
+                   evt: evt,
+                   handler: f,
+                   capture: false
+                   } ); */
                   e.addEventListener( evt, f, false );
                 } else {
                   f = options.on[ evt ].handler.bind( e );
-                  events.push( {
-                    type: "on",
-                    evt: evt,
-                    handler: f,
-                    capture: typeof options.on[ evt ].capture !== "undefined" ? options.on[ evt ].capture : false
-                  } );
+                  /*events.push( {
+                   type: "on",
+                   evt: evt,
+                   handler: f,
+                   capture: typeof options.on[ evt ].capture !== "undefined" ? options.on[ evt ].capture : false
+                   } ); */
                   e.addEventListener( evt, f, typeof options.on[ evt ].capture !== "undefined" ? options.on[ evt ].capture :
                     false );
                 }
@@ -6365,12 +6365,12 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
             var hammer = options.hammer.hammer;
             for ( evt in options.hammer ) {
               if ( options.hammer.hasOwnProperty( evt ) && evt !== "hammer" ) {
-                events.push( {
-                  type: "hammer",
-                  evt: evt,
-                  hammer: hammer,
-                  options: options.hammer[ evt ]
-                } );
+                /*events.push( {
+                 type: "hammer",
+                 evt: evt,
+                 hammer: hammer,
+                 options: options.hammer[ evt ]
+                 } );*/
                 hammer( e, options.hammer[ evt ].options ).on( evt, options.hammer[ evt ].handler );
               }
             }
@@ -6424,7 +6424,7 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
             }
           }
         }
-        renderEvents[ elid ] = events;
+        //renderEvents[elid] = events;
         // return the element (and associated tree)
         return e;
       },
@@ -6609,8 +6609,8 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
               styleKeys[ idx ] = Object.keys( styles[ idx ] );
             }
           } );
-          events[ _A ] = globalEvents[ elid[ _A ] ] || [];
-          events[ _B ] = renderEvents[ elid[ _B ] ] || [];
+          //events[_A] = globalEvents[elid[_A]] || [];
+          //events[_B] = renderEvents[elid[_B]] || [];
           // transform all our children
           for ( i = 0, l = Math.max( len[ _A ], len[ _B ] ); i < l; i++ ) {
             transform( nodeA, childNodes[ _A ][ i ], childNodes[ _B ][ i ] );
@@ -6640,36 +6640,36 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
             }
           }
           // copy events
-          for ( i = 0, l = Math.max( events[ _A ].length, events[ _B ].length ); i < l; i++ ) {
-            [ 0, 1 ].forEach( function doANode( whichNode ) {
-              var evt = events[ whichNode ][ i ],
-                node = nodes[ whichNode ],
-                handler;
-              if ( evt ) {
-                switch ( evt.type ) {
-                case "on":
-                  handler = whichNode === _A ? "removeEventListener" : "addEventListener";
-                  nodeA[ handler ]( evt.evt, evt.handler, evt.capture );
-                  break;
-                case "hammer":
-                  handler = whichNode === _A ? "off" : "on";
-                  console.log( handler, nodeA, evt.evt, evt.options.handler );
-                  evt.hammer( nodeA, evt.options.options )[ handler ]( evt.evt, evt.options.handler );
-                  break;
-                default:
-                }
-              }
-            } );
-          }
-          if ( elid[ _A ] ) {
-            globalEvents[ elid[ _A ] ] = null;
-            delete globalEvents[ elid[ _A ] ];
-          }
-          if ( elid[ _B ] ) {
-            globalEvents[ elid[ _B ] ] = renderEvents[ elid[ _B ] ];
-            renderEvents[ elid[ _B ] ] = null;
-            delete renderEvents[ elid[ _B ] ];
-          }
+          /*for ( i = 0, l = Math.max( events[ _A ].length, events[ _B ].length ); i < l; i++ ) {
+           [ 0, 1 ].forEach( function doANode( whichNode ) {
+           var evt = events[ whichNode ][ i ],
+           node = nodes[ whichNode ],
+           handler;
+           if ( evt ) {
+           switch ( evt.type ) {
+           case "on":
+           handler = whichNode === _A ? "removeEventListener" : "addEventListener";
+           nodeA[ handler ]( evt.evt, evt.handler, evt.capture );
+           break;
+           case "hammer":
+           handler = whichNode === _A ? "off" : "on";
+           console.log( handler, nodeA, evt.evt, evt.options.handler );
+           evt.hammer( nodeA, evt.options.options )[ handler ]( evt.evt, evt.options.handler );
+           break;
+           default:
+           }
+           }
+           } );
+           }
+           if ( elid[ _A ] ) {
+           globalEvents[ elid[ _A ] ] = null;
+           delete globalEvents[ elid[ _A ] ];
+           }
+           if ( elid[ _B ] ) {
+           globalEvents[ elid[ _B ] ] = renderEvents[ elid[ _B ] ];
+           renderEvents[ elid[ _B ] ] = null;
+           delete renderEvents[ elid[ _B ] ];
+           }*/
         }
         if ( !idx ) {
           idx = 0;
@@ -6680,9 +6680,9 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
           }
         } else {
           var elid = [ null, null ];
-          if ( n ) {
-            elid[ 1 ] = n.getAttribute( "id" );
-          }
+          /*if ( n ) {
+            elid[1] = n.getAttribute( "id" );
+          }*/
           if ( el.hasChildNodes() && idx < el.childNodes.length ) {
             elid[ 0 ] = el.childNodes[ idx ].getAttribute( "id" );
             if ( h.useDomMerging ) {
@@ -6693,15 +6693,16 @@ define( 'yasmf/util/h',[ "yasmf/util/object" ], function ( BaseObject ) {
           } else {
             el.appendChild( n );
           }
-          if ( elid[ 0 ] ) {
-            globalEvents[ elid[ 0 ] ] = null;
-            delete globalEvents[ elid[ 0 ] ];
-          }
-          if ( elid[ 1 ] ) {
-            globalEvents[ elid[ 1 ] ] = renderEvents[ elid[ 1 ] ];
-            renderEvents[ elid[ 1 ] ] = null;
-            delete renderEvents[ elid[ 1 ] ];
-          }
+          /*
+           if ( elid[ 0 ] ) {
+           globalEvents[ elid[ 0 ] ] = null;
+           delete globalEvents[ elid[ 0 ] ];
+           }
+           if ( elid[ 1 ] ) {
+           globalEvents[ elid[ 1 ] ] = renderEvents[ elid[ 1 ] ];
+           renderEvents[ elid[ 1 ] ] = null;
+           delete renderEvents[ elid[ 1 ] ];
+           }*/
         }
       }
     },
