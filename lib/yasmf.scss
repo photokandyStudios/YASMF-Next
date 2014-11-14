@@ -276,6 +276,7 @@ body {
   @include outline(none);
   @include text-rendering(optimizeLegibility);
   @include backface-visibility(hidden);
+  -webkit-overflow-scrolling: touch;
 }
 
 body.android {
@@ -324,12 +325,12 @@ div {
   line-height:                1em;
   font-size:                  20px;
   background-origin:          border-box;
-  -webkit-overflow-scrolling: touch;
   @include rectTLBR(0, 0, 0, 0);
   @include transform(translateZ(0));
   z-index:                    2;
   background-color:           #E8E8E8;
   color:                      #333;
+  @include backface-visibility(hidden);
 }
 
 .android .ui-container,
@@ -919,6 +920,7 @@ $android-destructive-color: #C00;
   right:    0;
   bottom:   0;
   overflow: auto;
+  @include backface-visibility(hidden);
 }
 
 /*****************************************************************************
