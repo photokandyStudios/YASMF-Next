@@ -97,7 +97,8 @@ body {
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
   -o-backface-visibility: hidden;
-  backface-visibility: hidden; }
+  backface-visibility: hidden;
+  -webkit-overflow-scrolling: touch; }
 
 body.android {
   font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-serif;
@@ -148,7 +149,6 @@ div {
   line-height: 1em;
   font-size: 20px;
   background-origin: border-box;
-  -webkit-overflow-scrolling: touch;
   top: 0;
   left: 0;
   right: 0;
@@ -160,7 +160,12 @@ div {
   transform: translateZ(0);
   z-index: 2;
   background-color: #E8E8E8;
-  color: #333; }
+  color: #333;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden; }
 
 .android .ui-container,
 .wince .ui-container {
@@ -749,7 +754,12 @@ div {
   left: 0;
   right: 0;
   bottom: 0;
-  overflow: auto; }
+  overflow: auto;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden; }
 
 /*****************************************************************************
  *
