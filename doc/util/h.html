@@ -261,21 +261,21 @@ if the handler is an object, it must be of the form</p>
               <span class="hljs-keyword">if</span> ( options.on.hasOwnProperty( evt ) ) {
                 <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.on[ evt ] === <span class="hljs-string">"function"</span> ) {
                   f = options.on[ evt ].bind( e );
-                  events.push( {
-                    type: <span class="hljs-string">"on"</span>,
-                    evt: evt,
-                    handler: f,
-                    capture: <span class="hljs-literal">false</span>
-                  } );
+                  <span class="hljs-comment">/*events.push( {
+                   type: "on",
+                   evt: evt,
+                   handler: f,
+                   capture: false
+                   } ); */</span>
                   e.addEventListener( evt, f, <span class="hljs-literal">false</span> );
                 } <span class="hljs-keyword">else</span> {
                   f = options.on[ evt ].handler.bind( e );
-                  events.push( {
-                    type: <span class="hljs-string">"on"</span>,
-                    evt: evt,
-                    handler: f,
-                    capture: <span class="hljs-keyword">typeof</span> options.on[ evt ].capture !== <span class="hljs-string">"undefined"</span> ? options.on[ evt ].capture : <span class="hljs-literal">false</span>
-                  } );
+                  <span class="hljs-comment">/*events.push( {
+                   type: "on",
+                   evt: evt,
+                   handler: f,
+                   capture: typeof options.on[ evt ].capture !== "undefined" ? options.on[ evt ].capture : false
+                   } ); */</span>
                   e.addEventListener( evt, f, <span class="hljs-keyword">typeof</span> options.on[ evt ].capture !== <span class="hljs-string">"undefined"</span> ? options.on[ evt ].capture :
                     <span class="hljs-literal">false</span> );
                 }
@@ -286,12 +286,12 @@ it must be of the form <code>{ hammer: { gesture: { handler: fn, options: }, ham
             <span class="hljs-keyword">var</span> hammer = options.hammer.hammer;
             <span class="hljs-keyword">for</span> ( evt <span class="hljs-keyword">in</span> options.hammer ) {
               <span class="hljs-keyword">if</span> ( options.hammer.hasOwnProperty( evt ) &amp;&amp; evt !== <span class="hljs-string">"hammer"</span> ) {
-                events.push( {
-                  type: <span class="hljs-string">"hammer"</span>,
-                  evt: evt,
-                  hammer: hammer,
-                  options: options.hammer[ evt ]
-                } );
+                <span class="hljs-comment">/*events.push( {
+                 type: "hammer",
+                 evt: evt,
+                 hammer: hammer,
+                 options: options.hammer[ evt ]
+                 } );*/</span>
                 hammer( e, options.hammer[ evt ].options ).on( evt, options.hammer[ evt ].handler );
               }
             }
@@ -334,7 +334,7 @@ the binding object is of the form <code>{ object: objectRef, keyPath: &quot;keyP
             }
           }
         }
-        renderEvents[ elid ] = events;</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the element (and associated tree)</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">return</span> e;
+        <span class="hljs-comment">//renderEvents[elid] = events;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>return the element (and associated tree)</p></div></div><div class="code"><div class="wrapper">        <span class="hljs-keyword">return</span> e;
       },</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method mapTo</span></p>
 <p>mapTo - Maps a keypath to another keypath based on <code>map</code>. <code>map</code> should look like this:</p>
 <pre><code>{
@@ -502,8 +502,8 @@ at that point <code>appendChild</code> fails.</p>
               styleKeys[ idx ] = <span class="hljs-built_in">Object</span>.keys( styles[ idx ] );
             }
           } );
-          events[ _A ] = globalEvents[ elid[ _A ] ] || [];
-          events[ _B ] = renderEvents[ elid[ _B ] ] || [];</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>transform all our children</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( len[ _A ], len[ _B ] ); i &lt; l; i++ ) {
+          <span class="hljs-comment">//events[_A] = globalEvents[elid[_A]] || [];</span>
+          <span class="hljs-comment">//events[_B] = renderEvents[elid[_B]] || [];</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>transform all our children</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( len[ _A ], len[ _B ] ); i &lt; l; i++ ) {
             transform( nodeA, childNodes[ _A ][ i ], childNodes[ _B ][ i ] );
           }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy attributes</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( attrs[ _A ].length, attrs[ _B ].length ); i &lt; l; i++ ) {
             <span class="hljs-keyword">if</span> ( attrs[ _A ][ i ] ) {
@@ -521,36 +521,36 @@ at that point <code>appendChild</code> fails.</p>
             <span class="hljs-keyword">if</span> ( styles[ _B ][ i ] ) {
               nodeA.style[ styleKeys[ _B ][ i ] ] = styles[ _B ][ styleKeys[ _B ][ i ] ];
             }
-          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy events</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>, l = <span class="hljs-built_in">Math</span>.max( events[ _A ].length, events[ _B ].length ); i &lt; l; i++ ) {
-            [ <span class="hljs-number">0</span>, <span class="hljs-number">1</span> ].forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doANode</span><span class="hljs-params">( whichNode )</span> </span>{
-              <span class="hljs-keyword">var</span> evt = events[ whichNode ][ i ],
-                node = nodes[ whichNode ],
-                handler;
-              <span class="hljs-keyword">if</span> ( evt ) {
-                <span class="hljs-keyword">switch</span> ( evt.type ) {
-                <span class="hljs-keyword">case</span> <span class="hljs-string">"on"</span>:
-                  handler = whichNode === _A ? <span class="hljs-string">"removeEventListener"</span> : <span class="hljs-string">"addEventListener"</span>;
-                  nodeA[ handler ]( evt.evt, evt.handler, evt.capture );
-                  <span class="hljs-keyword">break</span>;
-                <span class="hljs-keyword">case</span> <span class="hljs-string">"hammer"</span>:
-                  handler = whichNode === _A ? <span class="hljs-string">"off"</span> : <span class="hljs-string">"on"</span>;
-                  <span class="hljs-built_in">console</span>.log( handler, nodeA, evt.evt, evt.options.handler );
-                  evt.hammer( nodeA, evt.options.options )[ handler ]( evt.evt, evt.options.handler );
-                  <span class="hljs-keyword">break</span>;
-                <span class="hljs-keyword">default</span>:
-                }
-              }
-            } );
-          }
-          <span class="hljs-keyword">if</span> ( elid[ _A ] ) {
-            globalEvents[ elid[ _A ] ] = <span class="hljs-literal">null</span>;
-            <span class="hljs-keyword">delete</span> globalEvents[ elid[ _A ] ];
-          }
-          <span class="hljs-keyword">if</span> ( elid[ _B ] ) {
-            globalEvents[ elid[ _B ] ] = renderEvents[ elid[ _B ] ];
-            renderEvents[ elid[ _B ] ] = <span class="hljs-literal">null</span>;
-            <span class="hljs-keyword">delete</span> renderEvents[ elid[ _B ] ];
-          }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>copy events</p></div></div><div class="code"><div class="wrapper">          <span class="hljs-comment">/*for ( i = 0, l = Math.max( events[ _A ].length, events[ _B ].length ); i &lt; l; i++ ) {
+           [ 0, 1 ].forEach( function doANode( whichNode ) {
+           var evt = events[ whichNode ][ i ],
+           node = nodes[ whichNode ],
+           handler;
+           if ( evt ) {
+           switch ( evt.type ) {
+           case "on":
+           handler = whichNode === _A ? "removeEventListener" : "addEventListener";
+           nodeA[ handler ]( evt.evt, evt.handler, evt.capture );
+           break;
+           case "hammer":
+           handler = whichNode === _A ? "off" : "on";
+           console.log( handler, nodeA, evt.evt, evt.options.handler );
+           evt.hammer( nodeA, evt.options.options )[ handler ]( evt.evt, evt.options.handler );
+           break;
+           default:
+           }
+           }
+           } );
+           }
+           if ( elid[ _A ] ) {
+           globalEvents[ elid[ _A ] ] = null;
+           delete globalEvents[ elid[ _A ] ];
+           }
+           if ( elid[ _B ] ) {
+           globalEvents[ elid[ _B ] ] = renderEvents[ elid[ _B ] ];
+           renderEvents[ elid[ _B ] ] = null;
+           delete renderEvents[ elid[ _B ] ];
+           }*/</span>
         }
         <span class="hljs-keyword">if</span> ( !idx ) {
           idx = <span class="hljs-number">0</span>;
@@ -561,9 +561,9 @@ at that point <code>appendChild</code> fails.</p>
           }
         } <span class="hljs-keyword">else</span> {
           <span class="hljs-keyword">var</span> elid = [ <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span> ];
-          <span class="hljs-keyword">if</span> ( n ) {
-            elid[ <span class="hljs-number">1</span> ] = n.getAttribute( <span class="hljs-string">"id"</span> );
-          }
+          <span class="hljs-comment">/*if ( n ) {
+            elid[1] = n.getAttribute( "id" );
+          }*/</span>
           <span class="hljs-keyword">if</span> ( el.hasChildNodes() &amp;&amp; idx &lt; el.childNodes.length ) {
             elid[ <span class="hljs-number">0</span> ] = el.childNodes[ idx ].getAttribute( <span class="hljs-string">"id"</span> );
             <span class="hljs-keyword">if</span> ( h.useDomMerging ) {
@@ -573,17 +573,15 @@ at that point <code>appendChild</code> fails.</p>
             }
           } <span class="hljs-keyword">else</span> {
             el.appendChild( n );
-          }
-          <span class="hljs-keyword">if</span> ( elid[ <span class="hljs-number">0</span> ] ) {
-            globalEvents[ elid[ <span class="hljs-number">0</span> ] ] = <span class="hljs-literal">null</span>;
-            <span class="hljs-keyword">delete</span> globalEvents[ elid[ <span class="hljs-number">0</span> ] ];
-          }
-          <span class="hljs-keyword">if</span> ( elid[ <span class="hljs-number">1</span> ] ) {
-            globalEvents[ elid[ <span class="hljs-number">1</span> ] ] = renderEvents[ elid[ <span class="hljs-number">1</span> ] ];
-            renderEvents[ elid[ <span class="hljs-number">1</span> ] ] = <span class="hljs-literal">null</span>;
-            <span class="hljs-keyword">delete</span> renderEvents[ elid[ <span class="hljs-number">1</span> ] ];
-          }
-        }
+          }</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p> if ( elid[ 0 ] ) {
+ globalEvents[ elid[ 0 ] ] = null;
+ delete globalEvents[ elid[ 0 ] ];
+ }
+ if ( elid[ 1 ] ) {
+ globalEvents[ elid[ 1 ] ] = renderEvents[ elid[ 1 ] ];
+ renderEvents[ elid[ 1 ] ] = null;
+ delete renderEvents[ elid[ 1 ] ];
+ }</p></div></div><div class="code"><div class="wrapper">        }
       }
     },</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>create bindings for each HTML element (from: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">https://developer.mozilla.org/en-US/docs/Web/HTML/Element</a>)</p></div></div><div class="code"><div class="wrapper">    els = [ <span class="hljs-string">"a"</span>, <span class="hljs-string">"abbr"</span>, <span class="hljs-string">"acronym"</span>, <span class="hljs-string">"address"</span>, <span class="hljs-string">"applet"</span>, <span class="hljs-string">"area"</span>, <span class="hljs-string">"article"</span>, <span class="hljs-string">"aside"</span>, <span class="hljs-string">"audio"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"base"</span>, <span class="hljs-string">"basefont"</span>, <span class="hljs-string">"bdi"</span>,
       <span class="hljs-string">"bdo"</span>, <span class="hljs-string">"bgsound"</span>, <span class="hljs-string">"big"</span>, <span class="hljs-string">"blink"</span>, <span class="hljs-string">"blockquote"</span>, <span class="hljs-string">"body"</span>, <span class="hljs-string">"br"</span>, <span class="hljs-string">"button"</span>, <span class="hljs-string">"canvas"</span>, <span class="hljs-string">"caption"</span>, <span class="hljs-string">"center"</span>, <span class="hljs-string">"cite"</span>, <span class="hljs-string">"code"</span>,
