@@ -131,6 +131,29 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
             </div>
             
             <div class="content"><div class='highlight'><pre>    self.registerNotification( <span class="hljs-string">"viewsChanged"</span> );
+    self._preventClicks = <span class="hljs-literal">null</span>;
+    <span class="hljs-comment">/**
+     * Creates a click-prevention element -- essentially a transparent DIV that
+     * fills the screen.
+     * @method _createClickPreventionElement
+     * @private
+     */</span>
+    self._createClickPreventionElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      self.createElementIfNotCreated();
+      self._preventClicks = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._preventClicks.className = <span class="hljs-string">"ui-prevent-clicks"</span>;
+      self.element.appendChild( self._preventClicks );
+    };
+    <span class="hljs-comment">/**
+     * Create a click-prevention element if necessary
+     * @method _createClickPreventionElementIfNotCreated
+     * @private
+     */</span>
+    self._createClickPreventionElementIfNotCreated = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( self._preventClicks === <span class="hljs-literal">null</span> ) {
+        self._createClickPreventionElement();
+      }
+    };
     <span class="hljs-comment">/**
      * Indicates the type of split canvas:
      *
@@ -159,9 +182,13 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
      * @type {String}
      */</span>
     self.setLeftViewStatus = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( viewStatus )</span> </span>{
+      self._preventClicks.style.display = <span class="hljs-string">"block"</span>;
       self.element.classList.remove( <span class="hljs-string">"ui-left-side-"</span> + self._leftViewStatus );
       self._leftViewStatus = viewStatus;
       self.element.classList.add( <span class="hljs-string">"ui-left-side-"</span> + viewStatus );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self._preventClicks.style.display = <span class="hljs-string">"none"</span>;
+      }, <span class="hljs-number">600</span> );
     };
     self.defineProperty( <span class="hljs-string">"leftViewStatus"</span>, {
       read: <span class="hljs-literal">true</span>,
@@ -336,6 +363,7 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
      */</span>
     self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderToElement</span><span class="hljs-params">()</span> </span>{
       self._createElementsIfNecessary();
+      self._createClickPreventionElementIfNotCreated();
       <span class="hljs-keyword">return</span>; <span class="hljs-comment">// nothing to do.</span>
     } );
     <span class="hljs-comment">/**

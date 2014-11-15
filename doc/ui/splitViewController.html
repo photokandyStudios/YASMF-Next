@@ -23,7 +23,20 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
     self.subclass( _className );</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h1 id="notifications">Notifications</h1>
 <ul>
 <li><code>viewsChanged</code> - fired when the left or right side view changes</li>
-</ul></div></div><div class="code"><div class="wrapper">    self.registerNotification( <span class="hljs-string">"viewsChanged"</span> );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property viewType of type <em>String</em></span></p>
+</ul></div></div><div class="code"><div class="wrapper">    self.registerNotification( <span class="hljs-string">"viewsChanged"</span> );
+    self._preventClicks = <span class="hljs-literal">null</span>;</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createClickPreventionElement</span></p>
+<p>Creates a click-prevention element -- essentially a transparent DIV that
+fills the screen.</p></div></div><div class="code"><div class="wrapper">    self._createClickPreventionElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      self.createElementIfNotCreated();
+      self._preventClicks = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+      self._preventClicks.className = <span class="hljs-string">"ui-prevent-clicks"</span>;
+      self.element.appendChild( self._preventClicks );
+    };</div></div></div><div class="segment"><div class="comments doc-section doc-section-private"><div class="wrapper"><p><span class='doc-section-header'>Private method _createClickPreventionElementIfNotCreated</span></p>
+<p>Create a click-prevention element if necessary</p></div></div><div class="code"><div class="wrapper">    self._createClickPreventionElementIfNotCreated = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( self._preventClicks === <span class="hljs-literal">null</span> ) {
+        self._createClickPreventionElement();
+      }
+    };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property viewType of type <em>String</em></span></p>
 <p>Indicates the type of split canvas:</p>
 <ul>
 <li><code>split</code>: typical split-view - left and right side shares space on screen</li>
@@ -41,9 +54,13 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
       <span class="hljs-keyword">default</span>: <span class="hljs-string">"split"</span>
     } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Property leftViewStatus of type <em>String</em></span></p>
 <p>Indicates whether or not the left view is <code>visible</code> or <code>invisible</code>.</p></div></div><div class="code"><div class="wrapper">    self.setLeftViewStatus = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( viewStatus )</span> </span>{
+      self._preventClicks.style.display = <span class="hljs-string">"block"</span>;
       self.element.classList.remove( <span class="hljs-string">"ui-left-side-"</span> + self._leftViewStatus );
       self._leftViewStatus = viewStatus;
       self.element.classList.add( <span class="hljs-string">"ui-left-side-"</span> + viewStatus );
+      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self._preventClicks.style.display = <span class="hljs-string">"none"</span>;
+      }, <span class="hljs-number">600</span> );
     };
     self.defineProperty( <span class="hljs-string">"leftViewStatus"</span>, {
       read: <span class="hljs-literal">true</span>,
@@ -162,6 +179,7 @@ define( [ <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-st
     } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method renderToElement</span></p>
 <p>Creates the left and right elements if necessary</p></div></div><div class="code"><div class="wrapper">    self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderToElement</span><span class="hljs-params">()</span> </span>{
       self._createElementsIfNecessary();
+      self._createClickPreventionElementIfNotCreated();
       <span class="hljs-keyword">return</span>; <span class="hljs-comment">// nothing to do.</span>
     } );</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method init</span></p>
 <p>Initialize the split view controller</p>
