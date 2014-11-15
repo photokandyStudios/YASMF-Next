@@ -38,7 +38,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block; }
 
 body {
-  line-height: 1; }
+  line-height: normal; }
 
 ol, ul {
   list-style: none; }
@@ -65,7 +65,7 @@ body {
   margin: 0 0;
   font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
   font-size: 18px;
-  line-height: 1em;
+  line-height: normal;
   color: #333;
   background-color: #000;
   -webkit-tap-highlight-color: transparent;
@@ -146,7 +146,7 @@ div {
   margin: 0 0;
   padding: 0 0;
   border: none;
-  line-height: 1em;
+  line-height: normal;
   font-size: 20px;
   background-origin: border-box;
   top: 0;
@@ -2109,7 +2109,7 @@ div {
 
 .ui-prompt-input {
   position: static;
-  line-height: 1em;
+  line-height: normal;
   height: 1.5em;
   font-size: 12pt;
   font-weight: normal;

@@ -8821,6 +8821,29 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
     // * `viewsChanged` - fired when the left or right side view changes
     //
     self.registerNotification( "viewsChanged" );
+    self._preventClicks = null;
+    /**
+     * Creates a click-prevention element -- essentially a transparent DIV that
+     * fills the screen.
+     * @method _createClickPreventionElement
+     * @private
+     */
+    self._createClickPreventionElement = function () {
+      self.createElementIfNotCreated();
+      self._preventClicks = document.createElement( "div" );
+      self._preventClicks.className = "ui-prevent-clicks";
+      self.element.appendChild( self._preventClicks );
+    };
+    /**
+     * Create a click-prevention element if necessary
+     * @method _createClickPreventionElementIfNotCreated
+     * @private
+     */
+    self._createClickPreventionElementIfNotCreated = function () {
+      if ( self._preventClicks === null ) {
+        self._createClickPreventionElement();
+      }
+    };
     /**
      * Indicates the type of split canvas:
      *
@@ -8849,9 +8872,13 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      * @type {String}
      */
     self.setLeftViewStatus = function ( viewStatus ) {
+      self._preventClicks.style.display = "block";
       self.element.classList.remove( "ui-left-side-" + self._leftViewStatus );
       self._leftViewStatus = viewStatus;
       self.element.classList.add( "ui-left-side-" + viewStatus );
+      setTimeout( function () {
+        self._preventClicks.style.display = "none";
+      }, 600 );
     };
     self.defineProperty( "leftViewStatus", {
       read: true,
@@ -9013,6 +9040,7 @@ define( 'yasmf/ui/splitViewController',[ "yasmf/ui/core", "yasmf/ui/viewContaine
      */
     self.override( function renderToElement() {
       self._createElementsIfNecessary();
+      self._createClickPreventionElementIfNotCreated();
       return; // nothing to do.
     } );
     /**
