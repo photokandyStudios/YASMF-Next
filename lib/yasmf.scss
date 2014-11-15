@@ -41,7 +41,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 body {
-  line-height: 1;
+  line-height: normal;
 }
 
 ol, ul {
@@ -267,7 +267,7 @@ body {
   margin:           0 0;
   font-family:      $font-stack;
   font-size:        18px;
-  line-height:      1em;
+  line-height:      normal;
   color:            #333;
   background-color: #000;
   @include tap-highlight-color(rgba(0, 0, 0, 0));
@@ -322,7 +322,7 @@ div {
   margin:                     0 0;
   padding:                    0 0;
   border:                     none;
-  line-height:                1em;
+  line-height:                normal;
   font-size:                  20px;
   background-origin:          border-box;
   @include rectTLBR(0, 0, 0, 0);
@@ -1477,7 +1477,7 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
 
 .ui-prompt-input {
   position:           static;
-  line-height:        1em;
+  line-height:        normal;
   height:             1.5em;
   font-size:          12pt;
   font-weight:        normal;
