@@ -1312,7 +1312,7 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
   background-color: rgba(0, 0, 0, 0.25);
   @include rectTLBR(0, 0, 0, 0);
   opacity:          0;
-  @include transition(opacity 0.25s ease-in-out);
+  @include transition(opacity 0.3s ease-in-out);
   z-index:          9999999;
   display:          table;
   @include size(100%, 100%);
@@ -1331,10 +1331,10 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
   background-color:   rgba(255, 255, 255, 1);
   text-align:         center;
   opacity:            0;
-  -webkit-transition: -webkit-transform 0.125s ease-in-out, opacity 0.25s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out, right 0.25s ease-in-out, bottom 0.25s ease-in-out, width 0.25s ease-in-out, height 0.25s ease-in-out;
-  -moz-transition:    -moz-transform 0.125s ease-in-out, opacity 0.25s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out, right 0.25s ease-in-out, bottom 0.25s ease-in-out, width 0.25s ease-in-out, height 0.25s ease-in-out;
-  -ms-transition:     -ms-transform 0.125s ease-in-out, opacity 0.25s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out, right 0.25s ease-in-out, bottom 0.25s ease-in-out, width 0.25s ease-in-out, height 0.25s ease-in-out;
-  transition:         transform 0.125s ease-in-out, opacity 0.25s ease-in-out, top 0.25s ease-in-out, left 0.25s ease-in-out, right 0.25s ease-in-out, bottom 0.25s ease-in-out, width 0.25s ease-in-out, height 0.25s ease-in-out;
+  -webkit-transition: -webkit-transform 0.3s ease-in-out, opacity 0.3s ease-in-out, top 0.3s ease-in-out, left 0.3s ease-in-out, right 0.3s ease-in-out, bottom 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+  -moz-transition: -moz-transform 0.3s ease-in-out, opacity 0.3s ease-in-out, top 0.3s ease-in-out, left 0.3s ease-in-out, right 0.3s ease-in-out, bottom 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+  -ms-transition: -ms-transform 0.3s ease-in-out, opacity 0.3s ease-in-out, top 0.3s ease-in-out, left 0.3s ease-in-out, right 0.3s ease-in-out, bottom 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, top 0.3s ease-in-out, left 0.3s ease-in-out, right 0.3s ease-in-out, bottom 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
   -webkit-transform:  scale3d(1, 1, 1);
   -moz-transform:     scale3d(1, 1, 1);
   -ms-transform:      scale3d(1, 1, 1);
@@ -1400,7 +1400,7 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
   color:           #333;
   width:           100%;
   border-collapse: collapse;
-  display:         flex;
+  @include flex-box();
 
   &.wide {
     display: block;
