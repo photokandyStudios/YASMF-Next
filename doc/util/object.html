@@ -718,7 +718,8 @@ _getPrivateProperty, not get_privateProperty</p></div></div><div class="code"><d
         <span class="hljs-built_in">Object</span>.defineProperty( self, origPropertyName, defPropOptions );
       };</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>data binding support</p></div></div><div class="code"><div class="wrapper">      self._dataBindings = {};
       self._dataBindingTypes = {};
-      self._dataBindingEvents = [ <span class="hljs-string">"input"</span>, <span class="hljs-string">"change"</span>, <span class="hljs-string">"keyup"</span>, <span class="hljs-string">"blur"</span> ];</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method dataBindOn</span></p>
+      <span class="hljs-comment">//self._dataBindingEvents = [ "input", "change", "keyup", "blur" ];</span>
+      self._dataBindingEvents = [ <span class="hljs-string">"input"</span>, <span class="hljs-string">"change"</span>, <span class="hljs-string">"blur"</span> ];</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method dataBindOn</span></p>
 <p>Configure a data binding to an HTML element (el) for
 a particular property (keyPath). Returns self for chaining.</p>
 <p>Parameters:</p>
@@ -805,12 +806,14 @@ triggering element, and keyPath is on <code>data-y-keyPath</code> attribute.</p>
 </ul></div></div><div class="code"><div class="wrapper">      self.updatePropertyForKeyPath = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updatePropertyForKeyPath</span><span class="hljs-params">( inKeyPath, inValue, inKeyType )</span> </span>{
         <span class="hljs-keyword">var</span> keyType = inKeyType,
           keyPath = inKeyPath,
-          dataValue = inValue;
+          dataValue = inValue,
+          elType;
         <span class="hljs-keyword">try</span> {
           <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span> !== self &amp;&amp; <span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> Node ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>we&#39;ve been called from an event handler</p></div></div><div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyType"</span> ) !== <span class="hljs-literal">undefined</span> ) {
               keyType = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyType"</span> );
             }
             keyPath = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyPath"</span> );
+            elType = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"type"</span> );
             dataValue = <span class="hljs-keyword">this</span>.value;
             <span class="hljs-keyword">switch</span> ( keyType ) {
             <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
@@ -827,7 +830,17 @@ triggering element, and keyPath is on <code>data-y-keyPath</code> attribute.</p>
               }
               <span class="hljs-keyword">break</span>;
             <span class="hljs-keyword">case</span> <span class="hljs-string">"date"</span>:
-              self[ keyPath ] = <span class="hljs-keyword">this</span>.valueAsDate;
+              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.type === <span class="hljs-string">"text"</span> ) {
+                <span class="hljs-keyword">try</span> {
+                  <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"trying to pull date from "</span>, <span class="hljs-keyword">this</span>.value );
+                  self[ keyPath ] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>( <span class="hljs-keyword">this</span>.value )
+                } <span class="hljs-keyword">catch</span> ( err ) {
+                  <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"nope; set to null"</span> );
+                  self[ keyPath ] = <span class="hljs-literal">null</span>;
+                }
+              } <span class="hljs-keyword">else</span> {
+                self[ keyPath ] = <span class="hljs-keyword">this</span>.valueAsDate;
+              }
               <span class="hljs-keyword">break</span>;
             <span class="hljs-keyword">default</span>:
               self[ keyPath ] = dataValue;
@@ -858,7 +871,7 @@ triggering element, and keyPath is on <code>data-y-keyPath</code> attribute.</p>
             self[ keyPath ] = dataValue;
           }
         } <span class="hljs-keyword">catch</span> ( err ) {
-          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update"</span>, keyPath, <span class="hljs-string">"with"</span>, dataValue, <span class="hljs-string">"and"</span>, keyType );
+          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update"</span>, keyPath, <span class="hljs-string">"with"</span>, dataValue, <span class="hljs-string">"and"</span>, keyType, err, <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span> );
         }
       };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method @notifyDataBindingElementsForKeyPath</span></p>
 <p>notify all elements attached to a
@@ -871,7 +884,7 @@ with defineProperty and defineObservableProperty.</p>
         <span class="hljs-keyword">try</span> {
           <span class="hljs-keyword">var</span> keyPathEls = self._dataBindings[ keyPath ],
             keyType = self._dataBindingTypes[ keyPath ],
-            el, v;
+            el, v, elType, t, cursorPos;
           <span class="hljs-keyword">if</span> ( keyType === <span class="hljs-literal">undefined</span> ) {
             keyType = <span class="hljs-string">"string"</span>;
           }
@@ -882,9 +895,31 @@ with defineProperty and defineObservableProperty.</p>
           <span class="hljs-keyword">if</span> ( keyPathEls !== <span class="hljs-literal">undefined</span> ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = keyPathEls.length; i &lt; l; i++ ) {
               el = keyPathEls[ i ];
-              <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"date"</span> ) {
-                <span class="hljs-keyword">if</span> ( el.valueAsDate !== v ) {
-                  el.valueAsDate = v;
+              <span class="hljs-keyword">try</span> {
+                <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.selectionStart === <span class="hljs-string">"number"</span> ) {
+                  cursorPos = el.selectionStart;
+                } <span class="hljs-keyword">else</span> {
+                  cursorPos = -<span class="hljs-number">1</span>;
+                }
+              } <span class="hljs-keyword">catch</span> ( err ) {
+                cursorPos = -<span class="hljs-number">1</span>;
+              }
+              elType = el.getAttribute( <span class="hljs-string">"type"</span> );
+              <span class="hljs-keyword">if</span> ( elType === <span class="hljs-string">"date"</span> ) {
+                <span class="hljs-keyword">if</span> ( el.type !== elType ) {</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>problem; we almost certainly have a field that doesn&#39;t understand valueAsDate</p></div></div><div class="code"><div class="wrapper">                  <span class="hljs-keyword">if</span> ( v.toISOString ) {
+                    t = v.toISOString().split( <span class="hljs-string">"T"</span> )[ <span class="hljs-number">0</span> ];
+                    <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"trying to set value to  "</span>, t );
+                    <span class="hljs-keyword">if</span> ( el.value !== t ) {
+                      <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"doing it  "</span>, t );
+                      el.value = t;
+                    }
+                  } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"v is an unexpected type: "</span> + <span class="hljs-keyword">typeof</span> v + <span class="hljs-string">"; "</span> + v );
+                  }
+                } <span class="hljs-keyword">else</span> {
+                  <span class="hljs-keyword">if</span> ( el.valueAsDate !== v ) {
+                    el.valueAsDate = v;
+                  }
                 }
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"checkbox"</span> ) {
                 el.indeterminate = ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> );
@@ -906,10 +941,14 @@ with defineProperty and defineObservableProperty.</p>
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Data bind failure; browser doesn't understand value, textContent, or innerText."</span> );
               }
+              <span class="hljs-keyword">if</span> ( cursorPos &gt; -<span class="hljs-number">1</span> &amp;&amp; <span class="hljs-built_in">document</span>.activeElement === el ) {
+                el.selectionStart = cursorPos;
+                el.selectionEnd = cursorPos;
+              }
             }
           }
         } <span class="hljs-keyword">catch</span> ( err ) {
-          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update elements for "</span>, keyPath );
+          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update elements for "</span>, keyPath, err, <span class="hljs-built_in">arguments</span> );
         }
       };</div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'>Method _autoInit</span></p>
 <p>Auto initializes the object based on the arguments passed to the object constructor. Any object

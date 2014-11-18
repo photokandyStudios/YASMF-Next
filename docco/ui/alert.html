@@ -108,107 +108,115 @@
  * ```
  */</span>
 <span class="hljs-comment">/*global define*/</span>
-define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-string">"yasmf/util/device"</span>, <span class="hljs-string">"yasmf/util/object"</span>, <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf/ui/event"</span> ], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( _y,
-  theDevice, BaseObject, UI, Q, event )</span> </span>{
-<span class="hljs-pi">  "use strict"</span>;
-  <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"Alert"</span>;
-  <span class="hljs-keyword">var</span> Alert = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
-    self.subclass( _className );
-    <span class="hljs-comment">/*
-     * # Notifications
-     *
-     * * `buttonTapped` indicates which button was tapped when the view is dismissing
-     * * `dismissed` indicates that the alert was dismissed (by user or code)
-     */</span>
-    self.registerNotification( <span class="hljs-string">"buttonTapped"</span> );
-    self.registerNotification( <span class="hljs-string">"dismissed"</span> );
-    <span class="hljs-comment">/**
-     * The title to show in the alert.
-     * @property title
-     * @type {String}
-     */</span>
-    self._titleElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// the corresponding DOM element</span>
-    self.setTitle = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theTitle )</span> </span>{
-      self._title = theTitle;
-      <span class="hljs-keyword">if</span> ( self._titleElement !== <span class="hljs-literal">null</span> ) {
-        <span class="hljs-keyword">if</span> ( self._titleElement.textContent !== <span class="hljs-literal">undefined</span> ) {
-          self._titleElement.textContent = theTitle;
-        } <span class="hljs-keyword">else</span> {
-          self._titleElement.innerHTML = theTitle;
-        }
-      }
-    };
-    self.defineProperty( <span class="hljs-string">"title"</span>, {
-      read: <span class="hljs-literal">true</span>,
-      write: <span class="hljs-literal">true</span>,
-      <span class="hljs-keyword">default</span>: _y.T( <span class="hljs-string">"ALERT"</span> )
-    } );
-    <span class="hljs-comment">/**
-     * The body of the alert. Leave blank if you don't need to show
-     * anything more than the title.
-     * @property text
-     * @type {String}
-     */</span>
-    self._textElement = <span class="hljs-literal">null</span>;
-    self.setText = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theText )</span> </span>{
-      self._text = theText;
-      <span class="hljs-keyword">if</span> ( self._textElement !== <span class="hljs-literal">null</span> ) {
-        self._textElement.innerHTML = theText;
-      }
-    };
-    self.defineProperty( <span class="hljs-string">"text"</span>, {
-      read: <span class="hljs-literal">true</span>,
-      write: <span class="hljs-literal">true</span>
-    } );
-    <span class="hljs-comment">/**
-     * The alert's buttons are specified in this property. The layout
-     * is expected to be: `[ { title: title [, type: type] [, tag: tag] } [, {} ...] ]`
-     *
-     * Each button's type can be "normal", "bold", "destructive". The tag may be
-     * null; if it is, it is assigned the button index. If a tag is specifed (common
-     * for cancel buttons), that is the return value.
-     * @property buttons
-     * @type {Array}
-     */</span>
-    self._buttons = [];
-    self._buttonContainer = <span class="hljs-literal">null</span>;
-    self.defineProperty( <span class="hljs-string">"wideButtons"</span>, {
-      <span class="hljs-keyword">default</span>: <span class="hljs-string">"auto"</span>
-    } );
-    self.setButtons = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theButtons )</span> </span>{
-      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">touchStart</span><span class="hljs-params">( e )</span> </span>{
-        <span class="hljs-keyword">if</span> ( e.touches !== <span class="hljs-literal">undefined</span> ) {
-          <span class="hljs-keyword">this</span>.startX = e.touches[ <span class="hljs-number">0</span> ].clientX;
-          <span class="hljs-keyword">this</span>.startY = e.touches[ <span class="hljs-number">0</span> ].clientY;
-        } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">this</span>.startX = e.clientX;
-          <span class="hljs-keyword">this</span>.startY = e.clientY;
-        }
-        <span class="hljs-keyword">this</span>.moved = <span class="hljs-literal">false</span>;
-      }
-
-      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleScrolling</span><span class="hljs-params">( e )</span> </span>{
-        <span class="hljs-keyword">var</span> newX = ( e.touches !== <span class="hljs-literal">undefined</span> ) ? e.touches[ <span class="hljs-number">0</span> ].clientX : e.clientX,
-          newY = ( e.touches !== <span class="hljs-literal">undefined</span> ) ? e.touches[ <span class="hljs-number">0</span> ].clientY : e.clientY,
-          dX = <span class="hljs-built_in">Math</span>.abs( <span class="hljs-keyword">this</span>.startX - newX ),
-          dY = <span class="hljs-built_in">Math</span>.abs( <span class="hljs-keyword">this</span>.startY - newY );
-        <span class="hljs-built_in">console</span>.log( dX, dY );
-        <span class="hljs-keyword">if</span> ( dX &gt; <span class="hljs-number">20</span> || dY &gt; <span class="hljs-number">20</span> ) {
-          <span class="hljs-keyword">this</span>.moved = <span class="hljs-literal">true</span>;
-        }
-      }
-
-      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dismissWithIndex</span><span class="hljs-params">( idx )</span> </span>{
-        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
-          e.preventDefault();
-          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.moved ) {
-            <span class="hljs-keyword">return</span>;
+define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-string">"yasmf/util/device"</span>, <span class="hljs-string">"yasmf/util/object"</span>, <span class="hljs-string">"yasmf/ui/core"</span>, <span class="hljs-string">"Q"</span>, <span class="hljs-string">"yasmf/ui/event"</span>, <span class="hljs-string">"yasmf/util/h"</span> ],
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( _y, theDevice, BaseObject, UI, Q, event, h )</span> </span>{
+<span class="hljs-pi">    "use strict"</span>;
+    <span class="hljs-keyword">var</span> _className = <span class="hljs-string">"Alert"</span>;
+    <span class="hljs-keyword">var</span> Alert = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
+      self.subclass( _className );
+      <span class="hljs-comment">/*
+       * # Notifications
+       *
+       * * `buttonTapped` indicates which button was tapped when the view is dismissing
+       * * `dismissed` indicates that the alert was dismissed (by user or code)
+       */</span>
+      self.registerNotification( <span class="hljs-string">"buttonTapped"</span> );
+      self.registerNotification( <span class="hljs-string">"dismissed"</span> );
+      <span class="hljs-comment">/**
+       * The title to show in the alert.
+       * @property title
+       * @type {String}
+       */</span>
+      self._titleElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// the corresponding DOM element</span>
+      self.setTitle = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theTitle )</span> </span>{
+        self._title = theTitle;
+        <span class="hljs-keyword">if</span> ( self._titleElement !== <span class="hljs-literal">null</span> ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self._titleElement.textContent !== <span class="hljs-string">"undefined"</span> ) {
+            self._titleElement.textContent = theTitle;
+          } <span class="hljs-keyword">else</span> {
+            self._titleElement.innerHTML = theTitle;
           }
-          self.dismiss( idx );
-        };
-      }
-      <span class="hljs-keyword">var</span> i;</pre></div></div>
+        }
+      };
+      self.defineProperty( <span class="hljs-string">"title"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">true</span>,
+        <span class="hljs-keyword">default</span>: _y.T( <span class="hljs-string">"ALERT"</span> )
+      } );
+      <span class="hljs-comment">/**
+       * The body of the alert. Leave blank if you don't need to show
+       * anything more than the title.
+       * @property text
+       * @type {String}
+       */</span>
+      self._textElement = <span class="hljs-literal">null</span>;
+      self.setText = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theText )</span> </span>{
+        self._text = theText;
+        <span class="hljs-keyword">if</span> ( self._textElement !== <span class="hljs-literal">null</span> ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theText !== <span class="hljs-string">"object"</span> ) {
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self._textElement.textContent !== <span class="hljs-string">"undefined"</span> ) {
+              self._textElement.textContent = ( <span class="hljs-string">""</span> + theText ).replace( <span class="hljs-regexp">/\&lt;br\w*\/\&gt;/g</span>, <span class="hljs-string">"\r\n"</span> );
+            } <span class="hljs-keyword">else</span> {
+              self._textElement.innerHTML = theText;
+            }
+          } <span class="hljs-keyword">else</span> {
+            h.renderTo( theText, self._textElement, <span class="hljs-number">0</span> );
+          }
+        }
+      };
+      self.defineProperty( <span class="hljs-string">"text"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">true</span>
+      } );
+      <span class="hljs-comment">/**
+       * The alert's buttons are specified in this property. The layout
+       * is expected to be: `[ { title: title [, type: type] [, tag: tag] } [, {} ...] ]`
+       *
+       * Each button's type can be "normal", "bold", "destructive". The tag may be
+       * null; if it is, it is assigned the button index. If a tag is specifed (common
+       * for cancel buttons), that is the return value.
+       * @property buttons
+       * @type {Array}
+       */</span>
+      self._buttons = [];
+      self._buttonContainer = <span class="hljs-literal">null</span>;
+      self.defineProperty( <span class="hljs-string">"wideButtons"</span>, {
+        <span class="hljs-keyword">default</span>: <span class="hljs-string">"auto"</span>
+      } );
+      self.setButtons = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theButtons )</span> </span>{
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">touchStart</span><span class="hljs-params">( e )</span> </span>{
+          <span class="hljs-keyword">if</span> ( e.touches !== <span class="hljs-literal">undefined</span> ) {
+            <span class="hljs-keyword">this</span>.startX = e.touches[ <span class="hljs-number">0</span> ].clientX;
+            <span class="hljs-keyword">this</span>.startY = e.touches[ <span class="hljs-number">0</span> ].clientY;
+          } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.startX = e.clientX;
+            <span class="hljs-keyword">this</span>.startY = e.clientY;
+          }
+          <span class="hljs-keyword">this</span>.moved = <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleScrolling</span><span class="hljs-params">( e )</span> </span>{
+          <span class="hljs-keyword">var</span> newX = ( e.touches !== <span class="hljs-literal">undefined</span> ) ? e.touches[ <span class="hljs-number">0</span> ].clientX : e.clientX,
+            newY = ( e.touches !== <span class="hljs-literal">undefined</span> ) ? e.touches[ <span class="hljs-number">0</span> ].clientY : e.clientY,
+            dX = <span class="hljs-built_in">Math</span>.abs( <span class="hljs-keyword">this</span>.startX - newX ),
+            dY = <span class="hljs-built_in">Math</span>.abs( <span class="hljs-keyword">this</span>.startY - newY );
+          <span class="hljs-built_in">console</span>.log( dX, dY );
+          <span class="hljs-keyword">if</span> ( dX &gt; <span class="hljs-number">20</span> || dY &gt; <span class="hljs-number">20</span> ) {
+            <span class="hljs-keyword">this</span>.moved = <span class="hljs-literal">true</span>;
+          }
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dismissWithIndex</span><span class="hljs-params">( idx )</span> </span>{
+          <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+            e.preventDefault();
+            <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.moved ) {
+              <span class="hljs-keyword">return</span>;
+            }
+            self.dismiss( idx );
+          };
+        }
+        <span class="hljs-keyword">var</span> i;</pre></div></div>
             
         </li>
         
@@ -223,12 +231,12 @@ define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( self._buttonContainer !== <span class="hljs-literal">null</span> ) {
-        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; self._buttons.length; i++ ) {
-          self._buttonContainer.removeChild( self._buttons[ i ].element );
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( self._buttonContainer !== <span class="hljs-literal">null</span> ) {
+          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; self._buttons.length; i++ ) {
+            self._buttonContainer.removeChild( self._buttons[ i ].element );
+          }
         }
-      }
-      self._buttons = theButtons;</pre></div></div>
+        self._buttons = theButtons;</pre></div></div>
             
         </li>
         
@@ -243,15 +251,15 @@ define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> wideButtons = <span class="hljs-literal">false</span>;
-      <span class="hljs-keyword">if</span> ( self.wideButtons === <span class="hljs-string">"auto"</span> ) {
-        wideButtons = !( ( self._buttons.length &gt;= <span class="hljs-number">2</span> ) &amp;&amp; ( self._buttons.length &lt;= <span class="hljs-number">3</span> ) );
-      } <span class="hljs-keyword">else</span> {
-        wideButtons = self.wideButtons;
-      }
-      <span class="hljs-keyword">if</span> ( wideButtons ) {
-        self._buttonContainer.classList.add( <span class="hljs-string">"wide"</span> );
-      }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> wideButtons = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">if</span> ( self.wideButtons === <span class="hljs-string">"auto"</span> ) {
+          wideButtons = !( ( self._buttons.length &gt;= <span class="hljs-number">2</span> ) &amp;&amp; ( self._buttons.length &lt;= <span class="hljs-number">3</span> ) );
+        } <span class="hljs-keyword">else</span> {
+          wideButtons = self.wideButtons;
+        }
+        <span class="hljs-keyword">if</span> ( wideButtons ) {
+          self._buttonContainer.classList.add( <span class="hljs-string">"wide"</span> );
+        }</pre></div></div>
             
         </li>
         
@@ -266,10 +274,10 @@ define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( self._buttonContainer !== <span class="hljs-literal">null</span> ) {
-        <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; self._buttons.length; i++ ) {
-          <span class="hljs-keyword">var</span> e = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
-          <span class="hljs-keyword">var</span> b = self._buttons[ i ];</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( self._buttonContainer !== <span class="hljs-literal">null</span> ) {
+          <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">0</span>; i &lt; self._buttons.length; i++ ) {
+            <span class="hljs-keyword">var</span> e = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+            <span class="hljs-keyword">var</span> b = self._buttons[ i ];</pre></div></div>
             
         </li>
         
@@ -284,9 +292,9 @@ define( [ <span class="hljs-string">"yasmf/util/core"</span>, <span class="hljs-
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( b.tag === <span class="hljs-literal">null</span> ) {
-            b.tag = i;
-          }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( b.tag === <span class="hljs-literal">null</span> ) {
+              b.tag = i;
+            }</pre></div></div>
             
         </li>
         
@@ -302,7 +310,7 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          e.className = <span class="hljs-string">"ui-alert-button "</span> + b.type + <span class="hljs-string">" "</span> + ( wideButtons ? <span class="hljs-string">"wide"</span> : <span class="hljs-string">""</span> );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            e.className = <span class="hljs-string">"ui-alert-button "</span> + b.type + <span class="hljs-string">" "</span> + ( wideButtons ? <span class="hljs-string">"wide"</span> : <span class="hljs-string">""</span> );</pre></div></div>
             
         </li>
         
@@ -317,8 +325,8 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          e.innerHTML = b.title;
-          <span class="hljs-keyword">if</span> ( !wideButtons ) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            e.innerHTML = b.title;
+            <span class="hljs-keyword">if</span> ( !wideButtons ) {</pre></div></div>
             
         </li>
         
@@ -334,8 +342,8 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            e.style.width = <span class="hljs-string">""</span> + ( <span class="hljs-number">100</span> / self._buttons.length ) + <span class="hljs-string">"%"</span>;
-          }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>              e.style.width = <span class="hljs-string">""</span> + ( <span class="hljs-number">100</span> / self._buttons.length ) + <span class="hljs-string">"%"</span>;
+            }</pre></div></div>
             
         </li>
         
@@ -350,14 +358,14 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( Hammer ) {
-            Hammer( e ).on( <span class="hljs-string">"tap"</span>, dismissWithIndex( i ) );
-          } <span class="hljs-keyword">else</span> {
-            event.addListener( e, <span class="hljs-string">"touchstart"</span>, touchStart );
-            event.addListener( e, <span class="hljs-string">"touchmove"</span>, handleScrolling );
-            event.addListener( e, <span class="hljs-string">"touchend"</span>, dismissWithIndex( i ) );
-          }
-          b.element = e;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> ( Hammer ) {
+              Hammer( e ).on( <span class="hljs-string">"tap"</span>, dismissWithIndex( i ) );
+            } <span class="hljs-keyword">else</span> {
+              event.addListener( e, <span class="hljs-string">"touchstart"</span>, touchStart );
+              event.addListener( e, <span class="hljs-string">"touchmove"</span>, handleScrolling );
+              event.addListener( e, <span class="hljs-string">"touchend"</span>, dismissWithIndex( i ) );
+            }
+            b.element = e;</pre></div></div>
             
         </li>
         
@@ -372,15 +380,15 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          self._buttonContainer.appendChild( b.element );
+            <div class="content"><div class='highlight'><pre>            self._buttonContainer.appendChild( b.element );
+          }
         }
-      }
-    };
-    self.defineProperty( <span class="hljs-string">"buttons"</span>, {
-      read: <span class="hljs-literal">true</span>,
-      write: <span class="hljs-literal">true</span>,
-      <span class="hljs-keyword">default</span>: []
-    } );</pre></div></div>
+      };
+      self.defineProperty( <span class="hljs-string">"buttons"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">true</span>,
+        <span class="hljs-keyword">default</span>: []
+      } );</pre></div></div>
             
         </li>
         
@@ -395,82 +403,82 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    self._rootElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// root element contains the container</span>
-    self._alertElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// points to the alert itself</span>
-    self._vaElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// points to the DIV used to vertically align us</span>
-    self._deferred = <span class="hljs-literal">null</span>; <span class="hljs-comment">// stores a promise</span>
-    <span class="hljs-comment">/**
-     * If true, show() returns a promise.
-     * @property usePromise
-     * @type {boolean}
-     */</span>
-    self.defineProperty( <span class="hljs-string">"usePromise"</span>, {
-      read: <span class="hljs-literal">true</span>,
-      write: <span class="hljs-literal">false</span>,
-      <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
-    } );
-    <span class="hljs-comment">/**
-     * Indicates if the alert is veisible.
-     * @property visible
-     * @type {Boolean}
-     */</span>
-    self.defineProperty( <span class="hljs-string">"visible"</span>, {
-      read: <span class="hljs-literal">true</span>,
-      write: <span class="hljs-literal">false</span>,
-      <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
-    } );
-    <span class="hljs-comment">/**
-     * Creates the DOM elements for an Alert. Assumes the styles are
-     * already in the style sheet.
-     * @method _createElements
-     * @private
-     */</span>
-    self._createElements = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      self._rootElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
-      self._rootElement.className = <span class="hljs-string">"ui-alert-container"</span>;
-      self._vaElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
-      self._vaElement.className = <span class="hljs-string">"ui-alert-vertical-align"</span>;
-      self._alertElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
-      self._alertElement.className = <span class="hljs-string">"ui-alert"</span>;
-      self._titleElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
-      self._titleElement.className = <span class="hljs-string">"ui-alert-title"</span>;
-      self._textElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
-      self._textElement.className = <span class="hljs-string">"ui-alert-text"</span>;
-      self._buttonContainer = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
-      self._buttonContainer.className = <span class="hljs-string">"ui-alert-button-container"</span>;
-      self._alertElement.appendChild( self._titleElement );
-      self._alertElement.appendChild( self._textElement );
-      self._alertElement.appendChild( self._buttonContainer );
-      self._vaElement.appendChild( self._alertElement );
-      self._rootElement.appendChild( self._vaElement );
-    };
-    <span class="hljs-comment">/**
-     * Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.
-     * @method backButtonPressed
-     */</span>
-    self.backButtonPressed = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      self.dismiss( -<span class="hljs-number">1</span> );
-    };
-    <span class="hljs-comment">/**
-     * Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.
-     * @method hide
-     * @return {[type]} [description]
-     */</span>
-    self.hide = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      self.dismiss( -<span class="hljs-number">1</span> );
-    };
-    <span class="hljs-comment">/**
-     * Shows an alert.
-     * @method show
-     * @return {Promise} a promise if usePromise = true
-     */</span>
-    self.show = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">if</span> ( self.visible ) {
-        <span class="hljs-keyword">if</span> ( self.usePromise &amp;&amp; self._deferred !== <span class="hljs-literal">null</span> ) {
-          <span class="hljs-keyword">return</span> self._deferred;
-        }
-        <span class="hljs-keyword">return</span> <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// can't do anything more.</span>
-      }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      self._rootElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// root element contains the container</span>
+      self._alertElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// points to the alert itself</span>
+      self._vaElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// points to the DIV used to vertically align us</span>
+      self._deferred = <span class="hljs-literal">null</span>; <span class="hljs-comment">// stores a promise</span>
+      <span class="hljs-comment">/**
+       * If true, show() returns a promise.
+       * @property usePromise
+       * @type {boolean}
+       */</span>
+      self.defineProperty( <span class="hljs-string">"usePromise"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+      } );
+      <span class="hljs-comment">/**
+       * Indicates if the alert is veisible.
+       * @property visible
+       * @type {Boolean}
+       */</span>
+      self.defineProperty( <span class="hljs-string">"visible"</span>, {
+        read: <span class="hljs-literal">true</span>,
+        write: <span class="hljs-literal">false</span>,
+        <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span>
+      } );
+      <span class="hljs-comment">/**
+       * Creates the DOM elements for an Alert. Assumes the styles are
+       * already in the style sheet.
+       * @method _createElements
+       * @private
+       */</span>
+      self._createElements = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self._rootElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._rootElement.className = <span class="hljs-string">"ui-alert-container"</span>;
+        self._vaElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._vaElement.className = <span class="hljs-string">"ui-alert-vertical-align"</span>;
+        self._alertElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._alertElement.className = <span class="hljs-string">"ui-alert"</span>;
+        self._titleElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._titleElement.className = <span class="hljs-string">"ui-alert-title"</span>;
+        self._textElement = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._textElement.className = <span class="hljs-string">"ui-alert-text"</span>;
+        self._buttonContainer = <span class="hljs-built_in">document</span>.createElement( <span class="hljs-string">"div"</span> );
+        self._buttonContainer.className = <span class="hljs-string">"ui-alert-button-container"</span>;
+        self._alertElement.appendChild( self._titleElement );
+        self._alertElement.appendChild( self._textElement );
+        self._alertElement.appendChild( self._buttonContainer );
+        self._vaElement.appendChild( self._alertElement );
+        self._rootElement.appendChild( self._vaElement );
+      };
+      <span class="hljs-comment">/**
+       * Called when the back button is pressed. Dismisses with a -1 index. Effectively a Cancel.
+       * @method backButtonPressed
+       */</span>
+      self.backButtonPressed = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self.dismiss( -<span class="hljs-number">1</span> );
+      };
+      <span class="hljs-comment">/**
+       * Hide dismisses the alert and dismisses it with -1. Effectively a Cancel.
+       * @method hide
+       * @return {[type]} [description]
+       */</span>
+      self.hide = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        self.dismiss( -<span class="hljs-number">1</span> );
+      };
+      <span class="hljs-comment">/**
+       * Shows an alert.
+       * @method show
+       * @return {Promise} a promise if usePromise = true
+       */</span>
+      self.show = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> ( self.visible ) {
+          <span class="hljs-keyword">if</span> ( self.usePromise &amp;&amp; self._deferred !== <span class="hljs-literal">null</span> ) {
+            <span class="hljs-keyword">return</span> self._deferred;
+          }
+          <span class="hljs-keyword">return</span> <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// can't do anything more.</span>
+        }</pre></div></div>
             
         </li>
         
@@ -485,7 +493,7 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      UI.backButton.addListenerForNotification( <span class="hljs-string">"backButtonPressed"</span>, self.backButtonPressed );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        UI.backButton.addListenerForNotification( <span class="hljs-string">"backButtonPressed"</span>, self.backButtonPressed );</pre></div></div>
             
         </li>
         
@@ -500,7 +508,7 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-built_in">document</span>.body.appendChild( self._rootElement );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-built_in">document</span>.body.appendChild( self._rootElement );</pre></div></div>
             
         </li>
         
@@ -515,35 +523,28 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        self._rootElement.style.opacity = <span class="hljs-string">"1"</span>;
-      }, <span class="hljs-number">50</span> );
-      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        self._alertElement.style.opacity = <span class="hljs-string">"1"</span>;
-        UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(1.05, 1.05,1)"</span> )
-      }, <span class="hljs-number">125</span> );
-      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(0.95, 0.95,1)"</span> )
-      }, <span class="hljs-number">250</span> );
-      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(1.00, 1.00,1)"</span> )
-      }, <span class="hljs-number">375</span> );
-      self._visible = <span class="hljs-literal">true</span>;
-      <span class="hljs-keyword">if</span> ( self.usePromise ) {
-        self._deferred = Q.defer();
-        <span class="hljs-keyword">return</span> self._deferred.promise;
-      }
-    };
-    <span class="hljs-comment">/**
-     * Dismisses the alert with the sepcified button index
-     *
-     * @method dismiss
-     * @param {Number} idx
-     */</span>
-    self.dismiss = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( idx )</span> </span>{
-      <span class="hljs-keyword">if</span> ( !self.visible ) {
-        <span class="hljs-keyword">return</span>;
-      }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(2.00, 2.00,1)"</span> );
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          self._rootElement.style.opacity = <span class="hljs-string">"1"</span>;
+          self._alertElement.style.opacity = <span class="hljs-string">"1"</span>;
+          UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(1.00, 1.00,1)"</span> )
+        }, <span class="hljs-number">10</span> );
+        self._visible = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">if</span> ( self.usePromise ) {
+          self._deferred = Q.defer();
+          <span class="hljs-keyword">return</span> self._deferred.promise;
+        }
+      };
+      <span class="hljs-comment">/**
+       * Dismisses the alert with the sepcified button index
+       *
+       * @method dismiss
+       * @param {Number} idx
+       */</span>
+      self.dismiss = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( idx )</span> </span>{
+        <span class="hljs-keyword">if</span> ( !self.visible ) {
+          <span class="hljs-keyword">return</span>;
+        }</pre></div></div>
             
         </li>
         
@@ -558,7 +559,7 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      UI.backButton.removeListenerForNotification( <span class="hljs-string">"backButtonPressed"</span>, self.backButtonPressed );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        UI.backButton.removeListenerForNotification( <span class="hljs-string">"backButtonPressed"</span>, self.backButtonPressed );</pre></div></div>
             
         </li>
         
@@ -573,15 +574,13 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        self._alertElement.style.opacity = <span class="hljs-string">"0"</span>;
-      }, <span class="hljs-number">10</span> );
-      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        self._rootElement.style.opacity = <span class="hljs-string">"0"</span>;
-      }, <span class="hljs-number">250</span> );
-      setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        <span class="hljs-built_in">document</span>.body.removeChild( self._rootElement );
-      }, <span class="hljs-number">500</span> );</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          self._rootElement.style.opacity = <span class="hljs-string">"0"</span>;
+          UI.styleElement( self._alertElement, <span class="hljs-string">"transform"</span>, <span class="hljs-string">"scale3d(0.75, 0.75,1)"</span> )
+        }, <span class="hljs-number">10</span> );
+        setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+          <span class="hljs-built_in">document</span>.body.removeChild( self._rootElement );
+        }, <span class="hljs-number">310</span> );</pre></div></div>
             
         </li>
         
@@ -596,10 +595,10 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> tag = -<span class="hljs-number">1</span>;
-      <span class="hljs-keyword">if</span> ( ( idx &gt; -<span class="hljs-number">1</span> ) &amp;&amp; ( idx &lt; self._buttons.length ) ) {
-        tag = self._buttons[ idx ].tag;
-      }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> tag = -<span class="hljs-number">1</span>;
+        <span class="hljs-keyword">if</span> ( ( idx &gt; -<span class="hljs-number">1</span> ) &amp;&amp; ( idx &lt; self._buttons.length ) ) {
+          tag = self._buttons[ idx ].tag;
+        }</pre></div></div>
             
         </li>
         
@@ -614,9 +613,9 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      self.notify( <span class="hljs-string">"dismissed"</span> );
-      self.notify( <span class="hljs-string">"buttonTapped"</span>, [ tag ] );
-      self._visible = <span class="hljs-literal">false</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        self.notify( <span class="hljs-string">"dismissed"</span> );
+        self.notify( <span class="hljs-string">"buttonTapped"</span>, [ tag ] );
+        self._visible = <span class="hljs-literal">false</span>;</pre></div></div>
             
         </li>
         
@@ -631,69 +630,69 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( self.usePromise ) {
-        <span class="hljs-keyword">if</span> ( tag &gt; -<span class="hljs-number">1</span> ) {
-          self._deferred.resolve( tag );
-        } <span class="hljs-keyword">else</span> {
-          self._deferred.reject( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( tag ) );
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( self.usePromise ) {
+          <span class="hljs-keyword">if</span> ( tag &gt; -<span class="hljs-number">1</span> ) {
+            self._deferred.resolve( tag );
+          } <span class="hljs-keyword">else</span> {
+            self._deferred.reject( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( tag ) );
+          }
         }
-      }
-    };
-    <span class="hljs-comment">/**
-     * Initializes the Alert and calls _createElements.
-     * @method init
-     * @return {Object}
-     */</span>
-    self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{
-      self.super( _className, <span class="hljs-string">"init"</span> );
-      self._createElements();
-      <span class="hljs-keyword">return</span> self;
-    } );
-    <span class="hljs-comment">/**
-     * Initializes the Alert. Options includes title, text, buttons, and promise.
-     * @method overrideSuper
-     * @return {Object}
-     */</span>
-    self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initWithOptions</span><span class="hljs-params">( options )</span> </span>{
-      self.init();
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
-          self.title = options.title;
+      };
+      <span class="hljs-comment">/**
+       * Initializes the Alert and calls _createElements.
+       * @method init
+       * @return {Object}
+       */</span>
+      self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{
+        self.super( _className, <span class="hljs-string">"init"</span> );
+        self._createElements();
+        <span class="hljs-keyword">return</span> self;
+      } );
+      <span class="hljs-comment">/**
+       * Initializes the Alert. Options includes title, text, buttons, and promise.
+       * @method overrideSuper
+       * @return {Object}
+       */</span>
+      self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initWithOptions</span><span class="hljs-params">( options )</span> </span>{
+        self.init();
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
+            self.title = options.title;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
+            self.text = options.text;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.wideButtons !== <span class="hljs-string">"undefined"</span> ) {
+            self.wideButtons = options.wideButtons
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.buttons !== <span class="hljs-string">"undefined"</span> ) {
+            self.buttons = options.buttons;
+          }
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
+            self._usePromise = options.promise;
+          }
         }
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
-          self.text = options.text;
+        <span class="hljs-keyword">return</span> self;
+      } );
+      <span class="hljs-comment">/**
+       * Clean up after ourselves.
+       * @method destroy
+       */</span>
+      self.overrideSuper( self.class, <span class="hljs-string">"destroy"</span>, self.destroy );
+      self.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> ( self.visible ) {
+          self.hide();
+          setTimeout( destroy, <span class="hljs-number">600</span> ); <span class="hljs-comment">// we won't destroy immediately.</span>
+          <span class="hljs-keyword">return</span>;
         }
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.wideButtons !== <span class="hljs-string">"undefined"</span> ) {
-          self.wideButtons = options.wideButtons
-        }
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.buttons !== <span class="hljs-string">"undefined"</span> ) {
-          self.buttons = options.buttons;
-        }
-        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
-          self._usePromise = options.promise;
-        }
-      }
-      <span class="hljs-keyword">return</span> self;
-    } );
-    <span class="hljs-comment">/**
-     * Clean up after ourselves.
-     * @method destroy
-     */</span>
-    self.overrideSuper( self.class, <span class="hljs-string">"destroy"</span>, self.destroy );
-    self.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">if</span> ( self.visible ) {
-        self.hide();
-        setTimeout( destroy, <span class="hljs-number">600</span> ); <span class="hljs-comment">// we won't destroy immediately.</span>
-        <span class="hljs-keyword">return</span>;
-      }
-      self._rootElement = <span class="hljs-literal">null</span>;
-      self._vaElement = <span class="hljs-literal">null</span>;
-      self._alertElement = <span class="hljs-literal">null</span>;
-      self._titleElement = <span class="hljs-literal">null</span>;
-      self._textElement = <span class="hljs-literal">null</span>;
-      self._buttonContainer = <span class="hljs-literal">null</span>;
-      self.super( _className, <span class="hljs-string">"destroy"</span> );
-    };</pre></div></div>
+        self._rootElement = <span class="hljs-literal">null</span>;
+        self._vaElement = <span class="hljs-literal">null</span>;
+        self._alertElement = <span class="hljs-literal">null</span>;
+        self._titleElement = <span class="hljs-literal">null</span>;
+        self._textElement = <span class="hljs-literal">null</span>;
+        self._buttonContainer = <span class="hljs-literal">null</span>;
+        self.super( _className, <span class="hljs-string">"destroy"</span> );
+      };</pre></div></div>
             
         </li>
         
@@ -708,97 +707,97 @@ wide buttons are for 1 button or 4+ buttons.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    self._autoInit.apply( self, <span class="hljs-built_in">arguments</span> );
-    <span class="hljs-keyword">return</span> self;
-  };
-  <span class="hljs-comment">/**
-   * Creates a button suitable for an Alert
-   * @method button
-   * @param  {String} title   The title of the button
-   * @param  {Object} options The additional options: type and tag
-   * @return {Object}         A button
-   */</span>
-  Alert.button = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( title, options )</span> </span>{
-    <span class="hljs-keyword">var</span> button = {};
-    button.title = title;
-    button.type = <span class="hljs-string">"normal"</span>; <span class="hljs-comment">// normal, bold, destructive</span>
-    button.tag = <span class="hljs-literal">null</span>; <span class="hljs-comment">// assign for a specific tag</span>
-    button.enabled = <span class="hljs-literal">true</span>; <span class="hljs-comment">// false = disabled.</span>
-    button.element = <span class="hljs-literal">null</span>; <span class="hljs-comment">// attached DOM element</span>
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.type !== <span class="hljs-string">"undefined"</span> ) {
-        button.type = options.type;
-      }
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.tag !== <span class="hljs-string">"undefined"</span> ) {
-        button.tag = options.tag;
-      }
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.enabled !== <span class="hljs-string">"undefined"</span> ) {
-        button.enabled = options.enabled;
-      }
-    }
-    <span class="hljs-keyword">return</span> button;
-  };
-  <span class="hljs-comment">/**
-   * Creates an OK-style Alert. It only has an OK button.
-   * @method OK
-   * @param {Object} options Specify the title, text, and promise options if desired.
-   */</span>
-  Alert.OK = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> </span>{
-    <span class="hljs-keyword">var</span> anOK = <span class="hljs-keyword">new</span> Alert();
-    <span class="hljs-keyword">var</span> anOKOptions = {
-      title: _y.T( <span class="hljs-string">"OK"</span> ),
-      text: <span class="hljs-string">""</span>,
-      buttons: [ Alert.button( _y.T( <span class="hljs-string">"OK"</span> ), {
-        type: <span class="hljs-string">"bold"</span>
-      } ) ]
+            <div class="content"><div class='highlight'><pre>      self._autoInit.apply( self, <span class="hljs-built_in">arguments</span> );
+      <span class="hljs-keyword">return</span> self;
     };
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
-        anOKOptions.title = options.title;
+    <span class="hljs-comment">/**
+     * Creates a button suitable for an Alert
+     * @method button
+     * @param  {String} title   The title of the button
+     * @param  {Object} options The additional options: type and tag
+     * @return {Object}         A button
+     */</span>
+    Alert.button = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( title, options )</span> </span>{
+      <span class="hljs-keyword">var</span> button = {};
+      button.title = title;
+      button.type = <span class="hljs-string">"normal"</span>; <span class="hljs-comment">// normal, bold, destructive</span>
+      button.tag = <span class="hljs-literal">null</span>; <span class="hljs-comment">// assign for a specific tag</span>
+      button.enabled = <span class="hljs-literal">true</span>; <span class="hljs-comment">// false = disabled.</span>
+      button.element = <span class="hljs-literal">null</span>; <span class="hljs-comment">// attached DOM element</span>
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.type !== <span class="hljs-string">"undefined"</span> ) {
+          button.type = options.type;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.tag !== <span class="hljs-string">"undefined"</span> ) {
+          button.tag = options.tag;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.enabled !== <span class="hljs-string">"undefined"</span> ) {
+          button.enabled = options.enabled;
+        }
       }
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
-        anOKOptions.text = options.text;
-      }
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
-        anOKOptions.promise = options.promise;
-      }
-    }
-    anOK.initWithOptions( anOKOptions );
-    <span class="hljs-keyword">return</span> anOK;
-  };
-  <span class="hljs-comment">/**
-   * Creates an OK/Cancel-style Alert. It only has an OK and CANCEL button.
-   * @method Confirm
-   * @param {Object} options Specify the title, text, and promise options if desired.
-   */</span>
-  Alert.Confirm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> </span>{
-    <span class="hljs-keyword">var</span> aConfirmation = <span class="hljs-keyword">new</span> Alert();
-    <span class="hljs-keyword">var</span> confirmationOptions = {
-      title: _y.T( <span class="hljs-string">"Confirm"</span> ),
-      text: <span class="hljs-string">""</span>,
-      buttons: [ Alert.button( _y.T( <span class="hljs-string">"OK"</span> ) ),
-        Alert.button( _y.T( <span class="hljs-string">"Cancel"</span> ), {
-          type: <span class="hljs-string">"bold"</span>,
-          tag: -<span class="hljs-number">1</span>
-        } )
-      ]
+      <span class="hljs-keyword">return</span> button;
     };
-    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
-        confirmationOptions.title = options.title;
+    <span class="hljs-comment">/**
+     * Creates an OK-style Alert. It only has an OK button.
+     * @method OK
+     * @param {Object} options Specify the title, text, and promise options if desired.
+     */</span>
+    Alert.OK = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> </span>{
+      <span class="hljs-keyword">var</span> anOK = <span class="hljs-keyword">new</span> Alert();
+      <span class="hljs-keyword">var</span> anOKOptions = {
+        title: _y.T( <span class="hljs-string">"OK"</span> ),
+        text: <span class="hljs-string">""</span>,
+        buttons: [ Alert.button( _y.T( <span class="hljs-string">"OK"</span> ), {
+          type: <span class="hljs-string">"bold"</span>
+        } ) ]
+      };
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
+          anOKOptions.title = options.title;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
+          anOKOptions.text = options.text;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
+          anOKOptions.promise = options.promise;
+        }
       }
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
-        confirmationOptions.text = options.text;
+      anOK.initWithOptions( anOKOptions );
+      <span class="hljs-keyword">return</span> anOK;
+    };
+    <span class="hljs-comment">/**
+     * Creates an OK/Cancel-style Alert. It only has an OK and CANCEL button.
+     * @method Confirm
+     * @param {Object} options Specify the title, text, and promise options if desired.
+     */</span>
+    Alert.Confirm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> </span>{
+      <span class="hljs-keyword">var</span> aConfirmation = <span class="hljs-keyword">new</span> Alert();
+      <span class="hljs-keyword">var</span> confirmationOptions = {
+        title: _y.T( <span class="hljs-string">"Confirm"</span> ),
+        text: <span class="hljs-string">""</span>,
+        buttons: [ Alert.button( _y.T( <span class="hljs-string">"OK"</span> ) ),
+          Alert.button( _y.T( <span class="hljs-string">"Cancel"</span> ), {
+            type: <span class="hljs-string">"bold"</span>,
+            tag: -<span class="hljs-number">1</span>
+          } )
+        ]
+      };
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
+          confirmationOptions.title = options.title;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.text !== <span class="hljs-string">"undefined"</span> ) {
+          confirmationOptions.text = options.text;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
+          confirmationOptions.promise = options.promise;
+        }
       }
-      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.promise !== <span class="hljs-string">"undefined"</span> ) {
-        confirmationOptions.promise = options.promise;
-      }
-    }
-    aConfirmation.initWithOptions( confirmationOptions );
-    <span class="hljs-keyword">return</span> aConfirmation;
-  };
-  <span class="hljs-keyword">return</span> Alert;
-} );</pre></div></div>
+      aConfirmation.initWithOptions( confirmationOptions );
+      <span class="hljs-keyword">return</span> aConfirmation;
+    };
+    <span class="hljs-keyword">return</span> Alert;
+  } );</pre></div></div>
             
         </li>
         

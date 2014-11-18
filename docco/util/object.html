@@ -1264,8 +1264,22 @@ _getPrivateProperty, not get_privateProperty</p>
        * data binding support
        */</span>
       self._dataBindings = {};
-      self._dataBindingTypes = {};
-      self._dataBindingEvents = [ <span class="hljs-string">"input"</span>, <span class="hljs-string">"change"</span>, <span class="hljs-string">"keyup"</span>, <span class="hljs-string">"blur"</span> ];
+      self._dataBindingTypes = {};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>self._dataBindingEvents = [ “input”, “change”, “keyup”, “blur” ];</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      self._dataBindingEvents = [ <span class="hljs-string">"input"</span>, <span class="hljs-string">"change"</span>, <span class="hljs-string">"blur"</span> ];
       <span class="hljs-comment">/**
        * Configure a data binding to an HTML element (el) for
        * a particular property (keyPath). Returns self for chaining.
@@ -1359,18 +1373,19 @@ _getPrivateProperty, not get_privateProperty</p>
       self.updatePropertyForKeyPath = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updatePropertyForKeyPath</span><span class="hljs-params">( inKeyPath, inValue, inKeyType )</span> </span>{
         <span class="hljs-keyword">var</span> keyType = inKeyType,
           keyPath = inKeyPath,
-          dataValue = inValue;
+          dataValue = inValue,
+          elType;
         <span class="hljs-keyword">try</span> {
           <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span> !== self &amp;&amp; <span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> Node ) {</pre></div></div>
             
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>we’ve been called from an event handler</p>
 
@@ -1380,6 +1395,7 @@ _getPrivateProperty, not get_privateProperty</p>
               keyType = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyType"</span> );
             }
             keyPath = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"data-y-keyPath"</span> );
+            elType = <span class="hljs-keyword">this</span>.getAttribute( <span class="hljs-string">"type"</span> );
             dataValue = <span class="hljs-keyword">this</span>.value;
             <span class="hljs-keyword">switch</span> ( keyType ) {
             <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
@@ -1396,7 +1412,17 @@ _getPrivateProperty, not get_privateProperty</p>
               }
               <span class="hljs-keyword">break</span>;
             <span class="hljs-keyword">case</span> <span class="hljs-string">"date"</span>:
-              self[ keyPath ] = <span class="hljs-keyword">this</span>.valueAsDate;
+              <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">this</span>.type === <span class="hljs-string">"text"</span> ) {
+                <span class="hljs-keyword">try</span> {
+                  <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"trying to pull date from "</span>, <span class="hljs-keyword">this</span>.value );
+                  self[ keyPath ] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>( <span class="hljs-keyword">this</span>.value )
+                } <span class="hljs-keyword">catch</span> ( err ) {
+                  <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"nope; set to null"</span> );
+                  self[ keyPath ] = <span class="hljs-literal">null</span>;
+                }
+              } <span class="hljs-keyword">else</span> {
+                self[ keyPath ] = <span class="hljs-keyword">this</span>.valueAsDate;
+              }
               <span class="hljs-keyword">break</span>;
             <span class="hljs-keyword">default</span>:
               self[ keyPath ] = dataValue;
@@ -1427,7 +1453,7 @@ _getPrivateProperty, not get_privateProperty</p>
             self[ keyPath ] = dataValue;
           }
         } <span class="hljs-keyword">catch</span> ( err ) {
-          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update"</span>, keyPath, <span class="hljs-string">"with"</span>, dataValue, <span class="hljs-string">"and"</span>, keyType );
+          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update"</span>, keyPath, <span class="hljs-string">"with"</span>, dataValue, <span class="hljs-string">"and"</span>, keyType, err, <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span> );
         }
       };
       <span class="hljs-comment">/**
@@ -1442,7 +1468,7 @@ _getPrivateProperty, not get_privateProperty</p>
         <span class="hljs-keyword">try</span> {
           <span class="hljs-keyword">var</span> keyPathEls = self._dataBindings[ keyPath ],
             keyType = self._dataBindingTypes[ keyPath ],
-            el, v;
+            el, v, elType, t, cursorPos;
           <span class="hljs-keyword">if</span> ( keyType === <span class="hljs-literal">undefined</span> ) {
             keyType = <span class="hljs-string">"string"</span>;
           }
@@ -1453,9 +1479,46 @@ _getPrivateProperty, not get_privateProperty</p>
           <span class="hljs-keyword">if</span> ( keyPathEls !== <span class="hljs-literal">undefined</span> ) {
             <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = keyPathEls.length; i &lt; l; i++ ) {
               el = keyPathEls[ i ];
-              <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"date"</span> ) {
-                <span class="hljs-keyword">if</span> ( el.valueAsDate !== v ) {
-                  el.valueAsDate = v;
+              <span class="hljs-keyword">try</span> {
+                <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> el.selectionStart === <span class="hljs-string">"number"</span> ) {
+                  cursorPos = el.selectionStart;
+                } <span class="hljs-keyword">else</span> {
+                  cursorPos = -<span class="hljs-number">1</span>;
+                }
+              } <span class="hljs-keyword">catch</span> ( err ) {
+                cursorPos = -<span class="hljs-number">1</span>;
+              }
+              elType = el.getAttribute( <span class="hljs-string">"type"</span> );
+              <span class="hljs-keyword">if</span> ( elType === <span class="hljs-string">"date"</span> ) {
+                <span class="hljs-keyword">if</span> ( el.type !== elType ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>problem; we almost certainly have a field that doesn’t understand valueAsDate</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                  <span class="hljs-keyword">if</span> ( v.toISOString ) {
+                    t = v.toISOString().split( <span class="hljs-string">"T"</span> )[ <span class="hljs-number">0</span> ];
+                    <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"trying to set value to  "</span>, t );
+                    <span class="hljs-keyword">if</span> ( el.value !== t ) {
+                      <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"doing it  "</span>, t );
+                      el.value = t;
+                    }
+                  } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"v is an unexpected type: "</span> + <span class="hljs-keyword">typeof</span> v + <span class="hljs-string">"; "</span> + v );
+                  }
+                } <span class="hljs-keyword">else</span> {
+                  <span class="hljs-keyword">if</span> ( el.valueAsDate !== v ) {
+                    el.valueAsDate = v;
+                  }
                 }
               } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( el.type === <span class="hljs-string">"checkbox"</span> ) {
                 el.indeterminate = ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> );
@@ -1477,10 +1540,14 @@ _getPrivateProperty, not get_privateProperty</p>
               } <span class="hljs-keyword">else</span> {
                 <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Data bind failure; browser doesn't understand value, textContent, or innerText."</span> );
               }
+              <span class="hljs-keyword">if</span> ( cursorPos &gt; -<span class="hljs-number">1</span> &amp;&amp; <span class="hljs-built_in">document</span>.activeElement === el ) {
+                el.selectionStart = cursorPos;
+                el.selectionEnd = cursorPos;
+              }
             }
           }
         } <span class="hljs-keyword">catch</span> ( err ) {
-          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update elements for "</span>, keyPath );
+          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"Failed to update elements for "</span>, keyPath, err, <span class="hljs-built_in">arguments</span> );
         }
       };
       <span class="hljs-comment">/**
@@ -1510,11 +1577,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>chances are this is an initWithOptions, but make sure the incoming parameter is an object</p>
 
@@ -1545,11 +1612,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>clear data bindings</p>
 
@@ -1560,11 +1627,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>clear any listeners.</p>
 
@@ -1577,11 +1644,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>ready to be destroyed</p>
 
@@ -1592,11 +1659,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>self-categorize</p>
 
@@ -1607,11 +1674,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>call auto init</p>
 
@@ -1622,11 +1689,11 @@ _getPrivateProperty, not get_privateProperty</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>done</p>
 
