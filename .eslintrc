@@ -10,12 +10,31 @@
     "getComputedStyle": false,
     "define": false,
     "requirejs": false,
-    "Node": false
+    "Node": false,
+    "XMLHttpRequest": false,
+    "localStorage": false,
+    "alert": false,
+    "isNaN": false,
+    "_y": false,
+    "Q": false,
+    "Hammer": false,
+    "require": false,
+    "module": true,
+    "clearTimeout": false
   },
   "rules": {
     "no-underscore-dangle": 0,
     "new-cap": 0,
     "no-console": 0,
-    "camelcase": 0
+    "camelcase": 0,
+    "global-strict": 0,
+    "no-loop-func": 0,
+    "no-unused-vars": [
+      1,
+      {
+        "vars": "all",
+        "args": "after-used"
+      }
+    ]
   }
 }

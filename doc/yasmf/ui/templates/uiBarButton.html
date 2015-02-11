@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>uiBarButton.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>uiBarButton.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ *
+ * ui Bar Button Template
+ *
+ * @module uiBarButton.js
+ * @author Kerri Shotts
+ * @version 0.4
+ *
+ * ```
+ * Copyright (c) 2015 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */</span>
+<span class="hljs-comment">/*global module*/</span>
+<span class="hljs-pi">"use strict"</span>;
+
+<span class="hljs-keyword">var</span>
+  h = <span class="hljs-built_in">require</span>( <span class="hljs-string">"../../util/h"</span> );
+
+<span class="hljs-comment">/**
+ * Return a UI Bar Button node
+ *
+ * Options should look like this:
+ *
+ * {
+ *   [regular h options],
+ *   glyph: "clock", // mutually exclusive with text
+ *   text: "tap me!", // mutually exclusive with glyph
+ *   backButton: false, // or true; if true, requires text
+ * }
+ *
+ * @method uiBarButton
+ * @param {{[glyph]: string, [text]: string, [backButton]: boolean}} options
+ * @returns {Node}
+ */</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">uiBarButton</span><span class="hljs-params">( options )</span> </span>{
+  <span class="hljs-keyword">var</span> buttonClass = <span class="hljs-string">"ui-bar-button"</span>,
+    isButtonGlyph = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">if</span> ( options ) {
+    <span class="hljs-keyword">if</span> ( options.glyph ) {
+      buttonClass += [<span class="hljs-string">""</span>, <span class="hljs-string">"ui-glyph"</span>, <span class="hljs-string">"ui-glyph-"</span> + options.glyph, <span class="hljs-string">"ui-background-tint-color"</span>].join( <span class="hljs-string">" "</span> );
+      isButtonGlyph = <span class="hljs-literal">true</span>;
+    }
+    <span class="hljs-keyword">if</span> (options.backButton) {
+      buttonClass += <span class="hljs-string">" ui-back-button"</span>;
+    }
+  }
+
+  <span class="hljs-keyword">if</span> ( !isButtonGlyph ) {
+    buttonClass += <span class="hljs-string">" ui-tint-color"</span>;
+  }
+
+  <span class="hljs-keyword">return</span> h.el( <span class="hljs-string">"div."</span> + buttonClass, options, options &amp;&amp; options.text );
+};</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

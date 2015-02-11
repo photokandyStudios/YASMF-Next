@@ -1,7 +1,7 @@
 requirejs.config( {
   baseUrl: ".",
   paths: {
-    "yasmf": "../lib/yasmf",
+    "yasmf": "../dist/yasmf",
     "vendor": "../vendor",
     "globalize": "../vendor/globalize",
     "cultures": "../vendor/cultures",
@@ -11,7 +11,7 @@ requirejs.config( {
     "app": "./js/app",
     "html": "./html"
   },
-  urlArgs: "bust=" + ( new Date() ).getTime(),
+  //urlArgs: "bust=" + ( new Date() ).getTime(),
   shim: {
     "cultures/globalize.culture.en-US": [ "globalize" ],
     "cultures/globalize.culture.es-US": [ "globalize" ],

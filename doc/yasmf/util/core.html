@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>core.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>core.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ *
+ * Core of YASMF-UTIL; defines the version, DOM, and localization convenience methods.
+ *
+ * @module core.js
+ * @author Kerri Shotts
+ * @version 0.5
+ *
+ * ```
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */</span>
+<span class="hljs-comment">/*global define, Globalize, device, document, window, setTimeout, navigator, console, Node*/</span>
+<span class="hljs-pi">"use strict"</span>;
+<span class="hljs-comment">/**
+ * @method getComputedStyle
+ * @private
+ * @param {Node} element      the element to request the computed style from
+ * @param {string} property   the property to request (like `width`); optional
+ * @returns {*}               Either the property requested or the entire CSS style declaration
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getComputedStyle</span><span class="hljs-params">( element, property )</span> </span>{
+  <span class="hljs-keyword">if</span> ( !( element <span class="hljs-keyword">instanceof</span> Node ) &amp;&amp; <span class="hljs-keyword">typeof</span> element === <span class="hljs-string">"string"</span> ) {
+    property = element;
+    element = <span class="hljs-keyword">this</span>;
+  }
+  <span class="hljs-keyword">var</span> computedStyle = <span class="hljs-built_in">window</span>.getComputedStyle( element );
+  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> property !== <span class="hljs-string">"undefined"</span> ) {
+    <span class="hljs-keyword">return</span> computedStyle.getPropertyValue( property );
+  }
+  <span class="hljs-keyword">return</span> computedStyle;
+}
+<span class="hljs-comment">/**
+ * @method _arrayize
+ * @private
+ * @param {NodeList} list     the list to convert
+ * @returns {Array}           the converted array
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_arrayize</span><span class="hljs-params">( list )</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.prototype.splice.call( list, <span class="hljs-number">0</span> );
+}
+<span class="hljs-comment">/**
+ * @method getElementById
+ * @private
+ * @param {Node} parent      the parent to execute getElementById on
+ * @param {string} elementId the element ID to search for
+ * @returns {Node}           the element or null if not found
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getElementById</span><span class="hljs-params">( parent, elementId )</span> </span>{
+  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+    elementId = parent;
+    parent = <span class="hljs-built_in">document</span>;
+  }
+  <span class="hljs-keyword">return</span> ( parent.getElementById( elementId ) );
+}
+<span class="hljs-comment">/**
+ * @method querySelector
+ * @private
+ * @param {Node} parent       the parent to execute querySelector on
+ * @param {string} selector   the CSS selector to use
+ * @returns {Node}            the located element or null if not found
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">querySelector</span><span class="hljs-params">( parent, selector )</span> </span>{
+  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+    selector = parent;
+    parent = <span class="hljs-built_in">document</span>;
+  }
+  <span class="hljs-keyword">return</span> ( parent.querySelector( selector ) );
+}
+<span class="hljs-comment">/**
+ * @method querySelectorAll
+ * @private
+ * @param {Node} parent     the parent to execute querySelectorAll on
+ * @param {string} selector the selector to use
+ * @returns {Array}         the found elements; if none: []
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">querySelectorAll</span><span class="hljs-params">( parent, selector )</span> </span>{
+  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> parent === <span class="hljs-string">"string"</span> ) {
+    selector = parent;
+    parent = <span class="hljs-built_in">document</span>;
+  }
+  <span class="hljs-keyword">return</span> _arrayize( parent.querySelectorAll( selector ) );
+}
+<span class="hljs-comment">/**
+ * @method $
+ * @private
+ * @param {string} selector   the CSS selector to use
+ * @returns {Node}            The located element, relative to `this`
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$</span><span class="hljs-params">( selector )</span> </span>{
+  <span class="hljs-keyword">return</span> querySelector( <span class="hljs-keyword">this</span>, selector );
+}
+<span class="hljs-comment">/**
+ * @method $$
+ * @private
+ * @param {string} selector   the CSS selector to use
+ * @returns {Array}           the located elements, relative to `this`
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$$</span><span class="hljs-params">( selector )</span> </span>{
+  <span class="hljs-keyword">return</span> querySelectorAll( <span class="hljs-keyword">this</span>, selector );
+}
+<span class="hljs-comment">/**
+ * @method $id
+ * @private
+ * @param {string} id         the id of the element
+ * @returns {Node}            the located element or null if not found
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">$id</span><span class="hljs-params">( id )</span> </span>{
+  <span class="hljs-keyword">return</span> getElementById( <span class="hljs-keyword">this</span>, id );
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>modify Node’s prototype to provide useful additional shortcuts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> proto = Node.prototype;
+[
+  [<span class="hljs-string">"$"</span>, $],
+  [<span class="hljs-string">"$$"</span>, $$],
+  [<span class="hljs-string">"$1"</span>, $],
+  [<span class="hljs-string">"$id"</span>, $id],
+  [<span class="hljs-string">"gsc"</span>, getComputedStyle],
+  [<span class="hljs-string">"gcs"</span>, getComputedStyle],
+  [<span class="hljs-string">"getComputedStyle"</span>, getComputedStyle]
+].forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( i )</span> </span>{
+             <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> proto[i[<span class="hljs-number">0</span>]] === <span class="hljs-string">"undefined"</span> ) {
+               proto[i[<span class="hljs-number">0</span>]] = i[<span class="hljs-number">1</span>];
+             }
+           } );
+<span class="hljs-comment">/**
+ * Returns a value for the specified keypath. If any intervening
+ * values evaluate to undefined or null, the entire result is
+ * undefined or null, respectively.
+ *
+ * If you need a default value to be returned in such an instance,
+ * specify it after the keypath.
+ *
+ * Note: if `o` is not an object, it is assumed that the function
+ * has been bound to `this`. As such, all arguments are shifted by
+ * one position to the right.
+ *
+ * Key paths are of the form:
+ *
+ *    object.field.field.field[index]
+ *
+ * @param {object} o        the object to search
+ * @param {string} k        the keypath
+ * @param {*} d             (optional) the default value to return
+ *                          should the keypath evaluate to null or
+ *                          undefined.
+ * @return {*}              the value at the keypath
+ *
+ * License MIT: Copyright 2014 Kerri Shotts
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">valueForKeyPath</span><span class="hljs-params">( o, k, d )</span> </span>{
+  <span class="hljs-keyword">if</span> ( o === <span class="hljs-literal">undefined</span> || o === <span class="hljs-literal">null</span> ) {
+    <span class="hljs-keyword">return</span> ( d !== <span class="hljs-literal">undefined</span> ) ? d : o;
+  }
+  <span class="hljs-keyword">if</span> ( !( o <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) ) {
+    d = k;
+    k = o;
+    o = <span class="hljs-keyword">this</span>;
+  }
+  <span class="hljs-keyword">var</span> v = o;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>There’s a million ways that this regex can go wrong
+with respect to JavaScript identifiers. Splits will
+technically work with just about every non-A-Za-z\$-
+value, so your keypath could be “field/field/field”
+and it would work like “field.field.field”.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  v = k.match( <span class="hljs-regexp">/([\w\$\\\-]+)/g</span> ).reduce( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( v, keyPart )</span> </span>{
+    <span class="hljs-keyword">if</span> ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) {
+      <span class="hljs-keyword">return</span> v;
+    }
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">return</span> v[keyPart];
+    }
+    <span class="hljs-keyword">catch</span> ( err ) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+    }
+  }, v );
+  <span class="hljs-keyword">return</span> ( ( v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) &amp;&amp; ( d !== <span class="hljs-literal">undefined</span> ) ) ? d : v;
+}
+<span class="hljs-comment">/**
+ * Interpolates values from the context into the string. Placeholders are of the
+ * form {...}. If values within {...} do not exist within context, they are
+ * replaced with undefined.
+ * @param  {string} str     string to interpolate
+ * @param  {*} context      context to use for interpolation
+ * @return {string}}        interpolated string
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">interpolate</span><span class="hljs-params">( str, context )</span> </span>{
+  <span class="hljs-keyword">var</span> newStr = str;
+  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> context === <span class="hljs-string">"undefined"</span> ) {
+    <span class="hljs-keyword">return</span> newStr;
+  }
+  str.match( <span class="hljs-regexp">/\{([^\}]+)\}/g</span> ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( match )</span> </span>{
+    <span class="hljs-keyword">var</span> prop = match.substr( <span class="hljs-number">1</span>, match.length - <span class="hljs-number">2</span> ).trim();
+    newStr = newStr.replace( match, valueForKeyPath( context, prop ) );
+  } );
+  <span class="hljs-keyword">return</span> newStr;
+}
+<span class="hljs-comment">/**
+ * Merges the supplied objects together and returns a copy containin the merged objects. The original
+ * objects are untouched, and a new object is returned containing a relatively deep copy of each object.
+ *
+ * Important Notes:
+ *   - Items that exist in any object but not in any other will be added to the target
+ *   - Should more than one item exist in the set of objects with the same key, the following rules occur:
+ *     - If both types are arrays, the result is a.concat(b)
+ *     - If both types are objects, the result is merge(a,b)
+ *     - Otherwise the result is b (b overwrites a)
+ *   - Should more than one item exist in the set of objects with the same key, but differ in type, the
+ *     second value overwrites the first.
+ *   - This is not a true deep copy! Should any property be a reference to another object or array, the
+ *     copied result may also be a reference (unless both the target and the source share the same item
+ *     with the same type). In other words: DON'T USE THIS AS A DEEP COPY METHOD
+ *
+ * It's really meant to make this kind of work easy:
+ *
+ * var x = { a: 1, b: "hi", c: [1,2] },
+ *     y = { a: 3, c: [3, 4], d: 0 },
+ *     z = merge (x,y);
+ *
+ * z is now { a: 3, b: "hi", c: [1,2,3,4], d:0 }.
+ *
+ * License MIT. Copyright Kerri Shotts 2014
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">merge</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">var</span> t = {},
+    args = <span class="hljs-built_in">Array</span>.prototype.slice.call( <span class="hljs-built_in">arguments</span>, <span class="hljs-number">0</span> );
+  args.forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( s )</span> </span>{
+    <span class="hljs-keyword">if</span> (s === <span class="hljs-literal">undefined</span> || s === <span class="hljs-literal">null</span>) {
+      <span class="hljs-keyword">return</span>; <span class="hljs-comment">// no keys, why bother!</span>
+    }
+    <span class="hljs-built_in">Object</span>.keys( s ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( prop )</span> </span>{
+      <span class="hljs-keyword">var</span> e = s[prop];
+      <span class="hljs-keyword">if</span> ( e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+        <span class="hljs-keyword">if</span> ( t[prop] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) {
+          t[prop] = t[prop].concat( e );
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( t[prop] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) || !( t[prop] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) ) {
+          t[prop] = e;
+        }
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; t[prop] <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) {
+        t[prop] = merge( t[prop], e );
+      } <span class="hljs-keyword">else</span> {
+        t[prop] = e;
+      }
+    } );
+  } );
+  <span class="hljs-keyword">return</span> t;
+}
+<span class="hljs-comment">/**
+ * Validates a source against the specified rules. `source` can look like this:
+ *
+ *     { aString: "hi", aNumber: { hi: 294.12 }, anInteger: 1944.32 }
+ *
+ * `rules` can look like this:
+ *
+ *     {
+     *       "a-string": {
+     *         title: "A String",     -- optional; if not supplied, key is used
+     *         key: "aString",        -- optional: if not supplied the name of this rule is used as the key
+     *         required: true,        -- optional: if not supplied, value is not required
+     *         type: "string",        -- string, number, integer, array, date, boolean, object, *(any)
+     *         minLength: 1,          -- optional: minimum length (string, array)
+     *         maxLength: 255         -- optional: maximum length (string, array)
+     *       },
+     *       "a-number": {
+     *         title: "A Number",
+     *         key: "aNumber.hi",     -- keys can have . and [] to reference properties within objects
+     *         required: false,
+     *         type: "number",
+     *         min: 0,                -- if specified, number/integer can't be smaller than this number
+     *         max: 100               -- if specified, number/integer can't be larger than this number
+     *       },
+     *       "an-integer": {
+     *         title: "An Integer",
+     *         key: "anInteger",
+     *         required: true,
+     *         type: "integer",
+     *         enum: [1, 2, 4, 8]     -- if specified, the value must be a part of the array
+     *                                -- may also be specified as an array of objects with title/value properties
+     *       }
+     *     }
+ *
+ * @param {*} source       source to validate
+ * @param {*} rules        validation rules
+ * @returns {*}            an object with two fields: `validates: true|false` and `message: validation message`
+ *
+ * LICENSE: MIT
+ * Copyright Kerri Shotts, 2014
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">validate</span><span class="hljs-params">( source, rules )</span> </span>{
+  <span class="hljs-keyword">var</span> r = {
+    validates: <span class="hljs-literal">true</span>,
+    message:   <span class="hljs-string">""</span>
+  };
+  <span class="hljs-keyword">if</span> ( !( rules <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) ) {
+    <span class="hljs-keyword">return</span> r;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>go over each rule in <code>rules</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-built_in">Object</span>.keys( rules ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( prop )</span> </span>{
+    <span class="hljs-keyword">if</span> ( r.validates ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>get the rule</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> rule = rules[prop],
+        v = source,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>and get the value in source</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        k = ( rule.key !== <span class="hljs-literal">undefined</span> ) ? rule.key : prop,
+        title = ( rule.title !== <span class="hljs-literal">undefined</span> ) ? rule.title : prop;
+      k = k.replace( <span class="hljs-string">"["</span>, <span class="hljs-string">"."</span> ).replace( <span class="hljs-string">"]"</span>, <span class="hljs-string">""</span> ).replace( <span class="hljs-string">"\""</span>, <span class="hljs-string">""</span> );
+      k.split( <span class="hljs-string">"."</span> ).forEach( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( keyPart )</span> </span>{
+        <span class="hljs-keyword">try</span> {
+          v = v[keyPart];
+        }
+        <span class="hljs-keyword">catch</span> ( err ) {
+          v = <span class="hljs-literal">undefined</span>;
+        }
+      } );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>is it required?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( ( ( rule.required !== <span class="hljs-literal">undefined</span> ) ? rule.required : <span class="hljs-literal">false</span> ) &amp;&amp; v === <span class="hljs-literal">undefined</span> ) {
+        r.validates = <span class="hljs-literal">false</span>;
+        r.message = <span class="hljs-string">"Missing required value "</span> + title;
+        <span class="hljs-keyword">return</span>;
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>can it be null?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( !( ( rule.nullable !== <span class="hljs-literal">undefined</span> ) ? rule.nullable : <span class="hljs-literal">false</span> ) &amp;&amp; v === <span class="hljs-literal">null</span> ) {
+        r.validates = <span class="hljs-literal">false</span>;
+        r.message = <span class="hljs-string">"Unexpected null in "</span> + title;
+        <span class="hljs-keyword">return</span>;
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>is it of the right type?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">null</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v != <span class="hljs-string">""</span> ) {
+        r.message = <span class="hljs-string">"Type Mismatch; expected "</span> + rule.type + <span class="hljs-string">" not "</span> + ( <span class="hljs-keyword">typeof</span> v ) + <span class="hljs-string">" in "</span> + title;
+        <span class="hljs-keyword">switch</span> ( rule.type ) {
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"float"</span>:
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"number"</span>:
+            <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> ) {
+              <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( <span class="hljs-built_in">parseFloat</span>( v ) ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+              <span class="hljs-keyword">if</span> ( v != <span class="hljs-built_in">parseFloat</span>( v ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"integer"</span>:
+            <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> ) {
+              <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( <span class="hljs-built_in">parseInt</span>( v, <span class="hljs-number">10</span> ) ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+              <span class="hljs-keyword">if</span> ( v != <span class="hljs-built_in">parseInt</span>( v, <span class="hljs-number">10</span> ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              }
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"array"</span>:
+            <span class="hljs-keyword">if</span> ( v !== <span class="hljs-literal">undefined</span> &amp;&amp; !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ) ) {
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"date"</span>:
+            <span class="hljs-keyword">if</span> ( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) {
+              <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                <span class="hljs-keyword">return</span>;
+              } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> &amp;&amp; <span class="hljs-built_in">isNaN</span>( v.getTime() ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                r.message = <span class="hljs-string">"Invalid date in "</span> + title;
+                <span class="hljs-keyword">return</span>;
+              }
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> v === <span class="hljs-string">"string"</span> ) {
+              <span class="hljs-keyword">if</span> ( <span class="hljs-built_in">isNaN</span>( ( <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>( v ) ).getTime() ) ) {
+                r.validates = <span class="hljs-literal">false</span>;
+                r.message = <span class="hljs-string">"Invalid date in "</span> + title;
+                <span class="hljs-keyword">return</span>;
+              }
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-string">"object"</span> ) &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"object"</span>:
+            <span class="hljs-keyword">if</span> ( !( v <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ) &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
+            }
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">case</span> <span class="hljs-string">"*"</span>:
+            <span class="hljs-keyword">break</span>;
+          <span class="hljs-keyword">default</span>:
+            <span class="hljs-keyword">if</span> ( !( <span class="hljs-keyword">typeof</span> v === rule.type || v === <span class="hljs-literal">undefined</span> || v === <span class="hljs-literal">null</span> ) ) {
+              r.validates = <span class="hljs-literal">false</span>;
+              <span class="hljs-keyword">return</span>;
+            }
+        }
+        r.message = <span class="hljs-string">""</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>if we’re still here, types are good. Now check length, range, and enum
+check range</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        r.message = <span class="hljs-string">"Value out of range "</span> + v + <span class="hljs-string">" in "</span> + title;
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> rule.min === <span class="hljs-string">"number"</span> &amp;&amp; v &lt; rule.min ) {
+          r.validates = <span class="hljs-literal">false</span>;
+          <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> rule.max === <span class="hljs-string">"number"</span> &amp;&amp; v &gt; rule.max ) {
+          r.validates = <span class="hljs-literal">false</span>;
+          <span class="hljs-keyword">return</span>;
+        }
+        r.message = <span class="hljs-string">""</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>check length</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( ( <span class="hljs-keyword">typeof</span> rule.minLength === <span class="hljs-string">"number"</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length &lt; rule.minLength ) ||
+             ( <span class="hljs-keyword">typeof</span> rule.maxLength === <span class="hljs-string">"number"</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length !== <span class="hljs-literal">undefined</span> &amp;&amp; v.length &gt; rule.maxLength )
+        ) {
+          r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" out of length range"</span>;
+          r.validates = <span class="hljs-literal">false</span>;
+          <span class="hljs-keyword">return</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>check enum</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( rule.enum <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+          <span class="hljs-keyword">if</span> ( rule.enum.filter( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( e )</span> </span>{
+              <span class="hljs-keyword">if</span> ( e.value !== <span class="hljs-literal">undefined</span> ) {
+                <span class="hljs-keyword">return</span> e.value == v;
+              } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">return</span> e == v;
+              }
+            } ).length === <span class="hljs-number">0</span> ) {
+            r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" contains unexpected value "</span> + v + <span class="hljs-string">" in "</span> + title;
+            r.validates = <span class="hljs-literal">false</span>;
+            <span class="hljs-keyword">return</span>;
+          }
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>check pattern</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( rule.pattern <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> &amp;&amp; v !== <span class="hljs-literal">undefined</span> ) {
+          <span class="hljs-keyword">if</span> ( v.match( rule.pattern ) === <span class="hljs-literal">null</span> ) {
+            r.message = <span class="hljs-string">""</span> + title + <span class="hljs-string">" doesn't match pattern in "</span> + title;
+            r.validates = <span class="hljs-literal">false</span>;
+            <span class="hljs-keyword">return</span>;
+          }
+        }
+      }
+    }
+  } );
+  <span class="hljs-keyword">return</span> r;
+}
+<span class="hljs-keyword">var</span> _y = {
+  VERSION:                <span class="hljs-string">"0.5.142"</span>,
+  valueForKeyPath:        valueForKeyPath,
+  interpolate:            interpolate,
+  merge:                  merge,
+  validate:               validate,
+  <span class="hljs-comment">/**
+   * Returns an element from the DOM with the specified
+   * ID. Similar to (but not like) jQuery's $(), except
+   * that this is a pure DOM element.
+   * @method ge
+   * @alias $id
+   * @param  {String} elementId     id to search for, relative to document
+   * @return {Node}                 null if no node found
+   */</span>
+  ge:                     $id.bind( <span class="hljs-built_in">document</span> ),
+  $id:                    $id.bind( <span class="hljs-built_in">document</span> ),
+  <span class="hljs-comment">/**
+   * Returns an element from the DOM using `querySelector`.
+   * @method qs
+   * @alias $
+   * @alias $1
+   * @param {String} selector       CSS selector to search, relative to document
+   * @returns {Node}                null if no node found that matches search
+   */</span>
+  $:                      $.bind( <span class="hljs-built_in">document</span> ),
+  $<span class="hljs-number">1</span>:                     $.bind( <span class="hljs-built_in">document</span> ),
+  qs:                     $.bind( <span class="hljs-built_in">document</span> ),
+  <span class="hljs-comment">/**
+   * Returns an array of all elements matching a given
+   * selector. The array is processed to be a real array,
+   * not a nodeList.
+   * @method gac
+   * @alias $$
+   * @alias qsa
+   * @param  {String} selector      CSS selector to search, relative to document
+   * @return {Array} of Nodes       Array of nodes; [] if none found
+   */</span>
+  $$:                     $$.bind( <span class="hljs-built_in">document</span> ),
+  gac:                    $$.bind( <span class="hljs-built_in">document</span> ),
+  qsa:                    $$.bind( <span class="hljs-built_in">document</span> ),
+  <span class="hljs-comment">/**
+   * Returns a Computed CSS Style ready for interrogation if
+   * `property` is not defined, or the actual property value
+   * if `property` is defined.
+   * @method gcs
+   * @alias gsc
+   * @alias getComputedStyle
+   * @param {Node} element  A specific DOM element
+   * @param {String} [property]  A CSS property to query
+   * @returns {*}
+   */</span>
+  getComputedStyle:       getComputedStyle,
+  gcs:                    getComputedStyle,
+  gsc:                    getComputedStyle,
+  <span class="hljs-comment">/**
+   * Returns a parsed template. The template can be a simple
+   * string, in which case the replacement variable are replaced
+   * and returned simply, or the template can be a DOM element,
+   * in which case the template is assumed to be the DOM Element's
+   * `innerHTML`, and then the replacement variables are parsed.
+   *
+   * Replacement variables are of the form `%VARIABLE%`, and
+   * can occur anywhere, not just within strings in HTML.
+   *
+   * The replacements array is of the form
+   * ```
+   *     { "VARIABLE": replacement, "VARIABLE2": replacement, ... }
+   * ```
+   *
+   * If `addtlOptions` is specified, it may override the default
+   * options where `%` is used as a substitution marker and `toUpperCase`
+   * is used as a transform. For example:
+   *
+   * ```
+   * template ( "Hello, {{name}}", {"name": "Mary"},
+   *            { brackets: [ "{{", "}}" ],
+     *              transform: "toLowerCase" } );
+   * ```
+   *
+   * @method template
+   * @param  {Node|String} templateElement
+   * @param  {Object} replacements
+   * @return {String}
+   */</span>
+  template:               <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( templateElement, replacements, addtlOptions )</span> </span>{
+    <span class="hljs-keyword">var</span> brackets = [<span class="hljs-string">"%"</span>, <span class="hljs-string">"%"</span>],
+      transform = <span class="hljs-string">"toUpperCase"</span>,
+      templateHTML, theVar, thisVar;
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> addtlOptions !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> addtlOptions.brackets !== <span class="hljs-string">"undefined"</span> ) {
+        brackets = addtlOptions.brackets;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> addtlOptions.transform === <span class="hljs-string">"string"</span> ) {
+        transform = addtlOptions.transform;
+      }
+    }
+    <span class="hljs-keyword">if</span> ( templateElement <span class="hljs-keyword">instanceof</span> Node ) {
+      templateHTML = templateElement.innerHTML;
+    } <span class="hljs-keyword">else</span> {
+      templateHTML = templateElement;
+    }
+    <span class="hljs-keyword">for</span> ( theVar <span class="hljs-keyword">in</span> replacements ) {
+      <span class="hljs-keyword">if</span> ( replacements.hasOwnProperty( theVar ) ) {
+        thisVar = brackets[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">if</span> ( transform !== <span class="hljs-string">""</span> ) {
+          thisVar += theVar[transform]();
+        } <span class="hljs-keyword">else</span> {
+          thisVar += theVar;
+        }
+        thisVar += brackets[<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">while</span> ( templateHTML.indexOf( thisVar ) &gt; -<span class="hljs-number">1</span> ) {
+          templateHTML = templateHTML.replace( thisVar, replacements[theVar] );
+        }
+      }
+    }
+    <span class="hljs-keyword">return</span> templateHTML;
+  },
+  <span class="hljs-comment">/**
+   * Indicates if the app is running in a Cordova container.
+   * Only valid if `executeWhenReady` is used to start an app.
+   * @property underCordova
+   * @default false
+   */</span>
+  underCordova:           <span class="hljs-literal">false</span>,
+  <span class="hljs-comment">/**
+   * Handles the conundrum of executing a block of code when
+   * the mobile device or desktop browser is ready. If running
+   * under Cordova, the `deviceready` event will fire, and
+   * the `callback` will execute. Otherwise, after 1s, the
+   * `callback` will execute *if it hasn't already*.
+   *
+   * @method executeWhenReady
+   * @param {Function} callback
+   */</span>
+  executeWhenReady:       <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( callback )</span> </span>{
+    <span class="hljs-keyword">var</span> executed = <span class="hljs-literal">false</span>;
+    <span class="hljs-built_in">document</span>.addEventListener( <span class="hljs-string">"deviceready"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( !executed ) {
+        executed = <span class="hljs-literal">true</span>;
+        _y.underCordova = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+          callback();
+        }
+      }
+    }, <span class="hljs-literal">false</span> );
+    setTimeout( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> ( !executed ) {
+        executed = <span class="hljs-literal">true</span>;
+        _y.underCordova = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+          callback();
+        }
+      }
+    }, <span class="hljs-number">1000</span> );
+  },
+  <span class="hljs-comment">/**
+   * &gt; The following functions are related to globalization and localization, which
+   * &gt; are now considered to be core functions (previously it was broken out in
+   * &gt; PKLOC)
+   */</span>
+  <span class="hljs-comment">/**
+   * @typedef {String} Locale
+   */</span>
+  <span class="hljs-comment">/**
+   * Indicates the user's locale. It's only valid after
+   * a call to `getUserLocale`, but it can be written to
+   * at any time in order to override `getUserLocale`'s
+   * calculation of the user's locale.
+   *
+   * @property currentUserLocale
+   * @default (empty string)
+   * @type {Locale}
+   */</span>
+  currentUserLocale:      <span class="hljs-string">""</span>,
+  <span class="hljs-comment">/**
+   * A translation matrix. Used by `addTranslation(s)` and `T`.
+   *
+   * @property localizedText
+   * @type {Object}
+   */</span>
+  localizedText:          {},
+  <span class="hljs-comment">/**
+   * Given a locale string, normalize it to the form of `la-RE` or `la`, depending on the length.
+   * ```
+   *     "enus", "en_us", "en_---__--US", "EN-US" --&gt; "en-US"
+   *     "en", "en-", "EN!" --&gt; "en"
+   * ```
+   * @method normalizeLocale
+   * @param {Locale} theLocale
+   */</span>
+  normalizeLocale:        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> theNewLocale = theLocale;
+    <span class="hljs-keyword">if</span> ( theNewLocale.length &lt; <span class="hljs-number">2</span> ) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"Fatal: invalid locale; not of the format la-RE."</span> );
+    }
+    <span class="hljs-keyword">var</span> theLanguage = theNewLocale.substr( <span class="hljs-number">0</span>, <span class="hljs-number">2</span> ).toLowerCase(),
+      theRegion = theNewLocale.substr( -<span class="hljs-number">2</span> ).toUpperCase();
+    <span class="hljs-keyword">if</span> ( theNewLocale.length &lt; <span class="hljs-number">4</span> ) {
+      theRegion = <span class="hljs-string">""</span>; <span class="hljs-comment">// there can't possibly be a valid region on a 3-char string</span>
+    }
+    <span class="hljs-keyword">if</span> ( theRegion !== <span class="hljs-string">""</span> ) {
+      theNewLocale = theLanguage + <span class="hljs-string">"-"</span> + theRegion;
+    } <span class="hljs-keyword">else</span> {
+      theNewLocale = theLanguage;
+    }
+    <span class="hljs-keyword">return</span> theNewLocale;
+  },
+  <span class="hljs-comment">/**
+   * Sets the current locale for jQuery/Globalize
+   * @method setGlobalizationLocale
+   * @param {Locale} theLocale
+   */</span>
+  setGlobalizationLocale: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> theNewLocale = _y.normalizeLocale( theLocale );
+    Globalize.culture( theNewLocale );
+  },
+  <span class="hljs-comment">/**
+   * Add a translation to the existing translation matrix
+   * @method addTranslation
+   * @param {Locale} locale
+   * @param {String} key
+   * @param {String} value
+   */</span>
+  addTranslation:         <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( locale, key, value )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>we’ll store translations with upper-case locales, so case never matters</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      theNewLocale = self.normalizeLocale( locale ).toUpperCase();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>store the value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self.localizedText[theNewLocale] === <span class="hljs-string">"undefined"</span> ) {
+      self.localizedText[theNewLocale] = {};
+    }
+    self.localizedText[theNewLocale][key.toUpperCase()] = value;
+  },
+  <span class="hljs-comment">/**
+   * Add translations in batch, as follows:
+   * ```
+   *   {
+     *     "HELLO":
+     *     {
+     *       "en-US": "Hello",
+     *       "es-US": "Hola"
+     *     },
+     *     "GOODBYE":
+     *     {
+     *       "en-US": "Bye",
+     *       "es-US": "Adios"
+     *     }
+     *   }
+   * ```
+   * @method addTranslations
+   * @param {Object} o
+   */</span>
+  addTranslations:        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( o )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y;
+    <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> o ) {
+      <span class="hljs-keyword">if</span> ( o.hasOwnProperty( key ) ) {
+        <span class="hljs-keyword">for</span> ( <span class="hljs-keyword">var</span> locale <span class="hljs-keyword">in</span> o[key] ) {
+          <span class="hljs-keyword">if</span> ( o[key].hasOwnProperty( locale ) ) {
+            self.addTranslation( locale, key, o[key][locale] );
+          }
+        }
+      }
+    }
+  },
+  <span class="hljs-comment">/**
+   * Returns the user's locale (e.g., `en-US` or `fr-FR`). If one
+   * can't be found, `en-US` is returned. If `currentUserLocale`
+   * is already defined, it won't attempt to recalculate it.
+   * @method getUserLocale
+   * @return {Locale}
+   */</span>
+  getUserLocale:          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y;
+    <span class="hljs-keyword">if</span> ( self.currentUserLocale ) {
+      <span class="hljs-keyword">return</span> self.currentUserLocale;
+    }
+    <span class="hljs-keyword">var</span> currentPlatform = <span class="hljs-string">"unknown"</span>;
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> device !== <span class="hljs-string">"undefined"</span> ) {
+      currentPlatform = device.platform;
+    }
+    <span class="hljs-keyword">var</span> userLocale = <span class="hljs-string">"en-US"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>a suitable default</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( currentPlatform === <span class="hljs-string">"Android"</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>parse the navigator.userAgent</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> userAgent = navigator.userAgent,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>inspired by <a href="http://stackoverflow.com/a/7728507/741043">http://stackoverflow.com/a/7728507/741043</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        tempLocale = userAgent.match( <span class="hljs-regexp">/Android.*([a-zA-Z]{2}-[a-zA-Z]{2})/</span> );
+      <span class="hljs-keyword">if</span> ( tempLocale ) {
+        userLocale = tempLocale[<span class="hljs-number">1</span>];
+      }
+    } <span class="hljs-keyword">else</span> {
+      userLocale = navigator.language || navigator.browserLanguage || navigator.systemLanguage || navigator.userLanguage;
+    }
+    self.currentUserLocale = self.normalizeLocale( userLocale );
+    <span class="hljs-keyword">return</span> self.currentUserLocale;
+  },
+  <span class="hljs-comment">/**
+   * Gets the device locale, if available. It depends on the
+   * Globalization plugin provided by Cordova, but if the
+   * plugin is not available, it assumes the device locale
+   * can't be determined rather than throw an error.
+   *
+   * Once the locale is determined one way or the other, `callback`
+   * is called.
+   *
+   * @method getDeviceLocale
+   * @param {Function} callback
+   */</span>
+  getDeviceLocale:        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( callback )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y;
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> navigator.globalization !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> navigator.globalization.getLocaleName !== <span class="hljs-string">"undefined"</span> ) {
+        navigator.globalization.getLocaleName( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( locale )</span> </span>{
+          self.currentUserLocale = self.normalizeLocale( locale.value );
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+            callback();
+          }
+        }, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>error; go ahead and call the callback, but don’t set the locale</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-built_in">console</span>.log( <span class="hljs-string">"WARN: Couldn't get user locale from device."</span> );
+          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+            callback();
+          }
+        } );
+        <span class="hljs-keyword">return</span>;
+      }
+    }
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span> ) {
+      callback();
+    }
+  },
+  <span class="hljs-comment">/**
+   * Looks up a translation for a given `key` and locale. If
+   * the translation does not exist, `undefined` is returned.
+   *
+   * The `key` is converted to uppercase, and the locale is
+   * properly normalized and then converted to uppercase before
+   * any lookup is attempted.
+   *
+   * @method lookupTranslation
+   * @param {String} key
+   * @param {Locale} [theLocale]
+   * @returns {*}
+   */</span>
+  lookupTranslation:      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( key, theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,
+      upperKey = key.toUpperCase(),
+      userLocale = theLocale || self.getUserLocale();
+    userLocale = self.normalizeLocale( userLocale ).toUpperCase();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>look it up by checking if userLocale exists, and then if the key (uppercased) exists</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self.localizedText[userLocale] !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> self.localizedText[userLocale][upperKey] !== <span class="hljs-string">"undefined"</span> ) {
+        <span class="hljs-keyword">return</span> self.localizedText[userLocale][upperKey];
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>if not found, we don’t return anything</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">void</span>( <span class="hljs-number">0</span> );
+  },
+  <span class="hljs-comment">/**
+   * @property localeOfLastResort
+   * @default "en-US"
+   * @type {Locale}
+   */</span>
+  localeOfLastResort:     <span class="hljs-string">"en-US"</span>,
+  <span class="hljs-comment">/**
+   * @property languageOfLastResort
+   * @default "en"
+   * @type {Locale}
+   */</span>
+  languageOfLastResort:   <span class="hljs-string">"en"</span>,
+  <span class="hljs-comment">/**
+   * Convenience function for translating text. Key is the only
+   * required value and case doesn't matter (it's uppercased). Replacement
+   * variables can be specified using replacement variables of the form `{ "VAR":"VALUE" }`,
+   * using `%VAR%` in the key/value returned. If `locale` is specified, it
+   * takes precedence over the user's current locale.
+   *
+   * @method T
+   * @param {String} key
+   * @param {Object} [parms] replacement variables
+   * @param {Locale} [locale]
+   */</span>
+  T:                      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( key, parms, locale )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,
+      userLocale = locale || self.getUserLocale(),
+      currentValue;
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, userLocale ) ) === <span class="hljs-string">"undefined"</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>we haven’t found it under the given locale (of form: xx-XX), try the fallback locale (xx)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      userLocale = userLocale.substr( <span class="hljs-number">0</span>, <span class="hljs-number">2</span> );
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, userLocale ) ) === <span class="hljs-string">"undefined"</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>we haven’t found it under any of the given locales; try the language of last resort</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, self.languageOfLastResort ) ) === <span class="hljs-string">"undefined"</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>we haven’t found it under any of the given locales; try locale of last resort</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> ( currentValue = self.lookupTranslation( key, self.localeOfLastResort ) ) === <span class="hljs-string">"undefined"</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>we didn’t find it at all… we’ll use the key</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            currentValue = key;
+          }
+        }
+      }
+    }
+    <span class="hljs-keyword">return</span> self.template( currentValue, parms );
+  },
+  <span class="hljs-comment">/**
+   * Convenience function for localizing numbers according the format (optional) and
+   * the locale (optional). theFormat is typically the number of places to use; "n" if
+   * not specified.
+   *
+   * @method N
+   * @param {Number} theNumber
+   * @param {Number|String} theFormat
+   * @param {Locale} [theLocale]
+   */</span>
+  N:                      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNumber, theFormat, theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,
+      iFormat = <span class="hljs-string">"n"</span> + ( ( <span class="hljs-keyword">typeof</span> theFormat === <span class="hljs-string">"undefined"</span> ) ? <span class="hljs-string">"0"</span> : theFormat ),
+      iLocale = theLocale || self.getUserLocale();
+    self.setGlobalizationLocale( iLocale );
+    <span class="hljs-keyword">return</span> Globalize.format( theNumber, iFormat );
+  },
+  <span class="hljs-comment">/**
+   * Convenience function for localizing currency. theFormat is the number of decimal places
+   * or "2" if not specified. If there are more places than digits, padding is added; if there
+   * are fewer places, rounding is performed.
+   *
+   * @method C
+   * @param {Number} theNumber
+   * @param {String} theFormat
+   * @param {Locale} [theLocale]
+   */</span>
+  C:                      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNumber, theFormat, theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,
+      iFormat = <span class="hljs-string">"c"</span> + ( ( <span class="hljs-keyword">typeof</span> theFormat === <span class="hljs-string">"undefined"</span> ) ? <span class="hljs-string">"2"</span> : theFormat ),
+      iLocale = theLocale || self.getUserLocale();
+    self.setGlobalizationLocale( iLocale );
+    <span class="hljs-keyword">return</span> Globalize.format( theNumber, iFormat );
+  },
+  <span class="hljs-comment">/**
+   * Convenience function for localizing percentages. theFormat specifies the number of
+   * decimal places; two if not specified.
+   * @method PCT
+   * @param {Number} theNumber
+   * @param {Number} theFormat
+   * @param {Locale} [theLocale]
+   */</span>
+  PCT:                    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theNumber, theFormat, theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,
+      iFormat = <span class="hljs-string">"p"</span> + ( ( <span class="hljs-keyword">typeof</span> theFormat === <span class="hljs-string">"undefined"</span> ) ? <span class="hljs-string">"2"</span> : theFormat ),
+      iLocale = theLocale || self.getUserLocale();
+    self.setGlobalizationLocale( iLocale );
+    <span class="hljs-keyword">return</span> Globalize.format( theNumber, iFormat );
+  },
+  <span class="hljs-comment">/**
+   * Convenience function for localizing dates.
+   *
+   * theFormat specifies the format; "d" is assumed if not provided.
+   *
+   * @method D
+   * @param {Date} theDate
+   * @param {String} theFormat
+   * @param {Locale} [theLocale]
+   */</span>
+  D:                      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theDate, theFormat, theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,
+      iFormat = theFormat || <span class="hljs-string">"d"</span>,
+      iLocale = theLocale || self.getUserLocale();
+    self.setGlobalizationLocale( iLocale );
+    <span class="hljs-keyword">return</span> Globalize.format( theDate, iFormat );
+  },
+  <span class="hljs-comment">/**
+   * Convenience function for jQuery/Globalize's `format` method
+   * @method format
+   * @param {*} theValue
+   * @param {String} theFormat
+   * @param {Locale} [theLocale]
+   * @returns {*}
+   */</span>
+  format:                 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theValue, theFormat, theLocale )</span> </span>{
+    <span class="hljs-keyword">var</span> self = _y,
+      iFormat = theFormat,
+      iLocale = theLocale || self.getUserLocale();
+    self.setGlobalizationLocale( iLocale );
+    <span class="hljs-keyword">return</span> Globalize.format( theValue, iFormat );
+  }
+};
+<span class="hljs-built_in">module</span>.exports = _y;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>viewContainer.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>viewContainer.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ *
+ * View Containers are simple objects that provide very basic view management with
+ * a thin layer over the corresponding DOM element.
+ *
+ * @module viewContainer.js
+ * @author Kerri Shotts
+ * @version 0.5
+ *
+ * ```
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ```
+ */</span>
+<span class="hljs-comment">/*global module*/</span>
+<span class="hljs-pi">"use strict"</span>;
+<span class="hljs-keyword">var</span> BaseObject = <span class="hljs-built_in">require</span>( <span class="hljs-string">"../util/object"</span> ),
+  h = <span class="hljs-built_in">require</span>( <span class="hljs-string">"../util/h"</span> );
+<span class="hljs-keyword">var</span> _className = <span class="hljs-string">"ViewContainer"</span>;
+<span class="hljs-keyword">var</span> ViewContainer = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">new</span> BaseObject();
+  self.subclass( _className );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1 id="notifications">Notifications</h1>
+<ul>
+<li><code>viewWasPushed</code> is fired by a containing <code>ViewController</code> when the view is added
+to the view stack</li>
+<li><code>viewWasPopped</code> is fired by a container when the view is removed from the view stack</li>
+<li><code>viewWillAppear</code> is fired by a container when the view is about to appear (one should avoid
+any significant DOM changes or calculations during this time, or animations may stutter)</li>
+<li><code>viewWillDisappear</code> is fired by a container when the view is about to disappear</li>
+<li><code>viewDidAppear</code> is fired by a container when the view is on screen.</li>
+<li><code>viewDidDisappear</code> is fired by a container when the view is off screen.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  self.registerNotification( <span class="hljs-string">"viewWasPushed"</span> );
+  self.registerNotification( <span class="hljs-string">"viewWasPopped"</span> );
+  self.registerNotification( <span class="hljs-string">"viewWillAppear"</span> );
+  self.registerNotification( <span class="hljs-string">"viewWillDisappear"</span> );
+  self.registerNotification( <span class="hljs-string">"viewDidAppear"</span> );
+  self.registerNotification( <span class="hljs-string">"viewDidDisappear"</span> );
+  self.registerNotification( <span class="hljs-string">"willRender"</span>, <span class="hljs-literal">false</span> );
+  self.registerNotification( <span class="hljs-string">"didRender"</span>, <span class="hljs-literal">false</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>private properties used to manage the corresponding DOM element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  self._element = <span class="hljs-literal">null</span>;
+  self._elementClass = <span class="hljs-string">"ui-container"</span>; <span class="hljs-comment">// default; can be changed to any class for styling purposes</span>
+  self._elementId = <span class="hljs-literal">null</span>; <span class="hljs-comment">// bad design decision -- probably going to mark this as deprecated soon</span>
+  self._elementTag = <span class="hljs-string">"div"</span>; <span class="hljs-comment">// some elements might need to be something other than a DIV</span>
+  self._parentElement = <span class="hljs-literal">null</span>; <span class="hljs-comment">// owning element</span>
+  <span class="hljs-comment">/**
+   * The title isn't displayed anywhere (unless you use it yourself in `renderToElement`, but
+   * is useful for containers that want to know the title of their views.
+   * @property title
+   * @type {String}
+   * @observable
+   */</span>
+  self.defineObservableProperty( <span class="hljs-string">"title"</span> );
+  <span class="hljs-comment">/**
+   * Creates the internal elements.
+   * @method createElement
+   */</span>
+  self.createElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    self._element = <span class="hljs-built_in">document</span>.createElement( self._elementTag );
+    <span class="hljs-keyword">if</span> ( self.elementClass !== <span class="hljs-literal">null</span> ) {
+      self._element.className = self.elementClass;
+    }
+    <span class="hljs-keyword">if</span> ( self.elementId !== <span class="hljs-literal">null</span> ) {
+      self._element.id = self.elementId;
+    }
+  };
+  <span class="hljs-comment">/**
+   * Creates the internal elements if necessary (that is, if they aren't already in existence)
+   * @method createElementIfNotCreated
+   */</span>
+  self.createElementIfNotCreated = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> ( self._element === <span class="hljs-literal">null</span> ) {
+      self.createElement();
+    }
+  };
+  <span class="hljs-comment">/**
+   * The `element` property allow direct access to the DOM element backing the view
+   * @property element
+   * @type {DOMElement}
+   */</span>
+  self.getElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    self.createElementIfNotCreated();
+    <span class="hljs-keyword">return</span> self._element;
+  };
+  self.defineProperty( <span class="hljs-string">"element"</span>, {
+    read:    <span class="hljs-literal">true</span>,
+    write:   <span class="hljs-literal">true</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-literal">null</span>
+  } );
+  <span class="hljs-comment">/**
+   * The `elementClass` property indicates the class of the DOM element. Changing
+   * the class will alter the backing DOM element if created.
+   * @property elementClass
+   * @type {String}
+   * @default "ui-container"
+   */</span>
+  self.setElementClass = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theClassName )</span> </span>{
+    self._elementClass = theClassName;
+    <span class="hljs-keyword">if</span> ( self._element !== <span class="hljs-literal">null</span> ) {
+      self._element.className = theClassName;
+    }
+  };
+  self.defineProperty( <span class="hljs-string">"elementClass"</span>, {
+    read:    <span class="hljs-literal">true</span>,
+    write:   <span class="hljs-literal">true</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-string">"ui-container"</span>
+  } );
+  <span class="hljs-comment">/**
+   * Determines the `id` for the backing DOM element. Not the best choice to
+   * use, since this must be unique within the DOM. Probably going to become
+   * deprecated eventually
+   */</span>
+  self.setElementId = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theElementId )</span> </span>{
+    self._elementId = theElementId;
+    <span class="hljs-keyword">if</span> ( self._element !== <span class="hljs-literal">null</span> ) {
+      self._element.id = theElementId;
+    }
+  };
+  self.defineProperty( <span class="hljs-string">"elementId"</span>, {
+    read:    <span class="hljs-literal">true</span>,
+    write:   <span class="hljs-literal">true</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-literal">null</span>
+  } );
+  <span class="hljs-comment">/**
+   * Determines the type of DOM Element; by default this is a DIV.
+   * @property elementTag
+   * @type {String}
+   * @default "div"
+   */</span>
+  self.defineProperty( <span class="hljs-string">"elementTag"</span>, {
+    read:    <span class="hljs-literal">true</span>,
+    write:   <span class="hljs-literal">true</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-string">"div"</span>
+  } );
+  <span class="hljs-comment">/**
+   * Indicates the parent element, if it exists. This is a DOM element
+   * that owns this view (parent -&gt; child). Changing the parent removes
+   * this element from the parent and reparents to another element.
+   * @property parentElement
+   * @type {DOMElement}
+   */</span>
+  self.setParentElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( theParentElement )</span> </span>{
+    <span class="hljs-keyword">if</span> ( self._parentElement !== <span class="hljs-literal">null</span> &amp;&amp; self._element !== <span class="hljs-literal">null</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>remove ourselves from the existing parent element first</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      self._parentElement.removeChild( self._element );
+      self._parentElement = <span class="hljs-literal">null</span>;
+    }
+    self._parentElement = theParentElement;
+    <span class="hljs-keyword">if</span> ( self._parentElement !== <span class="hljs-literal">null</span> &amp;&amp; self._element !== <span class="hljs-literal">null</span> ) {
+      self._parentElement.appendChild( self._element );
+    }
+  };
+  self.defineProperty( <span class="hljs-string">"parentElement"</span>, {
+    read:    <span class="hljs-literal">true</span>,
+    write:   <span class="hljs-literal">true</span>,
+    <span class="hljs-keyword">default</span>: <span class="hljs-literal">null</span>
+  } );
+  <span class="hljs-comment">/**
+   * @method render
+   * @return {String|DOMElement|DocumentFragment}
+   * `render` is called by `renderToElement`. The idea behind this is to generate
+   * a return value consisting of the DOM tree necessary to create the view's
+   * contents.
+   **/</span>
+  self.render = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>right now, this doesn’t do anything, but it’s here for inheritance purposes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-string">"Error: Abstract Method"</span>;
+  };
+  <span class="hljs-comment">/**
+   * Renders the content of the view. Can be called more than once, but more
+   * often is called once during `init`. Calls `render` immediately and
+   * assigns it to `element`'s `innerHTML` -- this implicitly creates the
+   * DOM elements backing the view if they weren't already created.
+   * @method renderToElement
+   */</span>
+  self.renderToElement = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    self.emit( <span class="hljs-string">"willRender"</span> );
+    <span class="hljs-keyword">var</span> renderOutput = self.render();
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> renderOutput === <span class="hljs-string">"string"</span> ) {
+      self.element.innerHTML = self.render();
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> renderOutput === <span class="hljs-string">"object"</span> ) {
+      h.renderTo( renderOutput, self.element );
+    }
+    self.emit( <span class="hljs-string">"didRender"</span> );
+  };
+  <span class="hljs-comment">/**
+   * Initializes the view container; returns `self`
+   * @method init
+   * @param {String} [theElementId]
+   * @param {String} [theElementTag]
+   * @param {String} [theElementClass]
+   * @param {DOMElement} [theParentElement]
+   * @returns {Object}
+   */</span>
+  self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span><span class="hljs-params">( theElementId, theElementTag, theElementClass, theParentElement )</span> </span>{
+    self.$super();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>self.super( _className, “init” ); // super has no parameters
+set our Id, Tag, and Class</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theElementId !== <span class="hljs-string">"undefined"</span> ) {
+      self.elementId = theElementId;
+    }
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theElementTag !== <span class="hljs-string">"undefined"</span> ) {
+      self.elementTag = theElementTag;
+    }
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theElementClass !== <span class="hljs-string">"undefined"</span> ) {
+      self.elementClass = theElementClass;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>render ourselves to the element (via render); this implicitly creates the element
+with the above properties.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    self.renderToElement();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>add ourselves to our parent.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> theParentElement !== <span class="hljs-string">"undefined"</span> ) {
+      self.parentElement = theParentElement;
+    }
+    <span class="hljs-keyword">return</span> self;
+  } );
+  <span class="hljs-comment">/**
+   * Initializes the view container. `options` can specify any of the following properties:
+   *
+   *  * `id` - the `id` of the element
+   *  * `tag` - the element tag to use (`div` is the default)
+   *  * `class` - the class name to use (`ui-container` is the default)
+   *  * `parent` - the parent DOMElement
+   *
+   * @method initWithOptions
+   * @param {Object} options
+   * @return {Object}
+   */</span>
+  self.initWithOptions = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> </span>{
+    <span class="hljs-keyword">var</span> theElementId, theElementTag, theElementClass, theParentElement;
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.id !== <span class="hljs-string">"undefined"</span> ) {
+        theElementId = options.id;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.tag !== <span class="hljs-string">"undefined"</span> ) {
+        theElementTag = options.tag;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.class !== <span class="hljs-string">"undefined"</span> ) {
+        theElementClass = options.class;
+      }
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.parent !== <span class="hljs-string">"undefined"</span> ) {
+        theParentElement = options.parent;
+      }
+    }
+    self.init( theElementId, theElementTag, theElementClass, theParentElement );
+    <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">"undefined"</span> ) {
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> options.title !== <span class="hljs-string">"undefined"</span> ) {
+        self.title = options.title;
+      }
+    }
+    <span class="hljs-keyword">return</span> self;
+  };
+  <span class="hljs-comment">/**
+   * Clean up
+   * @method destroy
+   */</span>
+  self.override( <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>remove ourselves from the parent view, if attached</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( self._parentElement !== <span class="hljs-literal">null</span> &amp;&amp; self._element !== <span class="hljs-literal">null</span> ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>remove ourselves from the existing parent element first</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      self._parentElement.removeChild( self._element );
+      self._parentElement = <span class="hljs-literal">null</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>and let our super know that it can clean up</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    self.$super();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>self.super( _className, “destroy” );</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  } );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>handle auto-initialization</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  self._autoInit.apply( self, <span class="hljs-built_in">arguments</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>return the new object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> self;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>return the new factory</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = ViewContainer;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

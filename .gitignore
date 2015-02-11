@@ -1,22 +1,14 @@
+.swp
+.sass-cache
 .DS_Store
 node_modules
 *.sublime-workspace
-
 .idea/workspace.xml
-
 .idea/dictionaries/kerrishotts.xml
-
 .idea/*
-
 .idea/*.*
-
 *.scssc
-
 .idea/YASMF-Next.iml
-
-*.swp
-
 .idea/misc.xml
-
 .idea/modules.xml
 

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>yasmf.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>yasmf.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ *
+ * # YASMF-Next (Yet Another Simple Mobile Framework Next Gen)
+ *
+ * YASMF-Next is the successor to the YASMF framework. While that framework was useful
+ * and usable even in a production environment, as my experience has grown, it became
+ * necessary to re-architect the entire framework in order to provide a modern
+ * mobile framework.
+ *
+ * YASMF-Next is the result. It's young, under active development, and not at all
+ * compatible with YASMF v0.2. It uses all sorts of more modern technologies such as
+ * SASS for CSS styling, AMD, etc.
+ *
+ * YASMF-Next is intended to be a simple and fast framework for mobile and desktop
+ * devices. It provides several utility functions and also provides a UI framework.
+ *
+ * @module _y
+ * @author Kerri Shotts
+ * @version 0.4
+ *
+ * Copyright (c) 2013 Kerri Shotts, photoKandy Studios LLC
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */</span>
+<span class="hljs-comment">/*global module, require*/</span>
+<span class="hljs-pi">"use strict"</span>;
+
+<span class="hljs-comment">/* UTIL */</span>
+<span class="hljs-keyword">var</span> _y = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/core"</span> );
+_y.datetime = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/datetime"</span> );
+_y.filename = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/filename"</span> );
+_y.misc = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/misc"</span> );
+_y.device = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/device"</span> );
+_y.BaseObject = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/object"</span> );
+_y.FileManager = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/fileManager"</span> );
+_y.h = <span class="hljs-built_in">require</span>( <span class="hljs-string">"yasmf-h"</span> );
+_y.h.BaseObject = _y.BaseObject;
+_y.Router = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/util/router"</span> );
+
+<span class="hljs-comment">/* UI */</span>
+_y.UI = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/core"</span> );
+_y.UI.event = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/event"</span> );
+_y.UI.ViewContainer = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/viewContainer"</span> );
+_y.UI.NavigationController = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/navigationController"</span> );
+_y.UI.SplitViewController = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/splitViewController"</span> );
+_y.UI.TabViewController = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/tabViewController"</span> );
+_y.UI.Alert = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/alert"</span> );
+_y.UI.Spinner = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/spinner"</span> );
+
+<span class="hljs-comment">/* TEMPLATES */</span>
+_y.UI.templates = {};
+_y.UI.templates.uiBarButton = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/templates/uiBarButton"</span> );
+_y.UI.templates.uiNavigationBar = <span class="hljs-built_in">require</span>( <span class="hljs-string">"./yasmf/ui/templates/uiNavigationBar"</span> );
+
+<span class="hljs-built_in">module</span>.exports = _y;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

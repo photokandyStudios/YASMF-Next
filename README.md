@@ -92,6 +92,8 @@ History
 	- Formatting, missing semicolons, that jazz. Added eslint and jscs preference files.
 	- Added `serve.sh` (assumes http-server is installed)
 	- Added `yasmf.Router` for simple app-wide router handling (hashtag & history API based)
+	- Added `self.$super`, `self.$class`, and `self.$superclass` for easy inheritance method calling. Can call `self.$super(args...)` in methods overridden using `self.override`.
+	- Added data binding
 - 0.4 (May 2014)
 	- First release of YASMF-Next
 - 0.3 (Nov 2013)
