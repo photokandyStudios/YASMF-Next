@@ -27,7 +27,7 @@
  * Eric Meyer's Reset CSS v2.0 - http://cssreset.com
  *
  */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video, input, textarea, select {
   border:         0;
   font-size:      100%;
   font:           inherit;
@@ -617,6 +617,9 @@ $android-destructive-color: #C00;
   @include order(2);
   // 2==center (would be 1, but android <4.4)
   position:    initial;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* Android left-aligns the title */
@@ -735,6 +738,7 @@ $android-destructive-color: #C00;
   min-width: 44px;
   display:   inline-block;
   height:    100%;
+  vertical-align: middle;
 }
 
 /* Ensure that we can left, right, and center align the contents of a bar button */
@@ -816,22 +820,22 @@ $android-destructive-color: #C00;
 .ui-tool-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-right .ui-bar-button {
   text-align:    right;
-  padding-right: 10px;
+  margin-right: 10px;
 }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-left .ui-bar-button {
   text-align:   left;
-  padding-left: 10px;
+  margin-left: 10px;
 }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-center .ui-bar-button {
   text-align:    center;
-  padding-left:  5px;
-  padding-right: 5px;
+  margin-left:  5px;
+  margin-right: 5px;
 }
 
 /*****************************************************************************
@@ -1384,6 +1388,12 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
   padding-right:  1em;
   padding-bottom: 1em;
   overflow: auto;
+  max-height: 10em;
+  @media (max-height: 360px) {
+    & {
+      max-height: 4em;
+    }
+  }
 }
 
 .android .ui-alert-text {
@@ -1402,11 +1412,21 @@ $keyframe-prefixes: -webkit-keyframes, -moz-keyframes, -ms-keyframes, -o-keyfram
   border-collapse: collapse;
   @include flex-box();
 
+  .androidC & {
+    display: table;
+  }
+
   &.wide {
     display: block;
     max-height: 10em;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+
+    @media (max-height: 360px) {
+      & {
+        max-height: 4em;
+      }
+    }
   }
 }
 
