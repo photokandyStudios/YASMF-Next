@@ -8374,7 +8374,7 @@ function parseTag(tag) {
     // # identifies ID
     // . identifies class
     // ? identifies attributes (query string format)
-    tagParts.tag = parse(tag, /.[^\#\.\?]+/);
+    tagParts.tag = parse(tag, /.[^\#\.\?]*/);
     tagParts.id = parse(tag, /\#[^\#\.\?]+/, true);
     tagParts.query = parse(tag, /\?[^\#\.\?]+/, true);
     tagParts.class = parse(tag, /\.[^\#\.\?]+/, true);
